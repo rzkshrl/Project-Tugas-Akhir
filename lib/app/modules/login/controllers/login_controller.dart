@@ -20,7 +20,16 @@ class LoginController extends GetxController {
     MinLengthValidator(6, errorText: "Kata sandi kurang dari 6 karakter"),
   ]);
 
-  var isPasswordHidden = true.obs;
+  final isPasswordHidden = true.obs;
+
+  var isForm = "".obs;
+  // var isFormEmpty = true.obs;
+
+  // void setEmptyEmail() {
+  //   emailC.addListener(() {
+  //     isForm.value = emailC.text.isEmpty as String;
+  //   });
+  // }
 
   @override
   void onInit() {

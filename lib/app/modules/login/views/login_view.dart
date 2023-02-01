@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/routes/app_pages.dart';
 
+import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../controllers/login_controller.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -11,10 +13,8 @@ class LoginView extends GetView<LoginController> {
   const LoginView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final LoginController controller = Get.put(LoginController());
     final textScale = MediaQuery.of(context).textScaleFactor;
-    final bodyHeight =
-        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    final bodyHeight = MediaQuery.of(context).size.height;
     final bodyWidth = MediaQuery.of(context).size.width;
     // LOGIN ADMIN WEB
     if (kIsWeb) {
@@ -29,23 +29,38 @@ class LoginView extends GetView<LoginController> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: bodyHeight * 0.3,
+                        height: bodyHeight * 0.15,
                       ),
                       Center(
                         child: Image.asset(
                           'assets/icons/logo.png',
-                          width: bodyWidth * 0.3,
-                          height: bodyHeight * 0.3,
+                          width: 332,
+                          height: 294,
+                          fit: BoxFit.contain,
                         ),
                       ),
                       SizedBox(
-                        height: bodyHeight * 0.08,
+                        height: 30,
+                      ),
+                      Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Login ",
+                            style: getTextLogin(context),
+                          ),
+                          Text("Admin", style: getTextAdmin(context))
+                        ],
+                      )),
+                      SizedBox(
+                        height: 30,
                       ),
                       Form(
                         key: controller.emailKey.value,
                         child: Container(
-                          width: bodyWidth * 0.3,
-                          height: bodyHeight * 0.085,
+                          width: 344,
+                          height: bodyHeight * 0.1,
                           child: TextFormField(
                             textInputAction: TextInputAction.next,
                             autovalidateMode:
@@ -53,7 +68,7 @@ class LoginView extends GetView<LoginController> {
                             keyboardType: TextInputType.emailAddress,
                             validator: controller.emailValidator,
                             controller: controller.emailC,
-                            style: TextStyle(color: dark),
+                            style: getTextLogin(context),
                             // onTap: () {
                             //   FocusScopeNode currentFocus =
                             //       FocusScope.of(context);
@@ -64,6 +79,9 @@ class LoginView extends GetView<LoginController> {
 
                             //   // controller.iconEmail.value =
                             //   //     !controller.iconEmail.value;
+                            // },
+                            // onChanged: (value) {
+                            //   controller.isFormEmpty.isFalse;
                             // },
                             decoration: InputDecoration(
                                 prefixIcon: Padding(
@@ -82,15 +100,7 @@ class LoginView extends GetView<LoginController> {
                                 focusColor: Blue1,
                                 fillColor: light,
                                 filled: true,
-                                errorStyle: TextStyle(
-                                  fontSize: 13.5 * textScale,
-                                  color: light,
-                                  background: Paint()
-                                    ..strokeWidth = 20
-                                    ..color = errorBg
-                                    ..style = PaintingStyle.stroke
-                                    ..strokeJoin = StrokeJoin.round,
-                                ),
+                                errorStyle: getTextErrorFormLogin(context),
                                 errorBorder: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: errorBg, width: 1.8),
@@ -105,8 +115,7 @@ class LoginView extends GetView<LoginController> {
                                         BorderSide(color: Blue1, width: 1.8),
                                     borderRadius: BorderRadius.circular(14)),
                                 hintText: 'Email',
-                                hintStyle: heading6.copyWith(
-                                    color: Grey1, fontSize: 14 * textScale),
+                                hintStyle: getTextHintFormLogin(context),
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(width: 1, color: dark),
@@ -114,19 +123,19 @@ class LoginView extends GetView<LoginController> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: bodyHeight * 0.01,
-                      ),
+                      // SizedBox(
+                      //   height: bodyHeight * 0.003,
+                      // ),
                       Form(
                         key: controller.passKey.value,
                         child: Obx(
                           () => Container(
-                            width: bodyWidth * 0.3,
-                            height: bodyHeight * 0.085,
+                            width: 344,
+                            height: bodyHeight * 0.1,
                             child: TextFormField(
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              style: TextStyle(color: dark),
+                              style: getTextLogin(context),
                               // onTap: () {
                               //   FocusScopeNode currentFocus =
                               //       FocusScope.of(context);
@@ -137,6 +146,9 @@ class LoginView extends GetView<LoginController> {
 
                               //   // controller.iconPass.value =
                               //   //     !controller.iconPass.value;
+                              // },
+                              // onChanged: (value) {
+                              //   controller.isFormEmpty.isFalse;
                               // },
                               validator: controller.passValidator,
                               obscureText: controller.isPasswordHidden.value,
@@ -156,19 +168,10 @@ class LoginView extends GetView<LoginController> {
                                         )),
                                   ),
                                   hintText: 'Kata Sandi',
-                                  hintStyle: heading6.copyWith(
-                                      color: Grey1, fontSize: 14 * textScale),
+                                  hintStyle: getTextHintFormLogin(context),
                                   fillColor: light,
                                   filled: true,
-                                  errorStyle: TextStyle(
-                                    fontSize: 13.5 * textScale,
-                                    color: light,
-                                    background: Paint()
-                                      ..strokeWidth = 20
-                                      ..color = errorBg
-                                      ..style = PaintingStyle.stroke
-                                      ..strokeJoin = StrokeJoin.round,
-                                  ),
+                                  errorStyle: getTextErrorFormLogin(context),
                                   errorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           color: errorBg, width: 1.8),
@@ -206,7 +209,38 @@ class LoginView extends GetView<LoginController> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      Container(
+                        width: 211,
+                        height: bodyHeight * 0.05,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Blue1,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            // if (controller.emailKey.value.currentState!
+                            //         .validate() &&
+                            //     controller.passKey.value.currentState!
+                            //         .validate()) {
+                            //   authC.login(
+                            //       controller.emailC.text, controller.passC.text);
+                            // }
+                          },
+                          child: Text(
+                            'Masuk',
+                            style: getTextLoginBtnActive(context),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: bodyHeight * 0.03,
+                      ),
+                      TextButton(
+                        onPressed: () => Get.toNamed(Routes.LUPA_SANDI),
+                        child: Text('Lupa Sandi?',
+                            style: getTextLupaSandi(context)),
+                      ),
                     ],
                   ),
                 )),
