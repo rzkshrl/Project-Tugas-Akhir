@@ -8,12 +8,16 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.2
   dwds: ^16.0.1
+  firebase_core: ^2.5.0
   flutter:
     sdk: flutter
+  font_awesome_flutter: ^10.4.0
   form_field_validator: ^1.1.0
   get: 4.6.5
   hexcolor: ^3.0.1
   iconly: ^1.0.1
+  icons_plus: ^4.0.0
+  passwordfield: ^0.1.0
   responsive_framework: ^0.2.0
 
 dev_dependencies:
@@ -25,4 +29,25 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Inter-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Inter-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Inter-Black.ttf
+          weight: 900
   uses-material-design: true

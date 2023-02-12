@@ -53,6 +53,34 @@
         return appRunner.runApp();
       });
     });
+    window.fixPasswordCss = () => {
+      let style = document.createElement('style');
+      style.innerHTML = '::-ms-reveal { display: none; }';
+      document.head.appendChild(style);
+    };
+  </script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3FIAlGafpuI5a875hT_89BhUSjTjZq3M",
+      authDomain: "tugas-akhir-e1997.firebaseapp.com",
+      projectId: "tugas-akhir-e1997",
+      storageBucket: "tugas-akhir-e1997.appspot.com",
+      messagingSenderId: "678791692736",
+      appId: "1:678791692736:web:e32e14e38fd1d2bd3f8825",
+      measurementId: "G-6VQCEK5VZB"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
   </script>
 </body>
 </html>

@@ -7,6 +7,15 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const REGISTER = _Paths.REGISTER;
   static const LUPA_SANDI = _Paths.LUPA_SANDI;
+  static const BERANDA_PRESENSI = _Paths.BERANDA_PRESENSI;
+  static const RIWAYAT_PRESENSI = _Paths.RIWAYAT_PRESENSI;
+  static const REKAP_PRESENSI_ALL = _Paths.REKAP_PRESENSI_ALL;
+  static const REKAP_PRESENSI_PER = _Paths.REKAP_PRESENSI_PER;
+  static const REKAP_SCANLOG_PER = _Paths.REKAP_SCANLOG_PER;
+  static const DATA_PEGAWAI = _Paths.DATA_PEGAWAI;
+  static const JADWAL_KERJA = _Paths.JADWAL_KERJA;
+  static const JAM_KERJA = _Paths.JAM_KERJA;
+  static const KET_IZIN = _Paths.KET_IZIN;
 }
 
 abstract class _Paths {
@@ -15,4 +24,13 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const REGISTER = '/register';
   static const LUPA_SANDI = '/lupa-sandi';
+  static const BERANDA_PRESENSI = '/beranda-presensi';
+  static const RIWAYAT_PRESENSI = '/riwayat-presensi';
+  static const REKAP_PRESENSI_ALL = '/rekap-presensi-all';
+  static const REKAP_PRESENSI_PER = '/rekap-presensi-per';
+  static const REKAP_SCANLOG_PER = '/rekap-scanlog-per';
+  static const DATA_PEGAWAI = '/data-pegawai';
+  static const JADWAL_KERJA = '/jadwal-kerja';
+  static const JAM_KERJA = '/jam-kerja';
+  static const KET_IZIN = '/ket-izin';
 }

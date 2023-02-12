@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:project_tugas_akhir/app/theme/theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'app/routes/app_pages.dart';
@@ -25,6 +26,10 @@ class ProjectTugasAkhir extends StatelessWidget {
             ResponsiveBreakpoint.resize(2468, name: '4K')
           ]),
       title: "MonitorPresence MIM Jetis Lor",
+      theme: ThemeData(
+        fontFamily: 'Inter',
+        primaryColor: light,
+      ),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
