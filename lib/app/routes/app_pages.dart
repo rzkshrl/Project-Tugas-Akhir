@@ -56,11 +56,6 @@ class AppPages {
       binding: LupaSandiBinding(),
     ),
     GetPage(
-      name: _Paths.BERANDA_PRESENSI,
-      page: () => const BerandaPresensiView(),
-      binding: BerandaPresensiBinding(),
-    ),
-    GetPage(
       name: _Paths.RIWAYAT_PRESENSI,
       page: () => const RiwayatPresensiView(),
       binding: RiwayatPresensiBinding(),
