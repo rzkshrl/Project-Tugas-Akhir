@@ -29,7 +29,7 @@ class LupaSandiView extends GetView<LupaSandiController> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: bodyHeight * 0.15,
+                        height: bodyHeight * 0.03,
                       ),
                       Center(
                         child: Image.asset(
@@ -67,7 +67,7 @@ class LupaSandiView extends GetView<LupaSandiController> {
                         key: controller.emailKey.value,
                         child: Container(
                           width: 344,
-                          height: bodyHeight * 0.1,
+                          height: 65,
                           child: TextFormField(
                             textInputAction: TextInputAction.next,
                             autovalidateMode:
@@ -91,6 +91,10 @@ class LupaSandiView extends GetView<LupaSandiController> {
                             //   controller.isFormEmpty.isFalse;
                             // },
                             decoration: InputDecoration(
+                                helperText: ' ',
+                                helperStyle: getTextErrorFormLogin(context),
+                                isDense: true,
+                                contentPadding: EdgeInsets.all(20),
                                 prefixIcon: Padding(
                                   padding: EdgeInsets.only(
                                     left: bodyWidth * 0.01,
@@ -111,32 +115,31 @@ class LupaSandiView extends GetView<LupaSandiController> {
                                 errorBorder: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: errorBg, width: 1.8),
-                                    borderRadius: BorderRadius.circular(14),
+                                    borderRadius: BorderRadius.circular(12),
                                     gapPadding: 2),
                                 focusedErrorBorder: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: error, width: 1.8),
-                                    borderRadius: BorderRadius.circular(14)),
+                                    borderRadius: BorderRadius.circular(12)),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Blue1, width: 1.8),
-                                    borderRadius: BorderRadius.circular(14)),
+                                    borderRadius: BorderRadius.circular(12)),
                                 hintText: 'Email',
                                 hintStyle: getTextHintFormLogin(context),
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(width: 1, color: dark),
-                                    borderRadius: BorderRadius.circular(14))),
+                                    borderRadius: BorderRadius.circular(12))),
                           ),
                         ),
                       ),
-                      // SizedBox(
-                      //   height: bodyHeight * 0.003,
-                      // ),
-
+                      SizedBox(
+                        height: bodyHeight * 0.04,
+                      ),
                       Container(
                         width: 211,
-                        height: bodyHeight * 0.05,
+                        height: 49,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: Blue1,
@@ -152,7 +155,7 @@ class LupaSandiView extends GetView<LupaSandiController> {
                             // }
                           },
                           child: Text(
-                            'Masuk',
+                            'Kirim',
                             style: getTextLoginBtnActive(context),
                           ),
                         ),
@@ -164,6 +167,9 @@ class LupaSandiView extends GetView<LupaSandiController> {
                         onPressed: () => Get.offAllNamed(Routes.LOGIN),
                         child: Text('Tidak lupa kata sandi? Masuk?',
                             style: getTextLupaSandi(context)),
+                      ),
+                      SizedBox(
+                        height: bodyHeight * 0.03,
                       ),
                     ],
                   ),

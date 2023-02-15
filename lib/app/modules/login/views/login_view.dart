@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -8,7 +10,7 @@ import 'package:project_tugas_akhir/app/routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../controllers/login_controller.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class LoginView extends GetView<LoginController> {
   const LoginView({Key? key}) : super(key: key);
@@ -19,7 +21,10 @@ class LoginView extends GetView<LoginController> {
     final bodyWidth = MediaQuery.of(context).size.width;
 
     // LOGIN ADMIN WEB
-    if (kIsWeb) {
+    if (kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.linux ||
+            defaultTargetPlatform == TargetPlatform.macOS ||
+            defaultTargetPlatform == TargetPlatform.windows)) {
       return Scaffold(
         backgroundColor: light,
         body: LayoutBuilder(
@@ -32,7 +37,7 @@ class LoginView extends GetView<LoginController> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: bodyHeight * 0.15,
+                        height: bodyHeight * 0.03,
                       ),
                       Center(
                         child: Image.asset(
@@ -63,7 +68,7 @@ class LoginView extends GetView<LoginController> {
                         key: controller.emailKey.value,
                         child: Container(
                           width: 344,
-                          height: bodyHeight * 0.07,
+                          height: 65,
                           child: TextFormField(
                             textInputAction: TextInputAction.next,
                             autovalidateMode:
@@ -139,7 +144,7 @@ class LoginView extends GetView<LoginController> {
                         child: Obx(
                           () => Container(
                             width: 344,
-                            height: bodyHeight * 0.07,
+                            height: 65,
                             child: TextFormField(
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
@@ -231,7 +236,7 @@ class LoginView extends GetView<LoginController> {
                       ),
                       Container(
                         width: 211,
-                        height: bodyHeight * 0.055,
+                        height: 49,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: Blue1,
@@ -260,6 +265,9 @@ class LoginView extends GetView<LoginController> {
                         onPressed: () => Get.toNamed(Routes.LUPA_SANDI),
                         child: Text('Lupa Sandi?',
                             style: getTextLupaSandi(context)),
+                      ),
+                      SizedBox(
+                        height: bodyHeight * 0.03,
                       ),
                     ],
                   ),
