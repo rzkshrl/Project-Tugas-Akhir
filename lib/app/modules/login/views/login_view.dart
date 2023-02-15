@@ -245,7 +245,7 @@ class LoginView extends GetView<LoginController> {
                             //   authC.login(
                             //       controller.emailC.text, controller.passC.text);
                             // }
-                            Get.toNamed(Routes.BERANDA_PRESENSI);
+                            Get.toNamed(Routes.RIWAYAT_PRESENSI);
                           },
                           child: Text(
                             'Masuk',
@@ -309,7 +309,7 @@ class LoginView extends GetView<LoginController> {
                             // }
                           },
                           child: Text(
-                            'Daftar',
+                            'Masuk',
                             style: getTextLoginBtnActiveMobile(context),
                           ),
                         ),

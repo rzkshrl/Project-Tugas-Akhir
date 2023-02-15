@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 
-import '../modules/beranda_presensi/bindings/beranda_presensi_binding.dart';
-import '../modules/beranda_presensi/views/beranda_presensi_view.dart';
 import '../modules/data_pegawai/bindings/data_pegawai_binding.dart';
 import '../modules/data_pegawai/views/data_pegawai_view.dart';
+import '../modules/hari_libur/bindings/hari_libur_binding.dart';
+import '../modules/hari_libur/views/hari_libur_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/jadwal_kerja/bindings/jadwal_kerja_binding.dart';
@@ -16,6 +16,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/lupa_sandi/bindings/lupa_sandi_binding.dart';
 import '../modules/lupa_sandi/views/lupa_sandi_view.dart';
+import '../modules/navigation_drawer/bindings/navigation_drawer_binding.dart';
+import '../modules/navigation_drawer/views/navigation_drawer_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/rekap_presensi_all/bindings/rekap_presensi_all_binding.dart';
@@ -94,6 +96,16 @@ class AppPages {
       name: _Paths.KET_IZIN,
       page: () => const KetIzinView(),
       binding: KetIzinBinding(),
+    ),
+    GetPage(
+      name: _Paths.NAVIGATION_DRAWER,
+      page: () => const NavigationDrawerView(),
+      binding: NavigationDrawerBinding(),
+    ),
+    GetPage(
+      name: _Paths.HARI_LIBUR,
+      page: () => const HariLiburView(),
+      binding: HariLiburBinding(),
     ),
   ];
 }

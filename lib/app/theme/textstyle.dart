@@ -34,7 +34,47 @@ getTextMenu(BuildContext context) {
         Condition.equals(name: DESKTOP, value: 44.0),
       ]).value,
       color: Yellow1,
+      fontFamily: "Inter",
       fontWeight: FontWeight.w900);
+}
+
+getTextItemMenu(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 13.0),
+        Condition.equals(name: MOBILE, value: 13.0),
+        Condition.equals(name: TABLET, value: 14.5),
+        Condition.equals(name: DESKTOP, value: 16.0),
+      ]).value,
+      color: Yellow1,
+      fontFamily: "Inter",
+      fontWeight: FontWeight.w800);
+}
+
+getTextItemSubMenu(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 13.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 10.0),
+        Condition.equals(name: MOBILE, value: 10.0),
+        Condition.equals(name: TABLET, value: 11.5),
+        Condition.equals(name: DESKTOP, value: 13.0),
+      ]).value,
+      color: Yellow1,
+      fontFamily: "Inter",
+      fontWeight: FontWeight.w700);
+}
+
+getTextItemSubMenuDisabled(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 13.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 10.0),
+        Condition.equals(name: MOBILE, value: 10.0),
+        Condition.equals(name: TABLET, value: 11.5),
+        Condition.equals(name: DESKTOP, value: 13.0),
+      ]).value,
+      fontFamily: "Inter",
+      color: Yellow1.withOpacity(0.4),
+      fontWeight: FontWeight.w700);
 }
 
 getText10ptBlue(BuildContext context) {

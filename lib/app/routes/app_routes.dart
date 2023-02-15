@@ -16,6 +16,8 @@ abstract class Routes {
   static const JADWAL_KERJA = _Paths.JADWAL_KERJA;
   static const JAM_KERJA = _Paths.JAM_KERJA;
   static const KET_IZIN = _Paths.KET_IZIN;
+  static const NAVIGATION_DRAWER = _Paths.NAVIGATION_DRAWER;
+  static const HARI_LIBUR = _Paths.HARI_LIBUR;
 }
 
 abstract class _Paths {
@@ -33,4 +35,6 @@ abstract class _Paths {
   static const JADWAL_KERJA = '/jadwal-kerja';
   static const JAM_KERJA = '/jam-kerja';
   static const KET_IZIN = '/ket-izin';
+  static const NAVIGATION_DRAWER = '/navigation-drawer';
+  static const HARI_LIBUR = '/hari-libur';
 }

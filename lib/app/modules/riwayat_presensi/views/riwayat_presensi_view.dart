@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:project_tugas_akhir/app/theme/theme.dart';
 
+import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/riwayat_presensi_controller.dart';
 
 class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
@@ -13,6 +15,8 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
         title: const Text('RiwayatPresensiView'),
         centerTitle: true,
       ),
+      drawer: NavigationDrawerView(),
+      drawerScrimColor: light.withOpacity(0.6),
       body: Center(
         child: Text(
           'RiwayatPresensiView is working',

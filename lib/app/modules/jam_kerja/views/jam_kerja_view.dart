@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../theme/theme.dart';
+import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/jam_kerja_controller.dart';
 
 class JamKerjaView extends GetView<JamKerjaController> {
@@ -13,6 +15,8 @@ class JamKerjaView extends GetView<JamKerjaController> {
         title: const Text('JamKerjaView'),
         centerTitle: true,
       ),
+      drawer: NavigationDrawerView(),
+      drawerScrimColor: light.withOpacity(0.6),
       body: Center(
         child: Text(
           'JamKerjaView is working',

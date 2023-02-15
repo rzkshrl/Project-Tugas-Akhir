@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BerandaPresensiController extends GetxController {
-  //TODO: Implement BerandaPresensiController
+class HariLiburController extends GetxController {
+  //TODO: Implement HariLiburController
+
   final count = 0.obs;
   @override
   void onInit() {

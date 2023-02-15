@@ -4,22 +4,22 @@ import 'package:get/get.dart';
 
 import '../../../theme/theme.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
-import '../controllers/rekap_presensi_per_controller.dart';
+import '../controllers/hari_libur_controller.dart';
 
-class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
-  const RekapPresensiPerView({Key? key}) : super(key: key);
+class HariLiburView extends GetView<HariLiburController> {
+  const HariLiburView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('RekapPresensiPerView'),
+        title: const Text('HariLiburView'),
         centerTitle: true,
       ),
       drawer: NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       body: Center(
         child: Text(
-          'RekapPresensiPerView is working',
+          'HariLiburView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),
