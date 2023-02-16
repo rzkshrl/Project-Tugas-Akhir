@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
+import '../../../controller/auth_controller.dart';
 import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../controllers/lupa_sandi_controller.dart';
 
 class LupaSandiView extends GetView<LupaSandiController> {
-  const LupaSandiView({Key? key}) : super(key: key);
+  LupaSandiView({Key? key}) : super(key: key);
+  final authC = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     final textScale = MediaQuery.of(context).textScaleFactor;
@@ -19,6 +21,7 @@ class LupaSandiView extends GetView<LupaSandiController> {
     // LOGIN ADMIN WEB
     if (kIsWeb) {
       return Scaffold(
+        backgroundColor: light,
         body: LayoutBuilder(
             builder: (context, constraints) => SingleChildScrollView(
                   // reverse: true,
@@ -27,6 +30,7 @@ class LupaSandiView extends GetView<LupaSandiController> {
                   //   right: bodyWidth * 0.05,
                   // ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: bodyHeight * 0.03,
@@ -47,7 +51,7 @@ class LupaSandiView extends GetView<LupaSandiController> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Lupa Sandi ",
+                            "Reset Sandi ",
                             style: getTextLogin(context),
                           ),
                           Text("Admin", style: getTextAdmin(context))
@@ -57,7 +61,7 @@ class LupaSandiView extends GetView<LupaSandiController> {
                         height: 15,
                       ),
                       Text(
-                        "Verifikasi Lupa Sandi akan dikirimkan ke inbox email",
+                        "Verifikasi Reset Sandi akan dikirimkan ke inbox email",
                         style: getText10ptBlue(context),
                       ),
                       SizedBox(
@@ -98,14 +102,15 @@ class LupaSandiView extends GetView<LupaSandiController> {
                                 prefixIcon: Padding(
                                   padding: EdgeInsets.only(
                                     left: bodyWidth * 0.01,
-                                    right: bodyWidth * 0.006,
+                                    right: bodyWidth * 0.008,
                                   ),
                                   child: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
+                                      widthFactor: 0.5,
+                                      heightFactor: 0.5,
                                       child: Icon(
                                         IconlyLight.message,
                                         color: Blue1,
+                                        size: 26,
                                       )),
                                 ),
                                 focusColor: Blue1,
@@ -146,13 +151,10 @@ class LupaSandiView extends GetView<LupaSandiController> {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            // if (controller.emailKey.value.currentState!
-                            //         .validate() &&
-                            //     controller.passKey.value.currentState!
-                            //         .validate()) {
-                            //   authC.login(
-                            //       controller.emailC.text, controller.passC.text);
-                            // }
+                            if (controller.emailKey.value.currentState!
+                                .validate()) {
+                              authC.lupaSandi(controller.emailC.text, context);
+                            }
                           },
                           child: Text(
                             'Kirim',

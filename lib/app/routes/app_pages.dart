@@ -44,7 +44,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LOGIN,
-      page: () => const LoginView(),
+      page: () => LoginView(),
       binding: LoginBinding(),
     ),
     GetPage(
@@ -54,7 +54,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LUPA_SANDI,
-      page: () => const LupaSandiView(),
+      page: () => LupaSandiView(),
       binding: LupaSandiBinding(),
     ),
     GetPage(

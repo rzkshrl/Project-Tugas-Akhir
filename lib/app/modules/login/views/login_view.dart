@@ -7,13 +7,15 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/routes/app_pages.dart';
 
+import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../controllers/login_controller.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class LoginView extends GetView<LoginController> {
-  const LoginView({Key? key}) : super(key: key);
+  LoginView({Key? key}) : super(key: key);
+  final authC = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     final textScale = MediaQuery.of(context).textScaleFactor;
@@ -34,126 +36,52 @@ class LoginView extends GetView<LoginController> {
                   //   left: bodyWidth * 0.05,
                   //   right: bodyWidth * 0.05,
                   // ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: bodyHeight * 0.03,
-                      ),
-                      Center(
-                        child: Image.asset(
-                          'assets/icons/logo.png',
-                          width: 332,
-                          height: 294,
-                          fit: BoxFit.contain,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: bodyHeight * 0.03,
                         ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Login ",
-                            style: getTextLogin(context),
-                          ),
-                          Text("Admin", style: getTextAdmin(context))
-                        ],
-                      )),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Form(
-                        key: controller.emailKey.value,
-                        child: Container(
-                          width: 344,
-                          height: 65,
-                          child: TextFormField(
-                            textInputAction: TextInputAction.next,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: controller.emailValidator,
-                            controller: controller.emailC,
-                            style: getTextLogin(context),
-                            // onTap: () {
-                            //   FocusScopeNode currentFocus =
-                            //       FocusScope.of(context);
-
-                            //   if (!currentFocus.hasPrimaryFocus) {
-                            //     currentFocus.unfocus();
-                            //   }
-
-                            //   // controller.iconEmail.value =
-                            //   //     !controller.iconEmail.value;
-                            // },
-                            // onChanged: (value) {
-                            //   controller.isFormEmpty.isFalse;
-                            // },
-                            decoration: InputDecoration(
-                                helperText: ' ',
-                                helperStyle: getTextErrorFormLogin(context),
-                                isDense: true,
-                                contentPadding: EdgeInsets.all(20),
-                                prefixIcon: Padding(
-                                  padding: EdgeInsets.only(
-                                    left: bodyWidth * 0.01,
-                                    right: bodyWidth * 0.008,
-                                  ),
-                                  child: Align(
-                                      widthFactor: 0.5,
-                                      heightFactor: 0.5,
-                                      child: Icon(
-                                        IconlyLight.message,
-                                        color: Blue1,
-                                        size: 26,
-                                      )),
-                                ),
-                                focusColor: Blue1,
-                                fillColor: light,
-                                filled: true,
-                                errorStyle: getTextErrorFormLogin(context),
-                                errorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: errorBg, width: 1.8),
-                                    borderRadius: BorderRadius.circular(12),
-                                    gapPadding: 2),
-                                focusedErrorBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: error, width: 1.8),
-                                    borderRadius: BorderRadius.circular(12)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Blue1, width: 1.8),
-                                    borderRadius: BorderRadius.circular(12)),
-                                hintText: 'Email',
-                                hintStyle: getTextHintFormLogin(context),
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(width: 1, color: dark),
-                                    borderRadius: BorderRadius.circular(12))),
+                        Center(
+                          child: Image.asset(
+                            'assets/icons/logo.png',
+                            width: 332,
+                            height: 294,
+                            fit: BoxFit.contain,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: bodyHeight * 0.045,
-                      ),
-                      Form(
-                        key: controller.passKey.value,
-                        child: Obx(
-                          () => Container(
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Login ",
+                              style: getTextLogin(context),
+                            ),
+                            Text("Admin", style: getTextAdmin(context))
+                          ],
+                        )),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Form(
+                          key: controller.emailKey.value,
+                          child: Container(
                             width: 344,
                             height: 65,
                             child: TextFormField(
+                              textInputAction: TextInputAction.next,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
+                              keyboardType: TextInputType.emailAddress,
+                              validator: controller.emailValidator,
+                              controller: controller.emailC,
                               style: getTextLogin(context),
-                              // onChanged: (_) async {
-                              //   controller.fixEdgePasswordRevealButton(
-                              //       passwordFocusNode);
-                              // },
-                              // focusNode: passwordFocusNode,
                               // onTap: () {
                               //   FocusScopeNode currentFocus =
                               //       FocusScope.of(context);
@@ -162,12 +90,12 @@ class LoginView extends GetView<LoginController> {
                               //     currentFocus.unfocus();
                               //   }
 
-                              //   // controller.iconPass.value =
-                              //   //     !controller.iconPass.value;
+                              //   // controller.iconEmail.value =
+                              //   //     !controller.iconEmail.value;
                               // },
-                              validator: controller.passValidator,
-                              obscureText: controller.isPasswordHidden.value,
-                              controller: controller.passC,
+                              // onChanged: (value) {
+                              //   controller.isFormEmpty.isFalse;
+                              // },
                               decoration: InputDecoration(
                                   helperText: ' ',
                                   helperStyle: getTextErrorFormLogin(context),
@@ -182,13 +110,12 @@ class LoginView extends GetView<LoginController> {
                                         widthFactor: 0.5,
                                         heightFactor: 0.5,
                                         child: Icon(
-                                          IconlyLight.lock,
+                                          IconlyLight.message,
                                           color: Blue1,
                                           size: 26,
                                         )),
                                   ),
-                                  hintText: 'Kata Sandi',
-                                  hintStyle: getTextHintFormLogin(context),
+                                  focusColor: Blue1,
                                   fillColor: light,
                                   filled: true,
                                   errorStyle: getTextErrorFormLogin(context),
@@ -205,24 +132,8 @@ class LoginView extends GetView<LoginController> {
                                       borderSide:
                                           BorderSide(color: Blue1, width: 1.8),
                                       borderRadius: BorderRadius.circular(12)),
-                                  suffixIcon: Padding(
-                                    padding: EdgeInsets.only(
-                                      right: bodyWidth * 0.0035,
-                                    ),
-                                    child: IconButton(
-                                      color: Blue1,
-                                      splashRadius: 1,
-                                      iconSize: 20,
-                                      icon: Icon(
-                                          controller.isPasswordHidden.value
-                                              ? FontAwesomeIcons.eye
-                                              : FontAwesomeIcons.eyeSlash),
-                                      onPressed: () {
-                                        controller.isPasswordHidden.value =
-                                            !controller.isPasswordHidden.value;
-                                      },
-                                    ),
-                                  ),
+                                  hintText: 'Email',
+                                  hintStyle: getTextHintFormLogin(context),
                                   border: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(width: 1, color: dark),
@@ -230,46 +141,144 @@ class LoginView extends GetView<LoginController> {
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: bodyHeight * 0.04,
-                      ),
-                      Container(
-                        width: 211,
-                        height: 49,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Blue1,
+                        SizedBox(
+                          height: bodyHeight * 0.045,
                         ),
-                        child: TextButton(
-                          onPressed: () {
-                            // if (controller.emailKey.value.currentState!
-                            //         .validate() &&
-                            //     controller.passKey.value.currentState!
-                            //         .validate()) {
-                            //   authC.login(
-                            //       controller.emailC.text, controller.passC.text);
-                            // }
-                            Get.toNamed(Routes.RIWAYAT_PRESENSI);
-                          },
-                          child: Text(
-                            'Masuk',
-                            style: getTextLoginBtnActive(context),
+                        Form(
+                          key: controller.passKey.value,
+                          child: Obx(
+                            () => Container(
+                              width: 344,
+                              height: 65,
+                              child: TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                style: getTextLogin(context),
+                                // onChanged: (_) async {
+                                //   controller.fixEdgePasswordRevealButton(
+                                //       passwordFocusNode);
+                                // },
+                                // focusNode: passwordFocusNode,
+                                // onTap: () {
+                                //   FocusScopeNode currentFocus =
+                                //       FocusScope.of(context);
+
+                                //   if (!currentFocus.hasPrimaryFocus) {
+                                //     currentFocus.unfocus();
+                                //   }
+
+                                //   // controller.iconPass.value =
+                                //   //     !controller.iconPass.value;
+                                // },
+                                validator: controller.passValidator,
+                                obscureText: controller.isPasswordHidden.value,
+                                controller: controller.passC,
+                                decoration: InputDecoration(
+                                    helperText: ' ',
+                                    helperStyle: getTextErrorFormLogin(context),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.all(20),
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.only(
+                                        left: bodyWidth * 0.01,
+                                        right: bodyWidth * 0.008,
+                                      ),
+                                      child: Align(
+                                          widthFactor: 0.5,
+                                          heightFactor: 0.5,
+                                          child: Icon(
+                                            IconlyLight.lock,
+                                            color: Blue1,
+                                            size: 26,
+                                          )),
+                                    ),
+                                    hintText: 'Kata Sandi',
+                                    hintStyle: getTextHintFormLogin(context),
+                                    fillColor: light,
+                                    filled: true,
+                                    errorStyle: getTextErrorFormLogin(context),
+                                    errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: errorBg, width: 1.8),
+                                        borderRadius: BorderRadius.circular(12),
+                                        gapPadding: 2),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: error, width: 1.8),
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Blue1, width: 1.8),
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    suffixIcon: Padding(
+                                      padding: EdgeInsets.only(
+                                        right: bodyWidth * 0.0035,
+                                      ),
+                                      child: IconButton(
+                                        color: Blue1,
+                                        splashRadius: 1,
+                                        iconSize: 20,
+                                        icon: Icon(
+                                            controller.isPasswordHidden.value
+                                                ? FontAwesomeIcons.eye
+                                                : FontAwesomeIcons.eyeSlash),
+                                        onPressed: () {
+                                          controller.isPasswordHidden.value =
+                                              !controller
+                                                  .isPasswordHidden.value;
+                                        },
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(width: 1, color: dark),
+                                        borderRadius:
+                                            BorderRadius.circular(12))),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: bodyHeight * 0.03,
-                      ),
-                      TextButton(
-                        onPressed: () => Get.toNamed(Routes.LUPA_SANDI),
-                        child: Text('Lupa Sandi?',
-                            style: getTextLupaSandi(context)),
-                      ),
-                      SizedBox(
-                        height: bodyHeight * 0.03,
-                      ),
-                    ],
+                        SizedBox(
+                          height: bodyHeight * 0.04,
+                        ),
+                        Container(
+                          width: 211,
+                          height: 49,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Blue1,
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              if (controller.emailKey.value.currentState!
+                                      .validate() &&
+                                  controller.passKey.value.currentState!
+                                      .validate()) {
+                                authC.login(controller.emailC.text,
+                                    controller.passC.text, context);
+                              }
+                            },
+                            child: Text(
+                              'Masuk',
+                              style: getTextLoginBtnActive(context),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: bodyHeight * 0.03,
+                        ),
+                        TextButton(
+                          onPressed: () => Get.toNamed(Routes.LUPA_SANDI),
+                          child: Text('Lupa Sandi?',
+                              style: getTextLupaSandi(context)),
+                        ),
+                        SizedBox(
+                          height: bodyHeight * 0.03,
+                        ),
+                      ],
+                    ),
                   ),
                 )),
       );

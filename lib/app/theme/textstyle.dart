@@ -25,6 +25,54 @@ getTextAdmin(BuildContext context) {
       color: Blue1);
 }
 
+getTextAlert(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 12.0),
+        Condition.equals(name: MOBILE, value: 12.0),
+        Condition.equals(name: TABLET, value: 14.0),
+        Condition.equals(name: DESKTOP, value: 16.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w300);
+}
+
+getTextAlertSub(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 8.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 8.0),
+        Condition.equals(name: MOBILE, value: 8.0),
+        Condition.equals(name: TABLET, value: 10.0),
+        Condition.equals(name: DESKTOP, value: 12.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w300);
+}
+
+getTextAlertBtn(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 10.0),
+        Condition.equals(name: MOBILE, value: 10.0),
+        Condition.equals(name: TABLET, value: 12.0),
+        Condition.equals(name: DESKTOP, value: 14.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w400);
+}
+
+getTextAlertBtn2(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 10.0),
+        Condition.equals(name: MOBILE, value: 10.0),
+        Condition.equals(name: TABLET, value: 12.0),
+        Condition.equals(name: DESKTOP, value: 14.0),
+      ]).value,
+      color: light,
+      fontWeight: FontWeight.w400);
+}
+
 getTextMenu(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 36.0, valueWhen: [
@@ -119,8 +167,9 @@ getTextErrorFormLogin(BuildContext context) {
 
 getTextLoginBtnActive(BuildContext context) {
   return TextStyle(
-      fontSize: ResponsiveValue(context, defaultValue: 156.0, valueWhen: [
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
         Condition.smallerThan(name: DESKTOP, value: 14.0),
+        Condition.smallerThan(name: MOBILE, value: 14.0),
         Condition.equals(name: MOBILE, value: 14.0),
         Condition.equals(name: TABLET, value: 15.0),
         Condition.equals(name: DESKTOP, value: 16.0),
