@@ -36,10 +36,7 @@ class AuthController extends GetxController {
   }
 
   //store user data
-  void syncUsers(
-    String email,
-    String password,
-  ) async {
+  void syncUsers(String email, String password, BuildContext context) async {
     String uid = auth.currentUser!.uid.toString();
 
     CollectionReference users = firestore.collection('Users');
@@ -53,10 +50,12 @@ class AuthController extends GetxController {
       });
     } catch (e) {
       print(e);
-      Get.defaultDialog(
-        title: "Terjadi Kesalahan",
-        middleText: "Tidak Berhasil Memasukkan Data",
-      );
+      Get.dialog(dialogC.dialogAlertOnly(
+          IconlyLight.danger,
+          "Terjadi Kesalahan.",
+          "Tidak dapat menambahkan data.",
+          getTextAlert(context),
+          getTextAlertSub(context)));
     }
   }
 
@@ -76,9 +75,12 @@ class AuthController extends GetxController {
           getTextAlertSub(context),
           getTextAlertBtn(context)));
     } catch (e) {
-      Get.defaultDialog(
-          title: 'Terjadi kesalahan',
-          middleText: 'Tidak dapat mengirimkan reset password');
+      Get.dialog(dialogC.dialogAlertOnly(
+          IconlyLight.danger,
+          "Terjadi Kesalahan.",
+          "Tidak dapat reset sandi.",
+          getTextAlert(context),
+          getTextAlertSub(context)));
     }
   }
 
@@ -89,9 +91,9 @@ class AuthController extends GetxController {
           email: email, password: password);
 
       if (myUser.user!.emailVerified) {
-        Get.offAllNamed(Routes.RIWAYAT_PRESENSI);
+        Get.offAllNamed(Routes.HOME);
       } else {
-        Get.dialog(dialogC.dialogAlertDualBtn(() async {
+        Get.dialog(dialogC.dialogAlertBtn(() async {
           myUser.user!.sendEmailVerification();
           Get.back();
           await Get.dialog(dialogC.dialogAlertBtn(() {
@@ -105,46 +107,15 @@ class AuthController extends GetxController {
               getTextAlert(context),
               getTextAlertSub(context),
               getTextAlertBtn(context)));
-        }, () {
-          Get.back();
         },
             IconlyLight.danger,
             111.29,
             "Kirim",
-            111.29,
-            "Batal",
             "Email Belum Diverifikasi!",
             "klik tombol Kirim untuk mengirim email verifikasi",
             getTextAlert(context),
             getTextAlertSub(context),
-            getTextAlertBtn(context),
-            getTextAlertBtn2(context)));
-
-        // Get.dialog(dialogC.dialogAlert(() async {
-        //   myUser.user!.sendEmailVerification();
-        //   Get.back();
-        //   await Get.dialog(dialogAlert(() {
-        //     Get.back();
-        //   },
-        //       IconlyLight.tick_square,
-        //       316,
-        //       111.29,
-        //       "OK",
-        //       "Email sukses terkirim!",
-        //       "Cek inbox email Anda",
-        //       getTextAlert(context),
-        //       getTextAlertSub(context),
-        //       getTextAlertBtn(context)));
-        // },
-        //     IconlyLight.danger,
-        //     316,
-        //     111.29,
-        //     "Kirim",
-        //     "Email Belum Diverifikasi!",
-        //     "klik tombol Kirim untuk mengirim email verifikasi",
-        //     getTextAlert(context),
-        //     getTextAlertSub(context),
-        //     getTextAlertBtn(context)));
+            getTextAlertBtn(context)));
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -176,7 +147,7 @@ class AuthController extends GetxController {
         password: password,
       );
 
-      syncUsers(email, password);
+      syncUsers(email, password, context);
       await myUser.user!.sendEmailVerification();
       Get.dialog(dialogC.dialogAlertBtn(() {
         Get.back();
@@ -219,7 +190,7 @@ class AuthController extends GetxController {
 
   //logout
   void logout() async {
-    await FirebaseAuth.instance.signOut();
+    await auth.signOut();
     Get.offAllNamed(Routes.LOGIN);
   }
 }

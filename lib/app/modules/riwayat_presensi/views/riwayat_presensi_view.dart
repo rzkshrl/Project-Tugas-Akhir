@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -15,8 +16,10 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
     final authC = Get.put(AuthController());
     return Scaffold(
       appBar: AppBar(
-        title: const Text('RiwayatPresensiView'),
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: FaIcon(FontAwesomeIcons.bars)),
         actions: [
           IconButton(
               onPressed: () => authC.logout(), icon: Icon(IconlyLight.logout)),
