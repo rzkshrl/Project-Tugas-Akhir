@@ -13,12 +13,14 @@ import 'package:sizer/sizer.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
+import '../../../utils/textfieldC.dart';
 import '../controllers/login_controller.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class LoginView extends GetView<LoginController> {
   LoginView({Key? key}) : super(key: key);
   final authC = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     // LOGIN ADMIN WEB
@@ -67,7 +69,9 @@ class LoginView extends GetView<LoginController> {
                     children: [
                       textformNormalWeb(
                           context,
-                          [AutofillHints.email],
+                          c.emailWebKey.value,
+                          c.emailWebC,
+                          const [AutofillHints.email],
                           TextInputType.emailAddress,
                           IconlyLight.message,
                           Blue1,
@@ -75,7 +79,7 @@ class LoginView extends GetView<LoginController> {
                       SizedBox(
                         height: 4.2.h,
                       ),
-                      textformPassWeb(context, [AutofillHints.password],
+                      textformPassWeb(context, const [AutofillHints.password],
                           IconlyLight.lock, Blue1, "Kata Sandi", () {
                         TextInput.finishAutofillContext();
                       }),
@@ -94,10 +98,9 @@ class LoginView extends GetView<LoginController> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      if (controller.emailKey.value.currentState!.validate() &&
-                          controller.passKey.value.currentState!.validate()) {
-                        authC.login(controller.emailC.text,
-                            controller.passC.text, context);
+                      if (c.emailWebKey.value.currentState!.validate() &&
+                          c.passWebKey.value.currentState!.validate()) {
+                        authC.login(c.emailWebC.text, c.passWebC.text, context);
                       }
                     },
                     child: Text(
@@ -174,7 +177,9 @@ class LoginView extends GetView<LoginController> {
                         height: 20.h,
                       ),
                       TextButton(
-                        onPressed: () => Get.toNamed(Routes.LUPA_SANDI),
+                        onPressed: () {
+                          Get.offAllNamed(Routes.LUPA_SANDI);
+                        },
                         child: Text('Sudah punya akun? Masuk',
                             style: getTextLupaSandiMobile(context)),
                       ),

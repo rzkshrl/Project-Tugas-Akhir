@@ -18,14 +18,13 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
-            onPressed: () => Scaffold.of(context).openDrawer(),
+            onPressed: () => NavigationDrawerView(),
             icon: FaIcon(FontAwesomeIcons.bars)),
         actions: [
           IconButton(
               onPressed: () => authC.logout(), icon: Icon(IconlyLight.logout)),
         ],
       ),
-      drawer: NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       body: Center(
         child: Text(

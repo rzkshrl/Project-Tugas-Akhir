@@ -424,14 +424,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  passwordfield:
-    dependency: "direct main"
-    description:
-      name: passwordfield
-      sha256: e32b201b6185a18b074995a175c5fa3471fa0bd0a24dc1b42daa938f26b064ae
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   path:
     dependency: transitive
     description:

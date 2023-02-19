@@ -8,10 +8,12 @@ import 'package:sizer/sizer.dart';
 import '../theme/textstyle.dart';
 import '../theme/theme.dart';
 
-final controller = Get.put(TextFieldController());
+final c = Get.put(TextFieldController());
 
 Widget textformNormalWeb(
   BuildContext context,
+  Key? key,
+  TextEditingController? controller,
   Iterable<String>? autofillHints,
   TextInputType keyboardType,
   IconData prefixIcon,
@@ -19,7 +21,7 @@ Widget textformNormalWeb(
   String hintText,
 ) {
   return Form(
-    key: controller.emailKey.value,
+    key: key,
     child: Container(
       width: 344,
       height: 65,
@@ -27,8 +29,8 @@ Widget textformNormalWeb(
         autofillHints: autofillHints,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.emailAddress,
-        validator: controller.emailValidator,
-        controller: controller.emailC,
+        validator: c.emailValidator,
+        controller: controller,
         style: getTextLogin(context),
         decoration: InputDecoration(
             helperText: ' ',
@@ -82,7 +84,7 @@ Widget textformPassWeb(
   void Function()? onEditingComplete,
 ) {
   return Form(
-    key: controller.passKey.value,
+    key: c.passWebKey.value,
     child: Obx(
       () => Container(
         width: 344,
@@ -91,9 +93,9 @@ Widget textformPassWeb(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           autofillHints: autofillHints,
           style: getTextLogin(context),
-          validator: controller.passValidator,
-          obscureText: controller.isPasswordHidden.value,
-          controller: controller.passC,
+          validator: c.passValidator,
+          obscureText: c.isPasswordHidden.value,
+          controller: c.passWebC,
           onEditingComplete: onEditingComplete,
           decoration: InputDecoration(
             helperText: ' ',
@@ -137,12 +139,11 @@ Widget textformPassWeb(
                 color: Blue1,
                 splashRadius: 1,
                 iconSize: 20,
-                icon: Icon(controller.isPasswordHidden.value
+                icon: Icon(c.isPasswordHidden.value
                     ? FontAwesomeIcons.eye
                     : FontAwesomeIcons.eyeSlash),
                 onPressed: () {
-                  controller.isPasswordHidden.value =
-                      !controller.isPasswordHidden.value;
+                  c.isPasswordHidden.value = !c.isPasswordHidden.value;
                 },
               ),
             ),

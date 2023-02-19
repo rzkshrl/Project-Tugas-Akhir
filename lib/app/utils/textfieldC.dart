@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 class TextFieldController extends GetxController {
   final isPasswordHidden = true.obs;
 
-  final emailC = TextEditingController();
-  final passC = TextEditingController();
+  final emailWebC = TextEditingController();
+  final emailWebResetPassC = TextEditingController();
+  final passWebC = TextEditingController();
 
-  final emailKey = GlobalKey<FormState>().obs;
-  final passKey = GlobalKey<FormState>().obs;
+  final emailWebKey = GlobalKey<FormState>().obs;
+  final emailWebResetPassKey = GlobalKey<FormState>().obs;
+  final passWebKey = GlobalKey<FormState>().obs;
 
   final emailValidator = MultiValidator([
     EmailValidator(errorText: "Email tidak valid"),

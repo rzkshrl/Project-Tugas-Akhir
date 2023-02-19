@@ -62,7 +62,9 @@ class LupaSandiView extends GetView<LupaSandiController> {
               ),
               textformNormalWeb(
                   context,
-                  [AutofillHints.email],
+                  c.emailWebResetPassKey.value,
+                  c.emailWebResetPassC,
+                  null,
                   TextInputType.emailAddress,
                   IconlyLight.message,
                   Blue1,
@@ -79,8 +81,8 @@ class LupaSandiView extends GetView<LupaSandiController> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    if (controller.emailKey.value.currentState!.validate()) {
-                      authC.lupaSandi(controller.emailC.text, context);
+                    if (c.emailWebResetPassKey.value.currentState!.validate()) {
+                      authC.lupaSandi(c.emailWebResetPassC.text, context);
                     }
                   },
                   child: Text(
@@ -93,7 +95,9 @@ class LupaSandiView extends GetView<LupaSandiController> {
                 height: 3.h,
               ),
               TextButton(
-                onPressed: () => Get.offAllNamed(Routes.LOGIN),
+                onPressed: () {
+                  Get.offAllNamed(Routes.LOGIN);
+                },
                 child: Text('Tidak lupa kata sandi? Masuk?',
                     style: getTextLupaSandi(context)),
               ),
