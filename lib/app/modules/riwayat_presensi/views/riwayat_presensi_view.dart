@@ -15,17 +15,23 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     return Scaffold(
+      drawer: NavigationDrawerView(),
+      drawerScrimColor: light.withOpacity(0.6),
       appBar: AppBar(
         centerTitle: true,
-        leading: IconButton(
-            onPressed: () => NavigationDrawerView(),
-            icon: FaIcon(FontAwesomeIcons.bars)),
+        leading: Builder(builder: (context) {
+          return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              icon: FaIcon(FontAwesomeIcons.bars));
+        }),
         actions: [
           IconButton(
               onPressed: () => authC.logout(), icon: Icon(IconlyLight.logout)),
         ],
       ),
-      drawerScrimColor: light.withOpacity(0.6),
       body: Center(
         child: Text(
           'RiwayatPresensiView is working',
