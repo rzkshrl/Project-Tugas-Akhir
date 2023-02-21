@@ -12,6 +12,7 @@ import 'app/routes/app_pages.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  js.context.callMethod('fixPasswordCss');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -26,7 +27,6 @@ class ProjectTugasAkhir extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    js.context.callMethod('fixPasswordCss');
     return Sizer(builder: (context, orientation, screenType) {
       return GetMaterialApp(
         builder: (context, child) => ResponsiveWrapper.builder(
