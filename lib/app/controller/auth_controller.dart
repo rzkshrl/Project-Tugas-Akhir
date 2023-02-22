@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 
+import '../data/models/usersmodel.dart';
 import '../routes/app_pages.dart';
 import '../utils/dialogDefault.dart';
 
@@ -24,30 +27,66 @@ class AuthController extends GetxController {
   }
 
   Future<DocumentSnapshot<Object?>> getUserDoc() async {
-    String uid = auth.currentUser!.uid;
-    DocumentReference user = firestore.collection("Users").doc(uid);
+    String emailUser = auth.currentUser!.email.toString();
+    DocumentReference user = firestore.collection("Users").doc(emailUser);
     return user.get();
   }
 
-  Future<DocumentSnapshot<Object?>> role() async {
-    String uid = auth.currentUser!.uid;
-    DocumentReference users = firestore.collection('Users').doc(uid);
-    return users.get();
+  Future<DocumentSnapshot<Object?>> role(BuildContext context) async {
+    String emailUser = auth.currentUser!.email.toString();
+    CollectionReference users = firestore.collection('Users');
+
+    return users.doc(emailUser).get();
+
+    // if (userCheck.data() != null) {
+    //   return userCheck;
+    // } else {
+    //   Get.dialog(dialogC.dialogAlertBtn(() {
+    //     logout();
+    //   },
+    //       IconlyLight.danger,
+    //       111.29,
+    //       "Keluar",
+    //       "Terjadi Kesalahan!",
+    //       "Silakan masuk ulang.",
+    //       getTextAlert(context),
+    //       getTextAlertSub(context),
+    //       getTextAlertBtn(context)));
+    // }
   }
 
   //store user data
   void syncUsers(String email, String password, BuildContext context) async {
-    String uid = auth.currentUser!.uid.toString();
+    String emailUser = auth.currentUser!.email.toString();
 
     CollectionReference users = firestore.collection('Users');
+
+    final checkUserData = await users.doc(emailUser).get();
+
     try {
-      users.doc(uid).set({
-        'uid': uid,
-        'email': email,
-        'profile': '',
-        'password': password,
-        'role': "user",
-      });
+      // if (checkUserData.data() == null) {
+      //   users.doc(uid).set(user.toJson());
+      // } else {
+      //   return null;
+      // }
+      if (checkUserData.data() == null) {
+        users.doc(emailUser).set({
+          'uid': auth.currentUser?.uid,
+          'email': email,
+          'profile': '',
+          'password': password,
+          'role': "user",
+          'lastSignInDate':
+              auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
+          'creationTime':
+              auth.currentUser?.metadata.creationTime?.toIso8601String(),
+        });
+      } else {
+        users.doc(emailUser).update({
+          'lastSignInDate':
+              auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
+        });
+      }
     } catch (e) {
       print(e);
       Get.dialog(dialogC.dialogAlertOnly(
@@ -91,6 +130,7 @@ class AuthController extends GetxController {
           email: email, password: password);
 
       if (myUser.user!.emailVerified) {
+        syncUsers(email, password, context);
         Get.offAllNamed(Routes.HOME);
       } else {
         Get.dialog(dialogC.dialogAlertBtn(() async {

@@ -19,6 +19,7 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
     final authC = Get.put(AuthController());
     final apiC = Get.put(APIController());
     return Scaffold(
+      backgroundColor: light,
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: AppBar(

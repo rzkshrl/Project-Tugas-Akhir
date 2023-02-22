@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/modules/riwayat_presensi/views/riwayat_presensi_view.dart';
+import 'package:project_tugas_akhir/app/routes/app_pages.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 
@@ -23,15 +24,15 @@ class HomeView extends GetView<HomeController> {
             defaultTargetPlatform == TargetPlatform.macOS ||
             defaultTargetPlatform == TargetPlatform.windows)) {
       return FutureBuilder<DocumentSnapshot<Object?>>(
-          future: authC.role(),
+          future: authC.role(context),
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.waiting) {
               return const LoadingView();
             }
             if (snap.hasData) {
-              var role = snap.data!.get("roles");
+              var role = snap.data!.get("role");
               if (role == "admin") {
-                return RiwayatPresensiView();
+                return const RiwayatPresensiView();
               } else {
                 return Scaffold(
                   backgroundColor: error.withOpacity(0.5),
