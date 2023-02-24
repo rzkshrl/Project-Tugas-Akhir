@@ -62,13 +62,9 @@ class AuthController extends GetxController {
     CollectionReference users = firestore.collection('Users');
 
     final checkUserData = await users.doc(emailUser).get();
+    final currentUserData = checkUserData.data();
 
-    try {
-      // if (checkUserData.data() == null) {
-      //   users.doc(uid).set(user.toJson());
-      // } else {
-      //   return null;
-      // }
+    // try {
       if (checkUserData.data() == null) {
         users.doc(emailUser).set({
           'uid': auth.currentUser?.uid,
@@ -87,15 +83,15 @@ class AuthController extends GetxController {
               auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
         });
       }
-    } catch (e) {
-      print(e);
-      Get.dialog(dialogC.dialogAlertOnly(
-          IconlyLight.danger,
-          "Terjadi Kesalahan.",
-          "Tidak dapat menambahkan data.",
-          getTextAlert(context),
-          getTextAlertSub(context)));
-    }
+    // } catch (e) {
+    //   print(e);
+    //   Get.dialog(dialogC.dialogAlertOnly(
+    //       IconlyLight.danger,
+    //       "Terjadi Kesalahan.",
+    //       "Tidak dapat menambahkan data.",
+    //       getTextAlert(context),
+    //       getTextAlertSub(context)));
+    // }
   }
 
   //lupa sandi
