@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,6 +13,8 @@ import '../../../theme/theme.dart';
 import '../../../utils/loading.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_presensi_all_controller.dart';
+
+import 'package:http/http.dart' as http;
 
 class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
   const RekapPresensiAllView({Key? key}) : super(key: key);
@@ -47,45 +51,37 @@ class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
               )),
         ],
       ),
-      body: FutureBuilder<ReqResAPIModel?>(
-          future: apiC.getDataAPI(),
-          builder: (context, snap) {
-            if (snap.connectionState == ConnectionState.waiting) {
-              return LoadingView();
-            }
-            if (snap.hasData) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Rekap Presensi Semua Pegawai',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '${snap.data!.data.last_name}',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '${snap.data!.data.email}',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '${snap.data!.support.text}',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return Center(
-                child: Text(
-                  'NO DATA',
-                  style: TextStyle(fontSize: 20),
-                ),
-              );
-            }
-          }),
+      body: Builder(
+          // future: apiC.getDataSDK(),
+          builder: (context) {
+        // if (snap.connectionState == ConnectionState.waiting) {
+        //   return LoadingView();
+        // }
+        // if (snap.hasData) {
+        Uri url = Uri.parse("https:192.168.0.206:8008/user/all/paging");
+        var response = http.get(url);
+
+        log("{$response}");
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Rekap Presensi Semua Pegawai',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+        );
+        // } else {
+        //   return Center(
+        //     child: Text(
+        //       'NO DATA',
+        //       style: TextStyle(fontSize: 20),
+        //     ),
+        //   );
+        // }
+      }),
     );
   }
 }

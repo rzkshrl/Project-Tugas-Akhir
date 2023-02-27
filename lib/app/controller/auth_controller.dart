@@ -21,6 +21,8 @@ class AuthController extends GetxController {
   Stream<User?> get streamAuthStatus => auth.userChanges();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  var userModel = UsersModel().obs;
+
   Stream<QuerySnapshot<Object?>> streamDataUsers() {
     CollectionReference users = firestore.collection("Users");
     return users.snapshots();
@@ -56,33 +58,36 @@ class AuthController extends GetxController {
   }
 
   //store user data
-  void syncUsers(String email, String password, BuildContext context) async {
+  void syncUsers(String password, BuildContext context) async {
     String emailUser = auth.currentUser!.email.toString();
 
     CollectionReference users = firestore.collection('Users');
 
     final checkUserData = await users.doc(emailUser).get();
-    final currentUserData = checkUserData.data();
+    final currentUserData = checkUserData.data() as Map<String, dynamic>;
 
     // try {
-      if (checkUserData.data() == null) {
-        users.doc(emailUser).set({
-          'uid': auth.currentUser?.uid,
-          'email': email,
-          'profile': '',
-          'password': password,
-          'role': "user",
-          'lastSignInDate':
-              auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
-          'creationTime':
-              auth.currentUser?.metadata.creationTime?.toIso8601String(),
-        });
-      } else {
-        users.doc(emailUser).update({
-          'lastSignInDate':
-              auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
-        });
-      }
+    if (checkUserData.data() == null) {
+      users.doc(emailUser).set({
+        'uid': auth.currentUser!.uid,
+        'email': auth.currentUser!.email,
+        'profile': '',
+        'password': password,
+        'role': "user",
+        'lastSignInDate':
+            auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
+        'creationTime':
+            auth.currentUser?.metadata.creationTime?.toIso8601String(),
+      });
+    } else {
+      users.doc(emailUser).update({
+        'lastSignInDate':
+            auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
+      });
+    }
+
+    userModel(UsersModel.fromJson(currentUserData));
+    userModel.refresh();
     // } catch (e) {
     //   print(e);
     //   Get.dialog(dialogC.dialogAlertOnly(
@@ -126,7 +131,7 @@ class AuthController extends GetxController {
           email: email, password: password);
 
       if (myUser.user!.emailVerified) {
-        syncUsers(email, password, context);
+        syncUsers(password, context);
         Get.offAllNamed(Routes.HOME);
       } else {
         Get.dialog(dialogC.dialogAlertBtn(() async {
@@ -183,7 +188,7 @@ class AuthController extends GetxController {
         password: password,
       );
 
-      syncUsers(email, password, context);
+      syncUsers(password, context);
       await myUser.user!.sendEmailVerification();
       Get.dialog(dialogC.dialogAlertBtn(() {
         Get.back();

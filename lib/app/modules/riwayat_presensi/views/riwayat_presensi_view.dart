@@ -19,69 +19,54 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
     final authC = Get.put(AuthController());
     final apiC = Get.put(APIController());
     return Scaffold(
-      backgroundColor: light,
-      drawer: const NavigationDrawerView(),
-      drawerScrimColor: light.withOpacity(0.6),
-      appBar: AppBar(
-        title: null,
         backgroundColor: light,
-        bottomOpacity: 0.0,
-        elevation: 0.0,
-        leading: Builder(builder: (context) {
-          return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              icon: FaIcon(
-                FontAwesomeIcons.bars,
-                color: dark,
-              ));
-        }),
-        actions: [
-          IconButton(
-              onPressed: () => authC.logout(),
-              icon: Icon(
-                IconlyLight.logout,
-                color: dark,
-              )),
-        ],
-      ),
-      body: FutureBuilder<ReqResAPIModel?>(
-          future: apiC.getDataAPI(),
-          builder: (context, snap) {
-            if (snap.connectionState == ConnectionState.waiting) {
-              return LoadingView();
-            }
-            if (snap.hasData) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${snap.data!.data.first_name}',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '${snap.data!.data.email}',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '${snap.data!.support.text}',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return Center(
-                child: Text(
-                  'NO DATA',
+        drawer: const NavigationDrawerView(),
+        drawerScrimColor: light.withOpacity(0.6),
+        appBar: AppBar(
+          title: null,
+          backgroundColor: light,
+          bottomOpacity: 0.0,
+          elevation: 0.0,
+          leading: Builder(builder: (context) {
+            return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                icon: FaIcon(
+                  FontAwesomeIcons.bars,
+                  color: dark,
+                ));
+          }),
+          actions: [
+            IconButton(
+                onPressed: () => authC.logout(),
+                icon: Icon(
+                  IconlyLight.logout,
+                  color: dark,
+                )),
+          ],
+        ),
+        body: Center(
+          child: Obx(
+            () => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${authC.userModel.value.uid}',
                   style: TextStyle(fontSize: 20),
                 ),
-              );
-            }
-          }),
-    );
+                Text(
+                  '${authC.userModel.value.email}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  '${authC.userModel.value.role}',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }

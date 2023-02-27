@@ -21,4 +21,21 @@ class APIController extends GetxController {
       return ReqResAPIModel.fromJson(data);
     }
   }
+
+  Future getDataSDK() async {
+    Uri url = Uri.parse("https:192.168.8.2:5005/dev/info");
+    var response = await http.get(url);
+
+    print(response);
+
+    // if (response.statusCode != 200) {
+    //   print("GAGAL MENDAPAT DATA DARI SERVER");
+    //   return null;
+    // } else {
+    //   print(response.body);
+    //   Map<String, dynamic> data =
+    //       (json.decode(response.body) as Map<String, dynamic>);
+    //   return data;
+    // }
+  }
 }

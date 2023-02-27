@@ -32,7 +32,7 @@ class HomeView extends GetView<HomeController> {
             if (snap.hasData) {
               var role = snap.data!.get("role");
               if (role == "admin") {
-                return const RiwayatPresensiView();
+                return RiwayatPresensiView();
               } else {
                 return Scaffold(
                   backgroundColor: error.withOpacity(0.5),

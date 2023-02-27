@@ -34,7 +34,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.RIWAYAT_PRESENSI;
+  static const INITIAL = Routes.LOGIN;
 
   static final routes = [
     GetPage(
@@ -59,7 +59,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.RIWAYAT_PRESENSI,
-      page: () => const RiwayatPresensiView(),
+      page: () => RiwayatPresensiView(),
       binding: RiwayatPresensiBinding(),
     ),
     GetPage(
