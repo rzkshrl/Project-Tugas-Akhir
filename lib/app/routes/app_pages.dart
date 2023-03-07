@@ -16,6 +16,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/lupa_sandi/bindings/lupa_sandi_binding.dart';
 import '../modules/lupa_sandi/views/lupa_sandi_view.dart';
+import '../modules/mesin/bindings/mesin_binding.dart';
+import '../modules/mesin/views/mesin_view.dart';
 import '../modules/navigation_drawer/bindings/navigation_drawer_binding.dart';
 import '../modules/navigation_drawer/views/navigation_drawer_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.HARI_LIBUR,
       page: () => const HariLiburView(),
       binding: HariLiburBinding(),
+    ),
+    GetPage(
+      name: _Paths.MESIN,
+      page: () => const MesinView(),
+      binding: MesinBinding(),
     ),
   ];
 }

@@ -25,6 +25,42 @@ getTextAdmin(BuildContext context) {
       color: Blue1);
 }
 
+getTextHeader(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 24.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 20.0),
+        Condition.equals(name: MOBILE, value: 20.0),
+        Condition.equals(name: TABLET, value: 22.0),
+        Condition.equals(name: DESKTOP, value: 24.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w900);
+}
+
+getTextSubHeader(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 12.0),
+        Condition.equals(name: MOBILE, value: 12.0),
+        Condition.equals(name: TABLET, value: 14.0),
+        Condition.equals(name: DESKTOP, value: 16.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w700);
+}
+
+getTextItemAppBar(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 10.0),
+        Condition.equals(name: MOBILE, value: 10.0),
+        Condition.equals(name: TABLET, value: 12.0),
+        Condition.equals(name: DESKTOP, value: 14.0),
+      ]).value,
+      color: light,
+      fontWeight: FontWeight.w700);
+}
+
 getTextAlert(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
@@ -176,6 +212,32 @@ getTextLoginBtnActive(BuildContext context) {
       ]).value,
       color: Yellow1,
       fontWeight: FontWeight.w300);
+}
+
+getTextBtnAction(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 8.0),
+        Condition.smallerThan(name: MOBILE, value: 8.0),
+        Condition.equals(name: MOBILE, value: 8.0),
+        Condition.equals(name: TABLET, value: 12.0),
+        Condition.equals(name: DESKTOP, value: 14.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w700);
+}
+
+getTextBtn(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 8.0),
+        Condition.smallerThan(name: MOBILE, value: 8.0),
+        Condition.equals(name: MOBILE, value: 8.0),
+        Condition.equals(name: TABLET, value: 12.0),
+        Condition.equals(name: DESKTOP, value: 14.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w700);
 }
 
 getTextLoginBtnActiveMobile(BuildContext context) {

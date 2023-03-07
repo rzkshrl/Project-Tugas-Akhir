@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,20 +9,20 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 
-import '../data/models/usersmodel.dart';
+import '../data/models/usermodel.dart';
 import '../routes/app_pages.dart';
 import '../utils/dialogDefault.dart';
 
 class AuthController extends GetxController {
   var isLoading = false.obs;
 
-  final dialogC = Get.put(dialogDef());
+  var isAuth = false.obs;
 
   FirebaseAuth auth = FirebaseAuth.instance;
   Stream<User?> get streamAuthStatus => auth.userChanges();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  var userModel = UsersModel().obs;
+  var userData = UserModel().obs;
 
   Stream<QuerySnapshot<Object?>> streamDataUsers() {
     CollectionReference users = firestore.collection("Users");
@@ -34,76 +35,99 @@ class AuthController extends GetxController {
     return user.get();
   }
 
-  Future<DocumentSnapshot<Object?>> role(BuildContext context) async {
+  Future<DocumentSnapshot<Object?>> role() async {
     String emailUser = auth.currentUser!.email.toString();
     CollectionReference users = firestore.collection('Users');
 
     return users.doc(emailUser).get();
+  }
 
-    // if (userCheck.data() != null) {
-    //   return userCheck;
-    // } else {
-    //   Get.dialog(dialogC.dialogAlertBtn(() {
-    //     logout();
-    //   },
-    //       IconlyLight.danger,
-    //       111.29,
-    //       "Keluar",
-    //       "Terjadi Kesalahan!",
-    //       "Silakan masuk ulang.",
-    //       getTextAlert(context),
-    //       getTextAlertSub(context),
-    //       getTextAlertBtn(context)));
-    // }
+  Future<void> firstInitialized() async {
+    await autoLogin().then((value) {
+      if (value) {
+        isAuth.value = true;
+      }
+    });
+  }
+
+  Future<bool> autoLogin() async {
+    //auto login
+    try {
+      final isSignIn = await auth.currentUser;
+      if (isSignIn != null) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      // Dialog(
+      //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      //   backgroundColor: Colors.white,
+      //   child: Container(
+      //     width: 193.93,
+      //     height: 194.73,
+      //     child: Column(
+      //       children: [Icon(PhosphorIcons.xCircle)],
+      //     ),
+      //   ),
+      // );
+      return false;
+    }
   }
 
   //store user data
   void syncUsers(String password, BuildContext context) async {
+    CollectionReference users = firestore.collection("Users");
+
     String emailUser = auth.currentUser!.email.toString();
 
-    CollectionReference users = firestore.collection('Users');
+    final checkuser = await users.doc(emailUser).get();
 
-    final checkUserData = await users.doc(emailUser).get();
-    final currentUserData = checkUserData.data() as Map<String, dynamic>;
-
-    // try {
-    if (checkUserData.data() == null) {
+    if (checkuser.data() == null) {
       users.doc(emailUser).set({
         'uid': auth.currentUser!.uid,
         'email': auth.currentUser!.email,
+        'role': "user",
         'profile': '',
         'password': password,
-        'role': "user",
         'lastSignInDate':
-            auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
+            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
         'creationTime':
-            auth.currentUser?.metadata.creationTime?.toIso8601String(),
+            auth.currentUser!.metadata.creationTime!.toIso8601String(),
       });
     } else {
+      // return null;
       users.doc(emailUser).update({
         'lastSignInDate':
-            auth.currentUser?.metadata.lastSignInTime?.toIso8601String(),
+            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
       });
     }
 
-    userModel(UsersModel.fromJson(currentUserData));
-    userModel.refresh();
-    // } catch (e) {
-    //   print(e);
-    //   Get.dialog(dialogC.dialogAlertOnly(
-    //       IconlyLight.danger,
-    //       "Terjadi Kesalahan.",
-    //       "Tidak dapat menambahkan data.",
-    //       getTextAlert(context),
-    //       getTextAlertSub(context)));
-    // }
+    final checkUserData = checkuser.data() as Map<String, dynamic>;
+
+    // userData(UserModel.fromJson(checkUserData));
+
+    print("${checkUserData}");
+
+    userData(UserModel(
+        uid: auth.currentUser!.uid,
+        name: auth.currentUser!.displayName,
+        email: auth.currentUser!.email,
+        photoUrl: checkUserData['profile'],
+        password: password,
+        role: checkUserData['role'],
+        creationTime:
+            auth.currentUser!.metadata.creationTime!.toIso8601String(),
+        lastSignInTime:
+            auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
+
+    userData.refresh();
   }
 
   //lupa sandi
   void lupaSandi(String email, BuildContext context) async {
     try {
       auth.sendPasswordResetEmail(email: email);
-      Get.dialog(dialogC.dialogAlertBtn(() {
+      Get.dialog(dialogAlertBtn(() {
         Get.back();
       },
           IconlyLight.tick_square,
@@ -115,7 +139,7 @@ class AuthController extends GetxController {
           getTextAlertSub(context),
           getTextAlertBtn(context)));
     } catch (e) {
-      Get.dialog(dialogC.dialogAlertOnly(
+      Get.dialog(dialogAlertOnly(
           IconlyLight.danger,
           "Terjadi Kesalahan.",
           "Tidak dapat reset sandi.",
@@ -131,13 +155,23 @@ class AuthController extends GetxController {
           email: email, password: password);
 
       if (myUser.user!.emailVerified) {
-        syncUsers(password, context);
-        Get.offAllNamed(Routes.HOME);
+        auth.authStateChanges().listen((User? user) async {
+          if (user == null) {
+            print('User is currently signed out!');
+            syncUsers(password, context);
+          } else {
+            print('User is signed in!');
+            syncUsers(password, context);
+            isAuth.value = true;
+
+            await Get.offAllNamed(Routes.HOME);
+          }
+        });
       } else {
-        Get.dialog(dialogC.dialogAlertBtn(() async {
+        Get.dialog(dialogAlertBtn(() async {
           myUser.user!.sendEmailVerification();
           Get.back();
-          await Get.dialog(dialogC.dialogAlertBtn(() {
+          await Get.dialog(dialogAlertBtn(() {
             Get.back();
           },
               IconlyLight.tick_square,
@@ -161,16 +195,16 @@ class AuthController extends GetxController {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
-        Get.dialog(dialogC.dialogAlertOnlySingleMsg(IconlyLight.danger,
+        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
             "Akun tidak ditemukan!", getTextAlert(context)));
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
-        Get.dialog(dialogC.dialogAlertOnlySingleMsg(IconlyLight.danger,
+        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
             "Kata sandi yang dimasukkan salah!", getTextAlert(context)));
       }
     } catch (e) {
       print(e);
-      Get.dialog(dialogC.dialogAlertOnly(
+      Get.dialog(dialogAlertOnly(
           IconlyLight.danger,
           "Terjadi Kesalahan.",
           "Tidak dapat masuk.",
@@ -190,7 +224,7 @@ class AuthController extends GetxController {
 
       syncUsers(password, context);
       await myUser.user!.sendEmailVerification();
-      Get.dialog(dialogC.dialogAlertBtn(() {
+      Get.dialog(dialogAlertBtn(() {
         Get.back();
       },
           IconlyLight.tick_square,
@@ -205,7 +239,7 @@ class AuthController extends GetxController {
       if (e.code == 'weak-password') {
         // ignore: avoid_print
         print('The password provided is too weak.');
-        Get.dialog(dialogC.dialogAlertOnly(
+        Get.dialog(dialogAlertOnly(
             IconlyLight.danger,
             "Kata Sandi terlalu lemah!",
             "Gunakan kombinasi kata sandi yang kuat",
@@ -214,13 +248,13 @@ class AuthController extends GetxController {
       } else if (e.code == 'email-already-in-use') {
         // ignore: avoid_print
         print('The account already exists for that email.');
-        Get.dialog(dialogC.dialogAlertOnlySingleMsg(IconlyLight.danger,
+        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
             "Email sudah terpakai pada akun lain!", getTextAlert(context)));
       }
     } catch (e) {
       // ignore: avoid_print
       print(e);
-      Get.dialog(dialogC.dialogAlertOnly(
+      Get.dialog(dialogAlertOnly(
           IconlyLight.danger,
           "Terjadi Kesalahan.",
           "Tidak dapat mendaftarkan akun ini.",

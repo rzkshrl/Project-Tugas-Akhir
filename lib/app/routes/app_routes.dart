@@ -18,6 +18,7 @@ abstract class Routes {
   static const KET_IZIN = _Paths.KET_IZIN;
   static const NAVIGATION_DRAWER = _Paths.NAVIGATION_DRAWER;
   static const HARI_LIBUR = _Paths.HARI_LIBUR;
+  static const MESIN = _Paths.MESIN;
 }
 
 abstract class _Paths {
@@ -37,4 +38,5 @@ abstract class _Paths {
   static const KET_IZIN = '/ket-izin';
   static const NAVIGATION_DRAWER = '/navigation-drawer';
   static const HARI_LIBUR = '/hari-libur';
+  static const MESIN = '/mesin';
 }

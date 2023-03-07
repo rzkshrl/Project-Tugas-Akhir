@@ -40,6 +40,13 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <!-- This script installs service_worker.js to provide PWA functionality to
+     application. For more information, see:
+     https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-anaylytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -53,11 +60,13 @@
         return appRunner.runApp();
       });
     });
+  </script>
+  <script>
     window.fixPasswordCss = () => {
-      let style = document.createElement('style');
-      style.innerHTML = '::-ms-reveal { display: none; }';
-      document.head.appendChild(style);
-    };
+    let style = document.createElement('style');
+    style.innerHTML = '::-ms-reveal { display: none; }';
+    document.head.appendChild(style);
+  }
   </script>
   <script type="application/javascript">
 
@@ -68,7 +77,7 @@
     Element.prototype._attachShadow = Element.prototype.attachShadow;
     Element.prototype.attachShadow = function (init) {
 
-      if (this.tagName == "FLT-GLASS-PANE" && window.location.hash == '#/login') {
+      if (this.tagName == "FLT-GLASS-PANE") {
 
         _element = document.createElement('flt-element-host-node');
         this.appendChild(_element);

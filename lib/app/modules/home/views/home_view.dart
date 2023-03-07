@@ -15,44 +15,44 @@ import '../controllers/home_controller.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class HomeView extends GetView<HomeController> {
-  final authC = Get.put(AuthController());
-  final dialogC = Get.put(dialogDef());
   @override
   Widget build(BuildContext context) {
+    final authC = Get.put(AuthController());
     if (kIsWeb &&
         (defaultTargetPlatform == TargetPlatform.linux ||
             defaultTargetPlatform == TargetPlatform.macOS ||
             defaultTargetPlatform == TargetPlatform.windows)) {
-      return FutureBuilder<DocumentSnapshot<Object?>>(
-          future: authC.role(context),
-          builder: (context, snap) {
-            if (snap.connectionState == ConnectionState.waiting) {
-              return const LoadingView();
-            }
-            if (snap.hasData) {
-              var role = snap.data!.get("role");
-              if (role == "admin") {
-                return RiwayatPresensiView();
-              } else {
-                return Scaffold(
-                  backgroundColor: error.withOpacity(0.5),
-                  body: dialogC.dialogAlertBtn(() {
-                    authC.logout();
-                  },
-                      IconlyLight.danger,
-                      111.29,
-                      "Keluar",
-                      "Salah Akun!",
-                      "Akun bukan admin, \nsilahkan masuk menggunakan akun admin.",
-                      getTextAlert(context),
-                      getTextAlertSub(context),
-                      getTextAlertBtn(context)),
-                );
-              }
-            } else {
-              return const LoadingView();
-            }
-          });
+      // return FutureBuilder<DocumentSnapshot<Object?>>(
+      //     future: authC.role(),
+      //     builder: (context, snap) {
+      //       if (snap.connectionState == ConnectionState.waiting) {
+      //         return const LoadingView();
+      //       }
+      //       if (snap.hasData) {
+      //         var role = snap.data!.get("role");
+      //         if (role != "admin") {
+      if (authC.userData.value.role != "admin") {
+        return const RiwayatPresensiView();
+      } else {
+        return Scaffold(
+          backgroundColor: error.withOpacity(0.5),
+          body: dialogAlertBtn(() {
+            authC.logout();
+          },
+              IconlyLight.danger,
+              111.29,
+              "Keluar",
+              "Salah Akun!",
+              "Akun bukan admin, \nsilahkan masuk menggunakan akun admin.",
+              getTextAlert(context),
+              getTextAlertSub(context),
+              getTextAlertBtn(context)),
+        );
+      }
+      //   } else {
+      //     return const LoadingView();
+      //   }
+      // });
     } else {
       return Scaffold(
         appBar: AppBar(

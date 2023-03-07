@@ -1,26 +1,18 @@
 {
     "Result":true,
-    "Data":
-    [
-        {
-            "PIN":"1",
-            "Name":"satu",
-            "RFID":"2341073",
-            "Password":"1",
-            "Privilege":0,
-            "Template":[]
-        },
-        {
-            "PIN":"2",
-            "Name":"dua",
-            "RFID":"4085563",
-            "Password":"2",
-            "Privilege":0,
-            "Template":[{
-                "pin":"2",
-                "idx":0,
-                "alg_ver":10,
-                "template":"TFNTUzIxAAAFEBQEC"}]
-        }
-    ]
+    "DEVINFO":
+    {
+        "Admin":"0",
+        "PWD":"0",
+        "Jam":"07\/03\/2023 09:05:11",
+        "New Operasional":"0",
+        "All Presensi":"5732",
+        "New Presensi":"0",
+        "All Operasional":"0",
+        "FP":"20",
+        "Vein":"0",
+        "User":"10",
+        "Face":"0",
+        "CARD":"0"
+    }
 }
