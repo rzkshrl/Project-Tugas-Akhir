@@ -143,13 +143,265 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(top: 0.001.h),
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Padding(padding: EdgeInsets.only(top: 2.h));
-                    }),
+                child: SingleChildScrollView(
+                  child: DataTable(
+                      headingTextStyle: getTextSubHeader(context),
+                      dataRowHeight: 80,
+                      headingRowColor:
+                          MaterialStateProperty.resolveWith((states) => light),
+                      columns: [
+                        DataColumn(label: Text("Nama")),
+                        DataColumn(label: Text("NIP/PEGID")),
+                        DataColumn(label: Text("JAM MASUK ")),
+                        DataColumn(label: Text("JAM Keluar ")),
+                        DataColumn(label: Text("KETERANGAN ")),
+                        DataColumn(label: Text("EDIT "))
+                      ],
+                      rows: [
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("BAGUS")),
+                          DataCell(Text("210318")),
+                          DataCell(Text("12.57")),
+                          DataCell(Text("06.57")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text("AJIKOPI")),
+                          DataCell(Text("210213")),
+                          DataCell(Text("12.37")),
+                          DataCell(Text("06.12")),
+                          DataCell(Text("MBOLOS")),
+                          DataCell(IconButton(
+                            icon: Icon(IconlyLight.edit),
+                            onPressed: () {},
+                          )),
+                        ]),
+                      ]),
+                ),
               )
             ],
           ),
