@@ -108,7 +108,7 @@ class AuthController extends GetxController {
 
     print("${checkUserData}");
 
-    userData(UserModel(
+    userData.value = (UserModel(
         uid: auth.currentUser!.uid,
         name: auth.currentUser!.displayName,
         email: auth.currentUser!.email,
@@ -121,6 +121,8 @@ class AuthController extends GetxController {
             auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
 
     userData.refresh();
+
+    print("${userData.value.role}");
   }
 
   //lupa sandi
@@ -158,7 +160,6 @@ class AuthController extends GetxController {
         auth.authStateChanges().listen((User? user) async {
           if (user == null) {
             print('User is currently signed out!');
-            syncUsers(password, context);
           } else {
             print('User is signed in!');
             syncUsers(password, context);

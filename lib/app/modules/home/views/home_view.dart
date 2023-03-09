@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/data/models/usermodel.dart';
 import 'package:project_tugas_akhir/app/modules/riwayat_presensi/views/riwayat_presensi_view.dart';
 import 'package:project_tugas_akhir/app/routes/app_pages.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
@@ -15,6 +19,7 @@ import '../controllers/home_controller.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class HomeView extends GetView<HomeController> {
+  const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
@@ -31,7 +36,12 @@ class HomeView extends GetView<HomeController> {
       //       if (snap.hasData) {
       //         var role = snap.data!.get("role");
       //         if (role != "admin") {
-      if (authC.userData.value.role != "admin") {
+      String? roles = authC.userData.value.role;
+      log("$roles");
+
+      if (authC.userData.value.role == null ||
+          authC.userData.value.role == "admin") {
+        // if (authC.userData.value.role == "admin") {
         return const RiwayatPresensiView();
       } else {
         return Scaffold(
