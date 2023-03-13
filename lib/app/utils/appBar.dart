@@ -4,9 +4,36 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:sizer/sizer.dart';
 
+import '../controller/auth_controller.dart';
 import '../theme/textstyle.dart';
 import '../theme/theme.dart';
 
-class AppBar extends GetxController {
-  appBar() {}
+Widget rowAppBarAdmin(BuildContext context) {
+  final authC = Get.put(AuthController());
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      IconButton(
+          iconSize: 30,
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          icon: FaIcon(
+            FontAwesomeIcons.bars,
+            color: Blue1,
+          )),
+      Padding(
+        padding: EdgeInsets.only(
+          right: 1.5.w,
+        ),
+        child: IconButton(
+          color: Blue1,
+          onPressed: () => authC.logout(),
+          icon: Icon(IconlyLight.logout),
+          iconSize: 30,
+        ),
+      ),
+    ],
+  );
 }

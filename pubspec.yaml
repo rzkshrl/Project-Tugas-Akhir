@@ -9,6 +9,7 @@ dependencies:
   build_runner: ^2.3.3
   cloud_firestore: ^4.3.1
   cupertino_icons: ^1.0.2
+  data_table_2: ^2.4.1
   dio: ^5.0.1
   dwds: ^16.0.1
   firebase_auth: ^4.2.6

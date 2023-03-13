@@ -83,11 +83,11 @@ class LoginView extends GetView<LoginController> {
                           IconlyLight.lock, Blue1, "Kata Sandi", () {
                         TextInput.finishAutofillContext();
                       }),
-                      SizedBox(
-                        height: 4.h,
-                      ),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 4.h,
                 ),
                 Container(
                   width: 211,

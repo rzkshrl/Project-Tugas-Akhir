@@ -1,18 +1,10 @@
 {
-    "Result":true,
-    "DEVINFO":
-    {
-        "Admin":"0",
-        "PWD":"0",
-        "Jam":"07\/03\/2023 09:05:11",
-        "New Operasional":"0",
-        "All Presensi":"5732",
-        "New Presensi":"0",
-        "All Operasional":"0",
-        "FP":"20",
-        "Vein":"0",
-        "User":"10",
-        "Face":"0",
-        "CARD":"0"
-    }
+
+                "PIN": "",
+                "WorkCode": 0,
+                "SN": "",
+                "VerifyMode": 0,
+                "ScanDate": "",
+                "IOMode": 0
+
 }

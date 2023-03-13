@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/controller/api_controller.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 
@@ -17,6 +18,8 @@ class AuthController extends GetxController {
   var isLoading = false.obs;
 
   var isAuth = false.obs;
+
+  final apiC = Get.put(APIController());
 
   FirebaseAuth auth = FirebaseAuth.instance;
   Stream<User?> get streamAuthStatus => auth.userChanges();
@@ -106,7 +109,7 @@ class AuthController extends GetxController {
 
     // userData(UserModel.fromJson(checkUserData));
 
-    print("${checkUserData}");
+    print("User Data : ${checkUserData}");
 
     userData.value = (UserModel(
         uid: auth.currentUser!.uid,
@@ -121,8 +124,6 @@ class AuthController extends GetxController {
             auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
 
     userData.refresh();
-
-    print("${userData.value.role}");
   }
 
   //lupa sandi
@@ -164,6 +165,7 @@ class AuthController extends GetxController {
             print('User is signed in!');
             syncUsers(password, context);
             isAuth.value = true;
+            await Future.delayed(const Duration(seconds: 2));
 
             await Get.offAllNamed(Routes.HOME);
           }

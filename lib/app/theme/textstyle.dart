@@ -37,6 +37,18 @@ getTextHeader(BuildContext context) {
       fontWeight: FontWeight.w900);
 }
 
+getTextHeader2(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 36.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 32.0),
+        Condition.equals(name: MOBILE, value: 32.0),
+        Condition.equals(name: TABLET, value: 34.0),
+        Condition.equals(name: DESKTOP, value: 36.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w900);
+}
+
 getTextSubHeader(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [

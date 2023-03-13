@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/controller/api_controller.dart';
+import 'package:project_tugas_akhir/app/data/models/allscanlogmodel.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
@@ -16,7 +18,7 @@ import 'package:responsive_framework/responsive_value.dart' as rspnsvlue;
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
-import '../../../data/models/reqresapimodel.dart';
+import '../../../utils/appBar.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/riwayat_presensi_controller.dart';
 
@@ -25,7 +27,9 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
+    final controller = Get.put(RiwayatPresensiController());
     final apiC = Get.put(APIController());
+    final dataScanlog = DataScanlog();
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
@@ -61,21 +65,12 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                   Padding(
                     padding: EdgeInsets.only(
                       right: 1.5.w,
-                      // top: 3.5.h,
                     ),
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
                       icon: Icon(IconlyLight.logout),
                       iconSize: 30,
-                      // child: ClipRRect(
-                      //   borderRadius: BorderRadius.circular(10),
-                      //   child: Image.asset(
-                      //     'assets/icons/logo.png',
-                      //     height: 100,
-                      //     width: 100,
-                      //   ),
-                      // ),
                     ),
                   ),
                 ],
@@ -126,7 +121,7 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                   children: [
                     btnDefaultIcon1(13.w, Blue1, IconlyLight.swap, Yellow1,
                         "Refresh Data", getTextBtnAction(context), () {
-                      apiC.getDataSDK();
+                      apiC.getAllPresenceData(context);
                     }),
                     SizedBox(
                       width: 1.5.w,
@@ -144,264 +139,18 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                 width: 90.w,
                 height: 70.h,
                 child: SingleChildScrollView(
-                  child: DataTable(
-                      headingTextStyle: getTextSubHeader(context),
-                      dataRowHeight: 80,
-                      headingRowColor:
-                          MaterialStateProperty.resolveWith((states) => light),
-                      columns: [
-                        DataColumn(label: Text("Nama")),
-                        DataColumn(label: Text("NIP/PEGID")),
-                        DataColumn(label: Text("JAM MASUK ")),
-                        DataColumn(label: Text("JAM Keluar ")),
-                        DataColumn(label: Text("KETERANGAN ")),
-                        DataColumn(label: Text("EDIT "))
-                      ],
-                      rows: [
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("BAGUS")),
-                          DataCell(Text("210318")),
-                          DataCell(Text("12.57")),
-                          DataCell(Text("06.57")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text("AJIKOPI")),
-                          DataCell(Text("210213")),
-                          DataCell(Text("12.37")),
-                          DataCell(Text("06.12")),
-                          DataCell(Text("MBOLOS")),
-                          DataCell(IconButton(
-                            icon: Icon(IconlyLight.edit),
-                            onPressed: () {},
-                          )),
-                        ]),
-                      ]),
-                ),
+                    // child: PaginatedDataTable2(
+                    //   columns: [
+                    //     DataColumn(label: Text("PIN")),
+                    //     DataColumn(label: Text('Scan Date'))
+                    //   ],
+                    //   source: dataScanlog,
+                    //   rowsPerPage: controller.rowPerPage.value,
+                    //   onRowsPerPageChanged: (index) {
+                    //     controller.rowPerPage.value = index!;
+                    //   },
+                    // ),
+                    ),
               )
             ],
           ),

@@ -23,10 +23,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
-    if (kIsWeb &&
-        (defaultTargetPlatform == TargetPlatform.linux ||
-            defaultTargetPlatform == TargetPlatform.macOS ||
-            defaultTargetPlatform == TargetPlatform.windows)) {
+    if (kIsWeb) {
       // return FutureBuilder<DocumentSnapshot<Object?>>(
       //     future: authC.role(),
       //     builder: (context, snap) {
@@ -37,13 +34,9 @@ class HomeView extends GetView<HomeController> {
       //         var role = snap.data!.get("role");
       //         if (role != "admin") {
       String? roles = authC.userData.value.role;
-      log("$roles");
+      print("ROLES : $roles");
 
-      if (authC.userData.value.role == null ||
-          authC.userData.value.role == "admin") {
-        // if (authC.userData.value.role == "admin") {
-        return const RiwayatPresensiView();
-      } else {
+      if (roles == null) {
         return Scaffold(
           backgroundColor: error.withOpacity(0.5),
           body: dialogAlertBtn(() {
@@ -52,13 +45,36 @@ class HomeView extends GetView<HomeController> {
               IconlyLight.danger,
               111.29,
               "Keluar",
-              "Salah Akun!",
-              "Akun bukan admin, \nsilahkan masuk menggunakan akun admin.",
+              "Terjadi Masalah!",
+              "Silahkan masuk ulang.",
               getTextAlert(context),
               getTextAlertSub(context),
               getTextAlertBtn(context)),
         );
+      } else {
+        if (roles != "admin") {
+          return Scaffold(
+            backgroundColor: error.withOpacity(0.5),
+            body: dialogAlertBtn(() {
+              authC.logout();
+            },
+                IconlyLight.danger,
+                111.29,
+                "Keluar",
+                "Salah Akun!",
+                "Akun bukan admin, \nsilahkan masuk menggunakan akun admin.",
+                getTextAlert(context),
+                getTextAlertSub(context),
+                getTextAlertBtn(context)),
+          );
+        } else {
+          // return Routes.RIWAYAT_PRESENSI as Widget;
+          // return Get.toNamed(RIWAYAT_PRESENSI) as Widget;
+          // return Get.toNamed(Routes.RIWAYAT_PRESENSI) as Widget;
+          return RiwayatPresensiView();
+        }
       }
+
       //   } else {
       //     return const LoadingView();
       //   }
