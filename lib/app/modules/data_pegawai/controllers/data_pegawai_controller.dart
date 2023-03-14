@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class DataPegawaiController extends GetxController {
   //TODO: Implement DataPegawaiController
 
-  final count = 0.obs;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +20,4 @@ class DataPegawaiController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

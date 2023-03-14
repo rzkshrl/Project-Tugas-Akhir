@@ -11,15 +11,18 @@ import '../theme/theme.dart';
 final c = Get.put(TextFieldController());
 
 Widget textformNormalWeb(
-  BuildContext context,
-  Key? key,
-  TextEditingController? controller,
-  Iterable<String>? autofillHints,
-  TextInputType keyboardType,
-  IconData prefixIcon,
-  Color prefixIconColor,
-  String hintText,
-) {
+    BuildContext context,
+    Key? key,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    Iterable<String>? autofillHints,
+    TextInputType? keyboardType,
+    IconData? prefixIcon,
+    Color? prefixIconColor,
+    String hintText,
+    Color fillColor,
+    Color borderColor,
+    Color focusedBorderColor) {
   return Form(
     key: key,
     child: Container(
@@ -29,7 +32,7 @@ Widget textformNormalWeb(
         autofillHints: autofillHints,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.emailAddress,
-        validator: c.emailValidator,
+        validator: validator,
         controller: controller,
         style: getTextLogin(context),
         decoration: InputDecoration(
@@ -53,7 +56,7 @@ Widget textformNormalWeb(
             prefixIconColor: prefixIconColor,
             hintText: hintText,
             focusColor: Blue1,
-            fillColor: light,
+            fillColor: fillColor,
             filled: true,
             errorStyle: getTextErrorFormLogin(context),
             errorBorder: OutlineInputBorder(
@@ -64,11 +67,80 @@ Widget textformNormalWeb(
                 borderSide: BorderSide(color: error, width: 1.8),
                 borderRadius: BorderRadius.circular(12)),
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Blue1, width: 1.8),
+                borderSide: BorderSide(color: focusedBorderColor, width: 1.8),
                 borderRadius: BorderRadius.circular(12)),
             hintStyle: getTextHintFormLogin(context),
             border: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: dark),
+                borderSide: BorderSide(width: 1, color: borderColor),
+                borderRadius: BorderRadius.circular(12))),
+      ),
+    ),
+  );
+}
+
+Widget textformDialogWeb(
+    BuildContext context,
+    Key? key,
+    double width,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    Iterable<String>? autofillHints,
+    TextInputType? keyboardType,
+    IconData? prefixIcon,
+    Color? prefixIconColor,
+    String hintText,
+    Color fillColor,
+    Color borderColor,
+    Color focusedBorderColor) {
+  return Form(
+    key: key,
+    child: Container(
+      width: width,
+      height: 65,
+      child: TextFormField(
+        autofillHints: autofillHints,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        keyboardType: TextInputType.emailAddress,
+        validator: validator,
+        controller: controller,
+        style: getTextFormDialog(context),
+        decoration: InputDecoration(
+            helperText: ' ',
+            helperStyle: getTextErrorFormLogin(context),
+            isDense: true,
+            contentPadding: EdgeInsets.all(20),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(
+                left: 1.w,
+                right: 0.8.w,
+              ),
+              child: Align(
+                  widthFactor: 0.5,
+                  heightFactor: 0.5,
+                  child: Icon(
+                    prefixIcon,
+                    size: 26,
+                  )),
+            ),
+            prefixIconColor: prefixIconColor,
+            hintText: hintText,
+            focusColor: Blue1,
+            fillColor: fillColor,
+            filled: true,
+            errorStyle: getTextErrorFormLogin(context),
+            errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: errorBg, width: 1.8),
+                borderRadius: BorderRadius.circular(12),
+                gapPadding: 2),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: error, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: focusedBorderColor, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            hintStyle: getTextHintFormLogin(context),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: borderColor),
                 borderRadius: BorderRadius.circular(12))),
       ),
     ),

@@ -18,7 +18,7 @@ import 'app/utils/dialogDefault.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  js.context.callMethod('fixPasswordCss');
+  // js.context.callMethod('fixPasswordCss');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -64,7 +64,7 @@ class ProjectTugasAkhir extends StatelessWidget {
                         fontFamily: 'Inter',
                         primaryColor: light,
                       ),
-                      initialRoute: Routes.LOGIN,
+                      initialRoute: Routes.DATA_PEGAWAI,
                       getPages: AppPages.routes,
                       debugShowCheckedModeBanner: false,
                     );

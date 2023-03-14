@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
@@ -19,6 +20,7 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
+    final c = Get.put(DataPegawaiController());
     final apiC = Get.put(APIController());
     return Scaffold(
       backgroundColor: light,
@@ -75,16 +77,13 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
               EdgeInsets.only(left: 4.w, top: 2.h, right: 4.w, bottom: 8.h),
           child: Column(
             children: [
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Data Kepegawaian',
                     style: getTextHeader2(context),
-                  ),
-                  SizedBox(
-                    height: 0.5.h,
                   ),
                 ],
               ),
@@ -93,15 +92,15 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    btnDefaultIcon1(13.w, Blue1, IconlyLight.swap, Yellow1,
-                        "Refresh Data", getTextBtnAction(context), () {
-                      apiC.getAllPresenceData(context);
-                    }),
-                    SizedBox(
-                      width: 1.5.w,
-                    ),
-                    textButton1(IconlyLight.calendar, Blue1, "Filter Tanggal",
-                        getTextBtn(context), () {}),
+                    btnDefaultIcon1(
+                        13.w,
+                        Blue1,
+                        IconlyLight.plus,
+                        Yellow1,
+                        "Tambah Data",
+                        getTextBtnAction(context),
+                        () => Get.dialog(dialogTextFieldSevenField(context),
+                            barrierColor: light.withOpacity(0.7))),
                   ],
                 ),
               ),

@@ -75,16 +75,13 @@ class HariLiburView extends GetView<HariLiburController> {
               EdgeInsets.only(left: 4.w, top: 2.h, right: 4.w, bottom: 8.h),
           child: Column(
             children: [
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Hari Libur/Cuti Bersama',
                     style: getTextHeader2(context),
-                  ),
-                  SizedBox(
-                    height: 0.5.h,
                   ),
                 ],
               ),
@@ -93,15 +90,10 @@ class HariLiburView extends GetView<HariLiburController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    btnDefaultIcon1(13.w, Blue1, IconlyLight.swap, Yellow1,
-                        "Refresh Data", getTextBtnAction(context), () {
+                    btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
+                        "Tambah Data", getTextBtnAction(context), () {
                       apiC.getAllPresenceData(context);
                     }),
-                    SizedBox(
-                      width: 1.5.w,
-                    ),
-                    textButton1(IconlyLight.calendar, Blue1, "Filter Tanggal",
-                        getTextBtn(context), () {}),
                   ],
                 ),
               ),

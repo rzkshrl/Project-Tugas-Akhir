@@ -14,6 +14,17 @@ getTextLogin(BuildContext context) {
       color: dark);
 }
 
+getTextFormDialog(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 12.0),
+        Condition.equals(name: MOBILE, value: 12.0),
+        Condition.equals(name: TABLET, value: 14.0),
+        Condition.equals(name: DESKTOP, value: 16.0),
+      ]).value,
+      color: light);
+}
+
 getTextAdmin(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
@@ -39,11 +50,11 @@ getTextHeader(BuildContext context) {
 
 getTextHeader2(BuildContext context) {
   return TextStyle(
-      fontSize: ResponsiveValue(context, defaultValue: 36.0, valueWhen: [
-        Condition.smallerThan(name: DESKTOP, value: 32.0),
-        Condition.equals(name: MOBILE, value: 32.0),
-        Condition.equals(name: TABLET, value: 34.0),
-        Condition.equals(name: DESKTOP, value: 36.0),
+      fontSize: ResponsiveValue(context, defaultValue: 34.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 30.0),
+        Condition.equals(name: MOBILE, value: 30.0),
+        Condition.equals(name: TABLET, value: 32.0),
+        Condition.equals(name: DESKTOP, value: 34.0),
       ]).value,
       color: Blue1,
       fontWeight: FontWeight.w900);
@@ -237,6 +248,19 @@ getTextBtnAction(BuildContext context) {
       ]).value,
       color: Yellow1,
       fontWeight: FontWeight.w700);
+}
+
+getTextDialogFieldHeader(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 24.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 20.0),
+        Condition.smallerThan(name: MOBILE, value: 20.0),
+        Condition.equals(name: MOBILE, value: 20.0),
+        Condition.equals(name: TABLET, value: 22.0),
+        Condition.equals(name: DESKTOP, value: 24.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w900);
 }
 
 getTextBtn(BuildContext context) {
