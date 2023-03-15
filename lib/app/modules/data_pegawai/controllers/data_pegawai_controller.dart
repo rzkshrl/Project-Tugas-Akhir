@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/utils/dialogDefault.dart';
+
+import '../../../theme/textstyle.dart';
 
 class DataPegawaiController extends GetxController {
   //TODO: Implement DataPegawaiController
@@ -24,7 +28,10 @@ class DataPegawaiController extends GetxController {
         'bidang': bidang,
         'email': email
       });
-    } catch (e) {}
+    } catch (e) {
+      Get.dialog(dialogAlertOnlySingleMsg(
+          IconlyLight.danger, "Gagal menambahkan Data", getTextAlert(context)));
+    }
   }
 
   @override
