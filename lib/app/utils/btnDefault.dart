@@ -20,7 +20,7 @@ Widget btnDefaultIcon1(
     width: width,
     height: 40,
     decoration:
-        BoxDecoration(color: Blue1, borderRadius: BorderRadius.circular(8)),
+        BoxDecoration(color: btnColor, borderRadius: BorderRadius.circular(8)),
     child: TextButton(
       onPressed: onPressed,
       child: Row(

@@ -69,9 +69,9 @@ class LoginView extends GetView<LoginController> {
                     children: [
                       textformNormalWeb(
                           context,
-                          c.emailWebKey.value,
-                          c.emailWebC,
-                          c.emailValidator,
+                          textC.emailWebKey.value,
+                          textC.emailWebC,
+                          textC.emailValidator,
                           const [AutofillHints.email],
                           TextInputType.emailAddress,
                           IconlyLight.message,
@@ -102,9 +102,10 @@ class LoginView extends GetView<LoginController> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      if (c.emailWebKey.value.currentState!.validate() &&
-                          c.passWebKey.value.currentState!.validate()) {
-                        authC.login(c.emailWebC.text, c.passWebC.text, context);
+                      if (textC.emailWebKey.value.currentState!.validate() &&
+                          textC.passWebKey.value.currentState!.validate()) {
+                        authC.login(
+                            textC.emailWebC.text, textC.passWebC.text, context);
                       }
                     },
                     child: Text(

@@ -62,9 +62,9 @@ class LupaSandiView extends GetView<LupaSandiController> {
               ),
               textformNormalWeb(
                   context,
-                  c.emailWebResetPassKey.value,
-                  c.emailWebResetPassC,
-                  c.emailValidator,
+                  textC.emailWebResetPassKey.value,
+                  textC.emailWebResetPassC,
+                  textC.emailValidator,
                   null,
                   TextInputType.emailAddress,
                   IconlyLight.message,
@@ -85,8 +85,9 @@ class LupaSandiView extends GetView<LupaSandiController> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    if (c.emailWebResetPassKey.value.currentState!.validate()) {
-                      authC.lupaSandi(c.emailWebResetPassC.text, context);
+                    if (textC.emailWebResetPassKey.value.currentState!
+                        .validate()) {
+                      authC.lupaSandi(textC.emailWebResetPassC.text, context);
                     }
                   },
                   child: Text(

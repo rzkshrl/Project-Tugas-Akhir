@@ -118,8 +118,11 @@ class APIController extends GetxController {
             getTextAlertSub(context)));
       } else {
         Map<String, dynamic> data = res[0].data['Data'];
-        allScanlog(AllScanlogModel.fromJson(data));
+        final allScanlogData = allScanlog(AllScanlogModel.fromJson(data));
+        allScanlogData;
         allScanlog.refresh();
+
+        firestore.collection('Scanlog').add(allScanlogData.toJson());
       }
     } catch (e) {
       if (e is DioError) {

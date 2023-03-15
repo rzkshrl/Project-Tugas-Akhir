@@ -8,7 +8,7 @@ import 'package:sizer/sizer.dart';
 import '../theme/textstyle.dart';
 import '../theme/theme.dart';
 
-final c = Get.put(TextFieldController());
+final textC = Get.put(TextFieldController());
 
 Widget textformNormalWeb(
     BuildContext context,
@@ -96,7 +96,7 @@ Widget textformDialogWeb(
     key: key,
     child: Container(
       width: width,
-      height: 65,
+      height: 9.5.h,
       child: TextFormField(
         autofillHints: autofillHints,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -139,7 +139,7 @@ Widget textformDialogWeb(
                 borderSide: BorderSide(color: focusedBorderColor, width: 1.8),
                 borderRadius: BorderRadius.circular(12)),
             hintStyle: getTextHintFormLogin(context),
-            border: OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: borderColor),
                 borderRadius: BorderRadius.circular(12))),
       ),
@@ -156,7 +156,7 @@ Widget textformPassWeb(
   void Function()? onEditingComplete,
 ) {
   return Form(
-    key: c.passWebKey.value,
+    key: textC.passWebKey.value,
     child: Obx(
       () => Container(
         width: 344,
@@ -165,9 +165,9 @@ Widget textformPassWeb(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           autofillHints: autofillHints,
           style: getTextLogin(context),
-          validator: c.passValidator,
-          obscureText: c.isPasswordHidden.value,
-          controller: c.passWebC,
+          validator: textC.passValidator,
+          obscureText: textC.isPasswordHidden.value,
+          controller: textC.passWebC,
           onEditingComplete: onEditingComplete,
           decoration: InputDecoration(
             helperText: ' ',
@@ -211,11 +211,11 @@ Widget textformPassWeb(
                 color: Blue1,
                 splashRadius: 1,
                 iconSize: 20,
-                icon: Icon(c.isPasswordHidden.value
+                icon: Icon(textC.isPasswordHidden.value
                     ? FontAwesomeIcons.eye
                     : FontAwesomeIcons.eyeSlash),
                 onPressed: () {
-                  c.isPasswordHidden.value = !c.isPasswordHidden.value;
+                  textC.isPasswordHidden.value = !textC.isPasswordHidden.value;
                 },
               ),
             ),

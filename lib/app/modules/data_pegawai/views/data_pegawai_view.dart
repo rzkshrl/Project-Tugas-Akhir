@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
+import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
@@ -12,6 +13,7 @@ import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
+import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/data_pegawai_controller.dart';
 
@@ -99,7 +101,35 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                         Yellow1,
                         "Tambah Data",
                         getTextBtnAction(context),
-                        () => Get.dialog(dialogTextFieldSevenField(context),
+                        () => Get.dialog(
+                            dialogTextFieldSevenField(
+                                context,
+                                btnDefaultIcon1(
+                                    10.w,
+                                    Blue4,
+                                    IconlyLight.tick_square,
+                                    Yellow1,
+                                    "Kirim",
+                                    getTextBtnAction(context), () {
+                                  if (textC.namaTambahDataPegKey.value
+                                          .currentState!
+                                          .validate() &&
+                                      cDropdown
+                                          .pinTambahDataPegKey.value.currentState!
+                                          .validate() &&
+                                      cDropdown
+                                          .jadkerTambahDataPegKey.value.currentState!
+                                          .validate() &&
+                                      textC.nipTambahDataPegKey.value
+                                          .currentState!
+                                          .validate() &&
+                                      cDropdown.bidangTambahDataPegKey.value
+                                          .currentState!
+                                          .validate() &&
+                                      textC.emailTambahDataPegKey.value
+                                          .currentState!
+                                          .validate()) {}
+                                })),
                             barrierColor: light.withOpacity(0.7))),
                   ],
                 ),

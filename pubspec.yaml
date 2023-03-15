@@ -11,6 +11,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   data_table_2: ^2.4.1
   dio: ^5.0.1
+  dropdown_search: ^5.0.6
   dwds: ^16.0.1
   firebase_auth: ^4.2.6
   firebase_core: ^2.5.0
