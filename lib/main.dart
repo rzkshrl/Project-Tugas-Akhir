@@ -64,7 +64,7 @@ class ProjectTugasAkhir extends StatelessWidget {
                         fontFamily: 'Inter',
                         primaryColor: light,
                       ),
-                      initialRoute: Routes.DATA_PEGAWAI,
+                      initialRoute: Routes.LOGIN,
                       getPages: AppPages.routes,
                       debugShowCheckedModeBanner: false,
                     );

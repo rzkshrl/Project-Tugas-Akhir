@@ -19,8 +19,6 @@ class AuthController extends GetxController {
 
   var isAuth = false.obs;
 
-  final apiC = Get.put(APIController());
-
   FirebaseAuth auth = FirebaseAuth.instance;
   Stream<User?> get streamAuthStatus => auth.userChanges();
   FirebaseFirestore firestore = FirebaseFirestore.instance;

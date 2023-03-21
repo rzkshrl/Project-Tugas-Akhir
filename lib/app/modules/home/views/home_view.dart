@@ -12,6 +12,7 @@ import 'package:project_tugas_akhir/app/routes/app_pages.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 
+import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../utils/dialogDefault.dart';
 import '../../../utils/loading.dart';
@@ -23,6 +24,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
+    final apiC = Get.put(APIController(context1: context));
     if (kIsWeb) {
       // return FutureBuilder<DocumentSnapshot<Object?>>(
       //     future: authC.role(),
@@ -71,7 +73,22 @@ class HomeView extends GetView<HomeController> {
           // return Routes.RIWAYAT_PRESENSI as Widget;
           // return Get.toNamed(RIWAYAT_PRESENSI) as Widget;
           // return Get.toNamed(Routes.RIWAYAT_PRESENSI) as Widget;
-          return RiwayatPresensiView();
+          return FutureBuilder(
+              future: apiC.getDeviceInfo(context),
+              builder: (context, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return LoadingView();
+                }
+
+                return FutureBuilder(
+                    future: Future.delayed(Duration(seconds: 3)),
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.waiting) {
+                        return LoadingView();
+                      }
+                      return RiwayatPresensiView();
+                    });
+              });
         }
       }
 

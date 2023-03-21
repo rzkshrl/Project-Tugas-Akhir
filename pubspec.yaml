@@ -25,12 +25,13 @@ dependencies:
   iconly: ^1.0.1
   icons_plus: ^4.0.0
   json_annotation: ^4.8.0
-  json_serializable: ^6.6.1
+  
   linked_scroll_controller: ^0.2.0
   responsive_framework: ^0.2.0
   sizer: ^2.0.15
 
 dev_dependencies:
+  json_serializable: ^6.6.1
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter

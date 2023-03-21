@@ -11,6 +11,7 @@ import 'package:project_tugas_akhir/app/controller/api_controller.dart';
 import 'package:project_tugas_akhir/app/data/models/allscanlogmodel.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
+import 'package:project_tugas_akhir/app/utils/ScanlogDataTableSource.dart';
 import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -28,7 +29,7 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final controller = Get.put(RiwayatPresensiController());
-    final apiC = Get.put(APIController());
+    final apiC = Get.put(APIController(context1: context));
     final dataScanlog = DataScanlog();
     return Scaffold(
       backgroundColor: light,
@@ -138,19 +139,63 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: SingleChildScrollView(
-                    // child: PaginatedDataTable2(
-                    //   columns: [
-                    //     DataColumn(label: Text("PIN")),
-                    //     DataColumn(label: Text('Scan Date'))
-                    //   ],
-                    //   source: dataScanlog,
-                    //   rowsPerPage: controller.rowPerPage.value,
-                    //   onRowsPerPageChanged: (index) {
-                    //     controller.rowPerPage.value = index!;
-                    //   },
-                    // ),
-                    ),
+                child: FutureBuilder(
+                    future: apiC.getAllPresenceData(context),
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.waiting) {
+                        return LoadingView();
+                      }
+                      int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+                      var dts = ScanlogDTS();
+                      return PaginatedDataTable2(
+                        columns: [
+                          DataColumn2(
+                            label: Text('PIN'),
+                            size: ColumnSize.L,
+                          ),
+                          DataColumn(
+                            label: Text('Scan Date'),
+                          ),
+                        ],
+                        renderEmptyRowsInTheEnd: false,
+                        source: dts,
+                        onRowsPerPageChanged: (value) {
+                          _rowsPerPage = value!;
+                          if (value > 100) {}
+                        },
+                        initialFirstRowIndex: 0,
+                        rowsPerPage: _rowsPerPage,
+                        onPageChanged: (rowIndex) {
+                          if (rowIndex + _rowsPerPage >=
+                              allScanlogList.length) {
+                            apiC.getAllPresenceData(context);
+                          }
+                        },
+                      );
+                      // return DataTable2(
+                      //     columnSpacing: 12,
+                      //     horizontalMargin: 12,
+                      //     minWidth: 2000,
+                      // columns: [
+                      //   DataColumn2(
+                      //     label: Text('PIN'),
+                      //     size: ColumnSize.L,
+                      //   ),
+                      //   DataColumn(
+                      //     label: Text('Scan Date'),
+                      //   ),
+                      // ],
+                      //     rows: List<DataRow2>.generate(
+                      //         allScanlogList.length,
+                      //         (index) => DataRow2(cells: [
+                      //               DataCell(Text(allScanlogList != null
+                      //                   ? "PIN : ${allScanlogList[index].pin}"
+                      //                   : "Tidak ada data")),
+                      //               DataCell(Text(allScanlogList != null
+                      //                   ? "scanDate : ${allScanlogList[index].scanDate}"
+                      //                   : "Tidak ada data"))
+                      //             ])));
+                    }),
               )
             ],
           ),

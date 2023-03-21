@@ -6,6 +6,8 @@ AllScanlogModel allScanlogModelFromJson(String str) =>
 String allScanlogModelToJson(AllScanlogModel data) =>
     json.encode(data.toJson());
 
+List<AllScanlogModel> allScanlogList = [];
+
 class AllScanlogModel {
   String? pin;
   int? workCode;

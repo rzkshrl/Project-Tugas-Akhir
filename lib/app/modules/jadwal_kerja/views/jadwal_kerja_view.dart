@@ -19,7 +19,7 @@ class JadwalKerjaView extends GetView<JadwalKerjaController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
-    final apiC = Get.put(APIController());
+    final apiC = Get.put(APIController(context1: context));
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),

@@ -23,7 +23,7 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final c = Get.put(DataPegawaiController());
-    final apiC = Get.put(APIController());
+    final apiC = Get.put(APIController(context1: context));
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
