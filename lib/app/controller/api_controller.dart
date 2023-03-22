@@ -126,9 +126,19 @@ class APIController extends GetxController {
     print(port);
     print(allPresensi);
 
+    var intAllPresensi = int.parse(allPresensi!);
+
+    var loopCount = intAllPresensi / 100;
+    print("All Presensi Count : ${loopCount}");
+
+    var loopCountAsInt = loopCount.toInt() + 1;
+    print("All Presensi Count as Int : ${loopCountAsInt}");
+
     try {
       String urlGet = "http://$ip:$port$urlGetScanlogWithPaging?sn=${sn}";
 
+      // var res = await Future.wait(
+      //     Iterable.generate(loopCountAsInt + 1, (i) => dio.post(urlGet)));
       var res = await Future.wait([dio.post(urlGet)]);
 
       if (kDebugMode) {

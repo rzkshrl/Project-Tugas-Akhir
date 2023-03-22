@@ -81,7 +81,7 @@ class HomeView extends GetView<HomeController> {
                 }
 
                 return FutureBuilder(
-                    future: Future.delayed(Duration(seconds: 3)),
+                    future: Future.delayed(Duration(seconds: 10)),
                     builder: (context, snap) {
                       if (snap.connectionState == ConnectionState.waiting) {
                         return LoadingView();
