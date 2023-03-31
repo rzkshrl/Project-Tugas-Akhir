@@ -114,7 +114,7 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                                   if (textC.namaTambahDataPegKey.value
                                           .currentState!
                                           .validate() &&
-                                      cDropdown
+                                      textC
                                           .pinTambahDataPegKey.value.currentState!
                                           .validate() &&
                                       cDropdown
@@ -132,13 +132,10 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                                     c.addPegawai(
                                         context,
                                         textC.namaTambahDataPegC.text,
-                                        cDropdown
-                                            .setPin(cDropdown.pinCon.value),
-                                        cDropdown.setJadker(
-                                            cDropdown.jadkerCon.value),
+                                        textC.pinTambahDataPegC.text,
+                                        cDropdown.jadkerTambahDataPegC.text,
                                         textC.nipTambahDataPegC.text,
-                                        cDropdown.setBidang(
-                                            cDropdown.bidangCon.value),
+                                        cDropdown.bidangTambahDataPegC.text,
                                         textC.emailTambahDataPegC.text);
                                   }
                                 })),

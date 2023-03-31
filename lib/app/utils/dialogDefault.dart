@@ -92,13 +92,13 @@ Widget dialogAlertOnlySingleMsg(
 
 Widget dialogAlertBtn(
     VoidCallback onPressed,
-    IconData icon,
+    IconData? icon,
     double widthBtn,
     String textBtn,
     String text,
-    String textSub,
+    String? textSub,
     TextStyle textAlert,
-    TextStyle textAlertSub,
+    TextStyle? textAlertSub,
     TextStyle textAlertBtn) {
   return Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -133,7 +133,7 @@ Widget dialogAlertBtn(
             height: 5,
           ),
           Text(
-            textSub,
+            textSub!,
             textAlign: TextAlign.center,
             style: textAlertSub,
           ),

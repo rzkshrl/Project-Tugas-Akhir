@@ -1,18 +1,20 @@
 import 'dart:convert';
+import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:http/http.dart' as http;
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/data/models/allscanlogmodel.dart';
 import 'package:project_tugas_akhir/app/data/models/deviceinfomodel.dart';
 
 import '../data/models/devicemodel.dart';
-import '../data/models/listallscanlogmodel.dart';
+import '../data/models/firestorescanlogmodel.dart';
 import '../theme/textstyle.dart';
 import '../utils/dialogDefault.dart';
 import '../utils/urlHTTP.dart';
@@ -20,12 +22,7 @@ import '../utils/urlHTTP.dart';
 import 'dart:async';
 
 class APIController extends GetxController {
-  final _connect = GetConnect();
-
-  final client = http.Client();
-
   late BuildContext context1;
-
   APIController({required this.context1});
 
   final dio = Dio();
@@ -35,8 +32,6 @@ class APIController extends GetxController {
   var deviceData = DeviceModel().obs;
   var deviceInfo = DeviceInfoModel().obs;
   var allScanlog = <AllScanlogModel>[].obs;
-
-  var listAllScanlog = ListAllScanlogModel().obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -52,10 +47,13 @@ class APIController extends GetxController {
     var sn = deviceData.value.deviceSn;
     var ip = deviceData.value.serverIp;
     var port = deviceData.value.serverPort;
+    var allPresensi = deviceData.value.allPresensi;
 
-    print(ip);
-    print(sn);
-    print(port);
+    if (kDebugMode) {
+      print("Serial Number : $sn");
+      print("IP server dan Port : $ip:$port");
+      print("All Presensi : ${allPresensi}");
+    }
 
     try {
       String urlGet = "http://$ip:$port$urlGetDeviceInfo?sn=${sn}";
@@ -78,13 +76,18 @@ class APIController extends GetxController {
         Map<String, dynamic> data = res[0].data['DEVINFO'];
         deviceInfo(DeviceInfoModel.fromJson(data));
         deviceInfo.refresh();
-        firestore
-            .collection('Device')
-            .doc("mesin-1")
-            .update({'allPresensi': deviceInfo.value.allPresensi});
+        if (allPresensi != deviceInfo.value.allPresensi) {
+          firestore
+              .collection('Device')
+              .doc("mesin-1")
+              .update({'allPresensi': deviceInfo.value.allPresensi});
+        }
       }
     } catch (e) {
       if (e is DioError) {
+        if (kDebugMode) {
+          print(e);
+        }
         Get.dialog(dialogAlertOnly(
             IconlyLight.danger,
             "Terjadi Kesalahan.",
@@ -92,27 +95,20 @@ class APIController extends GetxController {
             getTextAlert(context),
             getTextAlertSub(context)));
       }
+      if (kDebugMode) {
+        print(e);
+      }
+      Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.", "$e",
+          getTextAlert(context), getTextAlertSub(context)));
     }
   }
-
-  // void repeatGetAllPresenceData() {
-  //   var period = const Duration(seconds: 1);
-  //   Timer.periodic(period, (arg) {
-  //     getAllPresenceData(context1);
-  //   });
-  // }
 
   Future<void> getAllPresenceData(BuildContext context) async {
     CollectionReference users = firestore.collection("Device");
     final devices = await users.doc('mesin-1').get();
     final deviceDataDB = devices.data() as Map<String, dynamic>;
 
-    deviceData(DeviceModel(
-      deviceSn: deviceDataDB['device_sn'],
-      serverIp: deviceDataDB['server_ip'],
-      serverPort: deviceDataDB['server_port'],
-      allPresensi: deviceDataDB['allPresensi'],
-    ));
+    deviceData(DeviceModel.fromJson(deviceDataDB));
 
     deviceData.refresh();
 
@@ -121,60 +117,191 @@ class APIController extends GetxController {
     var port = deviceData.value.serverPort;
     var allPresensi = deviceData.value.allPresensi;
 
-    print(ip);
-    print(sn);
-    print(port);
-    print(allPresensi);
+    if (kDebugMode) {
+      print("Serial Number : $sn");
+      print("IP server dan Port : $ip:$port");
+      print("All Presensi : ${allPresensi}");
+    }
 
-    var intAllPresensi = int.parse(allPresensi!);
+    if (allScanlogList.isNotEmpty) {
+      null;
+    } else {
+      final String url = "http://$ip:$port$urlGetScanlogWithPaging?sn=${sn}";
+      final List<dynamic> res = [];
+      int pageNumber = 0;
 
-    var loopCount = intAllPresensi / 100;
-    print("All Presensi Count : ${loopCount}");
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final List<DateTime> dates = [];
 
-    var loopCountAsInt = loopCount.toInt() + 1;
-    print("All Presensi Count as Int : ${loopCountAsInt}");
+      try {
+        while (true) {
+          var response = await Future.wait(
+              [dio.post(url + '&page=$pageNumber&limit=100')]);
+          final data = response[0].data['Data'];
 
-    try {
-      String urlGet = "http://$ip:$port$urlGetScanlogWithPaging?sn=${sn}";
+          res.addAll(data);
 
-      // var res = await Future.wait(
-      //     Iterable.generate(loopCountAsInt + 1, (i) => dio.post(urlGet)));
-      var res = await Future.wait([dio.post(urlGet)]);
+          if (data.length < 100) {
+            break;
+          }
 
-      if (kDebugMode) {
-        print('HASIL : ${res[0].data['Result']}');
-        print('BODY : ${res[0].data['Data'][0]['ScanDate']}');
-      }
-
-      if (res[0].data['Result'] == 'false') {
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
-            "Terjadi Kesalahan.",
-            "Tidak dapat mengambil data dari mesin.",
-            getTextAlert(context),
-            getTextAlertSub(context)));
-      } else {
-        var data1 = res[0].data['Data'];
-
+          pageNumber++;
+        }
+        if (kDebugMode) {
+          print('Jumlah Data Response API : ${res.length}');
+        }
         allScanlogList =
-            List.from(data1).map((e) => AllScanlogModel.fromJson(e)).toList();
+            List.from(res).map((e) => AllScanlogModel.fromJson(e)).toList();
 
-        print('JUMLAH DATA : ${allScanlogList.length}');
+        if (kDebugMode) {
+          print('JUMLAH DATA MODEL : ${allScanlogList.length}');
+        }
 
-        // firestore.collection('Scanlog').doc().set({
-        //   'pin': allScanlog.value.pin,
-        //   'scanDate': allScanlog.value.scanDate,
-        // });
+        final DateTime firstDate = allScanlogList.first.scanDate!;
+        final DateTime lastDate = allScanlogList.last.scanDate!;
+
+        final List<DateTime> dateRange = [];
+        DateTime currentDate = firstDate;
+
+        while (currentDate.isBefore(lastDate)) {
+          currentDate = currentDate.add(Duration(days: 1));
+          dateRange.add(currentDate);
+        }
+
+        for (final date in dateRange) {
+          final dataForDate = allScanlogList.where((value) =>
+              value.scanDate!.year == date.year &&
+              value.scanDate!.month == date.month &&
+              value.scanDate!.day == date.day);
+
+          if (dataForDate.isNotEmpty) {
+            fullScanlogList.addAll(dataForDate);
+          } else {
+            fullScanlogList.add(AllScanlogModel(scanDate: date));
+          }
+        }
+
+        allScanlogList = fullScanlogList;
+
+        exportData(allScanlogList);
+
+        final stopwatch = Stopwatch()..start();
+
+        for (var scanlog in allScanlogList) {
+          if (allScanlogList != null) {
+            var dateFormatPresensi =
+                DateFormat('d MMMM yyyy - HH:mm:ss', 'id-ID');
+            var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
+            var datePresensi = formatterDoc
+                .format(DateTime.parse(scanlog.scanDate!.toIso8601String()));
+            final scanlogPegawai = firestore
+                .collection('Kepegawaian')
+                .doc(scanlog.pin)
+                .collection('Presensi')
+                .doc(datePresensi);
+            final checkData = await scanlogPegawai.get();
+            if (!checkData.exists) {
+              final hour = scanlog.scanDate!.hour;
+              if (scanlog.pin != null) {
+                await scanlogPegawai.set({
+                  'pin': scanlog.pin,
+                  'masuk': hour >= 6 && hour <= 9
+                      ? Timestamp.fromDate(scanlog.scanDate!)
+                      : '',
+                  'keluar': hour >= 9 && hour <= 16
+                      ? Timestamp.fromDate(scanlog.scanDate!)
+                      : '',
+                  'keterangan': hour >= 6 && hour <= 8
+                      ? 'Hadir'
+                      : hour >= 9 && hour <= 16
+                          ? 'Hadir'
+                          : 'Tanpa Keterangan'
+                });
+              }
+            } else {
+              final hour = scanlog.scanDate!.hour;
+              if (scanlog.pin != null) {
+                await scanlogPegawai.update({
+                  'pin': scanlog.pin,
+                  'masuk': hour >= 6 && hour <= 9
+                      ? Timestamp.fromDate(scanlog.scanDate!)
+                      : '',
+                  'keluar': hour >= 9 && hour <= 16
+                      ? Timestamp.fromDate(scanlog.scanDate!)
+                      : '',
+                  'keterangan': hour >= 6 && hour <= 8
+                      ? 'Hadir'
+                      : hour >= 9 && hour <= 16
+                          ? 'Hadir'
+                          : 'Tanpa Keterangan'
+                });
+              }
+            }
+          }
+        }
+
+        stopwatch.stop();
+        if (kDebugMode) {
+          print('Waktu sinkron data mesin -> firebase : ${stopwatch.elapsed}');
+        }
+
+        if (kDebugMode) {
+          print('Sinkron Data Mesin -> Firebase : Selesai');
+        }
+      } catch (e) {
+        if (e is DioError) {
+          if (kDebugMode) {
+            print(e);
+          }
+          Get.dialog(dialogAlertOnly(
+              IconlyLight.danger,
+              "Terjadi Kesalahan.",
+              "Tidak dapat tersambung dengan mesin.",
+              getTextAlert(context),
+              getTextAlertSub(context)));
+        }
+        if (kDebugMode) {
+          print(e);
+        }
+        Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.",
+            "$e", getTextAlert(context), getTextAlertSub(context)));
       }
+    }
+  }
+
+  void exportData(List dataList) {
+    final content = jsonEncode(dataList);
+
+    final bytes = utf8.encode(content);
+    final blob = html.Blob([bytes]);
+    final url = html.Url.createObjectUrlFromBlob(blob);
+
+    final anchor = html.document.createElement('a') as html.AnchorElement
+      ..href = url
+      ..style.display = 'none'
+      ..download = 'data.txt';
+
+    html.document.body!.children.add(anchor);
+    anchor.click();
+
+    html.document.body!.children.remove(anchor);
+    html.Url.revokeObjectUrl(url);
+  }
+
+  Future<void> getFirestorePresenceData(BuildContext context) async {
+    try {
+      firestoreScanlogList = firestore
+          .collection('Kepegawaian')
+          .snapshots()
+          .map((query) => query.docs
+              .map((doc) => KepegawaianModel.fromSnapshot(doc))
+              .toList());
     } catch (e) {
-      if (e is DioError) {
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
-            "Terjadi Kesalahan.",
-            "Tidak dapat tersambung dengan mesin.",
-            getTextAlert(context),
-            getTextAlertSub(context)));
+      if (kDebugMode) {
+        print(e);
       }
+      Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.", "$e",
+          getTextAlert(context), getTextAlertSub(context)));
     }
   }
 

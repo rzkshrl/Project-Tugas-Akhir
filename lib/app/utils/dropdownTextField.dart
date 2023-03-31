@@ -77,7 +77,7 @@ Widget dropdownNormalField(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.only(bottom: 6),
                     ),
                     Flexible(
                       child: Container(

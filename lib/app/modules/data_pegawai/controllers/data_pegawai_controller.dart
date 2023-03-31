@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -10,28 +13,58 @@ class DataPegawaiController extends GetxController {
   //TODO: Implement DataPegawaiController
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  bool isSuccess = false;
+  Completer<bool> completer = Completer<bool>();
 
-  void addPegawai(BuildContext context, String nama, String pin, String jadker,
-      String nip, String bidang, String email) {
-    try {
-      CollectionReference pegawai = firestore.collection("Kepegawaian");
+  Future<void> addPegawai(BuildContext context, String nama, String pin,
+      String jadker, String nip, String bidang, String email) async {
+    CollectionReference pegawai = firestore.collection("Kepegawaian");
 
-      // if (pegawai.) {
+    print(pin);
 
-      // }
+    final QuerySnapshot checkData =
+        await pegawai.where('pin', isEqualTo: pin).get();
 
-      pegawai.doc(pin).set({
+    final List<DocumentSnapshot> documents = checkData.docs;
+
+    if (documents.isEmpty) {
+      await pegawai.doc(pin).set({
         'nama': nama,
         'pin': pin,
         'jadker': jadker,
         'nip': nip,
         'bidang': bidang,
         'email': email
+      }).then((value) async {
+        Get.dialog(dialogAlertBtn(() {
+          // isSuccess = true;
+          // completer.complete(true);
+          Get.back();
+          Get.back();
+        },
+            IconlyLight.tick_square,
+            111.29,
+            "OK",
+            "Berhasil menambahkan Data Kepegawaian!",
+            null,
+            getTextAlert(context),
+            null,
+            getTextAlertBtn(context)));
+      }).catchError((e) {
+        // isSuccess = false;
+        // completer.complete(false);
+        if (kDebugMode) {
+          print(e);
+        }
+        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+            "Gagal menambahkan Data.", getTextAlert(context)));
       });
-    } catch (e) {
+    } else {
       Get.dialog(dialogAlertOnlySingleMsg(
-          IconlyLight.danger, "Gagal menambahkan Data", getTextAlert(context)));
+          IconlyLight.danger, "Data sudah ada.", getTextAlert(context)));
     }
+    // isSuccess = await completer.future;
+    // return isSuccess;
   }
 
   @override

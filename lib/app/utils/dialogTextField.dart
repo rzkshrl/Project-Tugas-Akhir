@@ -9,11 +9,11 @@ import 'package:sizer/sizer.dart';
 import '../theme/theme.dart';
 
 Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
-  return Dialog(
+  return AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    child: Container(
-      width: 140.h,
+    content: Container(
+      width: 120.h,
       height: 90.h,
       child: Column(
         children: [
@@ -52,20 +52,27 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
           SizedBox(
             height: 1.5.h,
           ),
-          dropdownNormalField(
-              context, 45.4.w, cDropdown.pinTambahDataPegKey.value, (value) {
-            if (value != null) {
-              cDropdown.setPin(value);
-            }
-          }, ['1', '2', '3', '4'], null, "Pilih PIN Pegawai...",
-              Colors.transparent, Yellow1, Yellow1, Yellow1),
+          textformDialogWeb(
+              context,
+              textC.pinTambahDataPegKey.value,
+              45.4.w,
+              textC.pinTambahDataPegC,
+              textC.normalValidator,
+              null,
+              null,
+              null,
+              null,
+              "Masukkan PIN pegawai...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1),
           SizedBox(
-            height: 4.5.h,
+            height: 1.5.h,
           ),
           dropdownNormalField(
               context, 45.4.w, cDropdown.jadkerTambahDataPegKey.value, (value) {
             if (value != null) {
-              cDropdown.setPin(value);
+              cDropdown.jadkerTambahDataPegC.text = value;
             }
           },
               ['JPC', 'JPR', 'JDK', 'JRR'],
@@ -99,7 +106,7 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
           dropdownNormalField(
               context, 45.4.w, cDropdown.bidangTambahDataPegKey.value, (value) {
             if (value != null) {
-              cDropdown.setPin(value);
+              cDropdown.bidangTambahDataPegC.text = value;
             }
           }, [
             'Guru Kelas',
@@ -116,7 +123,7 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
             textC.emailTambahDataPegKey.value,
             45.4.w,
             textC.emailTambahDataPegC,
-            textC.normalValidator,
+            textC.emailValidator,
             null,
             null,
             null,

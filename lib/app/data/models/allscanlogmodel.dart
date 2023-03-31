@@ -8,12 +8,14 @@ String allScanlogModelToJson(AllScanlogModel data) =>
 
 List<AllScanlogModel> allScanlogList = [];
 
+List<AllScanlogModel> fullScanlogList = [];
+
 class AllScanlogModel {
   String? pin;
   int? workCode;
   String? sn;
   int? verifyMode;
-  String? scanDate;
+  DateTime? scanDate;
   int? iOMode;
 
   AllScanlogModel(
@@ -30,7 +32,7 @@ class AllScanlogModel {
         workCode: json['WorkCode'],
         sn: json['SN'],
         verifyMode: json['VerifyMode'],
-        scanDate: json['ScanDate'],
+        scanDate: DateTime.parse(json['ScanDate']),
         iOMode: json['IOMode']));
   }
 
@@ -40,7 +42,7 @@ class AllScanlogModel {
       "workCode": workCode,
       "sn": sn,
       "verifyMode": verifyMode,
-      "scanDate": scanDate,
+      "scanDate": scanDate!.toIso8601String(),
       "iOMode": iOMode
     };
   }

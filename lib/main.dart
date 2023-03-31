@@ -16,6 +16,7 @@ import 'app/routes/app_pages.dart';
 import 'app/theme/textstyle.dart';
 import 'app/utils/dialogDefault.dart';
 import 'firebase_options.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   // js.context.callMethod('fixPasswordCss');
@@ -23,8 +24,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // SystemChrome.setPreferredOrientations(
-  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await initializeDateFormatting('id_ID', null)
+      .then((_) => runApp(ProjectTugasAkhir()));
   runApp(ProjectTugasAkhir());
 }
 

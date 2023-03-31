@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/controller/api_controller.dart';
 import 'package:project_tugas_akhir/app/data/models/allscanlogmodel.dart';
+import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 import 'package:project_tugas_akhir/app/utils/ScanlogDataTableSource.dart';
@@ -30,7 +31,6 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
     final authC = Get.put(AuthController());
     final controller = Get.put(RiwayatPresensiController());
     final apiC = Get.put(APIController(context1: context));
-    final dataScanlog = DataScanlog();
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
@@ -140,37 +140,48 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                 width: 90.w,
                 height: 70.h,
                 child: FutureBuilder(
-                    future: apiC.getAllPresenceData(context),
+                    future: Future.delayed(Duration(seconds: 2)),
                     builder: (context, snap) {
                       if (snap.connectionState == ConnectionState.waiting) {
                         return LoadingView();
                       }
                       int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                      var dts = ScanlogDTS();
+                      var dts = ScanlogDTS(kepegawaianList);
                       return PaginatedDataTable2(
                         columns: [
                           DataColumn2(
+                            label: Text('Nama'),
+                            size: ColumnSize.M,
+                          ),
+                          DataColumn2(
+                            label: Text('NIP/PEGID'),
+                          ),
+                          DataColumn2(
                             label: Text('PIN'),
-                            size: ColumnSize.L,
                           ),
                           DataColumn(
-                            label: Text('Scan Date'),
+                            label: Text('Jam Masuk'),
+                          ),
+                          DataColumn(
+                            label: Text('Jam Keluar'),
+                          ),
+                          DataColumn(
+                            label: Text('Tanggal Presensi'),
+                          ),
+                          DataColumn(
+                            label: Text('Keterangan'),
+                          ),
+                          DataColumn(
+                            label: Text('Ubah'),
                           ),
                         ],
                         renderEmptyRowsInTheEnd: false,
                         source: dts,
                         onRowsPerPageChanged: (value) {
                           _rowsPerPage = value!;
-                          if (value > 100) {}
                         },
                         initialFirstRowIndex: 0,
                         rowsPerPage: _rowsPerPage,
-                        onPageChanged: (rowIndex) {
-                          if (rowIndex + _rowsPerPage >=
-                              allScanlogList.length) {
-                            apiC.getAllPresenceData(context);
-                          }
-                        },
                       );
                       // return DataTable2(
                       //     columnSpacing: 12,
