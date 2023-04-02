@@ -1,3 +1,4 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,6 +14,8 @@ import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
+import '../../../utils/kepegawaianDTS.dart';
+import '../../../utils/loading.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/data_pegawai_controller.dart';
@@ -150,19 +153,33 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: SingleChildScrollView(
-                    // child: PaginatedDataTable2(
-                    //   columns: [
-                    //     DataColumn(label: Text("PIN")),
-                    //     DataColumn(label: Text('Scan Date'))
-                    //   ],
-                    //   source: dataScanlog,
-                    //   rowsPerPage: controller.rowPerPage.value,
-                    //   onRowsPerPageChanged: (index) {
-                    //     controller.rowPerPage.value = index!;
-                    //   },
-                    // ),
-                    ),
+                child: FutureBuilder(
+                    future: Future.delayed(Duration(seconds: 2)),
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.waiting) {
+                        return LoadingView();
+                      }
+                      int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+                      return PaginatedDataTable2(
+                        columns: [
+                          DataColumn(label: Text('PIN')),
+                          DataColumn(label: Text('NIP')),
+                          DataColumn(label: Text('Nama')),
+                          DataColumn(label: Text('Jadwal Kerja')),
+                          DataColumn(label: Text('Email')),
+                          DataColumn(label: Text('Bidang')),
+                          DataColumn(label: Text('Hapus')),
+                          DataColumn(label: Text('Ubah')),
+                        ],
+                        renderEmptyRowsInTheEnd: false,
+                        source: KepegawaianDTS(c.kepegawaianList),
+                        onRowsPerPageChanged: (value) {
+                          _rowsPerPage = value!;
+                        },
+                        initialFirstRowIndex: 0,
+                        rowsPerPage: _rowsPerPage,
+                      );
+                    }),
               )
             ],
           ),

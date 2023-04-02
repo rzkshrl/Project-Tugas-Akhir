@@ -145,67 +145,55 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                       if (snap.connectionState == ConnectionState.waiting) {
                         return LoadingView();
                       }
-                      int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                      var dts = ScanlogDTS(kepegawaianList);
-                      return PaginatedDataTable2(
-                        columns: [
-                          DataColumn2(
-                            label: Text('Nama'),
-                            size: ColumnSize.M,
-                          ),
-                          DataColumn2(
-                            label: Text('NIP/PEGID'),
-                          ),
-                          DataColumn2(
-                            label: Text('PIN'),
-                          ),
-                          DataColumn(
-                            label: Text('Jam Masuk'),
-                          ),
-                          DataColumn(
-                            label: Text('Jam Keluar'),
-                          ),
-                          DataColumn(
-                            label: Text('Tanggal Presensi'),
-                          ),
-                          DataColumn(
-                            label: Text('Keterangan'),
-                          ),
-                          DataColumn(
-                            label: Text('Ubah'),
-                          ),
-                        ],
-                        renderEmptyRowsInTheEnd: false,
-                        source: dts,
-                        onRowsPerPageChanged: (value) {
-                          _rowsPerPage = value!;
+                      return StreamBuilder(
+                        stream: Stream.empty(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return LoadingView();
+                          }
+                          final kepegawaianList =
+                              snapshot.data! as List<KepegawaianModel>;
+                          int _rowsPerPage =
+                              PaginatedDataTable.defaultRowsPerPage;
+
+                          return PaginatedDataTable2(
+                            columns: [
+                              DataColumn2(
+                                label: Text('Nama'),
+                                size: ColumnSize.M,
+                              ),
+                              DataColumn2(
+                                label: Text('NIP/PEGID'),
+                              ),
+                              DataColumn2(
+                                label: Text('PIN'),
+                              ),
+                              DataColumn(
+                                label: Text('Jam Masuk'),
+                              ),
+                              DataColumn(
+                                label: Text('Jam Keluar'),
+                              ),
+                              DataColumn(
+                                label: Text('Tanggal Presensi'),
+                              ),
+                              DataColumn(
+                                label: Text('Keterangan'),
+                              ),
+                              DataColumn(
+                                label: Text('Ubah'),
+                              ),
+                            ],
+                            renderEmptyRowsInTheEnd: false,
+                            source: ScanlogDTS(kepegawaianList),
+                            onRowsPerPageChanged: (value) {
+                              _rowsPerPage = value!;
+                            },
+                            initialFirstRowIndex: 0,
+                            rowsPerPage: _rowsPerPage,
+                          );
                         },
-                        initialFirstRowIndex: 0,
-                        rowsPerPage: _rowsPerPage,
                       );
-                      // return DataTable2(
-                      //     columnSpacing: 12,
-                      //     horizontalMargin: 12,
-                      //     minWidth: 2000,
-                      // columns: [
-                      //   DataColumn2(
-                      //     label: Text('PIN'),
-                      //     size: ColumnSize.L,
-                      //   ),
-                      //   DataColumn(
-                      //     label: Text('Scan Date'),
-                      //   ),
-                      // ],
-                      //     rows: List<DataRow2>.generate(
-                      //         allScanlogList.length,
-                      //         (index) => DataRow2(cells: [
-                      //               DataCell(Text(allScanlogList != null
-                      //                   ? "PIN : ${allScanlogList[index].pin}"
-                      //                   : "Tidak ada data")),
-                      //               DataCell(Text(allScanlogList != null
-                      //                   ? "scanDate : ${allScanlogList[index].scanDate}"
-                      //                   : "Tidak ada data"))
-                      //             ])));
                     }),
               )
             ],

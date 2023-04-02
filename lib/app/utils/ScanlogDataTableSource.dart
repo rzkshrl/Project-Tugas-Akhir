@@ -1,27 +1,40 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 
 import '../data/models/allscanlogmodel.dart';
 import '../data/models/firestorescanlogmodel.dart';
 
 class ScanlogDTS extends DataTableSource {
-  final List<KepegawaianModel> _kepg;
+  final List<KepegawaianModel> kepegawaianList;
 
-  ScanlogDTS(this._kepg);
+  ScanlogDTS(this.kepegawaianList);
 
   @override
   DataRow2 getRow(int index) {
-    final data = _kepg[index];
+    final data = kepegawaianList[index];
+    final presensiList = data.presensi ?? [];
     return DataRow2.byIndex(index: index, cells: [
-      DataCell(Text(data != null ? "${data.nama}" : "Tidak ada data")),
-      DataCell(Text(data != null ? "${data.nip}" : "Tidak ada data")),
-      DataCell(Text(data != null ? "${data.pin}" : "Tidak ada data")),
-      DataCell(Text(data != null ? "${data.pin}" : "Tidak ada data")),
-      DataCell(Text(data != null ? "${data.nip}" : "Tidak ada data")),
-      DataCell(
-          Text(data != null ? "scanDate : ${data.nip}" : "Tidak ada data")),
-      DataCell(
-          Text(data != null ? "scanDate : ${data.nip}" : "Tidak ada data")),
+      DataCell(Text(data != null ? "${data.nama}" : "-")),
+      DataCell(Text(data != null ? "${data.nip}" : "-")),
+      DataCell(Text(data != null ? "${data.pin}" : "-")),
+      DataCell(Column(
+          children: presensiList.map((presensi) {
+        return Text(presensi != null ? "${presensi.masuk}" : "-");
+      }).toList())),
+      DataCell(Column(
+          children: presensiList.map((presensi) {
+        return Text(presensi != null ? "${presensi.keluar}" : "-");
+      }).toList())),
+      DataCell(Column(
+          children: presensiList.map((presensi) {
+        return Text(presensi != null ? "${presensi.date}" : "-");
+      }).toList())),
+      DataCell(Column(
+          children: presensiList.map((presensi) {
+        return Text(presensi != null ? "${presensi.keterangan}" : "-");
+      }).toList())),
+      DataCell(IconButton(onPressed: () {}, icon: Icon(IconlyLight.edit))),
     ]);
   }
 
@@ -31,7 +44,7 @@ class ScanlogDTS extends DataTableSource {
 
   @override
   // TODO: implement rowCount
-  int get rowCount => _kepg.length;
+  int get rowCount => kepegawaianList.length;
 
   @override
   // TODO: implement selectedRowCount

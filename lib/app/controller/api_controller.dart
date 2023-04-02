@@ -131,7 +131,6 @@ class APIController extends GetxController {
       int pageNumber = 0;
 
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
-      final List<DateTime> dates = [];
 
       try {
         while (true) {
@@ -150,38 +149,57 @@ class APIController extends GetxController {
         if (kDebugMode) {
           print('Jumlah Data Response API : ${res.length}');
         }
-        allScanlogList =
-            List.from(res).map((e) => AllScanlogModel.fromJson(e)).toList();
+
+        res.sort((a, b) => DateTime.parse(a['scanDate'])
+            .compareTo(DateTime.parse(b['scanDate'])));
+        final DateTime firstDate = allScanlogList.first.scanDate!;
+        final DateTime lastDate = allScanlogList.last.scanDate!;
+
+        final List<DateTime> allDates = List.generate(
+          lastDate.difference(firstDate).inDays + 1,
+          (i) => firstDate.add(Duration(days: i)),
+        );
+
+        final List<dynamic> presensiByDate = allDates.map((date) {
+          final presensiForDate = res
+              .where((data) =>
+                  DateTime.parse(data['scandate']).isAtSameMomentAs(date))
+              .toList();
+          return presensiForDate.isNotEmpty
+              ? presensiForDate[0]
+              : {
+                  'scanDate': date.toString()
+                }; // tambahkan objek kosong jika tidak ada data
+        }).toList();
+
+        allScanlogList = List.from(presensiByDate)
+            .map((e) => AllScanlogModel.fromJson(e))
+            .toList();
 
         if (kDebugMode) {
           print('JUMLAH DATA MODEL : ${allScanlogList.length}');
         }
 
-        final DateTime firstDate = allScanlogList.first.scanDate!;
-        final DateTime lastDate = allScanlogList.last.scanDate!;
+        // final List<DateTime> dateRange = [];
+        // DateTime currentDate = firstDate;
 
-        final List<DateTime> dateRange = [];
-        DateTime currentDate = firstDate;
+        // while (currentDate.isBefore(lastDate)) {
+        //   currentDate = currentDate.add(Duration(days: 1));
+        //   dateRange.add(currentDate);
+        // }
 
-        while (currentDate.isBefore(lastDate)) {
-          currentDate = currentDate.add(Duration(days: 1));
-          dateRange.add(currentDate);
-        }
+        // for (final date in dateRange) {
+        //   final dataForDate = allScanlogList.where((value) =>
+        //       value.scanDate!.year == date.year &&
+        //       value.scanDate!.month == date.month &&
+        //       value.scanDate!.day == date.day);
 
-        for (final date in dateRange) {
-          final dataForDate = allScanlogList.where((value) =>
-              value.scanDate!.year == date.year &&
-              value.scanDate!.month == date.month &&
-              value.scanDate!.day == date.day);
-
-          if (dataForDate.isNotEmpty) {
-            fullScanlogList.addAll(dataForDate);
-          } else {
-            fullScanlogList.add(AllScanlogModel(scanDate: date));
-          }
-        }
-
-        allScanlogList = fullScanlogList;
+        //   if (dataForDate.isNotEmpty) {
+        //     fullScanlogList.addAll(dataForDate);
+        //   } else {
+        //     fullScanlogList.add(AllScanlogModel(scanDate: date));
+        //   }
+        // }
 
         exportData(allScanlogList);
 
@@ -205,6 +223,7 @@ class APIController extends GetxController {
               if (scanlog.pin != null) {
                 await scanlogPegawai.set({
                   'pin': scanlog.pin,
+                  'date': scanlog.scanDate!.toIso8601String(),
                   'masuk': hour >= 6 && hour <= 9
                       ? Timestamp.fromDate(scanlog.scanDate!)
                       : '',
@@ -223,6 +242,7 @@ class APIController extends GetxController {
               if (scanlog.pin != null) {
                 await scanlogPegawai.update({
                   'pin': scanlog.pin,
+                  'date': scanlog.scanDate!.toIso8601String(),
                   'masuk': hour >= 6 && hour <= 9
                       ? Timestamp.fromDate(scanlog.scanDate!)
                       : '',
@@ -288,22 +308,22 @@ class APIController extends GetxController {
     html.Url.revokeObjectUrl(url);
   }
 
-  Future<void> getFirestorePresenceData(BuildContext context) async {
-    try {
-      firestoreScanlogList = firestore
-          .collection('Kepegawaian')
-          .snapshots()
-          .map((query) => query.docs
-              .map((doc) => KepegawaianModel.fromSnapshot(doc))
-              .toList());
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.", "$e",
-          getTextAlert(context), getTextAlertSub(context)));
-    }
-  }
+  // Future<void> getFirestorePresenceData(BuildContext context) async {
+  //   try {
+  //     firestoreScanlogList = firestore
+  //         .collection('Kepegawaian')
+  //         .snapshots()
+  //         .map((snap) => snap.docs
+  //             .map((doc) => KepegawaianModel.fromSnapshot(doc))
+  //             .toList());
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //     Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.", "$e",
+  //         getTextAlert(context), getTextAlertSub(context)));
+  //   }
+  // }
 
   // @override
   // void onInit() {

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/utils/dialogDefault.dart';
 
+import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../theme/textstyle.dart';
 
 class DataPegawaiController extends GetxController {
@@ -15,6 +16,8 @@ class DataPegawaiController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool isSuccess = false;
   Completer<bool> completer = Completer<bool>();
+  final kepegawaianList = <KepegawaianModel>[].obs;
+  var isLoading = true.obs;
 
   Future<void> addPegawai(BuildContext context, String nama, String pin,
       String jadker, String nip, String bidang, String email) async {
@@ -67,9 +70,21 @@ class DataPegawaiController extends GetxController {
     // return isSuccess;
   }
 
+  Future<void> getData() async {
+    firestore.collection('Kepegawaian').snapshots().listen((querySnap) {
+      kepegawaianList.clear();
+      for (var documentSnapshot in querySnap.docs) {
+        KepegawaianModel kepegawaian =
+            KepegawaianModel.fromSnapshot(documentSnapshot);
+        kepegawaianList.add(kepegawaian);
+      }
+    });
+  }
+
   @override
   void onInit() {
     super.onInit();
+    getData();
   }
 
   @override

@@ -2,26 +2,23 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-late Stream<List<KepegawaianModel>> firestoreScanlogList;
-
-List<KepegawaianModel> kepegawaianList = [];
-
 class PresensiModel {
   String? pin;
   String? masuk;
   String? keluar;
+  String? date;
+  String? keterangan;
 
-  PresensiModel({
-    this.pin,
-    this.masuk,
-    this.keluar,
-  });
+  PresensiModel(
+      {this.pin, this.masuk, this.keluar, this.date, this.keterangan});
 
   factory PresensiModel.fromJson(Map<String, dynamic> json) {
     return (PresensiModel(
       pin: json['pin'],
       masuk: json['masuk'],
       keluar: json['keluar'],
+      date: json['date'],
+      keterangan: json['keterangan'],
     ));
   }
 
@@ -30,6 +27,8 @@ class PresensiModel {
       "pin": pin,
       "masuk": masuk,
       "keluar": keluar,
+      "date": date,
+      "keterangan": keterangan,
     };
   }
 }
@@ -54,8 +53,8 @@ class KepegawaianModel {
 
   factory KepegawaianModel.fromSnapshot(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
-    final presensi = (data['Presensi'] as List)
-        .map((presence) => PresensiModel.fromJson(presence))
+    final presensi = (data['Presensi'] as List?)
+        ?.map((presence) => PresensiModel.fromJson(presence))
         .toList();
     return KepegawaianModel(
         pin: data['pin'],
@@ -64,6 +63,6 @@ class KepegawaianModel {
         jadker: data['jadker'],
         email: data['email'],
         bidang: data['bidang'],
-        presensi: presensi);
+        presensi: presensi ?? []);
   }
 }
