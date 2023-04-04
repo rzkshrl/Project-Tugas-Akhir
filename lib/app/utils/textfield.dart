@@ -228,3 +228,167 @@ Widget textformPassWeb(
     ),
   );
 }
+
+Widget textformNormalMobile(
+    BuildContext context,
+    Key? key,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    Iterable<String>? autofillHints,
+    TextInputType? keyboardType,
+    IconData? prefixIcon,
+    Color? prefixIconColor,
+    String hintText,
+    Color fillColor,
+    Color borderColor,
+    Color focusedBorderColor) {
+  return Form(
+    key: key,
+    child: Container(
+      width: 254,
+      height: 70,
+      child: TextFormField(
+        autofillHints: autofillHints,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        keyboardType: TextInputType.emailAddress,
+        validator: validator,
+        controller: controller,
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        style: getTextFormValueMobile(context),
+        decoration: InputDecoration(
+            helperText: ' ',
+            helperStyle: getTextErrorFormLoginMobile(context),
+            isDense: true,
+            contentPadding: EdgeInsets.all(20),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(
+                left: 1.w,
+                right: 0.8.w,
+              ),
+              child: Align(
+                  widthFactor: 0.5,
+                  heightFactor: 0.5,
+                  child: Icon(
+                    prefixIcon,
+                    size: 24,
+                  )),
+            ),
+            prefixIconColor: prefixIconColor,
+            hintText: hintText,
+            focusColor: Blue1,
+            fillColor: fillColor,
+            filled: true,
+            errorStyle: getTextErrorFormLoginMobile(context),
+            errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: errorBg, width: 1.8),
+                borderRadius: BorderRadius.circular(12),
+                gapPadding: 2),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: error, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: focusedBorderColor, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            hintStyle: getTextHintFormLoginMobile(context),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: borderColor),
+                borderRadius: BorderRadius.circular(12))),
+      ),
+    ),
+  );
+}
+
+Widget textformPassMobile(
+  BuildContext context,
+  Iterable<String>? autofillHints,
+  IconData prefixIcon,
+  Color prefixIconColor,
+  String hintText,
+  void Function()? onEditingComplete,
+) {
+  return Form(
+    key: textC.passMobileKey.value,
+    child: Obx(
+      () => Container(
+        width: 254,
+        height: 70,
+        child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofillHints: autofillHints,
+          style: getTextFormValueMobile(context),
+          validator: textC.passValidator,
+          obscureText: textC.isPasswordHidden.value,
+          controller: textC.passMobileC,
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          onEditingComplete: onEditingComplete,
+          decoration: InputDecoration(
+            helperText: ' ',
+            helperStyle: getTextErrorFormLoginMobile(context),
+            isDense: true,
+            contentPadding: EdgeInsets.all(20),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(
+                left: 1.w,
+                right: 0.8.w,
+              ),
+              child: Align(
+                  widthFactor: 0.5,
+                  heightFactor: 0.5,
+                  child: Icon(
+                    prefixIcon,
+                    size: 24,
+                  )),
+            ),
+            prefixIconColor: prefixIconColor,
+            hintText: hintText,
+            hintStyle: getTextHintFormLoginMobile(context),
+            fillColor: light,
+            filled: true,
+            errorStyle: getTextErrorFormLoginMobile(context),
+            errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: errorBg, width: 1.8),
+                borderRadius: BorderRadius.circular(12),
+                gapPadding: 2),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: error, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Blue1, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            suffixIcon: Padding(
+              padding: EdgeInsets.only(
+                right: 0.35.w,
+              ),
+              child: IconButton(
+                color: Blue1,
+                splashRadius: 1,
+                iconSize: 18,
+                icon: Icon(textC.isPasswordHidden.value
+                    ? FontAwesomeIcons.eye
+                    : FontAwesomeIcons.eyeSlash),
+                onPressed: () {
+                  textC.isPasswordHidden.value = !textC.isPasswordHidden.value;
+                },
+              ),
+            ),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: dark),
+                borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+      ),
+    ),
+  );
+}

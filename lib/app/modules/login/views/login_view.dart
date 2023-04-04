@@ -132,66 +132,67 @@ class LoginView extends GetView<LoginController> {
     } else {
       // WELCOME SCREEN MOBILE
       return Scaffold(
-        body: LayoutBuilder(
-            builder: (context, constraints) => SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Center(
-                        child: Image.asset(
-                          'assets/icons/logo.png',
-                          width: 50.w,
-                          height: 50.h,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Text("MonitorPresence"),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Text("Pantau Presensi Anda secara Langsung"),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      Container(
-                        width: 580.w,
-                        height: 60.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Blue1,
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            // if (controller.emailKey.value.currentState!
-                            //         .validate() &&
-                            //     controller.passKey.value.currentState!
-                            //         .validate()) {
-                            //   authC.login(
-                            //       controller.emailC.text, controller.passC.text);
-                            // }
-                          },
-                          child: Text(
-                            'Masuk',
-                            style: getTextLoginBtnActiveMobile(context),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Get.offAllNamed(Routes.LUPA_SANDI);
-                        },
-                        child: Text('Sudah punya akun? Masuk',
-                            style: getTextLupaSandiMobile(context)),
-                      ),
-                    ],
+          backgroundColor: light,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 25.h,
+                ),
+                Center(
+                  child: Image.asset(
+                    'assets/icons/logo.png',
+                    width: 255,
+                    fit: BoxFit.contain,
                   ),
-                )),
-      );
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  "MonitorPresence",
+                  style: getTextHeaderWelcomeScreen(context, 16),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Text(
+                  "Pantau Presensi Anda secara Langsung",
+                  style: getTextSubHeaderWelcomeScreen(context, 15),
+                ),
+                SizedBox(
+                  height: 28.h,
+                ),
+                Container(
+                  width: 58.w,
+                  height: 6.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Blue1,
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.LOGIN_MOBILE);
+                    },
+                    child: Text(
+                      'Masuk',
+                      style: getTextLoginBtnActiveMobile(context),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.toNamed(Routes.LUPA_SANDI_MOBILE);
+                  },
+                  child: Text('Lupa Sandi?',
+                      style: getTextLupaSandiMobile(context)),
+                ),
+              ],
+            ),
+          ));
     }
   }
 }

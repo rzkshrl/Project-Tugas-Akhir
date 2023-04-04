@@ -1,10 +1,9 @@
-import 'package:flutter/widgets.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
-class LoginController extends GetxController {
-  //TODO: Implement LoginController
+class ProfileMobileController extends GetxController {
+  //TODO: Implement ProfileMobileController
 
+  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -19,4 +18,6 @@ class LoginController extends GetxController {
   void onClose() {
     super.onClose();
   }
+
+  void increment() => count.value++;
 }

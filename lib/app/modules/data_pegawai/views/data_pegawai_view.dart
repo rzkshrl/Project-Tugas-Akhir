@@ -10,6 +10,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
+import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/appBar.dart';
@@ -153,26 +154,71 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: FutureBuilder(
-                    future: Future.delayed(Duration(seconds: 2)),
+                child: StreamBuilder(
+                    stream: c.firestoreKepegawaianList,
                     builder: (context, snap) {
-                      if (snap.connectionState == ConnectionState.waiting) {
+                      if (!snap.hasData) {
                         return LoadingView();
                       }
+                      final kepegawaianList =
+                          snap.data! as List<KepegawaianModel>;
                       int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
                       return PaginatedDataTable2(
                         columns: [
-                          DataColumn(label: Text('PIN')),
-                          DataColumn(label: Text('NIP')),
-                          DataColumn(label: Text('Nama')),
-                          DataColumn(label: Text('Jadwal Kerja')),
-                          DataColumn(label: Text('Email')),
-                          DataColumn(label: Text('Bidang')),
-                          DataColumn(label: Text('Hapus')),
-                          DataColumn(label: Text('Ubah')),
+                          DataColumn2(
+                            label: Text(
+                              'PIN',
+                              style: getTextTable(context),
+                            ),
+                            size: ColumnSize.S,
+                          ),
+                          DataColumn2(
+                              label: Text(
+                            'NIP',
+                            style: getTextTable(context),
+                          )),
+                          DataColumn2(
+                              label: Text(
+                            'Nama',
+                            style: getTextTable(context),
+                          )),
+                          DataColumn2(
+                              label: Text(
+                            'Jadwal Kerja',
+                            style: getTextTable(context),
+                          )),
+                          DataColumn2(
+                              label: Text(
+                                'Email',
+                                style: getTextTable(context),
+                              ),
+                              fixedWidth: 200),
+                          DataColumn2(
+                              label: Text(
+                            'Bidang',
+                            style: getTextTable(context),
+                          )),
+                          DataColumn2(
+                              label: Text(
+                                'Hapus',
+                                style: getTextTable(context),
+                              ),
+                              fixedWidth: 90),
+                          DataColumn2(
+                              label: Text(
+                                'Ubah',
+                                style: getTextTable(context),
+                              ),
+                              fixedWidth: 90),
                         ],
+                        dividerThickness: 0,
+                        horizontalMargin: 20,
+                        checkboxHorizontalMargin: 12,
+                        columnSpacing: 20,
+                        wrapInCard: false,
+                        minWidth: 950,
                         renderEmptyRowsInTheEnd: false,
-                        source: KepegawaianDTS(c.kepegawaianList),
+                        source: KepegawaianDTS(kepegawaianList),
                         onRowsPerPageChanged: (value) {
                           _rowsPerPage = value!;
                         },

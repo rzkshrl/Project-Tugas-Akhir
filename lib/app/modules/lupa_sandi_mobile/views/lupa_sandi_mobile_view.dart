@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/register_controller.dart';
+import '../controllers/lupa_sandi_mobile_controller.dart';
 
-class RegisterView extends GetView<RegisterController> {
-  const RegisterView({Key? key}) : super(key: key);
+class LupaSandiMobileView extends GetView<LupaSandiMobileController> {
+  const LupaSandiMobileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('RegisterView'),
+        title: const Text('LupaSandiMobileView'),
         centerTitle: true,
       ),
       body: Center(
         child: Text(
-          'RegisterView is working',
+          'LupaSandiMobileView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),

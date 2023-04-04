@@ -150,55 +150,58 @@ class APIController extends GetxController {
           print('Jumlah Data Response API : ${res.length}');
         }
 
-        res.sort((a, b) => DateTime.parse(a['scanDate'])
-            .compareTo(DateTime.parse(b['scanDate'])));
-        final DateTime firstDate = allScanlogList.first.scanDate!;
-        final DateTime lastDate = allScanlogList.last.scanDate!;
-
-        final List<DateTime> allDates = List.generate(
-          lastDate.difference(firstDate).inDays + 1,
-          (i) => firstDate.add(Duration(days: i)),
-        );
-
-        final List<dynamic> presensiByDate = allDates.map((date) {
-          final presensiForDate = res
-              .where((data) =>
-                  DateTime.parse(data['scandate']).isAtSameMomentAs(date))
-              .toList();
-          return presensiForDate.isNotEmpty
-              ? presensiForDate[0]
-              : {
-                  'scanDate': date.toString()
-                }; // tambahkan objek kosong jika tidak ada data
-        }).toList();
-
-        allScanlogList = List.from(presensiByDate)
-            .map((e) => AllScanlogModel.fromJson(e))
-            .toList();
+        allScanlogList =
+            List.from(res).map((e) => AllScanlogModel.fromJson(e)).toList();
 
         if (kDebugMode) {
           print('JUMLAH DATA MODEL : ${allScanlogList.length}');
         }
 
-        // final List<DateTime> dateRange = [];
-        // DateTime currentDate = firstDate;
+        // final Map<String, List<dynamic>> groupedByPin = {};
 
-        // while (currentDate.isBefore(lastDate)) {
-        //   currentDate = currentDate.add(Duration(days: 1));
-        //   dateRange.add(currentDate);
+        // for (final item in res) {
+        //   final pin = item['PIN'];
+        //   if (!groupedByPin.containsKey(pin)) {
+        //     groupedByPin[pin] = [];
+        //   }
+        //   groupedByPin[pin]!.add(item);
         // }
 
-        // for (final date in dateRange) {
-        //   final dataForDate = allScanlogList.where((value) =>
-        //       value.scanDate!.year == date.year &&
-        //       value.scanDate!.month == date.month &&
-        //       value.scanDate!.day == date.day);
+        // res.sort((a, b) => DateTime.parse(a['ScanDate'])
+        //     .compareTo(DateTime.parse(b['ScanDate'])));
+        // final DateTime firstDate = allScanlogList.first.scanDate!;
+        // if (kDebugMode) {
+        //   print('firstDate : ${firstDate}');
+        // }
+        // final DateTime lastDate = allScanlogList.last.scanDate!;
+        // if (kDebugMode) {
+        //   print('lastDate : ${lastDate}');
+        // }
 
-        //   if (dataForDate.isNotEmpty) {
-        //     fullScanlogList.addAll(dataForDate);
-        //   } else {
-        //     fullScanlogList.add(AllScanlogModel(scanDate: date));
-        //   }
+        // final List<DateTime> allDates = List.generate(
+        //   lastDate.difference(firstDate).inDays + 1,
+        //   (i) => firstDate.add(Duration(days: i)),
+        // );
+
+        // final Iterable<Map<String, dynamic>> presensiByDate = allDates
+        //     .map((date) {
+        //       final presensiForDate = res
+        //           .where((data) =>
+        //               DateTime.parse(data['ScanDate']).isAtSameMomentAs(date))
+        //           .toList();
+        //       return presensiForDate.isNotEmpty
+        //           ? presensiForDate[0]
+        //           : {'ScanDate': date.toString()};
+        //     })
+        //     .toList()
+        //     .cast<Map<String, dynamic>>();
+
+        // allScanlogList = List.from(presensiByDate)
+        //     .map((e) => AllScanlogModel.fromJson(e))
+        //     .toList();
+
+        // if (kDebugMode) {
+        //   print('JUMLAH DATA MODEL : ${allScanlogList.length}');
         // }
 
         exportData(allScanlogList);
@@ -256,6 +259,54 @@ class APIController extends GetxController {
                           : 'Tanpa Keterangan'
                 });
               }
+            }
+          }
+        }
+
+        final DateFormat formatter = DateFormat('d MMMM yyyy', 'id-ID');
+
+        final List<String> allPins =
+            List.from(res).map((e) => e['PIN'].toString()).toList();
+
+        List<String> listPin = [];
+
+        for (var scanlog in allScanlogList) {
+          if (!listPin.contains(scanlog.pin)) {
+            listPin.add(scanlog.pin!);
+          }
+        }
+
+        for (var pin in listPin) {
+          // Mengambil data presensi dari Firestore
+          final firestoreData = await firestore
+              .collection('Kepegawaian')
+              .doc(pin)
+              .collection('Presensi')
+              .get();
+
+          // Mengubah data Firestore menjadi List<DateTime>
+          final List<DateTime> existingDates =
+              firestoreData.docs.map((doc) => formatter.parse(doc.id)).toList();
+
+          // Memeriksa setiap tanggal dalam data presensi dari API
+          for (var data in res) {
+            final DateTime date = DateTime.parse(data['ScanDate']);
+            final String dateStr = formatter.format(date);
+
+            // Jika tanggal tidak ada dalam data presensi dari Firestore, maka tambahkan data presensi kosong ke Firestore
+            if (!existingDates.contains(date)) {
+              final scanlogPegawai = firestore
+                  .collection('Kepegawaian')
+                  .doc(pin)
+                  .collection('Presensi')
+                  .doc(dateStr);
+              await scanlogPegawai.set({
+                'pin': pin,
+                'date': date.toIso8601String(),
+                'masuk': '',
+                'keluar': '',
+                'keterangan': 'Tanpa Keterangan'
+              });
             }
           }
         }

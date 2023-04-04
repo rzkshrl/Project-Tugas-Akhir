@@ -3,19 +3,25 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/data/models/usermodel.dart';
+import 'package:project_tugas_akhir/app/modules/profile_mobile/views/profile_mobile_view.dart';
 import 'package:project_tugas_akhir/app/modules/riwayat_presensi/views/riwayat_presensi_view.dart';
+import 'package:project_tugas_akhir/app/modules/riwayat_presensi_mobile/views/riwayat_presensi_mobile_view.dart';
 import 'package:project_tugas_akhir/app/routes/app_pages.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../utils/dialogDefault.dart';
 import '../../../utils/loading.dart';
+import '../../beranda_mobile/views/beranda_mobile_view.dart';
 import '../controllers/home_controller.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
@@ -99,18 +105,61 @@ class HomeView extends GetView<HomeController> {
       //   }
       // });
     } else {
+      final authC = Get.put(AuthController());
+      var pages = <Widget>[
+        BerandaMobileView(),
+        RiwayatPresensiMobileView(),
+        ProfileMobileView()
+      ];
       return Scaffold(
-        appBar: AppBar(
-          title: Text('HomeView'),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Text(
-            'HALO Ini MOBILE',
-            style: TextStyle(fontSize: 20),
+        body: Obx(() => pages[controller.currentIndex.value]),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            color: Blue1,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(right: 9.w, left: 9.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                navBarItem(context, IconlyLight.home, 0),
+                navBarItem(context, FontAwesomeIcons.fingerprint, 1),
+                navBarItem(context, IconlyLight.profile, 2),
+              ],
+            ),
           ),
         ),
       );
     }
+  }
+
+  Widget navBarItem(BuildContext context, IconData icon, int index) {
+    return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          controller.changePage(index);
+        },
+        child: SizedBox(
+          height: 75,
+          child: Obx(
+            () => Padding(
+              padding: const EdgeInsets.all(11.0),
+              child: SizedBox(
+                width: 55,
+                child: Icon(
+                  icon,
+                  color: (index == controller.currentIndex.value ||
+                          Get.currentRoute == Routes.BERANDA_MOBILE)
+                      ? light
+                      : light.withOpacity(0.4),
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 }

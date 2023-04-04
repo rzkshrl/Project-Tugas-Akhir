@@ -11,21 +11,26 @@ Color Blue4 = HexColor('#244BA2');
 Color Yellow1 = HexColor('#F8F30B');
 Color Grey1 = HexColor('#808080');
 Color Grey2 = HexColor('#868D95');
+Color Grey3 = HexColor('#D9D9D9');
 Color error = HexColor('#FF0000');
 Color errorBg = HexColor('#FF6C6C');
 
-TextStyle heading6 = TextStyle(
-  fontWeight: FontWeight.w600,
-);
+MaterialStateProperty<Color?>? thumbColorScrollbar =
+    MaterialStateProperty.resolveWith<Color?>((states) {
+  if (states.contains(MaterialState.dragged)) {
+    return Blue1;
+  } else if (states.contains(MaterialState.hovered)) {
+    return Blue1.withOpacity(0.8);
+  }
+  return Blue1.withOpacity(0.4);
+});
 
-TextStyle regular12pt = TextStyle(
-  fontWeight: FontWeight.w600,
-);
-
-TextStyle bold12pt = TextStyle(
-  fontWeight: FontWeight.w800,
-);
-
-TextStyle headingBtn = TextStyle(
-  fontWeight: FontWeight.w800,
-);
+MaterialStateProperty<Color?>? trackColorScrollbar =
+    MaterialStateProperty.resolveWith<Color?>((states) {
+  if (states.contains(MaterialState.dragged)) {
+    return Blue1;
+  } else if (states.contains(MaterialState.hovered)) {
+    return Blue1.withOpacity(0.8);
+  }
+  return Blue1.withOpacity(0.4);
+});

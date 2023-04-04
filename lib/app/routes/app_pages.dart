@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/beranda_mobile/bindings/beranda_mobile_binding.dart';
+import '../modules/beranda_mobile/views/beranda_mobile_view.dart';
 import '../modules/data_pegawai/bindings/data_pegawai_binding.dart';
 import '../modules/data_pegawai/views/data_pegawai_view.dart';
 import '../modules/hari_libur/bindings/hari_libur_binding.dart';
@@ -14,12 +16,16 @@ import '../modules/ket_izin/bindings/ket_izin_binding.dart';
 import '../modules/ket_izin/views/ket_izin_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/login_mobile/bindings/login_mobile_binding.dart';
+import '../modules/login_mobile/views/login_mobile_view.dart';
 import '../modules/lupa_sandi/bindings/lupa_sandi_binding.dart';
 import '../modules/lupa_sandi/views/lupa_sandi_view.dart';
+import '../modules/lupa_sandi_mobile/bindings/lupa_sandi_mobile_binding.dart';
+import '../modules/lupa_sandi_mobile/views/lupa_sandi_mobile_view.dart';
 import '../modules/navigation_drawer/bindings/navigation_drawer_binding.dart';
 import '../modules/navigation_drawer/views/navigation_drawer_view.dart';
-import '../modules/register/bindings/register_binding.dart';
-import '../modules/register/views/register_view.dart';
+import '../modules/profile_mobile/bindings/profile_mobile_binding.dart';
+import '../modules/profile_mobile/views/profile_mobile_view.dart';
 import '../modules/rekap_presensi_all/bindings/rekap_presensi_all_binding.dart';
 import '../modules/rekap_presensi_all/views/rekap_presensi_all_view.dart';
 import '../modules/rekap_presensi_per/bindings/rekap_presensi_per_binding.dart';
@@ -28,6 +34,8 @@ import '../modules/rekap_scanlog_per/bindings/rekap_scanlog_per_binding.dart';
 import '../modules/rekap_scanlog_per/views/rekap_scanlog_per_view.dart';
 import '../modules/riwayat_presensi/bindings/riwayat_presensi_binding.dart';
 import '../modules/riwayat_presensi/views/riwayat_presensi_view.dart';
+import '../modules/riwayat_presensi_mobile/bindings/riwayat_presensi_mobile_binding.dart';
+import '../modules/riwayat_presensi_mobile/views/riwayat_presensi_mobile_view.dart';
 
 part 'app_routes.dart';
 
@@ -46,11 +54,6 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => LoginView(),
       binding: LoginBinding(),
-    ),
-    GetPage(
-      name: _Paths.REGISTER,
-      page: () => const RegisterView(),
-      binding: RegisterBinding(),
     ),
     GetPage(
       name: _Paths.LUPA_SANDI,
@@ -106,6 +109,31 @@ class AppPages {
       name: _Paths.HARI_LIBUR,
       page: () => const HariLiburView(),
       binding: HariLiburBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGIN_MOBILE,
+      page: () => const LoginMobileView(),
+      binding: LoginMobileBinding(),
+    ),
+    GetPage(
+      name: _Paths.LUPA_SANDI_MOBILE,
+      page: () => const LupaSandiMobileView(),
+      binding: LupaSandiMobileBinding(),
+    ),
+    GetPage(
+      name: _Paths.BERANDA_MOBILE,
+      page: () => const BerandaMobileView(),
+      binding: BerandaMobileBinding(),
+    ),
+    GetPage(
+      name: _Paths.RIWAYAT_PRESENSI_MOBILE,
+      page: () => const RiwayatPresensiMobileView(),
+      binding: RiwayatPresensiMobileBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE_MOBILE,
+      page: () => const ProfileMobileView(),
+      binding: ProfileMobileBinding(),
     ),
   ];
 }

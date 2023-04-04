@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class RegisterController extends GetxController {
-  //TODO: Implement RegisterController
+class RiwayatPresensiMobileController extends GetxController {
+  //TODO: Implement RiwayatPresensiMobileController
 
   final count = 0.obs;
   @override

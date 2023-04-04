@@ -136,66 +136,62 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                 height: 3.h,
               ),
               Container(
-                decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
-                width: 90.w,
-                height: 70.h,
-                child: FutureBuilder(
-                    future: Future.delayed(Duration(seconds: 2)),
-                    builder: (context, snap) {
-                      if (snap.connectionState == ConnectionState.waiting) {
+                  decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
+                  width: 90.w,
+                  height: 70.h,
+                  child: StreamBuilder(
+                    stream: controller.firestoreKepegawaianList,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
                         return LoadingView();
                       }
-                      return StreamBuilder(
-                        stream: Stream.empty(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return LoadingView();
-                          }
-                          final kepegawaianList =
-                              snapshot.data! as List<KepegawaianModel>;
-                          int _rowsPerPage =
-                              PaginatedDataTable.defaultRowsPerPage;
+                      final kepegawaianList =
+                          snapshot.data! as List<KepegawaianModel>;
+                      int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
 
-                          return PaginatedDataTable2(
-                            columns: [
-                              DataColumn2(
-                                label: Text('Nama'),
-                                size: ColumnSize.M,
-                              ),
-                              DataColumn2(
-                                label: Text('NIP/PEGID'),
-                              ),
-                              DataColumn2(
-                                label: Text('PIN'),
-                              ),
-                              DataColumn(
-                                label: Text('Jam Masuk'),
-                              ),
-                              DataColumn(
-                                label: Text('Jam Keluar'),
-                              ),
-                              DataColumn(
-                                label: Text('Tanggal Presensi'),
-                              ),
-                              DataColumn(
-                                label: Text('Keterangan'),
-                              ),
-                              DataColumn(
-                                label: Text('Ubah'),
-                              ),
-                            ],
-                            renderEmptyRowsInTheEnd: false,
-                            source: ScanlogDTS(kepegawaianList),
-                            onRowsPerPageChanged: (value) {
-                              _rowsPerPage = value!;
-                            },
-                            initialFirstRowIndex: 0,
-                            rowsPerPage: _rowsPerPage,
-                          );
+                      return PaginatedDataTable2(
+                        columns: [
+                          DataColumn2(
+                            label: Text('Nama'),
+                            size: ColumnSize.M,
+                          ),
+                          DataColumn2(
+                            label: Text('NIP/PEGID'),
+                          ),
+                          DataColumn2(
+                            label: Text('PIN'),
+                          ),
+                          DataColumn(
+                            label: Text('Jam Masuk'),
+                          ),
+                          DataColumn(
+                            label: Text('Jam Keluar'),
+                          ),
+                          DataColumn(
+                            label: Text('Tanggal Presensi'),
+                          ),
+                          DataColumn(
+                            label: Text('Keterangan'),
+                          ),
+                          DataColumn(
+                            label: Text('Ubah'),
+                          ),
+                        ],
+                        horizontalMargin: 20,
+                        checkboxHorizontalMargin: 12,
+                        columnSpacing: 20,
+                        wrapInCard: false,
+                        minWidth: 950,
+                        renderEmptyRowsInTheEnd: false,
+                        source: ScanlogDTS(kepegawaianList),
+                        onRowsPerPageChanged: (value) {
+                          _rowsPerPage = value!;
                         },
+                        initialFirstRowIndex: 0,
+                        rowsPerPage: _rowsPerPage,
                       );
-                    }),
-              )
+                    },
+                  ))
             ],
           ),
         ),

@@ -13,6 +13,14 @@ class TextFieldController extends GetxController {
   final emailWebResetPassKey = GlobalKey<FormState>().obs;
   final passWebKey = GlobalKey<FormState>().obs;
 
+  final emailMobileC = TextEditingController();
+  final emailMobileResetPassC = TextEditingController();
+  final passMobileC = TextEditingController();
+
+  final emailMobileKey = GlobalKey<FormState>().obs;
+  final emailMobileResetPassKey = GlobalKey<FormState>().obs;
+  final passMobileKey = GlobalKey<FormState>().obs;
+
   final namaTambahDataPegC = TextEditingController();
   final pinTambahDataPegC = TextEditingController();
   final nipTambahDataPegC = TextEditingController();

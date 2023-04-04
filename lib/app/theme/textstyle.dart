@@ -62,6 +62,18 @@ getTextHeader2(BuildContext context) {
 
 getTextSubHeader(BuildContext context) {
   return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 10.0),
+        Condition.equals(name: MOBILE, value: 10.0),
+        Condition.equals(name: TABLET, value: 12.0),
+        Condition.equals(name: DESKTOP, value: 14.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w700);
+}
+
+getTextTable(BuildContext context) {
+  return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
         Condition.smallerThan(name: DESKTOP, value: 12.0),
         Condition.equals(name: MOBILE, value: 12.0),
@@ -69,7 +81,7 @@ getTextSubHeader(BuildContext context) {
         Condition.equals(name: DESKTOP, value: 16.0),
       ]).value,
       color: Blue1,
-      fontWeight: FontWeight.w700);
+      fontWeight: FontWeight.w600);
 }
 
 getTextItemAppBar(BuildContext context) {
@@ -276,15 +288,6 @@ getTextBtn(BuildContext context) {
       fontWeight: FontWeight.w700);
 }
 
-getTextLoginBtnActiveMobile(BuildContext context) {
-  return TextStyle(
-      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
-        Condition.equals(name: MOBILE, value: 16.0),
-        Condition.equals(name: TABLET, value: 18.0),
-      ]).value,
-      color: Yellow1);
-}
-
 getTextLoginBtnDisabled(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
@@ -308,11 +311,87 @@ getTextLupaSandi(BuildContext context) {
       fontWeight: FontWeight.w500);
 }
 
-getTextLupaSandiMobile(BuildContext context) {
+getTextHeaderWelcomeScreen(BuildContext context, double value) {
   return TextStyle(
-      fontSize: ResponsiveValue(context, defaultValue: 11.0, valueWhen: [
-        Condition.equals(name: MOBILE, value: 11.0),
+      fontSize: ResponsiveValue(context, defaultValue: value, valueWhen: [
+        Condition.equals(name: MOBILE, value: value),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w800);
+}
+
+getTextSemiBoldHeaderWelcomeScreen(BuildContext context, double value) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: value, valueWhen: [
+        Condition.equals(name: MOBILE, value: value),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w700);
+}
+
+getTextSemiHeaderWelcomeScreen(BuildContext context, double value) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: value, valueWhen: [
+        Condition.equals(name: MOBILE, value: value),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w600);
+}
+
+getTextSubHeaderWelcomeScreen(BuildContext context, double value) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: value, valueWhen: [
+        Condition.equals(name: MOBILE, value: value),
       ]).value,
       color: Blue1,
       fontWeight: FontWeight.w500);
+}
+
+getTextLoginBtnActiveMobile(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 18.0, valueWhen: [
+        Condition.equals(name: MOBILE, value: 18.0),
+        Condition.equals(name: TABLET, value: 22.0),
+      ]).value,
+      color: Yellow1);
+}
+
+getTextLupaSandiMobile(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 13.0, valueWhen: [
+        Condition.equals(name: MOBILE, value: 13.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w500);
+}
+
+getTextHintFormLoginMobile(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        Condition.equals(name: MOBILE, value: 14.0),
+      ]).value,
+      color: Grey1,
+      fontWeight: FontWeight.w400);
+}
+
+getTextErrorFormLoginMobile(BuildContext context) {
+  return TextStyle(
+    fontSize: ResponsiveValue(context, defaultValue: 13.0, valueWhen: [
+      Condition.equals(name: MOBILE, value: 13.0),
+    ]).value,
+    color: light,
+    background: Paint()
+      ..strokeWidth = 16
+      ..color = errorBg
+      ..style = PaintingStyle.stroke
+      ..strokeJoin = StrokeJoin.round,
+  );
+}
+
+getTextFormValueMobile(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        Condition.equals(name: MOBILE, value: 14.0),
+      ]).value,
+      color: dark);
 }

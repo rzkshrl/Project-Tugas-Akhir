@@ -1,10 +1,11 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/modules/home/views/home_view.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
-import 'dart:js' as js;
 import 'package:sizer/sizer.dart';
 
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ import 'app/theme/textstyle.dart';
 import 'app/utils/dialogDefault.dart';
 import 'firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:page_transition/page_transition.dart';
 
 Future<void> main() async {
   // js.context.callMethod('fixPasswordCss');
@@ -62,9 +64,14 @@ class ProjectTugasAkhir extends StatelessWidget {
                           ]),
                       title: "MonitorPresence MIM Jetis Lor",
                       theme: ThemeData(
-                        fontFamily: 'Inter',
-                        primaryColor: light,
-                      ),
+                          scaffoldBackgroundColor: light,
+                          fontFamily: 'Inter',
+                          primaryColor: light,
+                          scrollbarTheme: ScrollbarThemeData(
+                            thumbColor: thumbColorScrollbar,
+                            trackColor: trackColorScrollbar,
+                            thumbVisibility: MaterialStatePropertyAll(true),
+                          )),
                       initialRoute: Routes.LOGIN,
                       getPages: AppPages.routes,
                       debugShowCheckedModeBanner: false,
@@ -74,11 +81,16 @@ class ProjectTugasAkhir extends StatelessWidget {
           } else {
             return Sizer(builder: (context, orientation, screenType) {
               return FutureBuilder(
-                  future: Future.delayed(Duration(seconds: 2)),
+                  future: Future.delayed(Duration(seconds: 0)),
                   builder: (context, snap) {
                     if (snap.connectionState == ConnectionState.done) {
-                      return Obx(
-                        () => GetMaterialApp(
+                      return AnnotatedRegion(
+                        value: SystemUiOverlayStyle(
+                          statusBarBrightness: Brightness.dark,
+                          statusBarIconBrightness: Brightness.dark,
+                          statusBarColor: light,
+                        ),
+                        child: GetMaterialApp(
                           builder: (context, child) =>
                               ResponsiveWrapper.builder(
                                   BouncingScrollWrapper.builder(
@@ -96,8 +108,7 @@ class ProjectTugasAkhir extends StatelessWidget {
                             fontFamily: 'Inter',
                             primaryColor: light,
                           ),
-                          initialRoute:
-                              authC.isAuth.isTrue ? Routes.HOME : Routes.LOGIN,
+                          home: SplashScreen(),
                           getPages: AppPages.routes,
                           debugShowCheckedModeBanner: false,
                         ),
@@ -113,5 +124,30 @@ class ProjectTugasAkhir extends StatelessWidget {
             });
           }
         });
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  final authC = Get.put(AuthController());
+
+  @override
+  Widget build(BuildContext context) {
+    return AnnotatedRegion(
+        value: SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarColor: light,
+        ),
+        child: AnimatedSplashScreen(
+          animationDuration: Duration(milliseconds: 900),
+          duration: 1200,
+          splash: 'assets/icons/logo_splash.png',
+          backgroundColor: light,
+          nextScreen: HomeView(),
+          nextRoute: authC.isAuth.isTrue ? Routes.HOME : Routes.LOGIN,
+          splashIconSize: 255,
+          splashTransition: SplashTransition.fadeTransition,
+          pageTransitionType: PageTransitionType.leftToRight,
+        ));
   }
 }

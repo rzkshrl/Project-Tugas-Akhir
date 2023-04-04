@@ -18,6 +18,11 @@ abstract class Routes {
   static const KET_IZIN = _Paths.KET_IZIN;
   static const NAVIGATION_DRAWER = _Paths.NAVIGATION_DRAWER;
   static const HARI_LIBUR = _Paths.HARI_LIBUR;
+  static const LOGIN_MOBILE = _Paths.LOGIN_MOBILE;
+  static const LUPA_SANDI_MOBILE = _Paths.LUPA_SANDI_MOBILE;
+  static const BERANDA_MOBILE = _Paths.BERANDA_MOBILE;
+  static const RIWAYAT_PRESENSI_MOBILE = _Paths.RIWAYAT_PRESENSI_MOBILE;
+  static const PROFILE_MOBILE = _Paths.PROFILE_MOBILE;
 }
 
 abstract class _Paths {
@@ -37,4 +42,9 @@ abstract class _Paths {
   static const KET_IZIN = '/ket-izin';
   static const NAVIGATION_DRAWER = '/navigation-drawer';
   static const HARI_LIBUR = '/hari-libur';
+  static const LOGIN_MOBILE = '/login-mobile';
+  static const LUPA_SANDI_MOBILE = '/lupa-sandi-mobile';
+  static const BERANDA_MOBILE = '/beranda-mobile';
+  static const RIWAYAT_PRESENSI_MOBILE = '/riwayat-presensi-mobile';
+  static const PROFILE_MOBILE = '/profile-mobile';
 }

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+List<KepegawaianModel> kepegawaianList = [];
+
 class PresensiModel {
   String? pin;
   String? masuk;
@@ -53,9 +55,7 @@ class KepegawaianModel {
 
   factory KepegawaianModel.fromSnapshot(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
-    final presensi = (data['Presensi'] as List?)
-        ?.map((presence) => PresensiModel.fromJson(presence))
-        .toList();
+    final presensiRef = json.reference.collection('Presensi');
     return KepegawaianModel(
         pin: data['pin'],
         nip: data['nip'],
@@ -63,6 +63,17 @@ class KepegawaianModel {
         jadker: data['jadker'],
         email: data['email'],
         bidang: data['bidang'],
-        presensi: presensi ?? []);
+        presensi: []);
+  }
+
+  Future<void> loadPresensi() async {
+    final presensiRef = FirebaseFirestore.instance
+        .collection('Kepegawaian')
+        .doc(pin)
+        .collection('Presensi');
+    final querySnapshot = await presensiRef.get();
+    this.presensi = querySnapshot.docs
+        .map((doc) => PresensiModel.fromJson(doc.data()))
+        .toList();
   }
 }
