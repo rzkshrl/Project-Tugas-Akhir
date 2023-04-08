@@ -18,22 +18,22 @@ class ScanlogDTS extends DataTableSource {
       DataCell(Text(data != null ? "${data.nama}" : "-")),
       DataCell(Text(data != null ? "${data.nip}" : "-")),
       DataCell(Text(data != null ? "${data.pin}" : "-")),
-      DataCell(Column(
-          children: presensiList.map((presensi) {
-        return Text(presensi != null ? "${presensi.masuk}" : "-");
-      }).toList())),
-      DataCell(Column(
-          children: presensiList.map((presensi) {
-        return Text(presensi != null ? "${presensi.keluar}" : "-");
-      }).toList())),
-      DataCell(Column(
-          children: presensiList.map((presensi) {
-        return Text(presensi != null ? "${presensi.date}" : "-");
-      }).toList())),
-      DataCell(Column(
-          children: presensiList.map((presensi) {
-        return Text(presensi != null ? "${presensi.keterangan}" : "-");
-      }).toList())),
+      // DataCell(Column(
+      //     children: presensiList.map((presensi) {
+      //   return Text(presensi != null ? "${presensi.masuk}" : "-");
+      // }).toList())),
+      // DataCell(Column(
+      //     children: presensiList.map((presensi) {
+      //   return Text(presensi != null ? "${presensi.keluar}" : "-");
+      // }).toList())),
+      // DataCell(Column(
+      //     children: presensiList.map((presensi) {
+      //   return Text(presensi != null ? "${presensi.date}" : "-");
+      // }).toList())),
+      // DataCell(Column(
+      //     children: presensiList.map((presensi) {
+      //   return Text(presensi != null ? "${presensi.keterangan}" : "-");
+      // }).toList())),
       DataCell(IconButton(onPressed: () {}, icon: Icon(IconlyLight.edit))),
     ]);
   }

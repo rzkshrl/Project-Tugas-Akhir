@@ -27,8 +27,11 @@ dependencies:
   icons_plus: ^4.0.0
   json_annotation: ^4.8.0
   linked_scroll_controller: ^0.2.0
+  lottie: ^2.3.2
   responsive_framework: ^0.2.0
   sizer: ^2.0.15
+  syncfusion_flutter_calendar: ^21.1.38
+  syncfusion_flutter_datepicker: ^21.1.38
   universal_html: ^2.2.1
 
 dev_dependencies:
@@ -40,6 +43,8 @@ dev_dependencies:
 flutter:
   assets:
     - assets/icons/
+    - assets/images/
+    - assets/lootie/
   fonts:
     - family: Inter
       fonts:

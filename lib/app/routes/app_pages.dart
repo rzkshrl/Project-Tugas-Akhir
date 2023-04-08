@@ -4,6 +4,8 @@ import '../modules/beranda_mobile/bindings/beranda_mobile_binding.dart';
 import '../modules/beranda_mobile/views/beranda_mobile_view.dart';
 import '../modules/data_pegawai/bindings/data_pegawai_binding.dart';
 import '../modules/data_pegawai/views/data_pegawai_view.dart';
+import '../modules/detail_presensi/bindings/detail_presensi_binding.dart';
+import '../modules/detail_presensi/views/detail_presensi_view.dart';
 import '../modules/hari_libur/bindings/hari_libur_binding.dart';
 import '../modules/hari_libur/views/hari_libur_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -134,6 +136,11 @@ class AppPages {
       name: _Paths.PROFILE_MOBILE,
       page: () => const ProfileMobileView(),
       binding: ProfileMobileBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_PRESENSI,
+      page: () => const DetailPresensiView(),
+      binding: DetailPresensiBinding(),
     ),
   ];
 }

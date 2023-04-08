@@ -6,8 +6,6 @@ import 'package:project_tugas_akhir/app/data/models/allscanlogmodel.dart';
 import '../../../data/models/firestorescanlogmodel.dart';
 
 class RiwayatPresensiController extends GetxController {
-  //TODO: Implement RiwayatPresensiController
-
   late Stream<List<KepegawaianModel>> firestoreKepegawaianList;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 

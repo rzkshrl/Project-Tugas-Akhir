@@ -6,31 +6,48 @@ List<KepegawaianModel> kepegawaianList = [];
 
 class PresensiModel {
   String? pin;
-  String? masuk;
-  String? keluar;
-  String? date;
-  String? keterangan;
+  DateTime? dateTime;
+  String? status;
 
-  PresensiModel(
-      {this.pin, this.masuk, this.keluar, this.date, this.keterangan});
+  PresensiModel({this.pin, this.dateTime, this.status});
 
   factory PresensiModel.fromJson(Map<String, dynamic> json) {
     return (PresensiModel(
       pin: json['pin'],
-      masuk: json['masuk'],
-      keluar: json['keluar'],
-      date: json['date'],
-      keterangan: json['keterangan'],
+      dateTime: DateTime.parse(json['date_time']),
+      status: json['status'],
     ));
   }
 
   Map<String, dynamic> toJson() {
     return {
       "pin": pin,
-      "masuk": masuk,
-      "keluar": keluar,
-      "date": date,
-      "keterangan": keterangan,
+      "dateTime": dateTime!.toIso8601String(),
+      "status": status,
+    };
+  }
+}
+
+class LiburModel {
+  String? holidayName;
+  DateTime? holidayDate;
+  bool? isNationalHoliday;
+
+  LiburModel({this.holidayName, this.holidayDate, this.isNationalHoliday});
+
+  factory LiburModel.fromJson(Map<String, dynamic> json) {
+    return (LiburModel(
+      holidayName: json['holiday_name'],
+      holidayDate: DateTime.parse(json['holiday_date']),
+      isNationalHoliday: json['is_national_holiday'],
+    ));
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "holidayName": holidayName,
+      "holidayDate": holidayDate,
+      "isNationalHoliday": isNationalHoliday,
     };
   }
 }

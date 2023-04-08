@@ -35,6 +35,26 @@ class APIController extends GetxController {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  void showLoadingDialog() {
+    Get.dialog(
+      dialogAlertOnlySingleMsgAnimation(
+          isLoading == true
+              ? 'assets/lootie/loading.json'
+              : 'assets/lootie/finish.json',
+          isLoading == true ? 'Memuat...' : 'Refresh Data Selesai!',
+          getTextAlert(Get.context!)),
+      barrierDismissible: false,
+    );
+  }
+
+  void showFinishDialog() {
+    Get.dialog(
+      dialogAlertOnlySingleMsgAnimation(
+          'assets/lootie/finish.json', 'Selesai!', getTextAlert(Get.context!)),
+      barrierDismissible: true,
+    );
+  }
+
   Future<void> getDeviceInfo(BuildContext context) async {
     CollectionReference users = firestore.collection("Device");
     final devices = await users.doc('mesin-1').get();
@@ -48,11 +68,13 @@ class APIController extends GetxController {
     var ip = deviceData.value.serverIp;
     var port = deviceData.value.serverPort;
     var allPresensi = deviceData.value.allPresensi;
+    var newPresensi = deviceData.value.newPresensi;
 
     if (kDebugMode) {
       print("Serial Number : $sn");
       print("IP server dan Port : $ip:$port");
       print("All Presensi : ${allPresensi}");
+      print("New Presensi : ${newPresensi}");
     }
 
     try {
@@ -81,6 +103,11 @@ class APIController extends GetxController {
               .collection('Device')
               .doc("mesin-1")
               .update({'allPresensi': deviceInfo.value.allPresensi});
+        } else if (newPresensi != deviceInfo.value.newPresensi) {
+          firestore
+              .collection('Device')
+              .doc("mesin-1")
+              .update({'newPresensi': deviceInfo.value.newPresensi});
         }
       }
     } catch (e) {
@@ -104,6 +131,8 @@ class APIController extends GetxController {
   }
 
   Future<void> getAllPresenceData(BuildContext context) async {
+    isLoading.value = true;
+
     CollectionReference users = firestore.collection("Device");
     final devices = await users.doc('mesin-1').get();
     final deviceDataDB = devices.data() as Map<String, dynamic>;
@@ -123,220 +152,106 @@ class APIController extends GetxController {
       print("All Presensi : ${allPresensi}");
     }
 
-    if (allScanlogList.isNotEmpty) {
-      null;
-    } else {
-      final String url = "http://$ip:$port$urlGetScanlogWithPaging?sn=${sn}";
-      final List<dynamic> res = [];
-      int pageNumber = 0;
+    final String url = "http://$ip:$port$urlGetScanlogWithPaging?sn=${sn}";
+    final List<dynamic> res = [];
+    int pageNumber = 0;
 
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    try {
+      showLoadingDialog();
+      while (true) {
+        var response =
+            await Future.wait([dio.post(url + '&page=$pageNumber&limit=100')]);
+        final data = response[0].data['Data'];
 
-      try {
-        while (true) {
-          var response = await Future.wait(
-              [dio.post(url + '&page=$pageNumber&limit=100')]);
-          final data = response[0].data['Data'];
+        res.addAll(data);
 
-          res.addAll(data);
-
-          if (data.length < 100) {
-            break;
-          }
-
-          pageNumber++;
-        }
-        if (kDebugMode) {
-          print('Jumlah Data Response API : ${res.length}');
+        if (data.length < 100) {
+          break;
         }
 
-        allScanlogList =
-            List.from(res).map((e) => AllScanlogModel.fromJson(e)).toList();
+        pageNumber++;
+      }
+      if (kDebugMode) {
+        print('Jumlah Data Response API : ${res.length}');
+      }
 
-        if (kDebugMode) {
-          print('JUMLAH DATA MODEL : ${allScanlogList.length}');
-        }
+      allScanlogList =
+          List.from(res).map((e) => AllScanlogModel.fromJson(e)).toList();
 
-        // final Map<String, List<dynamic>> groupedByPin = {};
-
-        // for (final item in res) {
-        //   final pin = item['PIN'];
-        //   if (!groupedByPin.containsKey(pin)) {
-        //     groupedByPin[pin] = [];
-        //   }
-        //   groupedByPin[pin]!.add(item);
-        // }
-
-        // res.sort((a, b) => DateTime.parse(a['ScanDate'])
-        //     .compareTo(DateTime.parse(b['ScanDate'])));
-        // final DateTime firstDate = allScanlogList.first.scanDate!;
-        // if (kDebugMode) {
-        //   print('firstDate : ${firstDate}');
-        // }
-        // final DateTime lastDate = allScanlogList.last.scanDate!;
-        // if (kDebugMode) {
-        //   print('lastDate : ${lastDate}');
-        // }
-
-        // final List<DateTime> allDates = List.generate(
-        //   lastDate.difference(firstDate).inDays + 1,
-        //   (i) => firstDate.add(Duration(days: i)),
-        // );
-
-        // final Iterable<Map<String, dynamic>> presensiByDate = allDates
-        //     .map((date) {
-        //       final presensiForDate = res
-        //           .where((data) =>
-        //               DateTime.parse(data['ScanDate']).isAtSameMomentAs(date))
-        //           .toList();
-        //       return presensiForDate.isNotEmpty
-        //           ? presensiForDate[0]
-        //           : {'ScanDate': date.toString()};
-        //     })
-        //     .toList()
-        //     .cast<Map<String, dynamic>>();
-
-        // allScanlogList = List.from(presensiByDate)
-        //     .map((e) => AllScanlogModel.fromJson(e))
-        //     .toList();
-
-        // if (kDebugMode) {
-        //   print('JUMLAH DATA MODEL : ${allScanlogList.length}');
-        // }
-
+      if (kDebugMode) {
+        print('Jumlah Data Model : ${allScanlogList.length}');
         exportData(allScanlogList);
+      }
 
-        final stopwatch = Stopwatch()..start();
+      final stopwatch = Stopwatch()..start();
 
-        for (var scanlog in allScanlogList) {
-          if (allScanlogList != null) {
-            var dateFormatPresensi =
-                DateFormat('d MMMM yyyy - HH:mm:ss', 'id-ID');
-            var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
-            var datePresensi = formatterDoc
-                .format(DateTime.parse(scanlog.scanDate!.toIso8601String()));
-            final scanlogPegawai = firestore
-                .collection('Kepegawaian')
-                .doc(scanlog.pin)
-                .collection('Presensi')
-                .doc(datePresensi);
-            final checkData = await scanlogPegawai.get();
-            if (!checkData.exists) {
-              final hour = scanlog.scanDate!.hour;
-              if (scanlog.pin != null) {
-                await scanlogPegawai.set({
-                  'pin': scanlog.pin,
-                  'date': scanlog.scanDate!.toIso8601String(),
-                  'masuk': hour >= 6 && hour <= 9
-                      ? Timestamp.fromDate(scanlog.scanDate!)
-                      : '',
-                  'keluar': hour >= 9 && hour <= 16
-                      ? Timestamp.fromDate(scanlog.scanDate!)
-                      : '',
-                  'keterangan': hour >= 6 && hour <= 8
-                      ? 'Hadir'
-                      : hour >= 9 && hour <= 16
-                          ? 'Hadir'
-                          : 'Tanpa Keterangan'
-                });
-              }
-            } else {
-              final hour = scanlog.scanDate!.hour;
-              if (scanlog.pin != null) {
-                await scanlogPegawai.update({
-                  'pin': scanlog.pin,
-                  'date': scanlog.scanDate!.toIso8601String(),
-                  'masuk': hour >= 6 && hour <= 9
-                      ? Timestamp.fromDate(scanlog.scanDate!)
-                      : '',
-                  'keluar': hour >= 9 && hour <= 16
-                      ? Timestamp.fromDate(scanlog.scanDate!)
-                      : '',
-                  'keterangan': hour >= 6 && hour <= 8
-                      ? 'Hadir'
-                      : hour >= 9 && hour <= 16
-                          ? 'Hadir'
-                          : 'Tanpa Keterangan'
-                });
-              }
-            }
-          }
-        }
-
-        final DateFormat formatter = DateFormat('d MMMM yyyy', 'id-ID');
-
-        final List<String> allPins =
-            List.from(res).map((e) => e['PIN'].toString()).toList();
-
-        List<String> listPin = [];
-
-        for (var scanlog in allScanlogList) {
-          if (!listPin.contains(scanlog.pin)) {
-            listPin.add(scanlog.pin!);
-          }
-        }
-
-        for (var pin in listPin) {
-          // Mengambil data presensi dari Firestore
-          final firestoreData = await firestore
+      for (var scanlog in allScanlogList) {
+        if (allScanlogList != null) {
+          var dateFormatPresensi =
+              DateFormat('d MMMM yyyy - HH:mm:ss', 'id-ID');
+          var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
+          var datePresensi = formatterDoc
+              .format(DateTime.parse(scanlog.scanDate!.toIso8601String()));
+          final hour = scanlog.scanDate!.hour;
+          final scanlogPegawai = firestore
               .collection('Kepegawaian')
-              .doc(pin)
+              .doc(scanlog.pin)
               .collection('Presensi')
-              .get();
-
-          // Mengubah data Firestore menjadi List<DateTime>
-          final List<DateTime> existingDates =
-              firestoreData.docs.map((doc) => formatter.parse(doc.id)).toList();
-
-          // Memeriksa setiap tanggal dalam data presensi dari API
-          for (var data in res) {
-            final DateTime date = DateTime.parse(data['ScanDate']);
-            final String dateStr = formatter.format(date);
-
-            // Jika tanggal tidak ada dalam data presensi dari Firestore, maka tambahkan data presensi kosong ke Firestore
-            if (!existingDates.contains(date)) {
-              final scanlogPegawai = firestore
-                  .collection('Kepegawaian')
-                  .doc(pin)
-                  .collection('Presensi')
-                  .doc(dateStr);
+              .doc(
+                hour >= 6 && hour <= 9
+                    ? datePresensi + ' Masuk'
+                    : hour >= 9 && hour <= 16
+                        ? datePresensi + ' Keluar'
+                        : null,
+              );
+          final checkData = await scanlogPegawai.get();
+          if (scanlog.pin != null) {
+            if (checkData.exists == false) {
               await scanlogPegawai.set({
-                'pin': pin,
-                'date': date.toIso8601String(),
-                'masuk': '',
-                'keluar': '',
-                'keterangan': 'Tanpa Keterangan'
+                'pin': scanlog.pin,
+                'date_time': hour >= 6 && hour <= 9
+                    ? scanlog.scanDate!.toIso8601String()
+                    : hour >= 9 && hour <= 16
+                        ? scanlog.scanDate!.toIso8601String()
+                        : null,
+                'status': hour >= 6 && hour <= 9
+                    ? 'Masuk'
+                    : hour >= 9 && hour <= 16
+                        ? 'Keluar'
+                        : 'Tanpa Keterangan'
               });
-            }
+            } else {}
           }
         }
+      }
 
-        stopwatch.stop();
-        if (kDebugMode) {
-          print('Waktu sinkron data mesin -> firebase : ${stopwatch.elapsed}');
-        }
+      isLoading.value = false;
 
-        if (kDebugMode) {
-          print('Sinkron Data Mesin -> Firebase : Selesai');
-        }
-      } catch (e) {
-        if (e is DioError) {
-          if (kDebugMode) {
-            print(e);
-          }
-          Get.dialog(dialogAlertOnly(
-              IconlyLight.danger,
-              "Terjadi Kesalahan.",
-              "Tidak dapat tersambung dengan mesin.",
-              getTextAlert(context),
-              getTextAlertSub(context)));
-        }
+      Get.back();
+      showFinishDialog();
+
+      stopwatch.stop();
+      if (kDebugMode) {
+        print('Waktu sinkron data mesin -> firebase : ${stopwatch.elapsed}');
+        print('Sinkron Data Mesin -> Firebase : Selesai');
+      }
+    } catch (e) {
+      if (e is DioError) {
         if (kDebugMode) {
           print(e);
         }
-        Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.",
-            "$e", getTextAlert(context), getTextAlertSub(context)));
+        Get.dialog(dialogAlertOnly(
+            IconlyLight.danger,
+            "Terjadi Kesalahan.",
+            "Tidak dapat tersambung dengan mesin.",
+            getTextAlert(context),
+            getTextAlertSub(context)));
       }
+      if (kDebugMode) {
+        print(e);
+      }
+      Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.", "$e",
+          getTextAlert(context), getTextAlertSub(context)));
     }
   }
 
@@ -359,26 +274,8 @@ class APIController extends GetxController {
     html.Url.revokeObjectUrl(url);
   }
 
-  // Future<void> getFirestorePresenceData(BuildContext context) async {
-  //   try {
-  //     firestoreScanlogList = firestore
-  //         .collection('Kepegawaian')
-  //         .snapshots()
-  //         .map((snap) => snap.docs
-  //             .map((doc) => KepegawaianModel.fromSnapshot(doc))
-  //             .toList());
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print(e);
-  //     }
-  //     Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.", "$e",
-  //         getTextAlert(context), getTextAlertSub(context)));
-  //   }
-  // }
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   getDeviceInfo(context1);
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+  }
 }

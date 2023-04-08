@@ -10,12 +10,14 @@ class DeviceModel {
   String? serverIp;
   int? serverPort;
   String? allPresensi;
+  String? newPresensi;
 
   DeviceModel({
     this.deviceSn,
     this.serverIp,
     this.serverPort,
     this.allPresensi,
+    this.newPresensi,
   });
 
   factory DeviceModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,7 @@ class DeviceModel {
       serverIp: json['server_ip'],
       serverPort: json['server_port'],
       allPresensi: json['allPresensi'],
+      newPresensi: json['newPresensi'],
     );
   }
 
@@ -33,6 +36,7 @@ class DeviceModel {
       "serverIp": serverIp,
       "serverPort": serverPort,
       "allPresensi": allPresensi,
+      "newPresensi": newPresensi,
     };
   }
 }

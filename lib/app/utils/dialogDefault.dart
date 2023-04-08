@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../theme/theme.dart';
 
@@ -75,6 +76,39 @@ Widget dialogAlertOnlySingleMsg(
               color: Yellow1,
               size: 55,
             ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            text,
+            textAlign: TextAlign.center,
+            style: textAlert,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget dialogAlertOnlySingleMsgAnimation(
+    String animationLink, String text, TextStyle textAlert) {
+  return Dialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    backgroundColor: Blue1,
+    child: Container(
+      width: 350,
+      height: 274.07,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 143.97,
+            height: 139.02,
+            decoration: BoxDecoration(
+                border: Border.all(color: Yellow1),
+                borderRadius: BorderRadius.circular(12)),
+            child: Lottie.asset(animationLink, height: 55),
           ),
           SizedBox(
             height: 30,

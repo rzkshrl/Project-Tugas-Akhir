@@ -23,6 +23,7 @@ abstract class Routes {
   static const BERANDA_MOBILE = _Paths.BERANDA_MOBILE;
   static const RIWAYAT_PRESENSI_MOBILE = _Paths.RIWAYAT_PRESENSI_MOBILE;
   static const PROFILE_MOBILE = _Paths.PROFILE_MOBILE;
+  static const DETAIL_PRESENSI = _Paths.DETAIL_PRESENSI;
 }
 
 abstract class _Paths {
@@ -47,4 +48,5 @@ abstract class _Paths {
   static const BERANDA_MOBILE = '/beranda-mobile';
   static const RIWAYAT_PRESENSI_MOBILE = '/riwayat-presensi-mobile';
   static const PROFILE_MOBILE = '/profile-mobile';
+  static const DETAIL_PRESENSI = '/detail-presensi';
 }
