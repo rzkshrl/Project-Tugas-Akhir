@@ -3,7 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/controller/calendars_controller.dart';
+import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
+import 'package:project_tugas_akhir/app/utils/calendarwidget.dart';
+import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
@@ -15,10 +20,17 @@ import '../controllers/detail_presensi_controller.dart';
 
 class DetailPresensiView extends GetView<DetailPresensiController> {
   const DetailPresensiView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final data = Get.arguments;
+    String pin = data;
     final authC = Get.put(AuthController());
+    final c = Get.put(CalendarsController(pin));
     final apiC = Get.put(APIController(context1: context));
+    final CalendarController calendarController = Get.put(CalendarController());
+
+    print(pin);
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
@@ -98,23 +110,47 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                 height: 3.h,
               ),
               Container(
-                decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
-                width: 90.w,
-                height: 70.h,
-                child: SingleChildScrollView(
-                    // child: PaginatedDataTable2(
-                    //   columns: [
-                    //     DataColumn(label: Text("PIN")),
-                    //     DataColumn(label: Text('Scan Date'))
-                    //   ],
-                    //   source: dataScanlog,
-                    //   rowsPerPage: controller.rowPerPage.value,
-                    //   onRowsPerPageChanged: (index) {
-                    //     controller.rowPerPage.value = index!;
-                    //   },
-                    // ),
-                    ),
-              )
+                  decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
+                  width: 90.w,
+                  height: 70.h,
+                  child: CalendarWidget()
+                  // child: StreamBuilder(
+                  //     stream: c.getPresensi(pin),
+                  //     builder: (context, snap) {
+                  //       if (snap.connectionState == ConnectionState.waiting) {
+                  //         return LoadingView();
+                  //       }
+                  //       final presensiList = snap.data! as List<PresensiModel>;
+                  // return ListView.builder(
+                  //     itemCount: presensiList.length,
+                  //     itemBuilder: ((context, index) {
+                  //       var data = presensiList[index];
+                  //       ListTile(
+                  //         title: Text(data.dateTime!.toIso8601String()),
+                  //         subtitle: Text(data.status!),
+                  //       );
+                  //     }));
+                  // return FutureBuilder(
+                  //     future: c.getHoliday(),
+                  //     builder: (context, snap) {
+                  //       if (snap.connectionState ==
+                  //           ConnectionState.waiting) {
+                  //         return LoadingView();
+                  //       }
+                  // return SfCalendar(
+                  //   view: CalendarView.month,
+                  //   dataSource: CalendarData(presensiList, liburList),
+                  //   monthViewSettings:
+                  //       MonthViewSettings(showAgenda: true),
+                  //   selectionDecoration: BoxDecoration(
+                  //       color: Colors.transparent,
+                  //       border: Border.all(color: Colors.blue)),
+                  //   todayHighlightColor: Colors.transparent,
+                  // );
+
+                  //     });
+                  // }),
+                  )
             ],
           ),
         ),

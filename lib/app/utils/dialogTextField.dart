@@ -151,3 +151,63 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
     ),
   );
 }
+
+Widget dialogAPILibur(BuildContext context, Widget btnAction) {
+  return AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    backgroundColor: Blue1,
+    content: Container(
+      width: 350,
+      height: 274.07,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 5.h,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 3.w,
+              ),
+              Text(
+                "Tambah Data",
+                style: getTextDialogFieldHeader(context),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 2.5.h,
+          ),
+          textformDialogWeb(
+              context,
+              textC.yearAPILiburKey.value,
+              45.4.w,
+              textC.yearAPILiburC,
+              textC.normalValidator,
+              null,
+              null,
+              null,
+              null,
+              "Masukkan tahun... (Contoh: 2023)",
+              Colors.transparent,
+              Yellow1,
+              Yellow1),
+          SizedBox(
+            height: 1.5.h,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 3.8.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                btnAction,
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

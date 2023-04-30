@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 List<KepegawaianModel> kepegawaianList = [];
+List<PresensiModel> presensiList = [];
+List<LiburModel> liburList = [];
 
 class PresensiModel {
   String? pin;
@@ -29,27 +32,40 @@ class PresensiModel {
 }
 
 class LiburModel {
-  String? holidayName;
-  DateTime? holidayDate;
-  bool? isNationalHoliday;
+  String? name;
+  String? date;
 
-  LiburModel({this.holidayName, this.holidayDate, this.isNationalHoliday});
+  LiburModel({this.name, this.date});
 
   factory LiburModel.fromJson(Map<String, dynamic> json) {
     return (LiburModel(
-      holidayName: json['holiday_name'],
-      holidayDate: DateTime.parse(json['holiday_date']),
-      isNationalHoliday: json['is_national_holiday'],
+      name: json['holiday_name'],
+      date: json['holiday_date'],
     ));
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "holidayName": holidayName,
-      "holidayDate": holidayDate,
-      "isNationalHoliday": isNationalHoliday,
+      "name": name,
+      "date": date,
     };
   }
+}
+
+class CalendarEvent {
+  final String eventName;
+  final DateTime from;
+  final DateTime to;
+  final Color background;
+  final bool isAllDay;
+
+  CalendarEvent({
+    required this.eventName,
+    required this.from,
+    required this.to,
+    required this.background,
+    required this.isAllDay,
+  });
 }
 
 class KepegawaianModel {
@@ -83,14 +99,14 @@ class KepegawaianModel {
         presensi: []);
   }
 
-  Future<void> loadPresensi() async {
-    final presensiRef = FirebaseFirestore.instance
-        .collection('Kepegawaian')
-        .doc(pin)
-        .collection('Presensi');
-    final querySnapshot = await presensiRef.get();
-    this.presensi = querySnapshot.docs
-        .map((doc) => PresensiModel.fromJson(doc.data()))
-        .toList();
-  }
+  // Future<void> loadPresensi() async {
+  //   final presensiRef = FirebaseFirestore.instance
+  //       .collection('Kepegawaian')
+  //       .doc(pin)
+  //       .collection('Presensi');
+  //   final querySnapshot = await presensiRef.get();
+  //   this.presensi = querySnapshot.docs
+  //       .map((doc) => PresensiModel.fromJson(doc.data()))
+  //       .toList();
+  // }
 }

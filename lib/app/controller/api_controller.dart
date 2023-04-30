@@ -32,22 +32,19 @@ class APIController extends GetxController {
   var deviceData = DeviceModel().obs;
   var deviceInfo = DeviceInfoModel().obs;
   var allScanlog = <AllScanlogModel>[].obs;
+  var presensiList = [].obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  void showLoadingDialog() {
+  showLoadingDialog() {
     Get.dialog(
-      dialogAlertOnlySingleMsgAnimation(
-          isLoading == true
-              ? 'assets/lootie/loading.json'
-              : 'assets/lootie/finish.json',
-          isLoading == true ? 'Memuat...' : 'Refresh Data Selesai!',
-          getTextAlert(Get.context!)),
+      dialogAlertOnlySingleMsgAnimation('assets/lootie/loading.json',
+          'Memuat...', getTextAlert(Get.context!)),
       barrierDismissible: false,
     );
   }
 
-  void showFinishDialog() {
+  showFinishDialog() {
     Get.dialog(
       dialogAlertOnlySingleMsgAnimation(
           'assets/lootie/finish.json', 'Selesai!', getTextAlert(Get.context!)),
@@ -55,7 +52,62 @@ class APIController extends GetxController {
     );
   }
 
+  Future<void> getLiburData(String year) async {
+    final response =
+        await dio.get('https://api-harilibur.vercel.app/api?year=$year');
+    try {
+      List<LiburModel> liburData = [];
+
+      final List<dynamic> responseData = response.data;
+
+      for (var data in responseData) {
+        LiburModel libur = LiburModel.fromJson(data);
+        liburData.add(libur);
+      }
+
+      print('$liburData');
+
+      for (var libur in liburData) {
+        var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
+        var document = formatterDoc.format(DateTime.parse(libur.date!));
+        final liburCol =
+            firestore.collection('Holiday').doc(document + " ${libur.name!}");
+        final checkData = await liburCol.get();
+        if (checkData.exists == false) {
+          await liburCol.set({
+            'name': libur.name,
+            'date': libur.date!,
+          });
+        }
+      }
+
+      showLoadingDialog();
+      Future.delayed(Duration(seconds: 1));
+      Get.back();
+      showFinishDialog();
+    } catch (e) {
+      Get.back();
+      if (e is DioError) {
+        if (kDebugMode) {
+          print(e);
+        }
+        Get.dialog(dialogAlertOnly(
+            IconlyLight.danger,
+            "Terjadi Kesalahan.",
+            "Tidak dapat tersambung dengan internet.",
+            getTextAlert(Get.context!),
+            getTextAlertSub(Get.context!)));
+      }
+      if (kDebugMode) {
+        print(e);
+        Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.",
+            "$e", getTextAlert(Get.context!), getTextAlertSub(Get.context!)));
+      }
+    }
+  }
+
   Future<void> getDeviceInfo(BuildContext context) async {
+    isLoading.value = true;
     CollectionReference users = firestore.collection("Device");
     final devices = await users.doc('mesin-1').get();
     final deviceDataDB = devices.data() as Map<String, dynamic>;
@@ -78,6 +130,8 @@ class APIController extends GetxController {
     }
 
     try {
+      showLoadingDialog();
+
       String urlGet = "http://$ip:$port$urlGetDeviceInfo?sn=${sn}";
 
       var res = await Future.wait([dio.post(urlGet)]);
@@ -109,8 +163,13 @@ class APIController extends GetxController {
               .doc("mesin-1")
               .update({'newPresensi': deviceInfo.value.newPresensi});
         }
+        isLoading.value = false;
+
+        Get.back();
+        showFinishDialog();
       }
     } catch (e) {
+      Get.back();
       if (e is DioError) {
         if (kDebugMode) {
           print(e);
@@ -180,8 +239,100 @@ class APIController extends GetxController {
 
       if (kDebugMode) {
         print('Jumlah Data Model : ${allScanlogList.length}');
-        exportData(allScanlogList);
       }
+
+      // var presensiMasukMap = Map<String, String>();
+      // var presensiKeluarMap = Map<String, String>();
+
+      // for (var presensi in allScanlogList) {
+      //   var pin = presensi.pin;
+      //   var scanDate = presensi.scanDate;
+
+      //   if (!presensiMasukMap.containsKey(pin)) {
+      //     presensiMasukMap[pin!] = scanDate.toString();
+      //   } else if (scanDate!.isBefore(DateTime.parse(presensiMasukMap[pin]!))) {
+      //     presensiMasukMap[pin!] = scanDate.toString();
+      //   }
+
+      //   if (!presensiKeluarMap.containsKey(pin)) {
+      //     presensiKeluarMap[pin!] = scanDate.toString();
+      //   } else if (scanDate!.isAfter(DateTime.parse(presensiKeluarMap[pin]!))) {
+      //     presensiKeluarMap[pin!] = scanDate.toString();
+      //   }
+
+      //   for (var key in presensiMasukMap.keys) {
+      //     var masuk = presensiMasukMap[key];
+      //     var keluar = presensiKeluarMap[key];
+      //     presensiList.add({'pin': key, 'masuk': masuk, 'keluar': keluar});
+      //   }
+      // }
+
+      // final presensiMap = <String, Map<String, String>>{};
+
+      // for (final data in allScanlogList) {
+      //   final pin = data.pin as String;
+      //   final scanDate = data.scanDate!.toIso8601String() as String;
+      //   final date = scanDate.split('T')[0];
+      //   final time = scanDate.split('T')[1].split('.')[0];
+
+      //   if (!presensiMap.containsKey(date)) {
+      //     presensiMap[date] = {};
+      //   }
+
+      //   if (!presensiMap[date]!.containsKey(pin)) {
+      //     presensiMap[date]![pin] = '';
+      //   }
+
+      //   if (presensiMap[date]![pin] != null) {
+      //     if (time.compareTo('06:00:00') >= 0 &&
+      //         time.compareTo('09:00:00') <= 0) {
+      //       presensiMap[date]![pin] =
+      //           '${presensiMap[date]![pin]!}masuk $time, ';
+      //     } else if (time.compareTo('09:00:00') >= 0 &&
+      //         time.compareTo('16:00:00') <= 0) {
+      //       presensiMap[date]![pin] =
+      //           '${presensiMap[date]![pin]!}keluar $time, ';
+      //     }
+      //   }
+      // }
+
+      // final presensiList = presensiMap.entries
+      //     .map((entry) => {'date': entry.key, ...entry.value})
+      //     .toList();
+
+      // // Mengirimkan data presensi ke observer
+      // this.presensiList.value = presensiList;
+
+      // List<Map<String, dynamic>> filteredData = [];
+      // for (int i = 0; i < allScanlogList.length; i++) {
+      //   for (int j = i + 1; j < allScanlogList.length; j++) {
+      //     final hourA = allScanlogList[i].scanDate!.hour;
+      //     final hourB = allScanlogList[j].scanDate!.hour;
+      //     final tanggalA = formatterDate.format(allScanlogList[i].scanDate!);
+      //     final jamA = hourA >= 6 && hourA <= 9
+      //         ? formatterTime.format(allScanlogList[i].scanDate!)
+      //         : hourA >= 9 && hourA <= 16
+      //             ? formatterTime.format(allScanlogList[i].scanDate!)
+      //             : null;
+      //     final tanggalB = formatterDate.format(allScanlogList[j].scanDate!);
+      //     final jamB = hourB >= 6 && hourB <= 9
+      //         ? formatterTime.format(allScanlogList[j].scanDate!)
+      //         : hourB >= 9 && hourB <= 16
+      //             ? formatterTime.format(allScanlogList[j].scanDate!)
+      //             : null;
+
+      //     if (tanggalA == tanggalB && jamA != jamB) {
+      //       filteredData.add({
+      //         'pin': allScanlogList[i].pin,
+      //         'date': tanggalA,
+      //         'masuk': jamA,
+      //         'keluar': jamB
+      //       });
+      //     }
+      //   }
+      // }
+
+      exportData(presensiList);
 
       final stopwatch = Stopwatch()..start();
 
@@ -236,6 +387,7 @@ class APIController extends GetxController {
         print('Sinkron Data Mesin -> Firebase : Selesai');
       }
     } catch (e) {
+      Get.back();
       if (e is DioError) {
         if (kDebugMode) {
           print(e);
@@ -249,9 +401,9 @@ class APIController extends GetxController {
       }
       if (kDebugMode) {
         print(e);
+        Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.",
+            "$e", getTextAlert(context), getTextAlertSub(context)));
       }
-      Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.", "$e",
-          getTextAlert(context), getTextAlertSub(context)));
     }
   }
 

@@ -32,15 +32,6 @@ class HomeView extends GetView<HomeController> {
     final authC = Get.put(AuthController());
     final apiC = Get.put(APIController(context1: context));
     if (kIsWeb) {
-      // return FutureBuilder<DocumentSnapshot<Object?>>(
-      //     future: authC.role(),
-      //     builder: (context, snap) {
-      //       if (snap.connectionState == ConnectionState.waiting) {
-      //         return const LoadingView();
-      //       }
-      //       if (snap.hasData) {
-      //         var role = snap.data!.get("role");
-      //         if (role != "admin") {
       String? roles = authC.userData.value.role;
       print("ROLES : $roles");
 
@@ -76,34 +67,16 @@ class HomeView extends GetView<HomeController> {
                 getTextAlertBtn(context)),
           );
         } else {
-          // return Routes.RIWAYAT_PRESENSI as Widget;
-          // return Get.toNamed(RIWAYAT_PRESENSI) as Widget;
-          // return Get.toNamed(Routes.RIWAYAT_PRESENSI) as Widget;
           return FutureBuilder(
               future: apiC.getDeviceInfo(context),
               builder: (context, snap) {
                 if (snap.connectionState == ConnectionState.waiting) {
                   return LoadingView();
                 }
-
-                return FutureBuilder(
-                    future: apiC.deviceData.value.allPresensi == null
-                        ? Future.delayed(Duration(milliseconds: 0))
-                        : Future.delayed(Duration(seconds: 3)),
-                    builder: (context, snap) {
-                      if (snap.connectionState == ConnectionState.waiting) {
-                        return LoadingView();
-                      }
-                      return RiwayatPresensiView();
-                    });
+                return RiwayatPresensiView();
               });
         }
       }
-
-      //   } else {
-      //     return const LoadingView();
-      //   }
-      // });
     } else {
       final authC = Get.put(AuthController());
       var pages = <Widget>[

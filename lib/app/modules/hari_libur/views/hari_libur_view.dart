@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
@@ -11,6 +12,7 @@ import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
+import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/hari_libur_controller.dart';
 
@@ -91,8 +93,16 @@ class HariLiburView extends GetView<HariLiburController> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
-                        "Tambah Data", getTextBtnAction(context), () {
-                      apiC.getAllPresenceData(context);
+                        "Sinkron Hari Libur", getTextBtnAction(context), () {
+                      Get.dialog(dialogAPILibur(
+                          context,
+                          btnDefaultIcon1(10.w, Blue4, IconlyLight.tick_square,
+                              Yellow1, "Kirim", getTextBtnAction(context), () {
+                            if (textC.yearAPILiburKey.value.currentState!
+                                .validate()) {
+                              apiC.getLiburData(textC.yearAPILiburC.text);
+                            }
+                          })));
                     }),
                   ],
                 ),
