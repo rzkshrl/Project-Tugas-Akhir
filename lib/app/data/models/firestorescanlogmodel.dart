@@ -32,22 +32,24 @@ class PresensiModel {
 }
 
 class LiburModel {
-  String? name;
-  String? date;
+  String? holidayName;
+  String? holidayDate;
+  bool? isNationalDay;
 
-  LiburModel({this.name, this.date});
+  LiburModel({this.holidayName, this.holidayDate, this.isNationalDay});
 
   factory LiburModel.fromJson(Map<String, dynamic> json) {
     return (LiburModel(
-      name: json['holiday_name'],
-      date: json['holiday_date'],
-    ));
+        holidayName: json['holiday_name'],
+        holidayDate: json['holiday_date'],
+        isNationalDay: json['is_national_holiday']));
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "name": name,
-      "date": date,
+      "holiday_name": holidayName,
+      "holiday_date": holidayDate,
+      "is_national_holiday": isNationalDay
     };
   }
 }

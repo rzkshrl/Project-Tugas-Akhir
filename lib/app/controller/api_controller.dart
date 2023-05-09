@@ -32,6 +32,7 @@ class APIController extends GetxController {
   var deviceData = DeviceModel().obs;
   var deviceInfo = DeviceInfoModel().obs;
   var allScanlog = <AllScanlogModel>[].obs;
+  var liburData = <LiburModel>[].obs;
   var presensiList = [].obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -53,10 +54,12 @@ class APIController extends GetxController {
   }
 
   Future<void> getLiburData(String year) async {
+    print('${year}');
     final response =
-        await dio.get('https://api-harilibur.vercel.app/api?year=$year');
+        await dio.get('https://api-harilibur.vercel.app/api?year=${year}');
     try {
-      List<LiburModel> liburData = [];
+      showLoadingDialog();
+      List<LiburModel> liburList = [];
 
       final List<dynamic> responseData = response.data;
 
@@ -65,24 +68,22 @@ class APIController extends GetxController {
         liburData.add(libur);
       }
 
-      print('$liburData');
+      liburData.removeWhere((e) => e.isNationalDay == false);
 
       for (var libur in liburData) {
-        var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
-        var document = formatterDoc.format(DateTime.parse(libur.date!));
-        final liburCol =
-            firestore.collection('Holiday').doc(document + " ${libur.name!}");
+        var formatter = DateFormat("yyyy-MM-dd");
+        List<String> tanggal = libur.holidayDate!.split('-');
+        String liburDate =
+            tanggal[0] + '-' + tanggal[1] + '-' + tanggal[2].padLeft(2, '0');
+        final liburCol = firestore.collection('Holiday').doc(liburDate);
         final checkData = await liburCol.get();
         if (checkData.exists == false) {
           await liburCol.set({
-            'name': libur.name,
-            'date': libur.date!,
+            'name': libur.holidayName,
+            'date': liburDate,
           });
         }
       }
-
-      showLoadingDialog();
-      Future.delayed(Duration(seconds: 1));
       Get.back();
       showFinishDialog();
     } catch (e) {
