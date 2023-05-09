@@ -85,7 +85,8 @@ class KepegawaianDTS extends DataTableSource {
                           cDropdown.bidangTambahDataPegC.text,
                           textC.emailTambahDataPegC.text);
                     }
-                  })));
+                  }),
+                  true));
             },
             icon: Icon(
               IconlyLight.edit,

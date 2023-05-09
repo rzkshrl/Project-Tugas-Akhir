@@ -143,7 +143,8 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                                       cDropdown.bidangTambahDataPegC.text,
                                       textC.emailTambahDataPegC.text);
                                 }
-                              })),
+                              }),
+                              false),
                           barrierColor: light.withOpacity(0.7));
                     }),
                   ],

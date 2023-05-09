@@ -91,13 +91,15 @@ Widget textformDialogWeb(
     String hintText,
     Color fillColor,
     Color borderColor,
-    Color focusedBorderColor) {
+    Color focusedBorderColor,
+    bool enabled) {
   return Form(
     key: key,
     child: Container(
       width: width,
       height: 9.5.h,
       child: TextFormField(
+        readOnly: enabled,
         autofillHints: autofillHints,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.emailAddress,

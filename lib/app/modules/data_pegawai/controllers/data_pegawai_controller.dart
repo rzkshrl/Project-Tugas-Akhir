@@ -53,14 +53,6 @@ class DataPegawaiController extends GetxController {
             getTextAlert(context),
             null,
             getTextAlertBtn(context)));
-      }).catchError((e) {
-        // isSuccess = false;
-        // completer.complete(false);
-        if (kDebugMode) {
-          print(e);
-        }
-        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-            "Gagal menambahkan Data.", getTextAlert(context)));
       });
     } else {
       Get.dialog(dialogAlertOnlySingleMsg(
@@ -86,22 +78,14 @@ class DataPegawaiController extends GetxController {
       'nip': nip,
       'bidang': bidang,
       'email': email
-    }).then((value) async {
-      Get.dialog(dialogAlertBtn(() {
-        // isSuccess = true;
-        // completer.complete(true);
-        Get.back();
-        Get.back();
-      },
-          IconlyLight.tick_square,
-          111.29,
-          "OK",
-          "Berhasil menambahkan Data Kepegawaian!",
-          null,
-          getTextAlert(context),
-          null,
-          getTextAlertBtn(context)));
     });
+    Get.dialog(dialogAlertBtn(() {
+      // isSuccess = true;
+      // completer.complete(true);
+      Get.back();
+      Get.back();
+    }, IconlyLight.tick_square, 111.29, "OK", "Berhasil mengubah Data!", null,
+        getTextAlert(context), null, getTextAlertBtn(context)));
 
     // isSuccess = await completer.future;
     // return isSuccess;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
@@ -8,7 +9,10 @@ import 'package:sizer/sizer.dart';
 
 import '../theme/theme.dart';
 
-Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
+var enabled = true.obs;
+
+Widget dialogTextFieldSevenField(
+    BuildContext context, Widget btnAction, bool enabled) {
   return AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
@@ -48,7 +52,8 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
               "Masukkan nama pegawai...",
               Colors.transparent,
               Yellow1,
-              Yellow1),
+              Yellow1,
+              false),
           SizedBox(
             height: 1.5.h,
           ),
@@ -65,7 +70,8 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
               "Masukkan PIN pegawai...",
               Colors.transparent,
               Yellow1,
-              Yellow1),
+              Yellow1,
+              enabled),
           SizedBox(
             height: 1.5.h,
           ),
@@ -102,6 +108,7 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
             Colors.transparent,
             Yellow1,
             Yellow1,
+            false,
           ),
           SizedBox(
             height: 1.5.h,
@@ -131,20 +138,20 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
             height: 4.5.h,
           ),
           textformDialogWeb(
-            context,
-            textC.emailTambahDataPegKey.value,
-            45.4.w,
-            textC.emailTambahDataPegC,
-            textC.emailValidator,
-            null,
-            null,
-            null,
-            null,
-            "Masukkan email pegawai...",
-            Colors.transparent,
-            Yellow1,
-            Yellow1,
-          ),
+              context,
+              textC.emailTambahDataPegKey.value,
+              45.4.w,
+              textC.emailTambahDataPegC,
+              textC.emailValidator,
+              null,
+              null,
+              null,
+              null,
+              "Masukkan email pegawai...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              false),
           SizedBox(
             height: 1.5.h,
           ),
@@ -204,7 +211,8 @@ Widget dialogAPILibur(BuildContext context, Widget btnAction) {
               "Masukkan tahun... (Contoh: 2023)",
               Colors.transparent,
               Yellow1,
-              Yellow1),
+              Yellow1,
+              false),
           SizedBox(
             height: 1.5.h,
           ),
