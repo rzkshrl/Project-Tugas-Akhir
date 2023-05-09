@@ -20,6 +20,7 @@ import 'package:responsive_framework/responsive_value.dart' as rspnsvlue;
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
+import '../../../routes/app_pages.dart';
 import '../../../utils/appBar.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/riwayat_presensi_controller.dart';
@@ -149,7 +150,10 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                           itemBuilder: (context, index) {
                             var data = kepegawaianList[index];
                             return InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Get.toNamed(Routes.DETAIL_PRESENSI,
+                                    arguments: data.pin!);
+                              },
                               child: ListTile(
                                 title: Text(data.nama!),
                                 subtitle: Text(data.pin!),

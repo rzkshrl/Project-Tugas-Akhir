@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+
+import '../../../data/models/devicemodel.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
@@ -7,8 +10,11 @@ class HomeController extends GetxController {
     currentIndex.value = i;
   }
 
+  var deviceData = DeviceModel().obs;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
   }
 

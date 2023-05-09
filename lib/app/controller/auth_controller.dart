@@ -163,7 +163,7 @@ class AuthController extends GetxController {
             print('User is signed in!');
             syncUsers(password, context);
             isAuth.value = true;
-            await Future.delayed(const Duration(seconds: 2));
+            await Future.delayed(const Duration(seconds: 5));
 
             await Get.offAllNamed(Routes.HOME);
           }

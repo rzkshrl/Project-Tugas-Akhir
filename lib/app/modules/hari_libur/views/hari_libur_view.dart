@@ -1,8 +1,11 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/data/models/firestorehariliburmodel.dart';
+import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
@@ -11,6 +14,9 @@ import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
+import '../../../utils/holidayDTS.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/hari_libur_controller.dart';
 
@@ -19,6 +25,7 @@ class HariLiburView extends GetView<HariLiburController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
+    final c = Get.put(HariLiburController());
     final apiC = Get.put(APIController(context1: context));
     return Scaffold(
       backgroundColor: light,
@@ -90,10 +97,28 @@ class HariLiburView extends GetView<HariLiburController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
-                        "Tambah Data", getTextBtnAction(context), () {
-                      apiC.getAllPresenceData(context);
+                    btnDefaultIcon1(
+                        13.w,
+                        Blue1,
+                        FontAwesomeIcons.rotate,
+                        Yellow1,
+                        "Sinkron Hari Libur",
+                        getTextBtnAction(context), () {
+                      Get.dialog(dialogAPILibur(
+                          context,
+                          btnDefaultIcon1(10.w, Blue4, IconlyLight.tick_square,
+                              Yellow1, "Kirim", getTextBtnAction(context), () {
+                            if (textC.yearAPILiburKey.value.currentState!
+                                .validate()) {
+                              apiC.getLiburData(textC.yearAPILiburC.text);
+                            }
+                          })));
                     }),
+                    SizedBox(
+                      width: 1.5.w,
+                    ),
+                    btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
+                        "Tambah Hari Libur", getTextBtnAction(context), () {})
                   ],
                 ),
               ),
@@ -104,19 +129,57 @@ class HariLiburView extends GetView<HariLiburController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: SingleChildScrollView(
-                    // child: PaginatedDataTable2(
-                    //   columns: [
-                    //     DataColumn(label: Text("PIN")),
-                    //     DataColumn(label: Text('Scan Date'))
-                    //   ],
-                    //   source: dataScanlog,
-                    //   rowsPerPage: controller.rowPerPage.value,
-                    //   onRowsPerPageChanged: (index) {
-                    //     controller.rowPerPage.value = index!;
-                    //   },
-                    // ),
-                    ),
+                child: StreamBuilder(
+                    stream: c.firestoreHolidayList,
+                    builder: (context, snap) {
+                      if (!snap.hasData) {
+                        return LoadingView();
+                      }
+                      final holidayList = snap.data! as List<HolidayModel>;
+                      int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+                      return PaginatedDataTable2(
+                          columns: [
+                            DataColumn2(
+                              label: Text(
+                                'Nama Hari Libur/Cuti Bersama',
+                                style: getTextTable(context),
+                              ),
+                              size: ColumnSize.M,
+                            ),
+                            DataColumn2(
+                              label: Text(
+                                'Tanggal',
+                                style: getTextTable(context),
+                              ),
+                              size: ColumnSize.M,
+                            ),
+                            DataColumn2(
+                                label: Text(
+                                  'Hapus',
+                                  style: getTextTable(context),
+                                ),
+                                fixedWidth: 90),
+                            DataColumn2(
+                                label: Text(
+                                  'Ubah',
+                                  style: getTextTable(context),
+                                ),
+                                fixedWidth: 90),
+                          ],
+                          dividerThickness: 0,
+                          horizontalMargin: 20,
+                          checkboxHorizontalMargin: 12,
+                          columnSpacing: 20,
+                          wrapInCard: false,
+                          minWidth: 950,
+                          renderEmptyRowsInTheEnd: false,
+                          onRowsPerPageChanged: (value) {
+                            _rowsPerPage = value!;
+                          },
+                          initialFirstRowIndex: 0,
+                          rowsPerPage: _rowsPerPage,
+                          source: HolidayDTS(holidayList));
+                    }),
               )
             ],
           ),

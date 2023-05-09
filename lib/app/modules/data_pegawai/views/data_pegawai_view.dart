@@ -98,52 +98,54 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    btnDefaultIcon1(
-                        13.w,
-                        Blue1,
-                        IconlyLight.plus,
-                        Yellow1,
-                        "Tambah Data",
-                        getTextBtnAction(context),
-                        () => Get.dialog(
-                            dialogTextFieldSevenField(
-                                context,
-                                btnDefaultIcon1(
-                                    10.w,
-                                    Blue4,
-                                    IconlyLight.tick_square,
-                                    Yellow1,
-                                    "Kirim",
-                                    getTextBtnAction(context), () {
-                                  if (textC.namaTambahDataPegKey.value
-                                          .currentState!
-                                          .validate() &&
-                                      textC
-                                          .pinTambahDataPegKey.value.currentState!
-                                          .validate() &&
-                                      cDropdown
-                                          .jadkerTambahDataPegKey.value.currentState!
-                                          .validate() &&
-                                      textC.nipTambahDataPegKey.value
-                                          .currentState!
-                                          .validate() &&
-                                      cDropdown.bidangTambahDataPegKey.value
-                                          .currentState!
-                                          .validate() &&
-                                      textC.emailTambahDataPegKey.value
-                                          .currentState!
-                                          .validate()) {
-                                    c.addPegawai(
-                                        context,
-                                        textC.namaTambahDataPegC.text,
-                                        textC.pinTambahDataPegC.text,
-                                        cDropdown.jadkerTambahDataPegC.text,
-                                        textC.nipTambahDataPegC.text,
-                                        cDropdown.bidangTambahDataPegC.text,
-                                        textC.emailTambahDataPegC.text);
-                                  }
-                                })),
-                            barrierColor: light.withOpacity(0.7))),
+                    btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
+                        "Tambah Data", getTextBtnAction(context), () {
+                      textC.namaTambahDataPegC.clear();
+                      textC.pinTambahDataPegC.clear();
+                      cDropdown.jadkerTambahDataPegC.clear();
+                      textC.nipTambahDataPegC.clear();
+                      cDropdown.bidangTambahDataPegC.clear();
+                      textC.emailTambahDataPegC.clear();
+                      Get.dialog(
+                          dialogTextFieldSevenField(
+                              context,
+                              btnDefaultIcon1(
+                                  10.w,
+                                  Blue4,
+                                  IconlyLight.tick_square,
+                                  Yellow1,
+                                  "Kirim",
+                                  getTextBtnAction(context), () {
+                                if (textC.namaTambahDataPegKey.value
+                                        .currentState!
+                                        .validate() &&
+                                    textC
+                                        .pinTambahDataPegKey.value.currentState!
+                                        .validate() &&
+                                    cDropdown
+                                        .jadkerTambahDataPegKey.value.currentState!
+                                        .validate() &&
+                                    textC
+                                        .nipTambahDataPegKey.value.currentState!
+                                        .validate() &&
+                                    cDropdown.bidangTambahDataPegKey.value
+                                        .currentState!
+                                        .validate() &&
+                                    textC.emailTambahDataPegKey.value
+                                        .currentState!
+                                        .validate()) {
+                                  c.addPegawai(
+                                      context,
+                                      textC.namaTambahDataPegC.text,
+                                      textC.pinTambahDataPegC.text,
+                                      cDropdown.jadkerTambahDataPegC.text,
+                                      textC.nipTambahDataPegC.text,
+                                      cDropdown.bidangTambahDataPegC.text,
+                                      textC.emailTambahDataPegC.text);
+                                }
+                              })),
+                          barrierColor: light.withOpacity(0.7));
+                    }),
                   ],
                 ),
               ),

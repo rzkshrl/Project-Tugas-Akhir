@@ -70,6 +70,43 @@ class DataPegawaiController extends GetxController {
     // return isSuccess;
   }
 
+  Future<void> editPegawai(
+      String docIdentify,
+      BuildContext context,
+      String nama,
+      String jadker,
+      String nip,
+      String bidang,
+      String email) async {
+    CollectionReference pegawai = firestore.collection("Kepegawaian");
+
+    await pegawai.doc(docIdentify).update({
+      'nama': nama,
+      'jadker': jadker,
+      'nip': nip,
+      'bidang': bidang,
+      'email': email
+    }).then((value) async {
+      Get.dialog(dialogAlertBtn(() {
+        // isSuccess = true;
+        // completer.complete(true);
+        Get.back();
+        Get.back();
+      },
+          IconlyLight.tick_square,
+          111.29,
+          "OK",
+          "Berhasil menambahkan Data Kepegawaian!",
+          null,
+          getTextAlert(context),
+          null,
+          getTextAlertBtn(context)));
+    });
+
+    // isSuccess = await completer.future;
+    // return isSuccess;
+  }
+
   @override
   void onInit() {
     super.onInit();

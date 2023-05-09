@@ -35,6 +35,9 @@ class TextFieldController extends GetxController {
   final emailTambahDataPegKey = GlobalKey<FormState>().obs;
   final bidangTambahDataPegKey = GlobalKey<FormState>().obs;
 
+  final yearAPILiburC = TextEditingController();
+  final yearAPILiburKey = GlobalKey<FormState>().obs;
+
   final emailValidator = MultiValidator([
     EmailValidator(errorText: "Email tidak valid"),
     RequiredValidator(errorText: "Kolom harus diisi")

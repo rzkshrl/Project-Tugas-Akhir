@@ -21,7 +21,8 @@ Widget dropdownNormalField(
     Color containerColor,
     Color borderColor,
     Color focusedBorderColor,
-    Color clearBtnColor) {
+    Color clearBtnColor,
+    String? selectedItem) {
   return Form(
     key: key,
     child: Column(
@@ -41,6 +42,7 @@ Widget dropdownNormalField(
                 ClearButtonProps(isVisible: true, color: clearBtnColor),
             items: items,
             onChanged: onChanged,
+            selectedItem: selectedItem,
             dropdownDecoratorProps: DropDownDecoratorProps(
                 baseStyle: getTextFormDialog(context),
                 dropdownSearchDecoration: InputDecoration(
