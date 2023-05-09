@@ -81,7 +81,10 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
               Colors.transparent,
               Yellow1,
               Yellow1,
-              Yellow1),
+              Yellow1,
+              cDropdown.jadkerTambahDataPegC.text == ''
+                  ? null
+                  : cDropdown.jadkerTambahDataPegC.text),
           SizedBox(
             height: 4.5.h,
           ),
@@ -108,13 +111,22 @@ Widget dialogTextFieldSevenField(BuildContext context, Widget btnAction) {
             if (value != null) {
               cDropdown.bidangTambahDataPegC.text = value;
             }
-          }, [
-            'Guru Kelas',
-            'Operator Sekolah',
-            'Guru Mapel',
-            'Kepala Sekolah'
-          ], null, "Pilih Bidang Kerja Pegawai...", Colors.transparent, Yellow1,
-              Yellow1, Yellow1),
+          },
+              [
+                'Guru Kelas',
+                'Operator Sekolah',
+                'Guru Mapel',
+                'Kepala Sekolah'
+              ],
+              null,
+              "Pilih Bidang Kerja Pegawai...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              Yellow1,
+              cDropdown.bidangTambahDataPegC.text == ''
+                  ? null
+                  : cDropdown.bidangTambahDataPegC.text),
           SizedBox(
             height: 4.5.h,
           ),
