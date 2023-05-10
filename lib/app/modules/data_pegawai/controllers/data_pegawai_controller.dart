@@ -91,6 +91,45 @@ class DataPegawaiController extends GetxController {
     // return isSuccess;
   }
 
+  Future<void> deleteDoc(String doc) async {
+    Get.dialog(dialogAlertDualBtn(() async {
+      Get.back();
+    }, () async {
+      Get.back();
+      try {
+        await firestore.collection('Kepegawaian').doc(doc).delete();
+        Get.dialog(dialogAlertBtn(() {
+          // isSuccess = true;
+          // completer.complete(true);
+          Get.back();
+          Get.back();
+        },
+            IconlyLight.tick_square,
+            111.29,
+            "OK",
+            "Berhasil mengubah Data!",
+            null,
+            getTextAlert(Get.context!),
+            null,
+            getTextAlertBtn(Get.context!)));
+      } catch (e) {
+        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+            "Terjadi Kesalahan!.\n$e", getTextAlert(Get.context!)));
+      }
+    },
+        IconlyLight.danger,
+        111.29,
+        'Batal',
+        111.29,
+        'OK',
+        'Peringatan!',
+        'Apakah anda yakin ingin menghapus data?',
+        getTextAlert(Get.context!),
+        getTextAlertSub(Get.context!),
+        getTextAlertBtn(Get.context!),
+        getTextAlertBtn2(Get.context!)));
+  }
+
   @override
   void onInit() {
     super.onInit();

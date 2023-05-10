@@ -49,7 +49,9 @@ class KepegawaianDTS extends DataTableSource {
           style: getTextTable(Get.context!),
         )),
         DataCell(IconButton(
-            onPressed: () {},
+            onPressed: () {
+              c.deleteDoc(data.pin!);
+            },
             icon: Icon(
               IconlyLight.delete,
               color: Blue1,
