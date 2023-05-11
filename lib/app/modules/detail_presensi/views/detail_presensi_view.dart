@@ -181,27 +181,37 @@ class _PresensiDataSource extends CalendarDataSource {
   List<Appointment> getAppointments() {
     final List<Appointment> appointments = [];
 
-    for (final data in presensiData) {
-      final DateTime dateTime = data.dateTime!;
-      final String status = data.status!;
+    appointments.add(Appointment(
+      startTime: DateTime.now(),
+      endTime: DateTime.now().add(Duration(minutes: 10)),
+      subject: 'Meeting',
+      color: Colors.blue,
+      startTimeZone: '',
+      endTimeZone: '',
+    ));
 
-      if (status == 'masuk') {
-        appointments.add(Appointment(
-          startTime: dateTime,
-          endTime: dateTime.add(Duration(minutes: 1)),
-          subject: 'Masuk',
-          color: Colors.green,
-        ));
-      } else if (status == 'keluar') {
-        appointments.add(Appointment(
-          startTime: dateTime,
-          endTime: dateTime.add(Duration(minutes: 1)),
-          subject: 'Keluar',
-          color: Colors.red,
-        ));
-      }
-    }
+    // for (final data in presensiData) {
+    //   final DateTime dateTime = data.dateTime!;
+    //   final String status = data.status!;
+    //   // print('ini status ${data.status}');
 
+    //   if (status == 'Masuk') {
+    //     appointments.add(Appointment(
+    //       startTime: dateTime,
+    //       endTime: dateTime.add(Duration(minutes: 1)),
+    //       subject: 'Masuk',
+    //       color: Colors.green,
+    //     ));
+    //   } else if (status == 'Keluar') {
+    //     appointments.add(Appointment(
+    //       startTime: dateTime,
+    //       endTime: dateTime.add(Duration(minutes: 1)),
+    //       subject: 'Keluar',
+    //       color: Colors.red,
+    //     ));
+    //   }
+    // }
+    print('$appointments');
     return appointments;
   }
 
