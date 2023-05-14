@@ -19,7 +19,29 @@ class CalendarsController extends GetxController {
   String? pin;
   CalendarsController(this.pin);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final CalendarController controller = CalendarController();
   final dio = Dio();
+
+  Color? get appointmentColor => Colors.yellow;
+
+  TextStyle get appointmentTextStyle => TextStyle(
+        color: Colors.red,
+        fontWeight: FontWeight.bold,
+      );
+
+  void calendarTapped(CalendarTapDetails calendarTapDetails) {
+    if (calendarTapDetails.targetElement == CalendarElement.appointment) {
+      final Appointment appointment = calendarTapDetails.appointments![0];
+      showAppointmentDetail(appointment);
+    }
+  }
+
+  void showAppointmentDetail(Appointment appointment) {
+    final DateTime startTime = appointment.startTime;
+    final DateTime endTime = appointment.endTime;
+    final String subject = appointment.subject;
+    final Color color = appointment.color;
+  }
 
   Stream<QuerySnapshot> getPresence() async* {
     yield* firestore

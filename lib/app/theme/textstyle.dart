@@ -60,6 +60,54 @@ getTextHeader2(BuildContext context) {
       fontWeight: FontWeight.w900);
 }
 
+getTextCalendarDef(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 18.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 14.0),
+        Condition.equals(name: MOBILE, value: 14.0),
+        Condition.equals(name: TABLET, value: 16.0),
+        Condition.equals(name: DESKTOP, value: 18.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w700);
+}
+
+getTextCalendarToday(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 18.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 14.0),
+        Condition.equals(name: MOBILE, value: 14.0),
+        Condition.equals(name: TABLET, value: 16.0),
+        Condition.equals(name: DESKTOP, value: 18.0),
+      ]).value,
+      color: light,
+      fontWeight: FontWeight.w700);
+}
+
+getTextCalendarHoliday(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 18.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 14.0),
+        Condition.equals(name: MOBILE, value: 14.0),
+        Condition.equals(name: TABLET, value: 16.0),
+        Condition.equals(name: DESKTOP, value: 18.0),
+      ]).value,
+      color: error,
+      fontWeight: FontWeight.w700);
+}
+
+getTextCalendarTrail(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 18.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 14.0),
+        Condition.equals(name: MOBILE, value: 14.0),
+        Condition.equals(name: TABLET, value: 16.0),
+        Condition.equals(name: DESKTOP, value: 18.0),
+      ]).value,
+      color: Grey1,
+      fontWeight: FontWeight.w700);
+}
+
 getTextSubHeader(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [

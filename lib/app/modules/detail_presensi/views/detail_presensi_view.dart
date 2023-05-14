@@ -117,8 +117,8 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
               ),
               Container(
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
-                width: 90.w,
-                height: 70.h,
+                width: 70.w,
+                height: 75.h,
                 child: StreamBuilder<QuerySnapshot>(
                     stream: firestore
                         .collection('Kepegawaian')
@@ -141,22 +141,123 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                             }
                             final holidayList =
                                 snap.data! as List<HolidayModel>;
-                            return SfCalendar(
-                              view: CalendarView.month,
-                              todayHighlightColor: Colors.blue,
-                              cellBorderColor: Colors.grey.shade200,
-                              appointmentTextStyle:
-                                  TextStyle(color: Colors.white),
-                              monthViewSettings: MonthViewSettings(
-                                  appointmentDisplayMode:
-                                      MonthAppointmentDisplayMode.appointment,
-                                  showTrailingAndLeadingDates: true,
-                                  showAgenda: true),
-                              selectionDecoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(color: Colors.blue)),
-                              dataSource: _PresensiDataSource(
-                                  presensiList, holidayList),
+
+                            return Column(
+                              children: [
+                                Expanded(
+                                  child: SfCalendar(
+                                    view: CalendarView.month,
+                                    viewHeaderStyle:
+                                        ViewHeaderStyle(backgroundColor: light),
+                                    controller: c.controller,
+                                    todayHighlightColor: Blue1,
+                                    cellBorderColor: Grey1,
+                                    showNavigationArrow: true,
+                                    showDatePickerButton: true,
+                                    onTap: c.calendarTapped,
+                                    allowedViews: [
+                                      CalendarView.month,
+                                      CalendarView.day,
+                                      CalendarView.week,
+                                      CalendarView.workWeek,
+                                      CalendarView.timelineDay,
+                                      CalendarView.timelineWeek,
+                                      CalendarView.timelineWorkWeek,
+                                      CalendarView.timelineMonth,
+                                    ],
+                                    appointmentTextStyle:
+                                        c.appointmentTextStyle,
+                                    monthViewSettings: MonthViewSettings(
+                                      dayFormat: 'EEE',
+                                      appointmentDisplayMode:
+                                          MonthAppointmentDisplayMode.indicator,
+                                      showTrailingAndLeadingDates: true,
+                                      showAgenda: true,
+                                      agendaViewHeight: 140,
+                                    ),
+                                    selectionDecoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        border: Border.all(color: Blue1)),
+                                    dataSource: _PresensiDataSource(
+                                        presensiList, holidayList),
+                                    monthCellBuilder: (BuildContext context,
+                                        MonthCellDetails details) {
+                                      final DateTime date = details.date;
+                                      final bool isLeadingDate =
+                                          details.visibleDates[0].month ==
+                                                  date.month &&
+                                              details.visibleDates[0].year ==
+                                                  date.year;
+                                      final bool isTrailingDate = details
+                                                  .visibleDates[details
+                                                          .visibleDates.length -
+                                                      1]
+                                                  .month ==
+                                              date.month &&
+                                          details
+                                                  .visibleDates[details
+                                                          .visibleDates.length -
+                                                      1]
+                                                  .year ==
+                                              date.year;
+                                      final bool isToday = date.year ==
+                                              DateTime.now().year &&
+                                          date.month == DateTime.now().month &&
+                                          date.day == DateTime.now().day;
+
+                                      final bool isHoliday = holidayList.any(
+                                          (data) =>
+                                              DateTime.parse(data.date!).year ==
+                                                  date.year &&
+                                              DateTime.parse(data.date!)
+                                                      .month ==
+                                                  date.month &&
+                                              DateTime.parse(data.date!).day ==
+                                                  date.day);
+                                      if (isLeadingDate || isTrailingDate) {
+                                        return Container(
+                                          child: Center(
+                                            child: Text(date.day.toString(),
+                                                style: getTextCalendarTrail(
+                                                    context)),
+                                          ),
+                                        );
+                                      } else if (isHoliday) {
+                                        return Container(
+                                          child: Center(
+                                            child: Text(date.day.toString(),
+                                                style: getTextCalendarHoliday(
+                                                    context)),
+                                          ),
+                                        );
+                                      } else {
+                                        return Container(
+                                          decoration: isToday
+                                              ? BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Blue1,
+                                                )
+                                              : null,
+                                          child: Center(
+                                            child: Text(date.day.toString(),
+                                                style: isToday
+                                                    ? getTextCalendarToday(
+                                                        context)
+                                                    : getTextCalendarDef(
+                                                        context)),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                                // ListTile(
+                                //   title: Text(c..subject),
+                                //   subtitle: Text(
+                                //       'Start: ${c.selectedAppointment.startTime.toString()}'),
+                                //   // Tambahkan informasi lain yang diperlukan dari appointment
+                                // )
+                              ],
                             );
                           });
                     }),
@@ -181,37 +282,42 @@ class _PresensiDataSource extends CalendarDataSource {
   List<Appointment> getAppointments() {
     final List<Appointment> appointments = [];
 
-    appointments.add(Appointment(
-      startTime: DateTime.now(),
-      endTime: DateTime.now().add(Duration(minutes: 10)),
-      subject: 'Meeting',
-      color: Colors.blue,
-      startTimeZone: '',
-      endTimeZone: '',
-    ));
+    for (final dataLibur in liburData) {
+      final DateTime dateTimeLibur = DateTime.parse(dataLibur.date!);
+      final String name = dataLibur.name!;
 
-    // for (final data in presensiData) {
-    //   final DateTime dateTime = data.dateTime!;
-    //   final String status = data.status!;
-    //   // print('ini status ${data.status}');
+      appointments.add(Appointment(
+        startTime: dateTimeLibur,
+        endTime: dateTimeLibur,
+        subject: name,
+        color: error,
+        isAllDay: true,
+      ));
+    }
 
-    //   if (status == 'Masuk') {
-    //     appointments.add(Appointment(
-    //       startTime: dateTime,
-    //       endTime: dateTime.add(Duration(minutes: 1)),
-    //       subject: 'Masuk',
-    //       color: Colors.green,
-    //     ));
-    //   } else if (status == 'Keluar') {
-    //     appointments.add(Appointment(
-    //       startTime: dateTime,
-    //       endTime: dateTime.add(Duration(minutes: 1)),
-    //       subject: 'Keluar',
-    //       color: Colors.red,
-    //     ));
-    //   }
-    // }
-    print('$appointments');
+    for (final data in presensiData) {
+      final DateTime dateTime = data.dateTime!;
+      final String status = data.status!;
+      // print('ini status ${data.status}');
+
+      if (status == 'Masuk') {
+        appointments.add(Appointment(
+          startTime: dateTime,
+          endTime: dateTime,
+          subject: 'Masuk',
+          color: Colors.green,
+        ));
+      } else if (status == 'Keluar') {
+        appointments.add(Appointment(
+          startTime: dateTime,
+          endTime: dateTime,
+          subject: 'Keluar',
+          color: Blue3,
+        ));
+      }
+    }
+
+    // print('$appointments');
     return appointments;
   }
 
@@ -247,7 +353,22 @@ class _PresensiDataSource extends CalendarDataSource {
   }
 
   @override
-  Color getColor(int index) => Colors.transparent;
+  List<DateTime> get blackoutDates => _getBlackoutDates();
+
+  List<DateTime> _getBlackoutDates() {
+    final List<DateTime> blackoutDates = [];
+
+    for (final data in liburData) {
+      final DateTime dateTime = DateTime.parse(data.date!);
+
+      blackoutDates.add(dateTime);
+    }
+
+    return blackoutDates;
+  }
+
+  @override
+  Color getColor(int index) => appointments[index].color;
 
   @override
   String getNotes(int index) => '';

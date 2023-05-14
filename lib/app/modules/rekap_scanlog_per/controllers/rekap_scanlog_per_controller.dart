@@ -1,12 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+
+import '../../../data/models/firestorescanlogmodel.dart';
 
 class RekapScanlogPerController extends GetxController {
   //TODO: Implement RekapScanlogPerController
 
-  final count = 0.obs;
+  late Stream<List<KepegawaianModel>> firestoreKepegawaianList;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   @override
   void onInit() {
     super.onInit();
+    firestoreKepegawaianList = firestore
+        .collection('Kepegawaian')
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map((documentSnapshot) =>
+                KepegawaianModel.fromSnapshot(documentSnapshot))
+            .toList());
   }
 
   @override
@@ -18,6 +30,4 @@ class RekapScanlogPerController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

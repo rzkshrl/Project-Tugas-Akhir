@@ -7,6 +7,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
+import '../../../data/models/firestorescanlogmodel.dart';
+import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/appBar.dart';
@@ -128,19 +130,27 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: SingleChildScrollView(
-                    // child: PaginatedDataTable2(
-                    //   columns: [
-                    //     DataColumn(label: Text("PIN")),
-                    //     DataColumn(label: Text('Scan Date'))
-                    //   ],
-                    //   source: dataScanlog,
-                    //   rowsPerPage: controller.rowPerPage.value,
-                    //   onRowsPerPageChanged: (index) {
-                    //     controller.rowPerPage.value = index!;
-                    //   },
-                    // ),
-                    ),
+                child: StreamBuilder(
+                    stream: controller.firestoreKepegawaianList,
+                    builder: (context, snap) {
+                      final kepegawaianList =
+                          snap.data! as List<KepegawaianModel>;
+                      return ListView.builder(
+                          itemCount: kepegawaianList.length,
+                          itemBuilder: (context, index) {
+                            var data = kepegawaianList[index];
+                            return InkWell(
+                              onTap: () {
+                                Get.toNamed(Routes.DETAIL_PRESENSI,
+                                    arguments: data.pin!);
+                              },
+                              child: ListTile(
+                                title: Text(data.nama!),
+                                subtitle: Text(data.pin!),
+                              ),
+                            );
+                          });
+                    }),
               )
             ],
           ),
