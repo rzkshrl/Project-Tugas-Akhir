@@ -25,6 +25,17 @@ getTextFormDialog(BuildContext context) {
       color: light);
 }
 
+getTextFormDialog2(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 12.0),
+        Condition.equals(name: MOBILE, value: 12.0),
+        Condition.equals(name: TABLET, value: 14.0),
+        Condition.equals(name: DESKTOP, value: 16.0),
+      ]).value,
+      color: dark);
+}
+
 getTextAdmin(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [

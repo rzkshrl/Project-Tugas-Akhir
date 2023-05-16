@@ -30,7 +30,8 @@ dependencies:
   json_annotation: ^4.8.0
   linked_scroll_controller: ^0.2.0
   lottie: ^2.3.2
-  pdf: ^3.10.2
+  pdf: ^3.10.3
+  printing: ^5.10.4
   responsive_framework: ^0.2.0
   sizer: ^2.0.15
   syncfusion_flutter_calendar: ^21.1.38
@@ -47,7 +48,6 @@ dev_dependencies:
 flutter:
   assets:
     - assets/icons/
-    - assets/images/
     - assets/lootie/
   fonts:
     - family: Inter

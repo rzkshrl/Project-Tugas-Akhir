@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/utils/textfieldC.dart';
 import 'package:sizer/sizer.dart';
 
@@ -72,6 +73,62 @@ Widget textformNormalWeb(
             hintStyle: getTextHintFormLogin(context),
             border: OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: borderColor),
+                borderRadius: BorderRadius.circular(12))),
+      ),
+    ),
+  );
+}
+
+Widget textformDatePicker(
+    TextEditingController? controller, void Function()? onTap) {
+  return Form(
+    key: textC.datepickerKey.value,
+    child: Container(
+      width: 344,
+      height: 65,
+      child: TextFormField(
+        readOnly: true,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: textC.normalValidator,
+        controller: controller,
+        style: getTextLogin(Get.context!),
+        decoration: InputDecoration(
+            helperText: ' ',
+            helperStyle: getTextErrorFormLogin(Get.context!),
+            isDense: true,
+            contentPadding: EdgeInsets.all(20),
+            suffixIcon: Padding(
+              padding: EdgeInsets.only(
+                left: 1.w,
+                right: 0.8.w,
+              ),
+              child: IconButton(
+                color: Blue1,
+                splashRadius: 1,
+                iconSize: 20,
+                icon: Icon(IconlyLight.calendar),
+                onPressed: onTap,
+              ),
+            ),
+            suffixIconColor: Blue1,
+            hintText: 'Pilih rentang tanggal presensi...',
+            focusColor: Blue1,
+            fillColor: light,
+            filled: true,
+            errorStyle: getTextErrorFormLogin(Get.context!),
+            errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: errorBg, width: 1.8),
+                borderRadius: BorderRadius.circular(12),
+                gapPadding: 2),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: error, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Blue1, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            hintStyle: getTextHintFormLogin(Get.context!),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: dark),
                 borderRadius: BorderRadius.circular(12))),
       ),
     ),

@@ -154,7 +154,6 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                                     cellBorderColor: Grey1,
                                     showNavigationArrow: true,
                                     showDatePickerButton: true,
-                                    onTap: c.calendarTapped,
                                     allowedViews: [
                                       CalendarView.month,
                                       CalendarView.day,
@@ -321,7 +320,6 @@ class _PresensiDataSource extends CalendarDataSource {
     return appointments;
   }
 
-  @override
   List<CalendarEvent> get events => [];
 
   @override
@@ -334,10 +332,8 @@ class _PresensiDataSource extends CalendarDataSource {
   @override
   String getSubject(int index) => presensiData[index].status!;
 
-  @override
   int getCount() => presensiData.length;
 
-  @override
   List<DateTime> get specialDates => _getSpecialDates();
 
   List<DateTime> _getSpecialDates() {
@@ -352,7 +348,6 @@ class _PresensiDataSource extends CalendarDataSource {
     return specialDates;
   }
 
-  @override
   List<DateTime> get blackoutDates => _getBlackoutDates();
 
   List<DateTime> _getBlackoutDates() {

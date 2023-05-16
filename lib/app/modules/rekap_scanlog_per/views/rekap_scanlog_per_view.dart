@@ -1,9 +1,13 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
+import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
@@ -22,6 +26,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final apiC = Get.put(APIController(context1: context));
+    final controller = Get.put(RekapScanlogPerController());
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
@@ -111,15 +116,89 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    btnDefaultIcon1(13.w, Blue1, IconlyLight.swap, Yellow1,
-                        "Refresh Data", getTextBtnAction(context), () {
-                      apiC.getAllPresenceData(context);
+                    dropdownNormalField2(
+                        context, 16.w, cDropdown.pinRekapKey.value, (value) {
+                      if (value != null) {
+                        cDropdown.pinRekapC.text = value;
+                      }
+                    },
+                        controller.pinList,
+                        null,
+                        'Pilih PIN Pegawai',
+                        Colors.transparent,
+                        dark,
+                        Blue1,
+                        Blue1,
+                        cDropdown.pinRekapC.text == ''
+                            ? null
+                            : cDropdown.pinRekapC.text),
+                    SizedBox(
+                      width: 1.5.w,
+                    ),
+                    textformDatePicker(
+                        controller.end.value.isAtSameMomentAs(DateTime.now())
+                            ? TextEditingController(text: '')
+                            : textC.datepickerC, () {
+                      Get.dialog(
+                        Dialog(
+                          child: Container(
+                            padding: EdgeInsets.all(1.h),
+                            height: 40.h,
+                            width: 20.w,
+                            // color: light,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: SfDateRangePicker(
+                              todayHighlightColor: Blue1,
+                              selectionColor: Blue1,
+                              rangeSelectionColor: Blue1.withOpacity(0.2),
+                              startRangeSelectionColor: Blue1.withOpacity(0.5),
+                              endRangeSelectionColor: Blue1.withOpacity(0.5),
+                              monthViewSettings:
+                                  DateRangePickerMonthViewSettings(
+                                firstDayOfWeek: 1,
+                              ),
+                              selectionMode: DateRangePickerSelectionMode.range,
+                              showActionButtons: true,
+                              cancelText: "Batal",
+                              confirmText: "OK",
+                              onCancel: () => Get.back(),
+                              onSubmit: (value) {
+                                if (value != null) {
+                                  if ((value as PickerDateRange).endDate !=
+                                      null) {
+                                    controller.pickRangeDate(
+                                        value.startDate!, value.endDate!);
+                                    Get.back();
+                                  } else {
+                                    Get.defaultDialog(
+                                        title: 'Terjadi Kesalahan',
+                                        middleText:
+                                            'Pilih tanggal jangkauan\n(Senin-Sabtu, dsb)\n(tekan tanggal dua kali \nuntuk memilih tanggal yang sama)');
+                                  }
+                                } else {
+                                  Get.defaultDialog(
+                                      title: 'Terjadi Kesalahan',
+                                      middleText: 'Tanggal tidak dipilih');
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      );
                     }),
                     SizedBox(
                       width: 1.5.w,
                     ),
-                    textButton1(IconlyLight.calendar, Blue1, "Filter Tanggal",
-                        getTextBtn(context), () {}),
+                    btnDefaultIcon1(13.w, Blue1, IconlyLight.swap, Yellow1,
+                        "Konfirmasi Rekap", getTextBtnAction(context), () {
+                      if (textC.datepickerKey.value.currentState!.validate() &&
+                          cDropdown.pinRekapKey.value.currentState!
+                              .validate()) {
+                        controller.generatePDF(cDropdown.pinRekapC.text);
+                      }
+                    }),
                   ],
                 ),
               ),
@@ -130,7 +209,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: StreamBuilder(
+                child: StreamBuilder<List<KepegawaianModel>>(
                     stream: controller.firestoreKepegawaianList,
                     builder: (context, snap) {
                       final kepegawaianList =

@@ -40,7 +40,7 @@ class LoginView extends GetView<LoginController> {
                   height: 3.h,
                 ),
                 Center(
-                  child: Image.asset(
+                  child: Image.network(
                     'assets/icons/logo.png',
                     width: 312,
                     height: 274,
@@ -140,7 +140,7 @@ class LoginView extends GetView<LoginController> {
                   height: 25.h,
                 ),
                 Center(
-                  child: Image.asset(
+                  child: Image.network(
                     'assets/icons/logo.png',
                     width: 255,
                     fit: BoxFit.contain,
