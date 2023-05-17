@@ -333,7 +333,7 @@ class APIController extends GetxController {
       //   }
       // }
 
-      exportData(presensiList);
+      exportData(allScanlogList);
 
       final stopwatch = Stopwatch()..start();
 
