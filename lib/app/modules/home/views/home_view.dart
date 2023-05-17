@@ -67,14 +67,14 @@ class HomeView extends GetView<HomeController> {
                 getTextAlertBtn(context)),
           );
         } else {
-          return FutureBuilder(
-              future: apiC.getDeviceInfo(context),
-              builder: (context, snap) {
-                if (snap.connectionState == ConnectionState.waiting) {
-                  return LoadingView();
-                }
-                return RiwayatPresensiView();
-              });
+          // return FutureBuilder(
+          //     future: apiC.getDeviceInfo(context),
+          //     builder: (context, snap) {
+          //       if (snap.connectionState == ConnectionState.waiting) {
+          //         return LoadingView();
+          //       }
+          return RiwayatPresensiView();
+          // });
         }
       }
     } else {

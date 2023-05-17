@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
@@ -11,6 +12,7 @@ import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
+import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/jam_kerja_controller.dart';
 
@@ -92,7 +94,21 @@ class JamKerjaView extends GetView<JamKerjaController> {
                   children: [
                     btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
                         "Tambah Data", getTextBtnAction(context), () {
-                      apiC.getAllPresenceData(context);
+                      textC.namaJamKerjaC.clear();
+                      textC.kodeJamKerjaC.clear();
+                      textC.ketJamKerjaC.clear();
+                      textC.masukJamKerjaC.clear();
+                      textC.keluarJamKerjaC.clear();
+                      Get.dialog(dialogTextJamKerja(
+                          context,
+                          btnDefaultIcon1(
+                              10.w,
+                              Blue4,
+                              IconlyLight.tick_square,
+                              Yellow1,
+                              "Kirim",
+                              getTextBtnAction(context),
+                              () {})));
                     }),
                   ],
                 ),

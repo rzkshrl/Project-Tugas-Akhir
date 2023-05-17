@@ -8,7 +8,6 @@ class TextFieldController extends GetxController {
   final emailWebC = TextEditingController();
   final emailWebResetPassC = TextEditingController();
   final passWebC = TextEditingController();
-
   final emailWebKey = GlobalKey<FormState>().obs;
   final emailWebResetPassKey = GlobalKey<FormState>().obs;
   final passWebKey = GlobalKey<FormState>().obs;
@@ -16,7 +15,6 @@ class TextFieldController extends GetxController {
   final emailMobileC = TextEditingController();
   final emailMobileResetPassC = TextEditingController();
   final passMobileC = TextEditingController();
-
   final emailMobileKey = GlobalKey<FormState>().obs;
   final emailMobileResetPassKey = GlobalKey<FormState>().obs;
   final passMobileKey = GlobalKey<FormState>().obs;
@@ -27,7 +25,6 @@ class TextFieldController extends GetxController {
   final alamatTambahDataPegC = TextEditingController();
   final emailTambahDataPegC = TextEditingController();
   final bidangTambahDataPegC = TextEditingController();
-
   final namaTambahDataPegKey = GlobalKey<FormState>().obs;
   final pinTambahDataPegKey = GlobalKey<FormState>().obs;
   final nipTambahDataPegKey = GlobalKey<FormState>().obs;
@@ -40,6 +37,17 @@ class TextFieldController extends GetxController {
 
   final datepickerC = TextEditingController();
   final datepickerKey = GlobalKey<FormState>().obs;
+
+  final namaJamKerjaC = TextEditingController();
+  final namaJamKerjaKey = GlobalKey<FormState>().obs;
+  final kodeJamKerjaC = TextEditingController();
+  final kodeJamKerjaKey = GlobalKey<FormState>().obs;
+  final ketJamKerjaC = TextEditingController();
+  final ketJamKerjaKey = GlobalKey<FormState>().obs;
+  final masukJamKerjaC = TextEditingController();
+  final masukJamKerjaKey = GlobalKey<FormState>().obs;
+  final keluarJamKerjaC = TextEditingController();
+  final keluarJamKerjaKey = GlobalKey<FormState>().obs;
 
   final emailValidator = MultiValidator([
     EmailValidator(errorText: "Email tidak valid"),

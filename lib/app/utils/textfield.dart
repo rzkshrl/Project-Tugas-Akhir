@@ -135,6 +135,51 @@ Widget textformDatePicker(
   );
 }
 
+Widget textformTimePicker(
+    Key key, TextEditingController? controller, void Function()? onTap) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Form(
+      key: key,
+      child: Container(
+        width: 144,
+        height: 65,
+        child: TextFormField(
+          readOnly: true,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: textC.normalValidator,
+          controller: controller,
+          style: getTextLogin(Get.context!),
+          decoration: InputDecoration(
+              helperText: ' ',
+              helperStyle: getTextErrorFormLogin(Get.context!),
+              isDense: true,
+              contentPadding: EdgeInsets.all(20),
+              hintText: '--:--',
+              focusColor: Blue1,
+              fillColor: Blue3,
+              filled: true,
+              errorStyle: getTextErrorFormLogin(Get.context!),
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: errorBg, width: 1.8),
+                  borderRadius: BorderRadius.circular(12),
+                  gapPadding: 2),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: error, width: 1.8),
+                  borderRadius: BorderRadius.circular(12)),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Blue1, width: 1.8),
+                  borderRadius: BorderRadius.circular(12)),
+              hintStyle: getTextHintFormLogin(Get.context!),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: Blue3),
+                  borderRadius: BorderRadius.circular(12))),
+        ),
+      ),
+    ),
+  );
+}
+
 Widget textformDialogWeb(
     BuildContext context,
     Key? key,
