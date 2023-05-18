@@ -242,140 +242,112 @@ class APIController extends GetxController {
         print('Jumlah Data Model : ${allScanlogList.length}');
       }
 
-      // var presensiMasukMap = Map<String, String>();
-      // var presensiKeluarMap = Map<String, String>();
+      RxList<Map<String, dynamic>> groupedData = <Map<String, dynamic>>[].obs;
 
-      // for (var presensi in allScanlogList) {
-      //   var pin = presensi.pin;
-      //   var scanDate = presensi.scanDate;
+      Map<String, List<Map<String, dynamic>>> groupedMap = {};
 
-      //   if (!presensiMasukMap.containsKey(pin)) {
-      //     presensiMasukMap[pin!] = scanDate.toString();
-      //   } else if (scanDate!.isBefore(DateTime.parse(presensiMasukMap[pin]!))) {
-      //     presensiMasukMap[pin!] = scanDate.toString();
-      //   }
+      for (var item in allScanlogList) {
+        final pin = item.pin;
+        final scanDate = item.scanDate!.toLocal();
+        final date = '${scanDate.year}-${scanDate.month}-${scanDate.day}';
+        final time = scanDate.toIso8601String();
 
-      //   if (!presensiKeluarMap.containsKey(pin)) {
-      //     presensiKeluarMap[pin!] = scanDate.toString();
-      //   } else if (scanDate!.isAfter(DateTime.parse(presensiKeluarMap[pin]!))) {
-      //     presensiKeluarMap[pin!] = scanDate.toString();
-      //   }
+        if (groupedMap.containsKey(pin)) {
+          final presence = groupedMap[pin]!;
 
-      //   for (var key in presensiMasukMap.keys) {
-      //     var masuk = presensiMasukMap[key];
-      //     var keluar = presensiKeluarMap[key];
-      //     presensiList.add({'pin': key, 'masuk': masuk, 'keluar': keluar});
-      //   }
-      // }
+          final presenceIndex = presence.indexWhere((p) => p['date'] == date);
 
-      // final presensiMap = <String, Map<String, String>>{};
+          if (presenceIndex != -1) {
+            final scanInDay = presence[presenceIndex]['scanInDay'];
 
-      // for (final data in allScanlogList) {
-      //   final pin = data.pin as String;
-      //   final scanDate = data.scanDate!.toIso8601String() as String;
-      //   final date = scanDate.split('T')[0];
-      //   final time = scanDate.split('T')[1].split('.')[0];
+            scanInDay.add({'scan': time});
+          } else {
+            presence.add({
+              'date': date,
+              'scanInDay': [
+                {'scan': time},
+              ],
+            });
+          }
+        } else {
+          groupedMap[pin!] = [
+            {
+              'date': date,
+              'scanInDay': [
+                {'scan': time},
+              ],
+            },
+          ];
+        }
+      }
 
-      //   if (!presensiMap.containsKey(date)) {
-      //     presensiMap[date] = {};
-      //   }
+      groupedMap.forEach((pin, presenceList) {
+        presenceList.forEach((presence) {
+          final scanInDay = presence['scanInDay'];
+          scanInDay.sort((a, b) => a['scan'].compareTo(b['scan']) as int);
+        });
+      });
 
-      //   if (!presensiMap[date]!.containsKey(pin)) {
-      //     presensiMap[date]![pin] = '';
-      //   }
+      groupedMap.forEach((pin, presenceList) {
+        presenceList.forEach((presence) {
+          final scanInDay = presence['scanInDay'];
 
-      //   if (presensiMap[date]![pin] != null) {
-      //     if (time.compareTo('06:00:00') >= 0 &&
-      //         time.compareTo('09:00:00') <= 0) {
-      //       presensiMap[date]![pin] =
-      //           '${presensiMap[date]![pin]!}masuk $time, ';
-      //     } else if (time.compareTo('09:00:00') >= 0 &&
-      //         time.compareTo('16:00:00') <= 0) {
-      //       presensiMap[date]![pin] =
-      //           '${presensiMap[date]![pin]!}keluar $time, ';
-      //     }
-      //   }
-      // }
+          if (scanInDay.length > 2) {
+            scanInDay.removeRange(1, scanInDay.length - 1);
+          }
+        });
+      });
 
-      // final presensiList = presensiMap.entries
-      //     .map((entry) => {'date': entry.key, ...entry.value})
-      //     .toList();
+      groupedData.value = groupedMap.entries
+          .map((entry) => {
+                'pin': entry.key,
+                'presence': entry.value,
+              })
+          .toList();
 
-      // // Mengirimkan data presensi ke observer
-      // this.presensiList.value = presensiList;
-
-      // List<Map<String, dynamic>> filteredData = [];
-      // for (int i = 0; i < allScanlogList.length; i++) {
-      //   for (int j = i + 1; j < allScanlogList.length; j++) {
-      //     final hourA = allScanlogList[i].scanDate!.hour;
-      //     final hourB = allScanlogList[j].scanDate!.hour;
-      //     final tanggalA = formatterDate.format(allScanlogList[i].scanDate!);
-      //     final jamA = hourA >= 6 && hourA <= 9
-      //         ? formatterTime.format(allScanlogList[i].scanDate!)
-      //         : hourA >= 9 && hourA <= 16
-      //             ? formatterTime.format(allScanlogList[i].scanDate!)
-      //             : null;
-      //     final tanggalB = formatterDate.format(allScanlogList[j].scanDate!);
-      //     final jamB = hourB >= 6 && hourB <= 9
-      //         ? formatterTime.format(allScanlogList[j].scanDate!)
-      //         : hourB >= 9 && hourB <= 16
-      //             ? formatterTime.format(allScanlogList[j].scanDate!)
-      //             : null;
-
-      //     if (tanggalA == tanggalB && jamA != jamB) {
-      //       filteredData.add({
-      //         'pin': allScanlogList[i].pin,
-      //         'date': tanggalA,
-      //         'masuk': jamA,
-      //         'keluar': jamB
-      //       });
-      //     }
-      //   }
-      // }
-
-      exportData(allScanlogList);
+      exportData(groupedData.value);
 
       final stopwatch = Stopwatch()..start();
 
-      for (var scanlog in allScanlogList) {
-        if (allScanlogList != null) {
-          var dateFormatPresensi =
-              DateFormat('d MMMM yyyy - HH:mm:ss', 'id-ID');
-          var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
-          var datePresensi = formatterDoc
-              .format(DateTime.parse(scanlog.scanDate!.toIso8601String()));
-          final hour = scanlog.scanDate!.hour;
-          final scanlogPegawai = firestore
-              .collection('Kepegawaian')
-              .doc(scanlog.pin)
-              .collection('Presensi')
-              .doc(
-                hour >= 6 && hour <= 9
-                    ? datePresensi + ' Masuk'
-                    : hour >= 9 && hour <= 16
-                        ? datePresensi + ' Keluar'
-                        : null,
-              );
-          final checkData = await scanlogPegawai.get();
-          if (scanlog.pin != null) {
-            if (checkData.exists == false) {
-              await scanlogPegawai.set({
-                'pin': scanlog.pin,
-                'date_time': hour >= 6 && hour <= 9
-                    ? scanlog.scanDate!.toIso8601String()
-                    : hour >= 9 && hour <= 16
-                        ? scanlog.scanDate!.toIso8601String()
-                        : null,
-                'status': hour >= 6 && hour <= 9
-                    ? 'Masuk'
-                    : hour >= 9 && hour <= 16
-                        ? 'Keluar'
-                        : 'Tanpa Keterangan'
-              });
-            } else {}
-          }
-        }
-      }
+      // for (var scanlog in allScanlogList) {
+      //   if (allScanlogList != null) {
+      //     var dateFormatPresensi =
+      //         DateFormat('d MMMM yyyy - HH:mm:ss', 'id-ID');
+      //     var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
+      //     var datePresensi = formatterDoc
+      //         .format(DateTime.parse(scanlog.scanDate!.toIso8601String()));
+      //     final hour = scanlog.scanDate!.hour;
+      //     final scanlogPegawai = firestore
+      //         .collection('Kepegawaian')
+      //         .doc(scanlog.pin)
+      //         .collection('Presensi')
+      //         .doc(
+      //           hour >= 6 && hour <= 9
+      //               ? datePresensi + ' Masuk'
+      //               : hour >= 9 && hour <= 16
+      //                   ? datePresensi + ' Keluar'
+      //                   : null,
+      //         );
+      //     final checkData = await scanlogPegawai.get();
+      //     if (scanlog.pin != null) {
+      //       if (checkData.exists == false) {
+      //         await scanlogPegawai.set({
+      //           'pin': scanlog.pin,
+      //           'date_time': hour >= 6 && hour <= 9
+      //               ? scanlog.scanDate!.toIso8601String()
+      //               : hour >= 9 && hour <= 16
+      //                   ? scanlog.scanDate!.toIso8601String()
+      //                   : null,
+      //           'status': hour >= 6 && hour <= 9
+      //               ? 'Masuk'
+      //               : hour >= 9 && hour <= 16
+      //                   ? 'Keluar'
+      //                   : 'Tanpa Keterangan'
+      //         });
+      //       } else {}
+      //     }
+      //   }
+      // }
 
       isLoading.value = false;
 
