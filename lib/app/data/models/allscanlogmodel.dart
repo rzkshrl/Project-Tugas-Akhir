@@ -47,3 +47,47 @@ class AllScanlogModel {
     };
   }
 }
+
+class ScanInDayModel {
+  DateTime? scan;
+
+  ScanInDayModel({this.scan});
+
+  factory ScanInDayModel.fromJson(Map<String, dynamic> json) {
+    return ScanInDayModel(
+      scan: DateTime.parse(json['scan']),
+    );
+  }
+}
+
+class PresenceModel {
+  String? date;
+  List<ScanInDayModel>? scanInDay;
+
+  PresenceModel({this.date, this.scanInDay});
+
+  factory PresenceModel.fromJson(Map<String, dynamic> json) {
+    return PresenceModel(
+      date: json['date'],
+      scanInDay: (json['scanInDay'] as List<dynamic>)
+          .map((item) => ScanInDayModel.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class PresensiKepgModel {
+  String? pin;
+  List<PresenceModel>? presence;
+
+  PresensiKepgModel({this.pin, this.presence});
+
+  factory PresensiKepgModel.fromJson(Map<String, dynamic> json) {
+    return PresensiKepgModel(
+      pin: json['pin'],
+      presence: (json['presence'] as List<dynamic>)
+          .map((item) => PresenceModel.fromJson(item))
+          .toList(),
+    );
+  }
+}

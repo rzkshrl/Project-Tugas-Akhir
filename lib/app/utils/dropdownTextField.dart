@@ -113,12 +113,12 @@ Widget dropdownNormalField2(
     Key? key,
     void Function(String?)? onChanged,
     List<String> items,
+    String Function(String)? itemAsString,
     IconData? prefixIcon,
     String hintText,
     Color containerColor,
     Color borderColor,
     Color focusedBorderColor,
-    Color clearBtnColor,
     String? selectedItem) {
   return Form(
     key: key,
@@ -137,9 +137,9 @@ Widget dropdownNormalField2(
             // key: _divisi,
             autoValidateMode: AutovalidateMode.onUserInteraction,
             validator: textC.normalValidator,
-            clearButtonProps:
-                ClearButtonProps(isVisible: true, color: clearBtnColor),
+            clearButtonProps: ClearButtonProps(isVisible: false),
             items: items,
+            itemAsString: itemAsString,
             onChanged: onChanged,
             selectedItem: selectedItem,
             dropdownDecoratorProps: DropDownDecoratorProps(

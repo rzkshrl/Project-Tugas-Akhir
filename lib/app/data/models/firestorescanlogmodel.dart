@@ -77,28 +77,21 @@ class KepegawaianModel {
   String? jadker;
   String? email;
   String? bidang;
-  List<PresensiModel>? presensi;
 
   KepegawaianModel(
-      {this.pin,
-      this.nip,
-      this.nama,
-      this.jadker,
-      this.email,
-      this.bidang,
-      this.presensi});
+      {this.pin, this.nip, this.nama, this.jadker, this.email, this.bidang, t});
 
   factory KepegawaianModel.fromSnapshot(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
     final presensiRef = json.reference.collection('Presensi');
     return KepegawaianModel(
-        pin: data['pin'],
-        nip: data['nip'],
-        nama: data['nama'],
-        jadker: data['jadker'],
-        email: data['email'],
-        bidang: data['bidang'],
-        presensi: []);
+      pin: data['pin'],
+      nip: data['nip'],
+      nama: data['nama'],
+      jadker: data['jadker'],
+      email: data['email'],
+      bidang: data['bidang'],
+    );
   }
 
   // Future<void> loadPresensi() async {

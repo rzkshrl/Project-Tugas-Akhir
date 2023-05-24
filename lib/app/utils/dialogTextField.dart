@@ -8,10 +8,12 @@ import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:project_tugas_akhir/app/utils/timepickerC.dart';
 import 'package:sizer/sizer.dart';
 
+import '../modules/jadwal_kerja/controllers/jadwal_kerja_controller.dart';
 import '../theme/theme.dart';
 
 var enabled = true.obs;
 final timepickerC = Get.put(TimePickerController());
+final jadwalKerjaC = Get.put(JadwalKerjaController());
 
 Widget dialogTextFieldSevenField(
     BuildContext context, Widget btnAction, bool enabled) {
@@ -173,6 +175,192 @@ Widget dialogTextFieldSevenField(
   );
 }
 
+Widget dialogTextJadwalKerja(BuildContext context, Widget btnAction) {
+  return AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    backgroundColor: Blue1,
+    content: Container(
+      width: 120.h,
+      height: 90.h,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 3.h,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 3.w,
+              ),
+              Text(
+                "Tambah Data",
+                style: getTextDialogFieldHeader(context),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 2.5.h,
+          ),
+          textformDialogWeb(
+              context,
+              textC.namaJadwalKerjaKey.value,
+              45.4.w,
+              textC.namaJadwalKerjaC,
+              textC.normalValidator,
+              null,
+              null,
+              null,
+              null,
+              "Masukkan nama jadwal kerja...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              false),
+          SizedBox(
+            height: 1.5.h,
+          ),
+          textformDialogWeb(
+              context,
+              textC.kodeJadwalKerjaKey.value,
+              45.4.w,
+              textC.kodeJadwalKerjaC,
+              textC.normalValidator,
+              null,
+              null,
+              null,
+              null,
+              "Masukkan kode jadwal kerja...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              false),
+          SizedBox(
+            height: 1.5.h,
+          ),
+          textformDialogWeb(
+            context,
+            textC.ketJadwalKerjaKey.value,
+            45.4.w,
+            textC.ketJadwalKerjaC,
+            textC.normalValidator,
+            null,
+            null,
+            null,
+            null,
+            "Masukkan keterangan jadwal kerja...",
+            Colors.transparent,
+            Yellow1,
+            Yellow1,
+            false,
+          ),
+          SizedBox(
+            height: 1.5.h,
+          ),
+          Container(
+            width: 45.4.w,
+            height: 38.5.h,
+            decoration: BoxDecoration(
+                border: Border.all(color: Yellow1),
+                borderRadius: BorderRadius.circular(22)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 1.5.h,
+                    ),
+                    Text(
+                      'Hari Kerja',
+                      style: getTextItemSubMenu(context),
+                    ),
+                    SizedBox(
+                      height: 1.5.h,
+                    ),
+                    Container(
+                      width: 15.4.w,
+                      height: 30.h,
+                      child: StatefulBuilder(builder: (context, setState) {
+                        return ListView.builder(
+                          itemCount: jadwalKerjaC.daysOfWeek.length,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(bottom: 0),
+                          itemBuilder: (context, index) {
+                            final day = jadwalKerjaC.daysOfWeek[index];
+                            final isChecked =
+                                jadwalKerjaC.selectedDays.contains(day);
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 0),
+                              child: Theme(
+                                data: Theme.of(context).copyWith(
+                                  unselectedWidgetColor:
+                                      light, // Warna border tidak dipilih
+                                  checkboxTheme: CheckboxThemeData(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          5.0), // Ubah radius border
+                                      side: BorderSide(
+                                          color: light), // Ubah warna border
+                                    ),
+                                  ),
+                                ),
+                                child: CheckboxListTile(
+                                  title: Text(
+                                    day,
+                                    style: getTextFormDialog(context),
+                                  ),
+                                  value: isChecked,
+                                  checkColor: light,
+                                  activeColor: Blue3,
+                                  controlAffinity:
+                                      ListTileControlAffinity.trailing,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      jadwalKerjaC.toggleDay(day);
+                                    });
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+                // SizedBox(
+                //   width: 5.w,
+                // ),
+                Container(
+                  width: 15.4.w,
+                  height: 30.h,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Yellow1),
+                      borderRadius: BorderRadius.circular(22)),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 1.5.h,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 3.8.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                btnAction,
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
   return AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -183,7 +371,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
       child: Column(
         children: [
           SizedBox(
-            height: 5.h,
+            height: 3.h,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,7 +434,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
             null,
             null,
             null,
-            "Masukkan keterangan jadwal kerja...",
+            "Masukkan keterangan jam kerja...",
             Colors.transparent,
             Yellow1,
             Yellow1,
@@ -256,31 +444,214 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
             height: 1.5.h,
           ),
           Container(
-            width: 40.w,
-            height: 15.h,
+            width: 46.4.w,
+            height: 30.h,
             decoration: BoxDecoration(
                 border: Border.all(color: Yellow1),
                 borderRadius: BorderRadius.circular(22)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: Column(
               children: [
-                textformTimePicker(
-                    textC.masukJamKerjaKey.value,
-                    timepickerC.selectedTime.value == TimeOfDay.now()
-                        ? TextEditingController(text: '')
-                        : textC.masukJamKerjaC, () {
-                  timepickerC.timePickerMasuk(context);
-                }),
-                SizedBox(
-                  width: 5.w,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        Text(
+                          'Jadwal Jam Masuk',
+                          style: getTextItemSubMenu(context),
+                        ),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        textformTimePicker(
+                            textC.masukJamKerjaKey.value,
+                            timepickerC.selectedTime.value != TimeOfDay.now()
+                                ? TextEditingController(text: '')
+                                : textC.masukJamKerjaC, () {
+                          timepickerC.timePicker(context, textC.masukJamKerjaC);
+                        }),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 1.w,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        Text(
+                          'Keterlambatan',
+                          style: getTextItemSubMenu(context),
+                        ),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        textformTimePicker(
+                            textC.terlambatJamKerjaKey.value,
+                            timepickerC.selectedTime.value != TimeOfDay.now()
+                                ? TextEditingController(text: '')
+                                : textC.terlambatJamKerjaC, () {
+                          timepickerC.timePicker(
+                              context, textC.terlambatJamKerjaC);
+                        }),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 1.w,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        Text(
+                          'Jadwal Jam Keluar',
+                          style: getTextItemSubMenu(context),
+                        ),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        textformTimePicker(
+                            textC.keluarJamKerjaKey.value,
+                            timepickerC.selectedTime.value != TimeOfDay.now()
+                                ? TextEditingController(text: '')
+                                : textC.keluarJamKerjaC, () {
+                          timepickerC.timePicker(
+                              context, textC.keluarJamKerjaC);
+                        }),
+                      ],
+                    )
+                  ],
                 ),
-                textformTimePicker(
-                    textC.keluarJamKerjaKey.value,
-                    timepickerC.selectedTime.value == TimeOfDay.now()
-                        ? TextEditingController(text: '')
-                        : textC.keluarJamKerjaC, () {
-                  timepickerC.timePickerKeluar(context);
-                })
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Batas Awal Jam Masuk',
+                          style: getTextItemSubMenu(context),
+                        ),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        textformTimePicker(
+                            textC.batasAwalmasukJamKerjaKey.value,
+                            timepickerC.selectedTime.value != TimeOfDay.now()
+                                ? TextEditingController(text: '')
+                                : textC.batasAwalmasukJamKerjaC, () {
+                          timepickerC.timePicker(
+                              context, textC.batasAwalmasukJamKerjaC);
+                        }),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 1.w,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        Text(
+                          'Pulang Lebih Awal',
+                          style: getTextItemSubMenu(context),
+                        ),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        textformTimePicker(
+                            textC.pulLebihAwalJamKerjaKey.value,
+                            timepickerC.selectedTime.value != TimeOfDay.now()
+                                ? TextEditingController(text: '')
+                                : textC.pulLebihAwalJamKerjaC, () {
+                          timepickerC.timePicker(
+                              context, textC.pulLebihAwalJamKerjaC);
+                        }),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 1.w,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Batas Akhir Jam Masuk',
+                          style: getTextItemSubMenu(context),
+                        ),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        textformTimePicker(
+                            textC.batasAkhirmasukJamKerjaKey.value,
+                            timepickerC.selectedTime.value != TimeOfDay.now()
+                                ? TextEditingController(text: '')
+                                : textC.batasAkhirmasukJamKerjaC, () {
+                          timepickerC.timePicker(
+                              context, textC.batasAkhirmasukJamKerjaC);
+                        }),
+                      ],
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Batas Awal Jam Keluar',
+                          style: getTextItemSubMenu(context),
+                        ),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        textformTimePicker(
+                            textC.batasAwalkeluarJamKerjaKey.value,
+                            timepickerC.selectedTime.value != TimeOfDay.now()
+                                ? TextEditingController(text: '')
+                                : textC.batasAwalkeluarJamKerjaC, () {
+                          timepickerC.timePicker(
+                              context, textC.batasAwalkeluarJamKerjaC);
+                        }),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 4.5.w,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Batas Akhir Jam Keluar',
+                          style: getTextItemSubMenu(context),
+                        ),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
+                        textformTimePicker(
+                            textC.batasAkhirkeluarJamKerjaKey.value,
+                            timepickerC.selectedTime.value != TimeOfDay.now()
+                                ? TextEditingController(text: '')
+                                : textC.batasAkhirkeluarJamKerjaC, () {
+                          timepickerC.timePicker(
+                              context, textC.batasAkhirkeluarJamKerjaC);
+                        }),
+                      ],
+                    )
+                  ],
+                ),
               ],
             ),
           ),

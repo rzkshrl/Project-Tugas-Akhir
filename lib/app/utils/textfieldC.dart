@@ -48,6 +48,25 @@ class TextFieldController extends GetxController {
   final masukJamKerjaKey = GlobalKey<FormState>().obs;
   final keluarJamKerjaC = TextEditingController();
   final keluarJamKerjaKey = GlobalKey<FormState>().obs;
+  final batasAwalmasukJamKerjaC = TextEditingController();
+  final batasAwalmasukJamKerjaKey = GlobalKey<FormState>().obs;
+  final batasAwalkeluarJamKerjaC = TextEditingController();
+  final batasAwalkeluarJamKerjaKey = GlobalKey<FormState>().obs;
+  final batasAkhirmasukJamKerjaC = TextEditingController();
+  final batasAkhirmasukJamKerjaKey = GlobalKey<FormState>().obs;
+  final batasAkhirkeluarJamKerjaC = TextEditingController();
+  final batasAkhirkeluarJamKerjaKey = GlobalKey<FormState>().obs;
+  final terlambatJamKerjaC = TextEditingController();
+  final terlambatJamKerjaKey = GlobalKey<FormState>().obs;
+  final pulLebihAwalJamKerjaC = TextEditingController();
+  final pulLebihAwalJamKerjaKey = GlobalKey<FormState>().obs;
+
+  final namaJadwalKerjaC = TextEditingController();
+  final namaJadwalKerjaKey = GlobalKey<FormState>().obs;
+  final kodeJadwalKerjaC = TextEditingController();
+  final kodeJadwalKerjaKey = GlobalKey<FormState>().obs;
+  final ketJadwalKerjaC = TextEditingController();
+  final ketJadwalKerjaKey = GlobalKey<FormState>().obs;
 
   final emailValidator = MultiValidator([
     EmailValidator(errorText: "Email tidak valid"),

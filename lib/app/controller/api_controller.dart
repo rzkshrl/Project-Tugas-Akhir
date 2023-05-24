@@ -305,49 +305,85 @@ class APIController extends GetxController {
               })
           .toList();
 
-      exportData(groupedData.value);
+      // exportData(groupedData.value);
+
+      RxList<PresensiKepgModel> presenceData = <PresensiKepgModel>[].obs;
+
+      List<PresensiKepgModel> presenceModels = [];
+
+      groupedMap.forEach((pin, presenceList) {
+        List<PresenceModel> presenceDates = [];
+
+        presenceList.forEach((presence) {
+          List<ScanInDayModel> scans = [];
+
+          presence['scanInDay'].forEach((scan) {
+            scans.add(ScanInDayModel(scan: DateTime.parse(scan['scan'])));
+          });
+
+          presenceDates.add(PresenceModel(
+            date: presence['date'],
+            scanInDay: scans,
+          ));
+        });
+
+        presenceModels.add(PresensiKepgModel(
+          pin: pin,
+          presence: presenceDates,
+        ));
+      });
+
+      presenceData.value = presenceModels;
 
       final stopwatch = Stopwatch()..start();
 
-      // for (var scanlog in allScanlogList) {
-      //   if (allScanlogList != null) {
-      //     var dateFormatPresensi =
-      //         DateFormat('d MMMM yyyy - HH:mm:ss', 'id-ID');
-      //     var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
-      //     var datePresensi = formatterDoc
-      //         .format(DateTime.parse(scanlog.scanDate!.toIso8601String()));
-      //     final hour = scanlog.scanDate!.hour;
-      //     final scanlogPegawai = firestore
-      //         .collection('Kepegawaian')
-      //         .doc(scanlog.pin)
-      //         .collection('Presensi')
-      //         .doc(
-      //           hour >= 6 && hour <= 9
-      //               ? datePresensi + ' Masuk'
-      //               : hour >= 9 && hour <= 16
-      //                   ? datePresensi + ' Keluar'
-      //                   : null,
-      //         );
-      //     final checkData = await scanlogPegawai.get();
-      //     if (scanlog.pin != null) {
-      //       if (checkData.exists == false) {
-      //         await scanlogPegawai.set({
-      //           'pin': scanlog.pin,
-      //           'date_time': hour >= 6 && hour <= 9
-      //               ? scanlog.scanDate!.toIso8601String()
-      //               : hour >= 9 && hour <= 16
-      //                   ? scanlog.scanDate!.toIso8601String()
-      //                   : null,
-      //           'status': hour >= 6 && hour <= 9
-      //               ? 'Masuk'
-      //               : hour >= 9 && hour <= 16
-      //                   ? 'Keluar'
-      //                   : 'Tanpa Keterangan'
-      //         });
-      //       } else {}
-      //     }
-      //   }
-      // }
+      for (var data in presenceData) {
+        final pin = data.pin;
+        final presence = data.presence;
+
+        for (var presenceData in presence!) {
+          final date = presenceData.date!;
+          final scanInDay = presenceData.scanInDay;
+
+          for (var scanInDayData in scanInDay!) {
+            final scan = scanInDayData.scan!;
+            var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
+            var datePresensi =
+                formatterDoc.format(DateTime.parse(scan.toIso8601String()));
+            final hour = scan.hour;
+            final minute = scan.minute;
+            final scanlogPegawai = firestore
+                .collection('Kepegawaian')
+                .doc(pin)
+                .collection('Presensi')
+                .doc(
+                  hour >= 6 && hour <= 8
+                      ? datePresensi + ' Masuk'
+                      : hour >= 9 && hour <= 17
+                          ? datePresensi + ' Keluar'
+                          : datePresensi,
+                );
+            final checkData = await scanlogPegawai.get();
+            if (pin != null) {
+              if (checkData.exists == false) {
+                await scanlogPegawai.set({
+                  'pin': pin,
+                  'date_time': hour >= 6 && hour <= 8
+                      ? scan.toIso8601String()
+                      : hour >= 9 && hour <= 17
+                          ? scan.toIso8601String()
+                          : scan.toIso8601String(),
+                  'status': hour >= 6 && hour <= 8
+                      ? 'Masuk'
+                      : hour >= 9 && hour <= 17
+                          ? 'Keluar'
+                          : 'Tanpa Keterangan'
+                });
+              } else {}
+            }
+          }
+        }
+      }
 
       isLoading.value = false;
 

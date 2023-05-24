@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import '../theme/textstyle.dart';
 import '../theme/theme.dart';
 
 Widget dialogAlertOnly(
@@ -118,6 +119,59 @@ Widget dialogAlertOnlySingleMsgAnimation(
             textAlign: TextAlign.center,
             style: textAlert,
           ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget dialogAlertBtnSingleMsgAnimation(
+  String animationLink,
+  String text,
+  TextStyle textAlert,
+  VoidCallback onPressed,
+) {
+  return Dialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    backgroundColor: Blue1,
+    child: Container(
+      width: 350,
+      height: 374.07,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 143.97,
+            height: 139.02,
+            decoration: BoxDecoration(
+                border: Border.all(color: Yellow1),
+                borderRadius: BorderRadius.circular(12)),
+            child: Lottie.asset(animationLink, height: 55),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            text,
+            textAlign: TextAlign.center,
+            style: textAlert,
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+              width: 111.29,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(11), color: light),
+              child: TextButton(
+                  onPressed: onPressed,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 11.0, bottom: 11.0),
+                    child: Text(
+                      'OK',
+                      style: getTextAlertBtn(Get.context!),
+                    ),
+                  )))
         ],
       ),
     ),

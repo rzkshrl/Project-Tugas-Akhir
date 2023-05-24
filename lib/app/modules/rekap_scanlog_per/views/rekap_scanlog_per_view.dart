@@ -117,17 +117,25 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     dropdownNormalField2(
-                        context, 16.w, cDropdown.pinRekapKey.value, (value) {
-                      if (value != null) {
-                        cDropdown.pinRekapC.text = value;
-                      }
-                    },
+                        context,
+                        16.w,
+                        cDropdown.pinRekapKey.value,
+                        (value) {
+                          if (value != null) {
+                            cDropdown.pinRekapC.text = value;
+                          }
+                        },
                         controller.pinList,
+                        (item) {
+                          int index = controller.pinList.indexOf(item);
+
+                          // Mengembalikan item yang sesuai dari namaList
+                          return controller.namaList[index];
+                        },
                         null,
                         'Pilih PIN Pegawai',
                         Colors.transparent,
                         dark,
-                        Blue1,
                         Blue1,
                         cDropdown.pinRekapC.text == ''
                             ? null

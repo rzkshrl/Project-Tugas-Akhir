@@ -13,7 +13,7 @@ class ScanlogDTS extends DataTableSource {
   @override
   DataRow2 getRow(int index) {
     final data = kepegawaianList[index];
-    final presensiList = data.presensi ?? [];
+
     return DataRow2.byIndex(index: index, cells: [
       DataCell(Text(data != null ? "${data.nama}" : "-")),
       DataCell(Text(data != null ? "${data.nip}" : "-")),

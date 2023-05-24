@@ -25,6 +25,17 @@ getTextFormDialog(BuildContext context) {
       color: light);
 }
 
+getTextFormJamKerja(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 11.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 7.0),
+        Condition.equals(name: MOBILE, value: 7.0),
+        Condition.equals(name: TABLET, value: 9.0),
+        Condition.equals(name: DESKTOP, value: 11.0),
+      ]).value,
+      color: light);
+}
+
 getTextFormDialog2(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
@@ -240,6 +251,19 @@ getTextItemSubMenu(BuildContext context) {
       color: Yellow1,
       fontFamily: "Inter",
       fontWeight: FontWeight.w700);
+}
+
+getTextHeaderJamKerja(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 11.0, valueWhen: [
+        Condition.smallerThan(name: DESKTOP, value: 9.0),
+        Condition.equals(name: MOBILE, value: 9.0),
+        Condition.equals(name: TABLET, value: 10.5),
+        Condition.equals(name: DESKTOP, value: 11.0),
+      ]).value,
+      color: Yellow1,
+      fontFamily: "Inter",
+      fontWeight: FontWeight.w600);
 }
 
 getTextItemSubMenuDisabled(BuildContext context) {

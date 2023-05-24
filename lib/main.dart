@@ -64,14 +64,15 @@ class ProjectTugasAkhir extends StatelessWidget {
                           ]),
                       title: "MonitorPresence MIM Jetis Lor",
                       theme: ThemeData(
-                          scaffoldBackgroundColor: light,
-                          fontFamily: 'Inter',
-                          primaryColor: light,
-                          scrollbarTheme: ScrollbarThemeData(
-                            thumbColor: thumbColorScrollbar,
-                            trackColor: trackColorScrollbar,
-                            thumbVisibility: MaterialStatePropertyAll(true),
-                          )),
+                        scaffoldBackgroundColor: light,
+                        fontFamily: 'Inter',
+                        primaryColor: light,
+                        // scrollbarTheme: ScrollbarThemeData(
+                        //   thumbColor: thumbColorScrollbar,
+                        //   trackColor: trackColorScrollbar,
+                        //   thumbVisibility: MaterialStatePropertyAll(true),
+                        // )),
+                      ),
                       initialRoute: Routes.LOGIN,
                       getPages: AppPages.routes,
                       debugShowCheckedModeBanner: false,

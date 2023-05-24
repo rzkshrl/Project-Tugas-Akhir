@@ -295,23 +295,32 @@ class _PresensiDataSource extends CalendarDataSource {
     }
 
     for (final data in presensiData) {
-      final DateTime dateTime = data.dateTime!;
+      final DateTime? dateTime = data.dateTime;
       final String status = data.status!;
       // print('ini status ${data.status}');
 
-      if (status == 'Masuk') {
+      if (dateTime != null) {
+        if (status == 'Masuk') {
+          appointments.add(Appointment(
+            startTime: dateTime,
+            endTime: dateTime,
+            subject: 'Masuk',
+            color: Colors.green,
+          ));
+        } else if (status == 'Keluar') {
+          appointments.add(Appointment(
+            startTime: dateTime,
+            endTime: dateTime,
+            subject: 'Keluar',
+            color: Blue3,
+          ));
+        }
+      } else {
         appointments.add(Appointment(
-          startTime: dateTime,
-          endTime: dateTime,
-          subject: 'Masuk',
-          color: Colors.green,
-        ));
-      } else if (status == 'Keluar') {
-        appointments.add(Appointment(
-          startTime: dateTime,
-          endTime: dateTime,
-          subject: 'Keluar',
-          color: Blue3,
+          startTime: DateTime.now(),
+          endTime: DateTime.now(),
+          subject: 'Tanpa Keterangan',
+          color: Grey1,
         ));
       }
     }

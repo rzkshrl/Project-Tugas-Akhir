@@ -5,29 +5,30 @@ import 'package:project_tugas_akhir/app/utils/textfield.dart';
 class TimePickerController extends GetxController {
   var selectedTime = TimeOfDay.now().obs;
 
-  void timePickerMasuk(BuildContext context) async {
+  void timePicker(
+      BuildContext context, TextEditingController controller) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: selectedTime.value,
+      initialEntryMode: TimePickerEntryMode.input,
     );
 
     if (pickedTime != null) {
       selectedTime.value = pickedTime;
-      final String formatTime = selectedTime.value.format(Get.context!);
-      textC.masukJamKerjaC.text = formatTime;
-    }
-  }
+      update();
+      int hour24 = selectedTime.value.hourOfPeriod;
+      int minute = selectedTime.value.minute;
+      var isAM = selectedTime.value.period == DayPeriod.am;
 
-  void timePickerKeluar(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: selectedTime.value,
-    );
+      if (!isAM && hour24 < 12) {
+        hour24 += 12;
+      } else if (isAM && hour24 == 12) {
+        hour24 = 0;
+      }
 
-    if (pickedTime != null) {
-      selectedTime.value = pickedTime;
-      final String formatTime = selectedTime.value.format(Get.context!);
-      textC.keluarJamKerjaC.text = formatTime;
+      String hourString = hour24.toString().padLeft(2, '0');
+      String minuteString = minute.toString().padLeft(2, '0');
+      controller.text = '$hourString:$minuteString';
     }
   }
 }

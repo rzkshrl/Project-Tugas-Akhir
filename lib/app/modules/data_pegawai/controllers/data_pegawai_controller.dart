@@ -21,45 +21,38 @@ class DataPegawaiController extends GetxController {
 
   Future<void> addPegawai(BuildContext context, String nama, String pin,
       String jadker, String nip, String bidang, String email) async {
-    CollectionReference pegawai = firestore.collection("Kepegawaian");
+    try {
+      CollectionReference pegawai = firestore.collection("Kepegawaian");
 
-    print(pin);
+      final DocumentReference docRef = pegawai.doc(pin);
+      final checkData = await docRef.get();
 
-    final QuerySnapshot checkData =
-        await pegawai.where('pin', isEqualTo: pin).get();
-
-    final List<DocumentSnapshot> documents = checkData.docs;
-
-    if (documents.isEmpty) {
-      await pegawai.doc(pin).set({
-        'nama': nama,
-        'pin': pin,
-        'jadker': jadker,
-        'nip': nip,
-        'bidang': bidang,
-        'email': email
-      }).then((value) async {
-        Get.dialog(dialogAlertBtn(() {
-          // isSuccess = true;
-          // completer.complete(true);
-          Get.back();
-          Get.back();
-        },
-            IconlyLight.tick_square,
-            111.29,
-            "OK",
-            "Berhasil menambahkan Data Kepegawaian!",
-            null,
-            getTextAlert(context),
-            null,
-            getTextAlertBtn(context)));
-      });
-    } else {
-      Get.dialog(dialogAlertOnlySingleMsg(
-          IconlyLight.danger, "Data sudah ada.", getTextAlert(context)));
+      if (checkData.exists == false) {
+        await pegawai.doc(pin).set({
+          'nama': nama,
+          'pin': pin,
+          'jadker': jadker,
+          'nip': nip,
+          'bidang': bidang,
+          'email': email
+        });
+        Get.dialog(
+          dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
+              'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {
+            Get.back();
+          }),
+        );
+      } else {
+        Get.dialog(dialogAlertOnlySingleMsg(
+            IconlyLight.danger, "Data sudah ada.", getTextAlert(context)));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+          "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
     }
-    // isSuccess = await completer.future;
-    // return isSuccess;
   }
 
   Future<void> editPegawai(
@@ -79,16 +72,12 @@ class DataPegawaiController extends GetxController {
       'bidang': bidang,
       'email': email
     });
-    Get.dialog(dialogAlertBtn(() {
-      // isSuccess = true;
-      // completer.complete(true);
-      Get.back();
-      Get.back();
-    }, IconlyLight.tick_square, 111.29, "OK", "Berhasil mengubah Data!", null,
-        getTextAlert(context), null, getTextAlertBtn(context)));
-
-    // isSuccess = await completer.future;
-    // return isSuccess;
+    Get.dialog(
+      dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
+          'Berhasil Mengubah Data!', getTextAlert(Get.context!), () {
+        Get.back();
+      }),
+    );
   }
 
   Future<void> deleteDoc(String doc) async {
@@ -98,23 +87,18 @@ class DataPegawaiController extends GetxController {
       Get.back();
       try {
         await firestore.collection('Kepegawaian').doc(doc).delete();
-        Get.dialog(dialogAlertBtn(() {
-          // isSuccess = true;
-          // completer.complete(true);
-          Get.back();
-          Get.back();
-        },
-            IconlyLight.tick_square,
-            111.29,
-            "OK",
-            "Berhasil mengubah Data!",
-            null,
-            getTextAlert(Get.context!),
-            null,
-            getTextAlertBtn(Get.context!)));
+        Get.dialog(
+          dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
+              'Berhasil Menghapus Data!', getTextAlert(Get.context!), () {
+            Get.back();
+          }),
+        );
       } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
         Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-            "Terjadi Kesalahan!.\n$e", getTextAlert(Get.context!)));
+            "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
       }
     },
         IconlyLight.danger,
