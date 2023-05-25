@@ -128,8 +128,6 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                         controller.pinList,
                         (item) {
                           int index = controller.pinList.indexOf(item);
-
-                          // Mengembalikan item yang sesuai dari namaList
                           return controller.namaList[index];
                         },
                         null,
