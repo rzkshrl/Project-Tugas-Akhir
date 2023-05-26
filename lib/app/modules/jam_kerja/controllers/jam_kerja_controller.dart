@@ -13,6 +13,37 @@ class JamKerjaController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late Stream<List<JamKerjaModel>> firestoreJamKerjaList;
 
+  final isChecked = false.obs;
+
+  final List<String> daysOfWeek = [
+    'Senin',
+    'Selasa',
+    'Rabu',
+    'Kamis',
+    'Jumat',
+    'Sabtu',
+    'Minggu',
+  ];
+
+  var selectedDays = [].obs;
+
+  void toggleDay(String day) {
+    if (selectedDays.contains(day)) {
+      selectedDays.remove(day);
+    } else {
+      selectedDays.add(day);
+    }
+    selectedDays.refresh();
+  }
+
+  bool isDaySelected(String day) {
+    return selectedDays.contains(day);
+  }
+
+  bool isAtLeastOneDaySelected() {
+    return selectedDays.isNotEmpty;
+  }
+
   Future<void> addJamKerja(
       String namaJamKerja,
       String kodeJamKerja,
@@ -30,6 +61,7 @@ class JamKerjaController extends GetxController {
 
       final DocumentReference docRef = jamkerja.doc(kodeJamKerja);
       final checkData = await docRef.get();
+      print(selectedDays);
 
       if (checkData.exists == false) {
         await jamkerja.doc(kodeJamKerja).set({
@@ -43,7 +75,8 @@ class JamKerjaController extends GetxController {
           'batasAkhir_masuk': batasAkhirMasukJamKerja,
           'batasAkhir_keluar': batasAkhirKeluarJamKerja,
           'keterlambatan': terlambatJamKerja,
-          'pulang_awal': pulLebihAwalJamKerja
+          'pulang_awal': pulLebihAwalJamKerja,
+          'hariKerja': selectedDays.toList()
         });
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
@@ -80,6 +113,7 @@ class JamKerjaController extends GetxController {
       String pulLebihAwalJamKerja) async {
     try {
       var jamkerja = firestore.collection('JamKerja');
+      print(selectedDays);
 
       await jamkerja.doc(doc).update({
         'nama': namaJamKerja,
@@ -92,7 +126,8 @@ class JamKerjaController extends GetxController {
         'batasAkhir_masuk': batasAkhirMasukJamKerja,
         'batasAkhir_keluar': batasAkhirKeluarJamKerja,
         'keterlambatan': terlambatJamKerja,
-        'pulang_awal': pulLebihAwalJamKerja
+        'pulang_awal': pulLebihAwalJamKerja,
+        'hariKerja': selectedDays.toList()
       });
       Get.dialog(
         dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',

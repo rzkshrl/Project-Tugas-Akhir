@@ -253,22 +253,13 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                             onTap: () => navigate(6)),
                         buildDrawerItemSubMenu(
                             text: Text(
-                              "Keterangan Izin",
-                              style: Get.currentRoute == Routes.KET_IZIN
-                                  ? getTextItemSubMenu(context)
-                                  : getTextItemSubMenuDisabled(context),
-                            ),
-                            visualDensity: VisualDensity(vertical: -2),
-                            onTap: () => navigate(7)),
-                        buildDrawerItemSubMenu(
-                            text: Text(
                               "Hari Libur/Cuti Bersama",
                               style: Get.currentRoute == Routes.HARI_LIBUR
                                   ? getTextItemSubMenu(context)
                                   : getTextItemSubMenuDisabled(context),
                             ),
                             visualDensity: VisualDensity(vertical: -2),
-                            onTap: () => navigate(8)),
+                            onTap: () => navigate(7)),
                       ],
                     ),
                   ),
@@ -350,8 +341,6 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
     } else if (index == 6) {
       Get.offAllNamed(Routes.JAM_KERJA);
     } else if (index == 7) {
-      Get.offAllNamed(Routes.KET_IZIN);
-    } else if (index == 8) {
       Get.offAllNamed(Routes.HARI_LIBUR);
     }
   }

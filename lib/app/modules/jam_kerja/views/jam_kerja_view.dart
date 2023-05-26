@@ -139,7 +139,8 @@ class JamKerjaView extends GetView<JamKerjaController> {
                                     .validate() &&
                                 textC
                                     .pulLebihAwalJamKerjaKey.value.currentState!
-                                    .validate()) {
+                                    .validate() &&
+                                controller.isAtLeastOneDaySelected()) {
                               c.addJamKerja(
                                   textC.namaJamKerjaC.text,
                                   textC.kodeJamKerjaC.text,

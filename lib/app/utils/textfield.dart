@@ -140,8 +140,8 @@ Widget textformTimePicker(
   return Form(
     key: key,
     child: Container(
-      width: 134,
-      height: 55,
+      width: 124,
+      height: 50,
       child: TextFormField(
         readOnly: true,
         textAlign: TextAlign.center,

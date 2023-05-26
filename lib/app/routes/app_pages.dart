@@ -14,8 +14,7 @@ import '../modules/jadwal_kerja/bindings/jadwal_kerja_binding.dart';
 import '../modules/jadwal_kerja/views/jadwal_kerja_view.dart';
 import '../modules/jam_kerja/bindings/jam_kerja_binding.dart';
 import '../modules/jam_kerja/views/jam_kerja_view.dart';
-import '../modules/ket_izin/bindings/ket_izin_binding.dart';
-import '../modules/ket_izin/views/ket_izin_view.dart';
+
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/login_mobile/bindings/login_mobile_binding.dart';
@@ -96,11 +95,6 @@ class AppPages {
       name: _Paths.JAM_KERJA,
       page: () => const JamKerjaView(),
       binding: JamKerjaBinding(),
-    ),
-    GetPage(
-      name: _Paths.KET_IZIN,
-      page: () => const KetIzinView(),
-      binding: KetIzinBinding(),
     ),
     GetPage(
       name: _Paths.NAVIGATION_DRAWER,

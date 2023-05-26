@@ -89,7 +89,8 @@ class JamKerjaDTS extends DataTableSource {
                         textC.terlambatJamKerjaKey.value.currentState!
                             .validate() &&
                         textC.pulLebihAwalJamKerjaKey.value.currentState!
-                            .validate()) {
+                            .validate() &&
+                        c.isAtLeastOneDaySelected()) {
                       c.editJamKerja(
                           data.kode!,
                           textC.namaJamKerjaC.text,
