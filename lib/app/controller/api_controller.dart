@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:universal_html/html.dart' as html;
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -8,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:http/http.dart' as http;
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/data/models/allscanlogmodel.dart';
 import 'package:project_tugas_akhir/app/data/models/deviceinfomodel.dart';
@@ -54,12 +52,14 @@ class APIController extends GetxController {
   }
 
   Future<void> getLiburData(String year) async {
-    print('${year}');
+    if (kDebugMode) {
+      print(year);
+    }
+
     final response =
         await dio.get('https://api-harilibur.vercel.app/api?year=${year}');
     try {
       showLoadingDialog();
-      List<LiburModel> liburList = [];
 
       final List<dynamic> responseData = response.data;
 
@@ -71,7 +71,7 @@ class APIController extends GetxController {
       liburData.removeWhere((e) => e.isNationalDay == false);
 
       for (var libur in liburData) {
-        var formatter = DateFormat("yyyy-MM-dd");
+        // var formatter = DateFormat("yyyy-MM-dd");
         List<String> tanggal = libur.holidayDate!.split('-');
         String liburDate =
             tanggal[0] + '-' + tanggal[1] + '-' + tanggal[2].padLeft(2, '0');
@@ -342,7 +342,7 @@ class APIController extends GetxController {
         final presence = data.presence;
 
         for (var presenceData in presence!) {
-          final date = presenceData.date!;
+          // final date = presenceData.date!;
           final scanInDay = presenceData.scanInDay;
 
           for (var scanInDayData in scanInDay!) {
@@ -351,7 +351,7 @@ class APIController extends GetxController {
             var datePresensi =
                 formatterDoc.format(DateTime.parse(scan.toIso8601String()));
             final hour = scan.hour;
-            final minute = scan.minute;
+            // final minute = scan.minute;
             final scanlogPegawai = firestore
                 .collection('Kepegawaian')
                 .doc(pin)

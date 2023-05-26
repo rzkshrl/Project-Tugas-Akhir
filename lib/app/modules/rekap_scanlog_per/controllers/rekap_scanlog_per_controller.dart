@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -70,22 +71,6 @@ class RekapScanlogPerController extends GetxController {
     });
   }
 
-  String? getNamaFromKepegawaian(
-      String? pin, List<KepegawaianModel> kepegawaianData) {
-    final kepegawaian = kepegawaianData.firstWhere(
-      (data) => data.pin == pin,
-    );
-    return kepegawaian.nama;
-  }
-
-  String? getJabatanFromKepegawaian(
-      String? pin, List<KepegawaianModel> kepegawaianData) {
-    final kepegawaian = kepegawaianData.firstWhere(
-      (data) => data.pin == pin,
-    );
-    return kepegawaian.bidang;
-  }
-
   Future<void> generatePDF(String pin) async {
     final QuerySnapshot<Map<String, dynamic>> presensiSnapshot;
 
@@ -95,7 +80,7 @@ class RekapScanlogPerController extends GetxController {
           .doc(pin)
           .collection('Presensi')
           .where("date_time", isLessThan: end.value.toIso8601String())
-          .orderBy("date_time", descending: true)
+          .orderBy("date_time", descending: false)
           .get();
     } else {
       presensiSnapshot = await firestore
@@ -105,7 +90,7 @@ class RekapScanlogPerController extends GetxController {
           .where("date_time", isGreaterThan: start!.toIso8601String())
           .where("date_time",
               isLessThan: end.value.add(Duration(days: 1)).toIso8601String())
-          .orderBy("date_time", descending: true)
+          .orderBy("date_time", descending: false)
           .get();
     }
 
@@ -118,153 +103,295 @@ class RekapScanlogPerController extends GetxController {
     List<KepegawaianModel> kepegawaianData = [kepegawaianModel];
 
     List<PresensiModel> presensiData = presensiSnapshot.docs
-        .map((e) => PresensiModel.fromJson(e.data() as Map<String, dynamic>))
+        .map((e) => PresensiModel.fromJson(e.data()))
         .toList();
 
+    List<GroupedPresensiModel> groupedData = groupAttendanceData(presensiData);
+
     final pdf = pw.Document();
-    var formatterDate = DateFormat('d MMMM yyyy', 'id-ID');
     var formatterTime = DateFormat('HH:mm', 'id-ID');
 
-    // final pageFormat = PdfPageFormat.a4;
+    final int rowsPerPage = 18;
+    int currentPageIndex = 0;
 
-    // final marginLeft = 20.0;
-    // final marginRight = 20.0;
-    // final marginTop = 20.0;
-    // final marginBottom = 20.0;
+    final totalPages = (groupedData.length / rowsPerPage).ceil();
 
-    // final tableWidth = pageFormat.availableWidth - marginLeft - marginRight;
+    for (var pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+      final startRow = pageIndex * rowsPerPage;
+      final endRow = (pageIndex + 1) * rowsPerPage;
 
-    // final tableRowHeight = 30.0;
-
-    // final maxRowsPerPage =
-    //     (pageFormat.availableHeight - marginTop - marginBottom) ~/
-    //         tableRowHeight;
-
-    // int remainingRows = maxRowsPerPage;
-
-    pdf.addPage(pw.Page(
-      orientation: pw.PageOrientation.landscape,
-      build: (pw.Context context) => pw.Column(
-        children: [
-          pw.Text('Kartu Scanlog', style: pw.TextStyle(fontSize: 12)),
-          pw.Text('PIN: $pin'),
-          pw.Text(
-              'Tanggal: ${formatterDate.format(start!).toString()} - ${formatterDate.format(end.value).toString()}'),
-          pw.SizedBox(height: 20),
-          pw.Table.fromTextArray(
-            columnWidths: {
-              0: pw.FixedColumnWidth(50),
-              1: pw.FixedColumnWidth(100),
-              2: pw.FixedColumnWidth(100),
-              3: pw.FixedColumnWidth(100),
-              4: pw.FixedColumnWidth(100),
-              5: pw.FixedColumnWidth(100),
-            },
-            cellAlignment: pw.Alignment.centerLeft,
-            headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-            headerDecoration: pw.BoxDecoration(color: PdfColors.grey300),
-            cellHeight: 30,
-            headerHeight: 40,
-            rowDecoration:
-                pw.BoxDecoration(border: pw.Border.all(color: PdfColors.grey)),
-            data: [
-              [
-                'PIN',
-                'Nama',
-                'Jabatan',
-                'Tanggal',
-                'Scan Masuk',
-                'Scan Keluar'
-              ],
-              for (var presensi in presensiData)
-                [
-                  presensi.pin,
-                  kepegawaianData
-                      .firstWhere(
-                          (kepegawaian) => kepegawaian.pin == presensi.pin)
-                      .nama,
-                  kepegawaianData
-                      .firstWhere(
-                          (kepegawaian) => kepegawaian.pin == presensi.pin)
-                      .bidang,
-                  dateFormatter.format(presensi.dateTime!),
-                  presensi.status! == 'Masuk'
-                      ? presensi.dateTime.toString()
-                      : '',
-                  presensi.status! == 'Keluar'
-                      ? presensi.dateTime.toString()
-                      : ''
-                ],
+      final tableRows = <pw.TableRow>[
+        pw.TableRow(
+          children: [
+            pw.Container(
+              padding: pw.EdgeInsets.all(5),
+              child: pw.Text('PIN',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            ),
+            pw.Container(
+              padding: pw.EdgeInsets.all(5),
+              child: pw.Text('Nama',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            ),
+            pw.Container(
+              padding: pw.EdgeInsets.all(5),
+              child: pw.Text('Jabatan',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            ),
+            pw.Container(
+              padding: pw.EdgeInsets.all(5),
+              child: pw.Text('Tanggal',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            ),
+            pw.Container(
+              padding: pw.EdgeInsets.all(5),
+              child: pw.Text('Scan Masuk',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            ),
+            pw.Container(
+              padding: pw.EdgeInsets.all(5),
+              child: pw.Text('Scan Keluar',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            ),
+          ],
+        ),
+        for (var i = startRow; i < endRow && i < groupedData.length; i++)
+          pw.TableRow(
+            children: [
+              pw.Container(
+                padding: pw.EdgeInsets.all(5),
+                child: pw.Text(groupedData[i].pin!,
+                    style: pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: pw.EdgeInsets.all(5),
+                child: pw.Text(
+                    kepegawaianData
+                        .firstWhere((kepegawaian) =>
+                            kepegawaian.pin == presensiData[i].pin)
+                        .nama!,
+                    style: pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: pw.EdgeInsets.all(5),
+                child: pw.Text(
+                    kepegawaianData
+                        .firstWhere((kepegawaian) =>
+                            kepegawaian.pin == groupedData[i].pin)
+                        .bidang!,
+                    style: pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: pw.EdgeInsets.all(5),
+                child: pw.Text(
+                    dateFormatter.format(groupedData[i].dateTimeMasuk!),
+                    style: pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: pw.EdgeInsets.all(5),
+                child: pw.Text(
+                  formatterTime.format(groupedData[i].dateTimeMasuk!),
+                  style: pw.TextStyle(fontSize: 10),
+                ),
+              ),
+              pw.Container(
+                padding: pw.EdgeInsets.all(5),
+                child: pw.Text(
+                  formatterTime.format(groupedData[i].dateTimeKeluar!),
+                  style: pw.TextStyle(fontSize: 10),
+                ),
+              ),
             ],
-          )
-        ],
-      ),
-    ));
+          ),
+      ];
 
-    // int remainingPresensi = presensiData.length - maxRowsPerPage;
+      pdf.addPage(
+        pw.Page(
+          orientation: pw.PageOrientation.landscape,
+          build: (pw.Context context) => pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text('Kartu Scanlog', style: pw.TextStyle(fontSize: 12)),
+              pw.Text('PIN: $pin', style: pw.TextStyle(fontSize: 10)),
+              pw.Text(
+                'Tanggal: ${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}',
+                style: pw.TextStyle(fontSize: 10),
+              ),
+              pw.SizedBox(height: 20),
+              pw.Table(
+                columnWidths: {
+                  0: pw.FixedColumnWidth(50),
+                  1: pw.FixedColumnWidth(100),
+                  2: pw.FixedColumnWidth(100),
+                  3: pw.FixedColumnWidth(100),
+                  4: pw.FixedColumnWidth(100),
+                  5: pw.FixedColumnWidth(100),
+                },
+                border: pw.TableBorder.all(color: PdfColors.grey),
+                children: tableRows,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
-    // while (remainingPresensi > 0) {
-    //   pdf.addPage(pw.Page(
-    //     orientation: pw.PageOrientation.landscape,
-    //     build: (pw.Context context) => pw.Column(
-    //       children: [
-    //         pw.Text('Kartu Scanlog', style: pw.TextStyle(fontSize: 12)),
-    //         pw.Text('PIN: $pin'),
-    //         pw.Text(
-    //             'Tanggal: ${formatterDate.format(start!).toString()} - ${formatterDate.format(end.value).toString()}'),
-    //         pw.SizedBox(height: 20),
-    //         pw.Table.fromTextArray(
-    //           columnWidths: {
-    //             0: pw.FixedColumnWidth(50),
-    //             1: pw.FixedColumnWidth(100),
-    //             2: pw.FixedColumnWidth(100),
-    //             3: pw.FixedColumnWidth(100),
-    //             4: pw.FixedColumnWidth(100),
-    //             5: pw.FixedColumnWidth(100),
-    //           },
-    //           cellAlignment: pw.Alignment.centerLeft,
-    //           headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-    //           headerDecoration: pw.BoxDecoration(color: PdfColors.grey300),
-    //           cellHeight: 30,
-    //           headerHeight: 40,
-    //           rowDecoration: pw.BoxDecoration(
-    //               border: pw.Border.all(color: PdfColors.grey)),
-    //           data: [
-    //             [
-    //               'PIN',
-    //               'Nama',
-    //               'Jabatan',
-    //               'Tanggal',
-    //               'Scan Masuk',
-    //               'Scan Keluar'
+    // final List<pw.TableRow> tableRows = [];
+
+    // for (var i = 0; i < groupedData.length; i++) {
+    //   final presensi = groupedData[i];
+    //   final kepegawaian = kepegawaianData
+    //       .firstWhere((kepegawaian) => kepegawaian.pin == presensi.pin);
+
+    //   final row = pw.TableRow(
+    //     children: [
+    //       pw.Container(
+    //         padding: pw.EdgeInsets.all(5),
+    //         child: pw.Text(presensi.pin!, style: pw.TextStyle(fontSize: 10)),
+    //       ),
+    //       pw.Container(
+    //         padding: pw.EdgeInsets.all(5),
+    //         child:
+    //             pw.Text(kepegawaian.nama!, style: pw.TextStyle(fontSize: 10)),
+    //       ),
+    //       pw.Container(
+    //         padding: pw.EdgeInsets.all(5),
+    //         child:
+    //             pw.Text(kepegawaian.bidang!, style: pw.TextStyle(fontSize: 10)),
+    //       ),
+    //       pw.Container(
+    //         padding: pw.EdgeInsets.all(5),
+    //         child: pw.Text(dateFormatter.format(presensi.dateTimeMasuk!),
+    //             style: pw.TextStyle(fontSize: 10)),
+    //       ),
+    //       pw.Container(
+    //         padding: pw.EdgeInsets.all(5),
+    //         child: pw.Text(
+    //           formatterTime.format(presensi.dateTimeMasuk!),
+    //           style: pw.TextStyle(fontSize: 10),
+    //         ),
+    //       ),
+    //       pw.Container(
+    //         padding: pw.EdgeInsets.all(5),
+    //         child: pw.Text(
+    //           formatterTime.format(presensi.dateTimeKeluar!),
+    //           style: pw.TextStyle(fontSize: 10),
+    //         ),
+    //       ),
+    //     ],
+    //   );
+
+    //   if ((i + 1) % rowsPerPage == 0 || i == presensiData.length - 1) {
+    //     if (currentPageIndex != 0) {
+    //       pdf.addPage(
+    //         pw.Page(
+    //           orientation: pw.PageOrientation.landscape,
+    //           build: (pw.Context context) => pw.Column(
+    //             crossAxisAlignment: pw.CrossAxisAlignment.start,
+    //             children: [
+    //               pw.Text('Kartu Scanlog', style: pw.TextStyle(fontSize: 12)),
+    //               pw.Text('PIN: $pin', style: pw.TextStyle(fontSize: 10)),
+    //               pw.Text(
+    //                 'Tanggal: ${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}',
+    //                 style: pw.TextStyle(fontSize: 10),
+    //               ),
+    //               pw.SizedBox(height: 20),
+    //               pw.Table(
+    //                 columnWidths: {
+    //                   0: pw.FixedColumnWidth(50),
+    //                   1: pw.FixedColumnWidth(100),
+    //                   2: pw.FixedColumnWidth(100),
+    //                   3: pw.FixedColumnWidth(100),
+    //                   4: pw.FixedColumnWidth(100),
+    //                   5: pw.FixedColumnWidth(100),
+    //                 },
+    //                 border: pw.TableBorder.all(color: PdfColors.grey),
+    //                 children: [
+    //                   pw.TableRow(
+    //                     children: tableHeaders.map((header) {
+    //                       return pw.Container(
+    //                         padding: pw.EdgeInsets.all(5),
+    //                         child: pw.Text(header,
+    //                             style: pw.TextStyle(
+    //                                 fontWeight: pw.FontWeight.bold)),
+    //                       );
+    //                     }).toList(),
+    //                   ),
+    //                   ...tableRows,
+    //                 ],
+    //               ),
     //             ],
-    //             for (var presensi in presensiData)
-    //               [
-    //                 presensi.pin,
-    //                 kepegawaianData
-    //                     .firstWhere(
-    //                         (kepegawaian) => kepegawaian.pin == presensi.pin)
-    //                     .nama,
-    //                 kepegawaianData
-    //                     .firstWhere(
-    //                         (kepegawaian) => kepegawaian.pin == presensi.pin)
-    //                     .bidang,
-    //                 dateFormatter.format(presensi.dateTime!),
-    //                 presensi.status! == 'Masuk'
-    //                     ? presensi.dateTime.toString()
-    //                     : '',
-    //                 presensi.status! == 'Keluar'
-    //                     ? presensi.dateTime.toString()
-    //                     : ''
-    //               ],
-    //           ],
-    //         )
-    //       ],
-    //     ),
-    //   ));
+    //           ),
+    //         ),
+    //       );
+    //     }
+
+    //     // Reset list untuk halaman berikutnya
+    //     tableRows.clear();
+    //     currentPageIndex++;
+    //   }
+    //   tableRows.add(row);
     // }
 
-    // remainingPresensi -= maxRowsPerPage;
+    // pdf.addPage(pw.Page(
+    //   orientation: pw.PageOrientation.landscape,
+    //   build: (pw.Context context) => pw.Column(
+    //     children: [
+    // pw.Text('Kartu Scanlog', style: pw.TextStyle(fontSize: 12)),
+    // pw.Text('PIN: $pin', style: pw.TextStyle(fontSize: 10)),
+    // pw.Text(
+    //     'Tanggal: ${formatterDate.format(start!).toString()} - ${formatterDate.format(end.value).toString()}',
+    //     style: pw.TextStyle(fontSize: 10)),
+    // pw.SizedBox(height: 20),
+    //       pw.Table.fromTextArray(
+    //         columnWidths: {
+    //           0: pw.FixedColumnWidth(50),
+    //           1: pw.FixedColumnWidth(100),
+    //           2: pw.FixedColumnWidth(100),
+    //           3: pw.FixedColumnWidth(100),
+    //           4: pw.FixedColumnWidth(100),
+    //           5: pw.FixedColumnWidth(100),
+    //         },
+    //         headers: [],
+    //         cellAlignment: pw.Alignment.centerLeft,
+    //         cellHeight: 13,
+    //         rowDecoration: pw.BoxDecoration(
+    //             border: pw.Border.all(color: PdfColors.grey100)),
+    //         data: [
+    //           [
+    //             'PIN',
+    //             'Nama',
+    //             'Jabatan',
+    //             'Tanggal',
+    //             'Scan Masuk',
+    //             'Scan Keluar'
+    //           ],
+    //           for (var presensi in groupedData)
+    //             [
+    //               presensi.pin,
+    // kepegawaianData
+    //     .firstWhere(
+    //         (kepegawaian) => kepegawaian.pin == presensi.pin)
+    //     .nama,
+    // kepegawaianData
+    //     .firstWhere(
+    //         (kepegawaian) => kepegawaian.pin == presensi.pin)
+    //     .bidang,
+    //               formatterDate.format(presensi.dateTimeMasuk!),
+    // formatterTime.format(presensi.dateTimeMasuk!),
+    // formatterTime.format(presensi.dateTimeKeluar!),
+    //               // presensi.status! == 'Masuk'
+    //               //     ? presensi.dateTime.toString()
+    //               //     : '',
+    //               // presensi.status! == 'Keluar'
+    //               //     ? presensi.dateTime.toString()
+    //               //     : ''
+    //             ],
+    //         ],
+    //       )
+    //     ],
+    //   ),
+    // ));
 
     final bytes = await pdf.save();
     final blob = html.Blob([bytes], 'application/pdf');
@@ -278,6 +405,51 @@ class RekapScanlogPerController extends GetxController {
     anchor.click();
     html.document.body?.children.remove(anchor);
     html.Url.revokeObjectUrl(url);
+  }
+
+  void exportData(List dataList) {
+    final content = jsonEncode(dataList);
+
+    final bytes = utf8.encode(content);
+    final blob = html.Blob([bytes]);
+    final url = html.Url.createObjectUrlFromBlob(blob);
+
+    final anchor = html.document.createElement('a') as html.AnchorElement
+      ..href = url
+      ..style.display = 'none'
+      ..download = 'data.txt';
+
+    html.document.body!.children.add(anchor);
+    anchor.click();
+
+    html.document.body!.children.remove(anchor);
+    html.Url.revokeObjectUrl(url);
+  }
+
+  List<GroupedPresensiModel> groupAttendanceData(List<PresensiModel> rawData) {
+    List<GroupedPresensiModel> groupedData = [];
+    GroupedPresensiModel? currentPresensi;
+
+    for (var data in rawData) {
+      String? pin = data.pin;
+      DateTime? dateTime = data.dateTime;
+      String? status = data.status;
+
+      if (status == 'Masuk') {
+        currentPresensi = GroupedPresensiModel(
+          pin: pin,
+          dateTimeMasuk: dateTime,
+          dateTimeKeluar: DateTime.now(),
+        );
+        groupedData.add(currentPresensi!);
+      } else if (status == 'Keluar') {
+        if (currentPresensi != null && currentPresensi.pin == pin) {
+          currentPresensi.dateTimeKeluar = dateTime;
+        }
+      }
+    }
+
+    return groupedData;
   }
 
   @override

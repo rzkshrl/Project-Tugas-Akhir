@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/controller/calendars_controller.dart';
 import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
-import 'package:project_tugas_akhir/app/utils/calendarwidget.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';

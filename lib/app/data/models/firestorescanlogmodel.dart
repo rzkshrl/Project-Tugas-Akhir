@@ -31,6 +31,14 @@ class PresensiModel {
   }
 }
 
+class GroupedPresensiModel {
+  String? pin;
+  DateTime? dateTimeMasuk;
+  DateTime? dateTimeKeluar;
+
+  GroupedPresensiModel({this.pin, this.dateTimeMasuk, this.dateTimeKeluar});
+}
+
 class LiburModel {
   String? holidayName;
   String? holidayDate;
