@@ -20,7 +20,7 @@ class DataPegawaiController extends GetxController {
   var isLoading = true.obs;
 
   Future<void> addPegawai(BuildContext context, String nama, String pin,
-      String jadker, String nip, String bidang, String email) async {
+      String kepg, String nip, String bidang) async {
     try {
       CollectionReference pegawai = firestore.collection("Kepegawaian");
 
@@ -31,10 +31,9 @@ class DataPegawaiController extends GetxController {
         await pegawai.doc(pin).set({
           'nama': nama,
           'pin': pin,
-          'jadker': jadker,
+          'kepegawaian': kepg,
           'nip': nip,
           'bidang': bidang,
-          'email': email
         });
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
@@ -55,22 +54,15 @@ class DataPegawaiController extends GetxController {
     }
   }
 
-  Future<void> editPegawai(
-      String docIdentify,
-      BuildContext context,
-      String nama,
-      String jadker,
-      String nip,
-      String bidang,
-      String email) async {
+  Future<void> editPegawai(String docIdentify, BuildContext context,
+      String nama, String kepg, String nip, String bidang) async {
     CollectionReference pegawai = firestore.collection("Kepegawaian");
 
     await pegawai.doc(docIdentify).update({
       'nama': nama,
-      'jadker': jadker,
+      'kepegawaian': kepg,
       'nip': nip,
       'bidang': bidang,
-      'email': email
     });
     Get.dialog(
       dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',

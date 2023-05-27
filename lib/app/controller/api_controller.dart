@@ -192,6 +192,42 @@ class APIController extends GetxController {
     }
   }
 
+  Future<void> getDeviceInfo2(String? ip, int? port, int? sn,
+      String? allPresensi, String? newPresensi) async {
+    String urlGet = "http://$ip:$port$urlGetDeviceInfo?sn=${sn}";
+
+    var res = await Future.wait([dio.post(urlGet)]);
+
+    if (kDebugMode) {
+      print('HASIL DEVINFO : ${res[0].data['Result']}');
+      // print('BODY : ${res[0].data['DEVINFO']}');
+    }
+
+    if (res[0].data['Result'] == 'false') {
+      Get.dialog(dialogAlertOnly(
+          IconlyLight.danger,
+          "Terjadi Kesalahan.",
+          "Tidak dapat mengambil data dari mesin.",
+          getTextAlert(Get.context!),
+          getTextAlertSub(Get.context!)));
+    } else {
+      Map<String, dynamic> data = res[0].data['DEVINFO'];
+      deviceInfo(DeviceInfoModel.fromJson(data));
+      deviceInfo.refresh();
+      if (allPresensi != deviceInfo.value.allPresensi) {
+        firestore
+            .collection('Device')
+            .doc("mesin-1")
+            .update({'allPresensi': deviceInfo.value.allPresensi});
+      } else if (newPresensi != deviceInfo.value.newPresensi) {
+        firestore
+            .collection('Device')
+            .doc("mesin-1")
+            .update({'newPresensi': deviceInfo.value.newPresensi});
+      }
+    }
+  }
+
   Future<void> getAllPresenceData(BuildContext context) async {
     isLoading.value = true;
 
@@ -207,11 +243,13 @@ class APIController extends GetxController {
     var ip = deviceData.value.serverIp;
     var port = deviceData.value.serverPort;
     var allPresensi = deviceData.value.allPresensi;
+    var newPresensi = deviceData.value.newPresensi;
 
     if (kDebugMode) {
       print("Serial Number : $sn");
       print("IP server dan Port : $ip:$port");
       print("All Presensi : $allPresensi");
+      print("New Presensi : $newPresensi");
     }
 
     final String url = "http://$ip:$port$urlGetScanlogWithPaging?sn=${sn}";
@@ -220,6 +258,9 @@ class APIController extends GetxController {
 
     try {
       showLoadingDialog();
+
+      getDeviceInfo2(ip, port, sn, allPresensi, newPresensi);
+
       while (true) {
         var response =
             await Future.wait([dio.post('$url&page=$pageNumber&limit=100')]);

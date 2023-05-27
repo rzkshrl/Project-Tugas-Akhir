@@ -27,27 +27,23 @@ class KepegawaianDTS extends DataTableSource {
       cells: [
         DataCell(Text(
           "${data.pin}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${data.nip}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${data.nama}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
-          "${data.jadker}",
-          style: getTextTable(Get.context!),
-        )),
-        DataCell(Text(
-          "${data.email}",
-          style: getTextTable(Get.context!),
+          "${data.kepegawaian}",
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${data.bidang}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(IconButton(
             onPressed: () {
@@ -61,17 +57,16 @@ class KepegawaianDTS extends DataTableSource {
             onPressed: () {
               textC.namaTambahDataPegC.text = data.nama!;
               textC.pinTambahDataPegC.text = data.pin!;
-              cDropdown.jadkerTambahDataPegC.text = data.jadker!;
+              cDropdown.kepgTambahDataPegC.text = data.kepegawaian!;
               textC.nipTambahDataPegC.text = data.nip!;
               cDropdown.bidangTambahDataPegC.text = data.bidang!;
-              textC.emailTambahDataPegC.text = data.email!;
               Get.dialog(dialogTextFieldSevenField(
                   Get.context!,
                   btnDefaultIcon1(10.w, Blue4, IconlyLight.tick_square, Yellow1,
                       "Kirim", getTextBtnAction(Get.context!), () {
                     if (textC.namaTambahDataPegKey.value.currentState!
                             .validate() &&
-                        cDropdown.jadkerTambahDataPegKey.value.currentState!
+                        cDropdown.kepgTambahDataPegKey.value.currentState!
                             .validate() &&
                         textC.nipTambahDataPegKey.value.currentState!
                             .validate() &&
@@ -80,13 +75,13 @@ class KepegawaianDTS extends DataTableSource {
                         textC.emailTambahDataPegKey.value.currentState!
                             .validate()) {
                       c.editPegawai(
-                          data.pin!,
-                          Get.context!,
-                          textC.namaTambahDataPegC.text,
-                          cDropdown.jadkerTambahDataPegC.text,
-                          textC.nipTambahDataPegC.text,
-                          cDropdown.bidangTambahDataPegC.text,
-                          textC.emailTambahDataPegC.text);
+                        data.pin!,
+                        Get.context!,
+                        textC.namaTambahDataPegC.text,
+                        cDropdown.kepgTambahDataPegC.text,
+                        textC.nipTambahDataPegC.text,
+                        cDropdown.bidangTambahDataPegC.text,
+                      );
                     }
                   }),
                   true));

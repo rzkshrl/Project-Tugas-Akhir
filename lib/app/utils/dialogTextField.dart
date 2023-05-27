@@ -80,21 +80,21 @@ Widget dialogTextFieldSevenField(
             height: 1.5.h,
           ),
           dropdownNormalField(
-              context, 45.4.w, cDropdown.jadkerTambahDataPegKey.value, (value) {
+              context, 45.4.w, cDropdown.kepgTambahDataPegKey.value, (value) {
             if (value != null) {
-              cDropdown.jadkerTambahDataPegC.text = value;
+              cDropdown.kepgTambahDataPegC.text = value;
             }
           },
-              ['JPC', 'JPR', 'JDK', 'JRR'],
+              ['PNS', 'NON-PNS'],
               null,
-              "Pilih Kode Jadwal Kerja Pegawai...",
+              "Pilih Jenis Kepegawaian...",
               Colors.transparent,
               Yellow1,
               Yellow1,
               Yellow1,
-              cDropdown.jadkerTambahDataPegC.text == ''
+              cDropdown.kepgTambahDataPegC.text == ''
                   ? null
-                  : cDropdown.jadkerTambahDataPegC.text),
+                  : cDropdown.kepgTambahDataPegC.text),
           SizedBox(
             height: 4.5.h,
           ),
@@ -124,10 +124,10 @@ Widget dialogTextFieldSevenField(
             }
           },
               [
-                'Guru Kelas',
+                'Kepala Sekolah',
                 'Operator Sekolah',
-                'Guru Mapel',
-                'Kepala Sekolah'
+                'Guru Kelas',
+                'Guru Mapel'
               ],
               null,
               "Pilih Bidang Kerja Pegawai...",
@@ -141,21 +141,21 @@ Widget dialogTextFieldSevenField(
           SizedBox(
             height: 4.5.h,
           ),
-          textformDialogWeb(
-              context,
-              textC.emailTambahDataPegKey.value,
-              45.4.w,
-              textC.emailTambahDataPegC,
-              textC.emailValidator,
-              null,
-              null,
-              null,
-              null,
-              "Masukkan email pegawai...",
-              Colors.transparent,
-              Yellow1,
-              Yellow1,
-              false),
+          // textformDialogWeb(
+          //     context,
+          //     textC.emailTambahDataPegKey.value,
+          //     45.4.w,
+          //     textC.emailTambahDataPegC,
+          //     textC.emailValidator,
+          //     null,
+          //     null,
+          //     null,
+          //     null,
+          //     "Masukkan email pegawai...",
+          //     Colors.transparent,
+          //     Yellow1,
+          //     Yellow1,
+          //     false),
           SizedBox(
             height: 1.5.h,
           ),
@@ -371,7 +371,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
       child: Column(
         children: [
           SizedBox(
-            height: 2.h,
+            height: 1.h,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -381,7 +381,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
               ),
               Text(
                 "Tambah Data",
-                style: getTextDialogFieldHeader(context),
+                style: getTextDialogFieldHeader2(context),
               ),
             ],
           ),
@@ -445,16 +445,17 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
           // ),
           Container(
             width: 60.4.w,
-            height: 38.5.h,
+            height: 45.5.h,
             decoration: BoxDecoration(
                 border: Border.all(color: Yellow1),
                 borderRadius: BorderRadius.circular(22)),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(
                   width: 12.4.w,
-                  height: 30.h,
+                  height: 35.h,
                   child: StatefulBuilder(builder: (context, setState) {
                     return ListView.builder(
                       itemCount: dayPickC.daysOfWeek.length,
@@ -501,7 +502,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
                 ),
                 SizedBox(
                   width: 40.4.w,
-                  height: 30.h,
+                  height: 35.h,
                   child: Column(
                     children: [
                       Row(
@@ -511,7 +512,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                height: 1.5.h,
+                                height: 0.5.h,
                               ),
                               Text(
                                 'Jadwal Jam Masuk',
@@ -538,7 +539,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                height: 1.5.h,
+                                height: 0.5.h,
                               ),
                               Text(
                                 'Keterlambatan',
@@ -565,7 +566,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                height: 1.5.h,
+                                height: 0.5.h,
                               ),
                               Text(
                                 'Jadwal Jam Keluar',
@@ -721,9 +722,6 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
             ),
           ),
 
-          SizedBox(
-            height: 4.5.h,
-          ),
           SizedBox(
             height: 1.5.h,
           ),

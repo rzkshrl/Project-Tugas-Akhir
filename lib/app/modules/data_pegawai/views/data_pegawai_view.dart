@@ -99,7 +99,7 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                         "Tambah Data", getTextBtnAction(context), () {
                       textC.namaTambahDataPegC.clear();
                       textC.pinTambahDataPegC.clear();
-                      cDropdown.jadkerTambahDataPegC.clear();
+                      cDropdown.kepgTambahDataPegC.clear();
                       textC.nipTambahDataPegC.clear();
                       cDropdown.bidangTambahDataPegC.clear();
                       textC.emailTambahDataPegC.clear();
@@ -119,8 +119,8 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                                     textC
                                         .pinTambahDataPegKey.value.currentState!
                                         .validate() &&
-                                    cDropdown
-                                        .jadkerTambahDataPegKey.value.currentState!
+                                    cDropdown.kepgTambahDataPegKey.value
+                                        .currentState!
                                         .validate() &&
                                     textC
                                         .nipTambahDataPegKey.value.currentState!
@@ -132,13 +132,13 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                                         .currentState!
                                         .validate()) {
                                   c.addPegawai(
-                                      context,
-                                      textC.namaTambahDataPegC.text,
-                                      textC.pinTambahDataPegC.text,
-                                      cDropdown.jadkerTambahDataPegC.text,
-                                      textC.nipTambahDataPegC.text,
-                                      cDropdown.bidangTambahDataPegC.text,
-                                      textC.emailTambahDataPegC.text);
+                                    context,
+                                    textC.namaTambahDataPegC.text,
+                                    textC.pinTambahDataPegC.text,
+                                    cDropdown.kepgTambahDataPegC.text,
+                                    textC.nipTambahDataPegC.text,
+                                    cDropdown.bidangTambahDataPegC.text,
+                                  );
                                 }
                               }),
                               false),
@@ -184,15 +184,9 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                           )),
                           DataColumn2(
                               label: Text(
-                            'Jadwal Kerja',
+                            'Kepegawaian',
                             style: getTextTable(context),
                           )),
-                          DataColumn2(
-                              label: Text(
-                                'Email',
-                                style: getTextTable(context),
-                              ),
-                              fixedWidth: 200),
                           DataColumn2(
                               label: Text(
                             'Bidang',

@@ -153,6 +153,18 @@ getTextTable(BuildContext context) {
       fontWeight: FontWeight.w600);
 }
 
+getTextTableData(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 11.0),
+        const Condition.equals(name: MOBILE, value: 11.0),
+        const Condition.equals(name: TABLET, value: 13.0),
+        const Condition.equals(name: DESKTOP, value: 15.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w500);
+}
+
 getTextItemAppBar(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
@@ -352,6 +364,19 @@ getTextDialogFieldHeader(BuildContext context) {
         const Condition.equals(name: MOBILE, value: 20.0),
         const Condition.equals(name: TABLET, value: 22.0),
         const Condition.equals(name: DESKTOP, value: 24.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w900);
+}
+
+getTextDialogFieldHeader2(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 20.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 16.0),
+        const Condition.smallerThan(name: MOBILE, value: 16.0),
+        const Condition.equals(name: MOBILE, value: 16.0),
+        const Condition.equals(name: TABLET, value: 18.0),
+        const Condition.equals(name: DESKTOP, value: 20.0),
       ]).value,
       color: Yellow1,
       fontWeight: FontWeight.w900);

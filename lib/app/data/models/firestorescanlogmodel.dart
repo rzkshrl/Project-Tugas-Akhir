@@ -80,12 +80,12 @@ class KepegawaianModel {
   String? pin;
   String? nip;
   String? nama;
-  String? jadker;
-  String? email;
+  String? kepegawaian;
+
   String? bidang;
 
   KepegawaianModel(
-      {this.pin, this.nip, this.nama, this.jadker, this.email, this.bidang, t});
+      {this.pin, this.nip, this.nama, this.kepegawaian, this.bidang, t});
 
   factory KepegawaianModel.fromSnapshot(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
@@ -94,8 +94,7 @@ class KepegawaianModel {
       pin: data['pin'],
       nip: data['nip'],
       nama: data['nama'],
-      jadker: data['jadker'],
-      email: data['email'],
+      kepegawaian: data['kepegawaian'],
       bidang: data['bidang'],
     );
   }

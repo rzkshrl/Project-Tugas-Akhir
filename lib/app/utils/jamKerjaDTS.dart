@@ -26,27 +26,27 @@ class JamKerjaDTS extends DataTableSource {
       cells: [
         DataCell(Text(
           "${data.nama}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${data.kode}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${data.jadwalMasuk}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${data.jadwalKeluar}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${data.terlambat}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${data.pulangLebihAwal}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(IconButton(
             onPressed: () {

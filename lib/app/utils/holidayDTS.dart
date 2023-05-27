@@ -22,11 +22,11 @@ class HolidayDTS extends DataTableSource {
       cells: [
         DataCell(Text(
           "${data.name}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           "${formatter.format(DateTime.parse("${data.date!}"))}",
-          style: getTextTable(Get.context!),
+          style: getTextTableData(Get.context!),
         )),
         DataCell(IconButton(
             onPressed: () {},
