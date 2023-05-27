@@ -8,12 +8,10 @@ import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
-import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/kepegawaianDTS.dart';
 import '../../../utils/loading.dart';
@@ -27,13 +25,12 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final c = Get.put(DataPegawaiController());
-    final apiC = Get.put(APIController(context1: context));
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -67,7 +64,7 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -161,11 +158,11 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                     stream: c.firestoreKepegawaianList,
                     builder: (context, snap) {
                       if (!snap.hasData) {
-                        return LoadingView();
+                        return const LoadingView();
                       }
                       final kepegawaianList =
                           snap.data! as List<KepegawaianModel>;
-                      int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+                      int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
                       return PaginatedDataTable2(
                         columns: [
                           DataColumn2(
@@ -223,10 +220,10 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                         renderEmptyRowsInTheEnd: false,
                         source: KepegawaianDTS(kepegawaianList),
                         onRowsPerPageChanged: (value) {
-                          _rowsPerPage = value!;
+                          rowsPerPage = value!;
                         },
                         initialFirstRowIndex: 0,
-                        rowsPerPage: _rowsPerPage,
+                        rowsPerPage: rowsPerPage,
                       );
                     }),
               )

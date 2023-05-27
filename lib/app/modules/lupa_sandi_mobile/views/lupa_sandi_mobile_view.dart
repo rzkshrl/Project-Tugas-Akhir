@@ -13,7 +13,7 @@ class LupaSandiMobileView extends GetView<LupaSandiMobileController> {
         title: const Text('LupaSandiMobileView'),
         centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'LupaSandiMobileView is working',
           style: TextStyle(fontSize: 20),

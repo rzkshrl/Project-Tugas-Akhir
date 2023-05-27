@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,7 +11,6 @@ import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../data/models/firestorehariliburmodel.dart';
 import '../../../theme/textstyle.dart';
@@ -32,16 +32,18 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
     final authC = Get.put(AuthController());
     final c = Get.put(CalendarsController(pin));
     final liburC = Get.put(HariLiburController());
-    final apiC = Get.put(APIController(context1: context));
-    final CalendarController calendarController = Get.put(CalendarController());
+    // final CalendarController calendarController = Get.put(CalendarController());
 
-    print(pin);
+    if (kDebugMode) {
+      print(pin);
+    }
+
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -75,7 +77,7 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -126,7 +128,7 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                         .snapshots(),
                     builder: (context, snap) {
                       if (!snap.hasData) {
-                        return LoadingView();
+                        return const LoadingView();
                       }
                       final List<PresensiModel> presensiList = snap.data!.docs
                           .map((e) => PresensiModel.fromJson(
@@ -136,7 +138,7 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                           stream: liburC.firestoreHolidayList,
                           builder: (context, snap) {
                             if (!snap.hasData) {
-                              return LoadingView();
+                              return const LoadingView();
                             }
                             final holidayList =
                                 snap.data! as List<HolidayModel>;
@@ -153,19 +155,14 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                                     cellBorderColor: Grey1,
                                     showNavigationArrow: true,
                                     showDatePickerButton: true,
-                                    allowedViews: [
+                                    allowedViews: const [
                                       CalendarView.month,
                                       CalendarView.day,
                                       CalendarView.week,
-                                      CalendarView.workWeek,
-                                      CalendarView.timelineDay,
-                                      CalendarView.timelineWeek,
-                                      CalendarView.timelineWorkWeek,
-                                      CalendarView.timelineMonth,
                                     ],
                                     appointmentTextStyle:
                                         c.appointmentTextStyle,
-                                    monthViewSettings: MonthViewSettings(
+                                    monthViewSettings: const MonthViewSettings(
                                       dayFormat: 'EEE',
                                       appointmentDisplayMode:
                                           MonthAppointmentDisplayMode.indicator,
@@ -213,20 +210,16 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                                               DateTime.parse(data.date!).day ==
                                                   date.day);
                                       if (isLeadingDate || isTrailingDate) {
-                                        return Container(
-                                          child: Center(
-                                            child: Text(date.day.toString(),
-                                                style: getTextCalendarTrail(
-                                                    context)),
-                                          ),
+                                        return Center(
+                                          child: Text(date.day.toString(),
+                                              style: getTextCalendarTrail(
+                                                  context)),
                                         );
                                       } else if (isHoliday) {
-                                        return Container(
-                                          child: Center(
-                                            child: Text(date.day.toString(),
-                                                style: getTextCalendarHoliday(
-                                                    context)),
-                                          ),
+                                        return Center(
+                                          child: Text(date.day.toString(),
+                                              style: getTextCalendarHoliday(
+                                                  context)),
                                         );
                                       } else {
                                         return Container(
@@ -335,7 +328,7 @@ class _PresensiDataSource extends CalendarDataSource {
 
   @override
   DateTime getEndTime(int index) =>
-      presensiData[index].dateTime!.add(Duration(minutes: 1));
+      presensiData[index].dateTime!.add(const Duration(minutes: 1));
 
   @override
   String getSubject(int index) => presensiData[index].status!;

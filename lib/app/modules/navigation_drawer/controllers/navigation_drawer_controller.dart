@@ -1,8 +1,8 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'package:get/get.dart';
 
 class NavigationDrawerController extends GetxController {
-  //TODO: Implement NavigationDrawerController
-
   final count = 0.obs;
 
   var isExpanded = false.obs;

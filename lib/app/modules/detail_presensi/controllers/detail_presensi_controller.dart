@@ -1,15 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+// ignore_for_file: unnecessary_overrides
+
 import 'package:get/get.dart';
-import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:intl/intl.dart';
 
 class DetailPresensiController extends GetxController {
-  //TODO: Implement DetailPresensiController
-
   @override
   void onInit() {
     super.onInit();

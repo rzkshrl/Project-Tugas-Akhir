@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,13 +9,9 @@ import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
-import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
-import '../../../utils/loading.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_presensi_all_controller.dart';
-
-import 'package:http/http.dart' as http;
 
 class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
   const RekapPresensiAllView({Key? key}) : super(key: key);
@@ -30,7 +24,7 @@ class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -64,7 +58,7 @@ class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -133,7 +127,7 @@ class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: SingleChildScrollView(
+                child: const SingleChildScrollView(
                     // child: PaginatedDataTable2(
                     //   columns: [
                     //     DataColumn(label: Text("PIN")),

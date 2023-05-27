@@ -12,7 +12,6 @@ import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
-import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/holidayDTS.dart';
 import '../../../utils/loading.dart';
@@ -32,7 +31,7 @@ class HariLiburView extends GetView<HariLiburController> {
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -66,7 +65,7 @@ class HariLiburView extends GetView<HariLiburController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -133,10 +132,10 @@ class HariLiburView extends GetView<HariLiburController> {
                     stream: c.firestoreHolidayList,
                     builder: (context, snap) {
                       if (!snap.hasData) {
-                        return LoadingView();
+                        return const LoadingView();
                       }
                       final holidayList = snap.data! as List<HolidayModel>;
-                      int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+                      int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
                       return PaginatedDataTable2(
                           columns: [
                             DataColumn2(
@@ -174,10 +173,10 @@ class HariLiburView extends GetView<HariLiburController> {
                           minWidth: 950,
                           renderEmptyRowsInTheEnd: false,
                           onRowsPerPageChanged: (value) {
-                            _rowsPerPage = value!;
+                            rowsPerPage = value!;
                           },
                           initialFirstRowIndex: 0,
-                          rowsPerPage: _rowsPerPage,
+                          rowsPerPage: rowsPerPage,
                           source: HolidayDTS(holidayList));
                     }),
               )

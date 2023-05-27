@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -8,8 +10,6 @@ import '../../../theme/textstyle.dart';
 import '../../../utils/dialogDefault.dart';
 
 class JamKerjaController extends GetxController {
-  //TODO: Implement JamKerjaController
-
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late Stream<List<JamKerjaModel>> firestoreJamKerjaList;
 
@@ -61,7 +61,9 @@ class JamKerjaController extends GetxController {
 
       final DocumentReference docRef = jamkerja.doc(kodeJamKerja);
       final checkData = await docRef.get();
-      print(selectedDays);
+      if (kDebugMode) {
+        print(selectedDays);
+      }
 
       if (checkData.exists == false) {
         await jamkerja.doc(kodeJamKerja).set({
@@ -113,7 +115,9 @@ class JamKerjaController extends GetxController {
       String pulLebihAwalJamKerja) async {
     try {
       var jamkerja = firestore.collection('JamKerja');
-      print(selectedDays);
+      if (kDebugMode) {
+        print(selectedDays);
+      }
 
       await jamkerja.doc(doc).update({
         'nama': namaJamKerja,

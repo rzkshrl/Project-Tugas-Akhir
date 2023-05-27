@@ -1,14 +1,12 @@
-import 'dart:convert';
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import 'package:project_tugas_akhir/app/controller/api_controller.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
-import 'package:project_tugas_akhir/app/theme/theme.dart';
 
 import '../data/models/usermodel.dart';
 import '../routes/app_pages.dart';
@@ -54,7 +52,7 @@ class AuthController extends GetxController {
   Future<bool> autoLogin() async {
     //auto login
     try {
-      final isSignIn = await auth.currentUser;
+      final isSignIn = auth.currentUser;
       if (isSignIn != null) {
         return true;
       }
@@ -107,7 +105,9 @@ class AuthController extends GetxController {
 
     // userData(UserModel.fromJson(checkUserData));
 
-    print("User Data : ${checkUserData}");
+    if (kDebugMode) {
+      print("User Data : $checkUserData");
+    }
 
     userData.value = (UserModel(
         uid: auth.currentUser!.uid,
@@ -158,9 +158,14 @@ class AuthController extends GetxController {
       if (myUser.user!.emailVerified) {
         auth.authStateChanges().listen((User? user) async {
           if (user == null) {
-            print('User is currently signed out!');
+            if (kDebugMode) {
+              print('User is currently signed out!');
+            }
           } else {
-            print('User is signed in!');
+            if (kDebugMode) {
+              print('User is signed in!');
+            }
+
             syncUsers(password, context);
             isAuth.value = true;
             await Future.delayed(const Duration(seconds: 5));
@@ -195,16 +200,25 @@ class AuthController extends GetxController {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        if (kDebugMode) {
+          print('No user found for that email.');
+        }
+
         Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
             "Akun tidak ditemukan!", getTextAlert(context)));
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        if (kDebugMode) {
+          print('Wrong password provided for that user.');
+        }
+
         Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
             "Kata sandi yang dimasukkan salah!", getTextAlert(context)));
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
+
       Get.dialog(dialogAlertOnly(
           IconlyLight.danger,
           "Terjadi Kesalahan.",

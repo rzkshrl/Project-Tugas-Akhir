@@ -1,4 +1,5 @@
-import 'package:data_table_2/data_table_2.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -25,27 +26,27 @@ class KepegawaianDTS extends DataTableSource {
     return DataRow(
       cells: [
         DataCell(Text(
-          data != null ? "${data.pin}" : "-",
+          "${data.pin}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.nip}" : "-",
+          "${data.nip}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.nama}" : "-",
+          "${data.nama}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.jadker}" : "-",
+          "${data.jadker}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.email}" : "-",
+          "${data.email}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.bidang}" : "-",
+          "${data.bidang}",
           style: getTextTable(Get.context!),
         )),
         DataCell(IconButton(

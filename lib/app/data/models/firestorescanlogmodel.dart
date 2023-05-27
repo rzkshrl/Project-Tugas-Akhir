@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -91,7 +89,7 @@ class KepegawaianModel {
 
   factory KepegawaianModel.fromSnapshot(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
-    final presensiRef = json.reference.collection('Presensi');
+
     return KepegawaianModel(
       pin: data['pin'],
       nip: data['nip'],

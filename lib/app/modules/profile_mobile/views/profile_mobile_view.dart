@@ -13,7 +13,7 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
         title: const Text('ProfileMobileView'),
         centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'ProfileMobileView is working',
           style: TextStyle(fontSize: 20),

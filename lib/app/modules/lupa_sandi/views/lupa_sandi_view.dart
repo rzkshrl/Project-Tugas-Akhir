@@ -117,10 +117,10 @@ class LupaSandiView extends GetView<LupaSandiController> {
       // WELCOME SCREEN MOBILE
       return Scaffold(
         appBar: AppBar(
-          title: Text('HomeView'),
+          title: const Text('HomeView'),
           centerTitle: true,
         ),
-        body: Center(
+        body: const Center(
           child: Text(
             'HALO Ini MOBILE',
             style: TextStyle(fontSize: 20),

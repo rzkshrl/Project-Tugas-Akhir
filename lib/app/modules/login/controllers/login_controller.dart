@@ -1,10 +1,8 @@
-import 'package:flutter/widgets.dart';
-import 'package:form_field_validator/form_field_validator.dart';
+// ignore_for_file: unnecessary_overrides
+
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  //TODO: Implement LoginController
-
   @override
   void onInit() {
     super.onInit();

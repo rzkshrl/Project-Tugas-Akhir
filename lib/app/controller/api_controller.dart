@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_brace_in_string_interps, use_build_context_synchronously, unnecessary_overrides
+
 import 'dart:convert';
 import 'package:universal_html/html.dart' as html;
 
@@ -74,7 +76,7 @@ class APIController extends GetxController {
         // var formatter = DateFormat("yyyy-MM-dd");
         List<String> tanggal = libur.holidayDate!.split('-');
         String liburDate =
-            tanggal[0] + '-' + tanggal[1] + '-' + tanggal[2].padLeft(2, '0');
+            '${tanggal[0]}-${tanggal[1]}-${tanggal[2].padLeft(2, '0')}';
         final liburCol = firestore.collection('Holiday').doc(liburDate);
         final checkData = await liburCol.get();
         if (checkData.exists == false) {
@@ -126,8 +128,8 @@ class APIController extends GetxController {
     if (kDebugMode) {
       print("Serial Number : $sn");
       print("IP server dan Port : $ip:$port");
-      print("All Presensi : ${allPresensi}");
-      print("New Presensi : ${newPresensi}");
+      print("All Presensi : $allPresensi");
+      print("New Presensi : $newPresensi");
     }
 
     try {
@@ -209,7 +211,7 @@ class APIController extends GetxController {
     if (kDebugMode) {
       print("Serial Number : $sn");
       print("IP server dan Port : $ip:$port");
-      print("All Presensi : ${allPresensi}");
+      print("All Presensi : $allPresensi");
     }
 
     final String url = "http://$ip:$port$urlGetScanlogWithPaging?sn=${sn}";
@@ -220,7 +222,7 @@ class APIController extends GetxController {
       showLoadingDialog();
       while (true) {
         var response =
-            await Future.wait([dio.post(url + '&page=$pageNumber&limit=100')]);
+            await Future.wait([dio.post('$url&page=$pageNumber&limit=100')]);
         final data = response[0].data['Data'];
 
         res.addAll(data);
@@ -282,20 +284,20 @@ class APIController extends GetxController {
       }
 
       groupedMap.forEach((pin, presenceList) {
-        presenceList.forEach((presence) {
+        for (var presence in presenceList) {
           final scanInDay = presence['scanInDay'];
           scanInDay.sort((a, b) => a['scan'].compareTo(b['scan']) as int);
-        });
+        }
       });
 
       groupedMap.forEach((pin, presenceList) {
-        presenceList.forEach((presence) {
+        for (var presence in presenceList) {
           final scanInDay = presence['scanInDay'];
 
           if (scanInDay.length > 2) {
             scanInDay.removeRange(1, scanInDay.length - 1);
           }
-        });
+        }
       });
 
       groupedData.value = groupedMap.entries
@@ -314,7 +316,7 @@ class APIController extends GetxController {
       groupedMap.forEach((pin, presenceList) {
         List<PresenceModel> presenceDates = [];
 
-        presenceList.forEach((presence) {
+        for (var presence in presenceList) {
           List<ScanInDayModel> scans = [];
 
           presence['scanInDay'].forEach((scan) {
@@ -325,7 +327,7 @@ class APIController extends GetxController {
             date: presence['date'],
             scanInDay: scans,
           ));
-        });
+        }
 
         presenceModels.add(PresensiKepgModel(
           pin: pin,
@@ -358,9 +360,9 @@ class APIController extends GetxController {
                 .collection('Presensi')
                 .doc(
                   hour >= 6 && hour <= 8
-                      ? datePresensi + ' Masuk'
+                      ? '$datePresensi Masuk'
                       : hour >= 9 && hour <= 17
-                          ? datePresensi + ' Keluar'
+                          ? '$datePresensi Keluar'
                           : datePresensi,
                 );
             final checkData = await scanlogPegawai.get();

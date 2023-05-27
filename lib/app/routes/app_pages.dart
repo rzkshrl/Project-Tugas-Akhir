@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:get/get.dart';
 
 import '../modules/beranda_mobile/bindings/beranda_mobile_binding.dart';
@@ -48,7 +50,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () => HomeView(),
+      page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -63,7 +65,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.RIWAYAT_PRESENSI,
-      page: () => RiwayatPresensiView(),
+      page: () => const RiwayatPresensiView(),
       binding: RiwayatPresensiBinding(),
     ),
     GetPage(

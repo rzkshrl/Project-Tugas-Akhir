@@ -1,10 +1,11 @@
+// ignore_for_file: invalid_use_of_protected_member, unnecessary_cast
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
-import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -32,7 +33,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -66,7 +67,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -164,7 +165,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                                     Blue1.withOpacity(0.5),
                                 endRangeSelectionColor: Blue1.withOpacity(0.5),
                                 monthViewSettings:
-                                    DateRangePickerMonthViewSettings(
+                                    const DateRangePickerMonthViewSettings(
                                   firstDayOfWeek: 1,
                                 ),
                                 selectionMode:

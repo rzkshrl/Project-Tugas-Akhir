@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
@@ -7,7 +9,6 @@ import '../theme/textstyle.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import '../theme/theme.dart';
-import 'package:intl/intl.dart';
 import 'package:project_tugas_akhir/app/data/models/firestorejamkerjamodel.dart';
 
 import 'dialogTextField.dart';
@@ -20,31 +21,31 @@ class JamKerjaDTS extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    JamKerjaModel data = jamKerjaList[index];
+    JamKerjaModel? data = jamKerjaList[index];
     return DataRow(
       cells: [
         DataCell(Text(
-          data != null ? "${data.nama}" : "-",
+          "${data.nama}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.kode}" : "-",
+          "${data.kode}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.jadwalMasuk}" : "-",
+          "${data.jadwalMasuk}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.jadwalKeluar}" : "-",
+          "${data.jadwalKeluar}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.terlambat}" : "-",
+          "${data.terlambat}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null ? "${data.pulangLebihAwal}" : "-",
+          "${data.pulangLebihAwal}",
           style: getTextTable(Get.context!),
         )),
         DataCell(IconButton(

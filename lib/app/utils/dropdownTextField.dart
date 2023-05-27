@@ -1,7 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
@@ -79,8 +80,8 @@ Widget dropdownNormalField(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 6),
                     ),
                     Flexible(
                       child: Container(
@@ -88,7 +89,7 @@ Widget dropdownNormalField(
                             color: light,
                             boxShadow: [
                               BoxShadow(
-                                  offset: Offset(0, 0.5),
+                                  offset: const Offset(0, 0.5),
                                   blurRadius: 1,
                                   color: dark.withOpacity(0.5))
                             ],
@@ -137,7 +138,7 @@ Widget dropdownNormalField2(
             // key: _divisi,
             autoValidateMode: AutovalidateMode.onUserInteraction,
             validator: textC.normalValidator,
-            clearButtonProps: ClearButtonProps(isVisible: false),
+            clearButtonProps: const ClearButtonProps(isVisible: false),
             items: items,
             itemAsString: itemAsString,
             onChanged: onChanged,
@@ -177,8 +178,8 @@ Widget dropdownNormalField2(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 6),
                     ),
                     Flexible(
                       child: Container(
@@ -186,7 +187,7 @@ Widget dropdownNormalField2(
                             color: light,
                             boxShadow: [
                               BoxShadow(
-                                  offset: Offset(0, 0.5),
+                                  offset: const Offset(0, 0.5),
                                   blurRadius: 1,
                                   color: dark.withOpacity(0.5))
                             ],

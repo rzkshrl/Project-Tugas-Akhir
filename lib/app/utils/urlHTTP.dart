@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 String urlGetUserWithPaging = '/user/all/paging';
 String urlGetScanlogWithPaging = '/scanlog/all/paging';
 String urlGetNewScanlog = '/scanlog/new';

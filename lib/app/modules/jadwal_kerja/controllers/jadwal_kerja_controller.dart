@@ -1,17 +1,14 @@
-import 'package:checkbox_grouped/checkbox_grouped.dart';
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
-import '../../../data/models/firestorejadwalkerjamodel.dart';
 import '../../../theme/textstyle.dart';
 import '../../../utils/dialogDefault.dart';
 
 class JadwalKerjaController extends GetxController {
-  //TODO: Implement JadwalKerjaController
-
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final isChecked = false.obs;
@@ -35,11 +32,6 @@ class JadwalKerjaController extends GetxController {
       selectedDays.add(day);
     }
     selectedDays.refresh();
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
   }
 
   Future<void> addJadker(
@@ -79,15 +71,5 @@ class JadwalKerjaController extends GetxController {
     // });
     // isSuccess = await completer.future;
     // return isSuccess;
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 }

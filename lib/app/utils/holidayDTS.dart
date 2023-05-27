@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -16,18 +18,14 @@ class HolidayDTS extends DataTableSource {
   DataRow getRow(int index) {
     HolidayModel data = holidayList[index];
     var formatter = DateFormat('d MMMM yyyy', 'id-ID');
-    DateTime dateTime = DateTime.parse(data.date!);
     return DataRow(
       cells: [
         DataCell(Text(
-          data != null ? "${data.name}" : "-",
+          "${data.name}",
           style: getTextTable(Get.context!),
         )),
         DataCell(Text(
-          data != null
-              // ? "${data.date!}"
-              ? "${formatter.format(DateTime.parse("${data.date!}"))}"
-              : "-",
+          "${formatter.format(DateTime.parse("${data.date!}"))}",
           style: getTextTable(Get.context!),
         )),
         DataCell(IconButton(

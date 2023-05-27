@@ -1,10 +1,11 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 import '../../../data/models/devicemodel.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
   var currentIndex = 0.obs;
   changePage(int i) {
     currentIndex.value = i;

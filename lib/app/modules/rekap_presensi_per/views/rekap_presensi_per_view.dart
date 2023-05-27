@@ -9,7 +9,6 @@ import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
-import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_presensi_per_controller.dart';
@@ -25,7 +24,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -59,7 +58,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -128,7 +127,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: SingleChildScrollView(
+                child: const SingleChildScrollView(
                     // child: PaginatedDataTable2(
                     //   columns: [
                     //     DataColumn(label: Text("PIN")),

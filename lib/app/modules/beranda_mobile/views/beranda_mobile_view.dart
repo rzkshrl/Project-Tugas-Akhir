@@ -203,7 +203,7 @@ class BerandaMobileView extends GetView<BerandaMobileController> {
               ),
               ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: 5,
                   padding: EdgeInsets.only(top: 1.h),
                   itemBuilder: (context, index) {

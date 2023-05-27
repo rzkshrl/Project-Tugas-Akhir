@@ -1,27 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/controller/api_controller.dart';
-import 'package:project_tugas_akhir/app/data/models/allscanlogmodel.dart';
 import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
-import 'package:project_tugas_akhir/app/utils/ScanlogDataTableSource.dart';
 import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
-import 'package:project_tugas_akhir/app/utils/loading.dart';
-import 'package:responsive_framework/responsive_framework.dart';
-import 'package:responsive_framework/responsive_value.dart' as rspnsvlue;
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
 import '../../../routes/app_pages.dart';
-import '../../../utils/appBar.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/riwayat_presensi_controller.dart';
 
@@ -37,7 +27,7 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -71,7 +61,7 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -144,6 +134,7 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                     stream: controller.firestoreKepegawaianList,
                     builder: (context, snap) {
                       final kepegawaianList =
+                          // ignore: unnecessary_cast
                           snap.data! as List<KepegawaianModel>;
                       return ListView.builder(
                           itemCount: kepegawaianList.length,
@@ -161,47 +152,6 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                             );
                           });
                     }),
-                // child: StreamBuilder(
-                //   stream: controller.firestoreKepegawaianList,
-                //   builder: (context, snapshot) {
-                //     if (!snapshot.hasData) {
-                //       return LoadingView();
-                //     }
-                //     final kepegawaianList =
-                //         snapshot.data! as List<KepegawaianModel>;
-                //     int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-
-                //     return PaginatedDataTable2(
-                //       columns: [
-                //         DataColumn2(
-                //           label: Text('Nama'),
-                //           size: ColumnSize.M,
-                //         ),
-                //         DataColumn2(
-                //           label: Text('NIP/PEGID'),
-                //         ),
-                //         DataColumn2(
-                //           label: Text('PIN'),
-                //         ),
-                //         DataColumn(
-                //           label: Text('Ubah'),
-                //         ),
-                //       ],
-                //       horizontalMargin: 20,
-                //       checkboxHorizontalMargin: 12,
-                //       columnSpacing: 20,
-                //       wrapInCard: false,
-                //       minWidth: 950,
-                //       renderEmptyRowsInTheEnd: false,
-                //       source: ScanlogDTS(kepegawaianList),
-                //       onRowsPerPageChanged: (value) {
-                //         _rowsPerPage = value!;
-                //       },
-                //       initialFirstRowIndex: 0,
-                //       rowsPerPage: _rowsPerPage,
-                //     );
-                //   },
-                // )
               )
             ],
           ),

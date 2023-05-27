@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -6,11 +7,9 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
-import '../../../utils/appBar.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
@@ -21,14 +20,13 @@ class JadwalKerjaView extends GetView<JadwalKerjaController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
-    final apiC = Get.put(APIController(context1: context));
     final c = Get.put(JadwalKerjaController());
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -62,7 +60,7 @@ class JadwalKerjaView extends GetView<JadwalKerjaController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -99,7 +97,10 @@ class JadwalKerjaView extends GetView<JadwalKerjaController> {
                           context,
                           btnDefaultIcon1(10.w, Blue4, IconlyLight.tick_square,
                               Yellow1, "Kirim", getTextBtnAction(context), () {
-                            print(c.selectedDays);
+                            if (kDebugMode) {
+                              print(c.selectedDays);
+                            }
+
                             if (textC.namaJadwalKerjaKey.value.currentState!.validate() &&
                                 textC.kodeJadwalKerjaKey.value.currentState!
                                     .validate() &&
@@ -122,7 +123,7 @@ class JadwalKerjaView extends GetView<JadwalKerjaController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: SingleChildScrollView(
+                child: const SingleChildScrollView(
                     // child: PaginatedDataTable2(
                     //   columns: [
                     //     DataColumn(label: Text("PIN")),

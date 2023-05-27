@@ -1,8 +1,8 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'package:get/get.dart';
 
 class RekapPresensiPerController extends GetxController {
-  //TODO: Implement RekapPresensiPerController
-
   final count = 0.obs;
   @override
   void onInit() {

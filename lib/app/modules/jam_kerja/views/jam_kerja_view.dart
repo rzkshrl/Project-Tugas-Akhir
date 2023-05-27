@@ -9,12 +9,11 @@ import 'package:project_tugas_akhir/app/utils/jamKerjaDTS.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../data/models/firestorejamkerjamodel.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
-import '../../../utils/appBar.dart';
+
 import '../../../utils/btnDefault.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
@@ -25,14 +24,14 @@ class JamKerjaView extends GetView<JamKerjaController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
-    final apiC = Get.put(APIController(context1: context));
+
     final c = Get.put(JamKerjaController());
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
       drawerScrimColor: light.withOpacity(0.6),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: light,
           automaticallyImplyLeading: false,
@@ -66,7 +65,7 @@ class JamKerjaView extends GetView<JamKerjaController> {
                     child: IconButton(
                       color: Blue1,
                       onPressed: () => authC.logout(),
-                      icon: Icon(IconlyLight.logout),
+                      icon: const Icon(IconlyLight.logout),
                       iconSize: 30,
                     ),
                   ),
@@ -170,10 +169,10 @@ class JamKerjaView extends GetView<JamKerjaController> {
                     stream: c.firestoreJamKerjaList,
                     builder: (context, snap) {
                       if (!snap.hasData) {
-                        return LoadingView();
+                        return const LoadingView();
                       }
                       final jamKerjaList = snap.data! as List<JamKerjaModel>;
-                      int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+                      int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
                       return PaginatedDataTable2(
                           columns: [
                             DataColumn2(
@@ -239,10 +238,10 @@ class JamKerjaView extends GetView<JamKerjaController> {
                           minWidth: 950,
                           renderEmptyRowsInTheEnd: false,
                           onRowsPerPageChanged: (value) {
-                            _rowsPerPage = value!;
+                            rowsPerPage = value!;
                           },
                           initialFirstRowIndex: 0,
-                          rowsPerPage: _rowsPerPage,
+                          rowsPerPage: rowsPerPage,
                           source: JamKerjaDTS(jamKerjaList));
                     }),
               )

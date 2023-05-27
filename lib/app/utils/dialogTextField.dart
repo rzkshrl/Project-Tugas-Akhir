@@ -1,8 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
-import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
 import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:project_tugas_akhir/app/utils/timepickerC.dart';
@@ -20,7 +20,7 @@ Widget dialogTextFieldSevenField(
   return AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    content: Container(
+    content: SizedBox(
       width: 120.h,
       height: 90.h,
       child: Column(
@@ -179,7 +179,7 @@ Widget dialogTextJadwalKerja(BuildContext context, Widget btnAction) {
   return AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    content: Container(
+    content: SizedBox(
       width: 120.h,
       height: 90.h,
       child: Column(
@@ -278,20 +278,20 @@ Widget dialogTextJadwalKerja(BuildContext context, Widget btnAction) {
                     SizedBox(
                       height: 1.5.h,
                     ),
-                    Container(
+                    SizedBox(
                       width: 15.4.w,
                       height: 30.h,
                       child: StatefulBuilder(builder: (context, setState) {
                         return ListView.builder(
                           itemCount: dayPickC.daysOfWeek.length,
                           shrinkWrap: true,
-                          padding: EdgeInsets.only(bottom: 0),
+                          padding: const EdgeInsets.only(bottom: 0),
                           itemBuilder: (context, index) {
                             final day = dayPickC.daysOfWeek[index];
                             final isChecked =
                                 dayPickC.selectedDays.contains(day);
                             return Padding(
-                              padding: EdgeInsets.only(bottom: 0),
+                              padding: const EdgeInsets.only(bottom: 0),
                               child: Theme(
                                 data: Theme.of(context).copyWith(
                                   unselectedWidgetColor:
@@ -365,7 +365,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
   return AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    content: Container(
+    content: SizedBox(
       width: 120.h,
       height: 90.h,
       child: Column(
@@ -452,19 +452,19 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
+                SizedBox(
                   width: 12.4.w,
                   height: 30.h,
                   child: StatefulBuilder(builder: (context, setState) {
                     return ListView.builder(
                       itemCount: dayPickC.daysOfWeek.length,
                       shrinkWrap: true,
-                      padding: EdgeInsets.only(bottom: 0),
+                      padding: const EdgeInsets.only(bottom: 0),
                       itemBuilder: (context, index) {
                         final day = dayPickC.daysOfWeek[index];
                         final isChecked = dayPickC.isDaySelected(day);
                         return Padding(
-                          padding: EdgeInsets.only(bottom: 0),
+                          padding: const EdgeInsets.only(bottom: 0),
                           child: Theme(
                             data: Theme.of(context).copyWith(
                               unselectedWidgetColor:
@@ -499,7 +499,7 @@ Widget dialogTextJamKerja(BuildContext context, Widget btnAction) {
                     );
                   }),
                 ),
-                Container(
+                SizedBox(
                   width: 40.4.w,
                   height: 30.h,
                   child: Column(
@@ -747,7 +747,7 @@ Widget dialogAPILibur(BuildContext context, Widget btnAction) {
   return AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    content: Container(
+    content: SizedBox(
       width: 350,
       height: 274.07,
       child: Column(

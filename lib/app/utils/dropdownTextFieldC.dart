@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_overrides
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -26,16 +28,6 @@ class DropdownTextFieldController extends GetxController {
 
   @override
   void onInit() {
-    setJadker(String jadker) {
-      jadkerCon.value = jadker;
-      // log(divisiCon.value);
-    }
-
-    setBidang(String bidang) {
-      bidangCon.value = bidang;
-      // log(divisiCon.value);
-    }
-
     super.onInit();
   }
 

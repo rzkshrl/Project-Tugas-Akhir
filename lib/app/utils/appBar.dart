@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -5,7 +7,6 @@ import 'package:iconly/iconly.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controller/auth_controller.dart';
-import '../theme/textstyle.dart';
 import '../theme/theme.dart';
 
 Widget rowAppBarAdmin(BuildContext context) {
@@ -30,7 +31,7 @@ Widget rowAppBarAdmin(BuildContext context) {
         child: IconButton(
           color: Blue1,
           onPressed: () => authC.logout(),
-          icon: Icon(IconlyLight.logout),
+          icon: const Icon(IconlyLight.logout),
           iconSize: 30,
         ),
       ),

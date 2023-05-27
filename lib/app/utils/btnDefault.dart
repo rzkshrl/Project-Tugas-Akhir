@@ -1,12 +1,9 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_framework/responsive_value.dart' as rspnsvlue;
 import 'package:sizer/sizer.dart';
-
-import '../theme/textstyle.dart';
-import '../theme/theme.dart';
 
 Widget btnDefaultIcon1(
     double width,
@@ -36,7 +33,7 @@ Widget btnDefaultIcon1(
             width: 0.6.w,
           ),
           ResponsiveVisibility(
-            hiddenWhen: [
+            hiddenWhen: const [
               rspnsvlue.Condition.smallerThan(name: DESKTOP),
               rspnsvlue.Condition.smallerThan(name: MOBILE),
               rspnsvlue.Condition.equals(name: MOBILE),
@@ -70,7 +67,7 @@ Widget textButton1(IconData icon, Color iconColor, String textBtn,
           width: 0.6.w,
         ),
         ResponsiveVisibility(
-          hiddenWhen: [
+          hiddenWhen: const [
             rspnsvlue.Condition.smallerThan(name: DESKTOP),
             rspnsvlue.Condition.smallerThan(name: MOBILE),
             rspnsvlue.Condition.equals(name: MOBILE),

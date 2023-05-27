@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -13,7 +10,7 @@ import 'package:sizer/sizer.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
-import '../../../utils/textfieldC.dart';
+
 import '../controllers/login_controller.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 

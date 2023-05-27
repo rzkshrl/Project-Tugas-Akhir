@@ -15,9 +15,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationDrawerController());
-    final bodyHeight = MediaQuery.of(context).size.height;
-    final bodyWidth = MediaQuery.of(context).size.width;
-    final isSmallScreen = MediaQuery.of(context).size.width < 1200;
+
     if (kIsWeb) {
       return Drawer(
         width: 350,
@@ -26,7 +24,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
         child: SafeArea(
             child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 43,
             ),
             Text(
@@ -43,10 +41,10 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                         "Beranda/Riwayat Presensi",
                         style: getTextItemMenu(context),
                       ),
-                      padding: EdgeInsets.only(left: 16),
+                      padding: const EdgeInsets.only(left: 16),
                       icon: IconlyLight.document,
                       iconColor: Yellow1,
-                      visualDensity: VisualDensity(vertical: 3),
+                      visualDensity: const VisualDensity(vertical: 3),
                       iconSize: 26,
                       tileColor: Get.currentRoute == Routes.RIWAYAT_PRESENSI
                           ? Blue2
@@ -55,7 +53,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                   Obx(
                     () => ExpansionTile(
                       trailing: Padding(
-                        padding: EdgeInsets.only(right: 16),
+                        padding: const EdgeInsets.only(right: 16),
                         child: AnimatedRotation(
                           turns: controller.isExpanded.value ||
                                   Get.currentRoute ==
@@ -65,7 +63,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                   Get.currentRoute == Routes.REKAP_SCANLOG_PER
                               ? .5
                               : 0,
-                          duration: Duration(milliseconds: 500),
+                          duration: const Duration(milliseconds: 500),
                           child: FaIcon(
                             FontAwesomeIcons.chevronDown,
                             color: controller.isExpanded.value ||
@@ -90,16 +88,16 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                           ? true
                           : false,
                       title: Padding(
-                        padding: EdgeInsets.only(left: 4.5),
+                        padding: const EdgeInsets.only(left: 4.5),
                         child: Text(
                           "Rekapitulasi",
                           style: getTextItemMenu(context),
                         ),
                       ),
-                      leading: Container(
+                      leading: SizedBox(
                         height: double.infinity,
                         child: Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             left: 16,
                           ),
                           child: Icon(
@@ -118,7 +116,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                               Get.currentRoute == Routes.REKAP_SCANLOG_PER
                           ? Blue2
                           : Blue1,
-                      childrenPadding: EdgeInsets.only(left: 57.5),
+                      childrenPadding: const EdgeInsets.only(left: 57.5),
                       children: [
                         buildDrawerItemSubMenu(
                             text: Text(
@@ -128,7 +126,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                       ? getTextItemSubMenu(context)
                                       : getTextItemSubMenuDisabled(context),
                             ),
-                            visualDensity: VisualDensity(vertical: -2),
+                            visualDensity: const VisualDensity(vertical: -2),
                             onTap: () => navigate(1)),
                         buildDrawerItemSubMenu(
                             text: Text(
@@ -138,7 +136,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                       ? getTextItemSubMenu(context)
                                       : getTextItemSubMenuDisabled(context),
                             ),
-                            visualDensity: VisualDensity(vertical: -2),
+                            visualDensity: const VisualDensity(vertical: -2),
                             onTap: () => navigate(2)),
                         buildDrawerItemSubMenu(
                             text: Text(
@@ -148,7 +146,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                       ? getTextItemSubMenu(context)
                                       : getTextItemSubMenuDisabled(context),
                             ),
-                            visualDensity: VisualDensity(vertical: -2),
+                            visualDensity: const VisualDensity(vertical: -2),
                             onTap: () => navigate(3)),
                       ],
                     ),
@@ -158,10 +156,10 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                         "Data Kepegawaian",
                         style: getTextItemMenu(context),
                       ),
-                      padding: EdgeInsets.only(left: 16),
+                      padding: const EdgeInsets.only(left: 16),
                       icon: IconlyLight.user_1,
                       iconColor: Yellow1,
-                      visualDensity: VisualDensity(vertical: 3),
+                      visualDensity: const VisualDensity(vertical: 3),
                       iconSize: 26,
                       tileColor: Get.currentRoute == Routes.DATA_PEGAWAI
                           ? Blue2
@@ -170,7 +168,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                   Obx(
                     () => ExpansionTile(
                       trailing: Padding(
-                        padding: EdgeInsets.only(right: 16),
+                        padding: const EdgeInsets.only(right: 16),
                         child: AnimatedRotation(
                           turns: controller.isExpanded1.value ||
                                   Get.currentRoute == Routes.JADWAL_KERJA ||
@@ -179,7 +177,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                   Get.currentRoute == Routes.HARI_LIBUR
                               ? .5
                               : 0,
-                          duration: Duration(milliseconds: 500),
+                          duration: const Duration(milliseconds: 500),
                           child: FaIcon(
                             FontAwesomeIcons.chevronDown,
                             color: controller.isExpanded1.value ||
@@ -204,7 +202,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                               ? true
                               : false,
                       title: Padding(
-                        padding: EdgeInsets.only(left: 4.5),
+                        padding: const EdgeInsets.only(left: 4.5),
                         child: Text(
                           "Pengaturan",
                           style: getTextItemMenu(context),
@@ -212,10 +210,10 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                       ),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
-                      leading: Container(
+                      leading: SizedBox(
                         height: double.infinity,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 16),
+                          padding: const EdgeInsets.only(left: 16),
                           child: Icon(
                             IconlyLight.setting,
                             color: Yellow1,
@@ -231,7 +229,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                   Get.currentRoute == Routes.HARI_LIBUR
                               ? Blue2
                               : Blue1,
-                      childrenPadding: EdgeInsets.only(left: 56.5),
+                      childrenPadding: const EdgeInsets.only(left: 56.5),
                       children: [
                         buildDrawerItemSubMenu(
                             text: Text(
@@ -240,7 +238,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                   ? getTextItemSubMenu(context)
                                   : getTextItemSubMenuDisabled(context),
                             ),
-                            visualDensity: VisualDensity(vertical: -2),
+                            visualDensity: const VisualDensity(vertical: -2),
                             onTap: () => navigate(5)),
                         buildDrawerItemSubMenu(
                             text: Text(
@@ -249,7 +247,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                   ? getTextItemSubMenu(context)
                                   : getTextItemSubMenuDisabled(context),
                             ),
-                            visualDensity: VisualDensity(vertical: -2),
+                            visualDensity: const VisualDensity(vertical: -2),
                             onTap: () => navigate(6)),
                         buildDrawerItemSubMenu(
                             text: Text(
@@ -258,7 +256,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                   ? getTextItemSubMenu(context)
                                   : getTextItemSubMenuDisabled(context),
                             ),
-                            visualDensity: VisualDensity(vertical: -2),
+                            visualDensity: const VisualDensity(vertical: -2),
                             onTap: () => navigate(7)),
                       ],
                     ),
@@ -273,10 +271,10 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
       // WELCOME SCREEN MOBILE
       return Scaffold(
         appBar: AppBar(
-          title: Text('HomeView'),
+          title: const Text('HomeView'),
           centerTitle: true,
         ),
-        body: Center(
+        body: const Center(
           child: Text(
             'HALO Ini MOBILE',
             style: TextStyle(fontSize: 20),
@@ -296,7 +294,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
       required Color? tileColor,
       required VoidCallback onTap}) {
     return ListTile(
-      leading: Container(
+      leading: SizedBox(
         height: double.infinity,
         child: Padding(
           padding: padding,

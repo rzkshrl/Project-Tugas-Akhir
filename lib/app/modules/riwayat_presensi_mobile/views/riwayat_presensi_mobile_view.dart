@@ -14,7 +14,7 @@ class RiwayatPresensiMobileView
         title: const Text('RiwayatPresensiMobileView'),
         centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'RiwayatPresensiMobileView is working',
           style: TextStyle(fontSize: 20),

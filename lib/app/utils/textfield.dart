@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -26,7 +25,7 @@ Widget textformNormalWeb(
     Color focusedBorderColor) {
   return Form(
     key: key,
-    child: Container(
+    child: SizedBox(
       width: 344,
       height: 65,
       child: TextFormField(
@@ -40,7 +39,7 @@ Widget textformNormalWeb(
             helperText: ' ',
             helperStyle: getTextErrorFormLogin(context),
             isDense: true,
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             prefixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,
@@ -83,7 +82,7 @@ Widget textformDatePicker(
     TextEditingController? controller, void Function()? onTap) {
   return Form(
     key: textC.datepickerKey.value,
-    child: Container(
+    child: SizedBox(
       width: 344,
       height: 65,
       child: TextFormField(
@@ -96,7 +95,7 @@ Widget textformDatePicker(
             helperText: ' ',
             helperStyle: getTextErrorFormLogin(Get.context!),
             isDense: true,
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             suffixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,
@@ -106,7 +105,7 @@ Widget textformDatePicker(
                 color: Blue1,
                 splashRadius: 1,
                 iconSize: 20,
-                icon: Icon(IconlyLight.calendar),
+                icon: const Icon(IconlyLight.calendar),
                 onPressed: onTap,
               ),
             ),
@@ -139,7 +138,7 @@ Widget textformTimePicker(
     Key key, TextEditingController? controller, void Function()? onTap) {
   return Form(
     key: key,
-    child: Container(
+    child: SizedBox(
       width: 124,
       height: 50,
       child: TextFormField(
@@ -153,7 +152,7 @@ Widget textformTimePicker(
             helperText: ' ',
             helperStyle: getTextErrorFormLogin(Get.context!),
             isDense: true,
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             suffixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,
@@ -163,7 +162,7 @@ Widget textformTimePicker(
                 color: light,
                 splashRadius: 1,
                 iconSize: 20,
-                icon: Icon(IconlyLight.time_square),
+                icon: const Icon(IconlyLight.time_square),
                 onPressed: onTap,
               ),
             ),
@@ -209,7 +208,7 @@ Widget textformDialogWeb(
     bool enabled) {
   return Form(
     key: key,
-    child: Container(
+    child: SizedBox(
       width: width,
       height: 9.5.h,
       child: TextFormField(
@@ -224,7 +223,7 @@ Widget textformDialogWeb(
             helperText: ' ',
             helperStyle: getTextErrorFormLogin(context),
             isDense: true,
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             prefixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,
@@ -274,7 +273,7 @@ Widget textformPassWeb(
   return Form(
     key: textC.passWebKey.value,
     child: Obx(
-      () => Container(
+      () => SizedBox(
         width: 344,
         height: 65,
         child: TextFormField(
@@ -289,7 +288,7 @@ Widget textformPassWeb(
             helperText: ' ',
             helperStyle: getTextErrorFormLogin(context),
             isDense: true,
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             prefixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,
@@ -360,7 +359,7 @@ Widget textformNormalMobile(
     Color focusedBorderColor) {
   return Form(
     key: key,
-    child: Container(
+    child: SizedBox(
       width: 254,
       height: 70,
       child: TextFormField(
@@ -381,7 +380,7 @@ Widget textformNormalMobile(
             helperText: ' ',
             helperStyle: getTextErrorFormLoginMobile(context),
             isDense: true,
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             prefixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,
@@ -431,7 +430,7 @@ Widget textformPassMobile(
   return Form(
     key: textC.passMobileKey.value,
     child: Obx(
-      () => Container(
+      () => SizedBox(
         width: 254,
         height: 70,
         child: TextFormField(
@@ -453,7 +452,7 @@ Widget textformPassMobile(
             helperText: ' ',
             helperStyle: getTextErrorFormLoginMobile(context),
             isDense: true,
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             prefixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,

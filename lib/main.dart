@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +20,7 @@ import 'app/theme/textstyle.dart';
 import 'app/utils/dialogDefault.dart';
 import 'firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
+// ignore: depend_on_referenced_packages
 import 'package:page_transition/page_transition.dart';
 
 Future<void> main() async {
@@ -46,21 +49,25 @@ class ProjectTugasAkhir extends StatelessWidget {
           }
           if (kIsWeb) {
             return FutureBuilder(
-                future: Future.delayed(Duration(seconds: 0)),
+                future: Future.delayed(const Duration(seconds: 0)),
                 builder: (context, snapshot) {
                   if (snap.connectionState == ConnectionState.waiting) {
-                    return LoadingView();
+                    return const LoadingView();
                   }
                   return Sizer(builder: (context, orientation, screenType) {
                     return GetMaterialApp(
                       builder: (context, child) => ResponsiveWrapper.builder(
                           BouncingScrollWrapper.builder(context, child!),
                           breakpoints: [
-                            ResponsiveBreakpoint.resize(240, name: MOBILE),
-                            ResponsiveBreakpoint.resize(650, name: TABLET),
-                            ResponsiveBreakpoint.resize(900, name: TABLET),
-                            ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-                            ResponsiveBreakpoint.resize(2468, name: '4K')
+                            const ResponsiveBreakpoint.resize(240,
+                                name: MOBILE),
+                            const ResponsiveBreakpoint.resize(650,
+                                name: TABLET),
+                            const ResponsiveBreakpoint.resize(900,
+                                name: TABLET),
+                            const ResponsiveBreakpoint.resize(1000,
+                                name: DESKTOP),
+                            const ResponsiveBreakpoint.resize(2468, name: '4K')
                           ]),
                       title: "MonitorPresence MIM Jetis Lor",
                       theme: ThemeData(
@@ -82,7 +89,7 @@ class ProjectTugasAkhir extends StatelessWidget {
           } else {
             return Sizer(builder: (context, orientation, screenType) {
               return FutureBuilder(
-                  future: Future.delayed(Duration(seconds: 0)),
+                  future: Future.delayed(const Duration(seconds: 0)),
                   builder: (context, snap) {
                     if (snap.connectionState == ConnectionState.done) {
                       return AnnotatedRegion(
@@ -97,12 +104,16 @@ class ProjectTugasAkhir extends StatelessWidget {
                                   BouncingScrollWrapper.builder(
                                       context, child!),
                                   breakpoints: [
-                                ResponsiveBreakpoint.resize(240, name: MOBILE),
-                                ResponsiveBreakpoint.resize(650, name: TABLET),
-                                ResponsiveBreakpoint.resize(900, name: TABLET),
-                                ResponsiveBreakpoint.resize(1000,
+                                const ResponsiveBreakpoint.resize(240,
+                                    name: MOBILE),
+                                const ResponsiveBreakpoint.resize(650,
+                                    name: TABLET),
+                                const ResponsiveBreakpoint.resize(900,
+                                    name: TABLET),
+                                const ResponsiveBreakpoint.resize(1000,
                                     name: DESKTOP),
-                                ResponsiveBreakpoint.resize(2468, name: '4K')
+                                const ResponsiveBreakpoint.resize(2468,
+                                    name: '4K')
                               ]),
                           title: "MonitorPresence MIM Jetis Lor",
                           theme: ThemeData(
@@ -118,7 +129,7 @@ class ProjectTugasAkhir extends StatelessWidget {
                       return FutureBuilder(
                           future: authC.firstInitialized(),
                           builder: (context, snap) {
-                            return LoadingView();
+                            return const LoadingView();
                           });
                     }
                   });
@@ -140,11 +151,11 @@ class SplashScreen extends StatelessWidget {
           statusBarColor: light,
         ),
         child: AnimatedSplashScreen(
-          animationDuration: Duration(milliseconds: 900),
+          animationDuration: const Duration(milliseconds: 900),
           duration: 1200,
           splash: 'assets/icons/logo_splash.png',
           backgroundColor: light,
-          nextScreen: HomeView(),
+          nextScreen: const HomeView(),
           nextRoute: authC.isAuth.isTrue ? Routes.HOME : Routes.LOGIN,
           splashIconSize: 255,
           splashTransition: SplashTransition.fadeTransition,

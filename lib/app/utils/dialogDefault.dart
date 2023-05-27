@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -15,7 +17,7 @@ Widget dialogAlertOnly(
   return Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    child: Container(
+    child: SizedBox(
       width: 350,
       height: 274.07,
       child: Column(
@@ -33,7 +35,7 @@ Widget dialogAlertOnly(
               size: 55,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Text(
@@ -41,7 +43,7 @@ Widget dialogAlertOnly(
             textAlign: TextAlign.center,
             style: textAlert,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -60,7 +62,7 @@ Widget dialogAlertOnlySingleMsg(
   return Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    child: Container(
+    child: SizedBox(
       width: 350,
       height: 274.07,
       child: Column(
@@ -78,7 +80,7 @@ Widget dialogAlertOnlySingleMsg(
               size: 55,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Text(
@@ -97,7 +99,7 @@ Widget dialogAlertOnlySingleMsgAnimation(
   return Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    child: Container(
+    child: SizedBox(
       width: 350,
       height: 274.07,
       child: Column(
@@ -111,7 +113,7 @@ Widget dialogAlertOnlySingleMsgAnimation(
                 borderRadius: BorderRadius.circular(12)),
             child: Lottie.asset(animationLink, height: 55),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Text(
@@ -134,7 +136,7 @@ Widget dialogAlertBtnSingleMsgAnimation(
   return Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    child: Container(
+    child: SizedBox(
       width: 350,
       height: 374.07,
       child: Column(
@@ -148,7 +150,7 @@ Widget dialogAlertBtnSingleMsgAnimation(
                 borderRadius: BorderRadius.circular(12)),
             child: Lottie.asset(animationLink, height: 55),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Text(
@@ -156,7 +158,7 @@ Widget dialogAlertBtnSingleMsgAnimation(
             textAlign: TextAlign.center,
             style: textAlert,
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Container(
@@ -191,7 +193,7 @@ Widget dialogAlertBtn(
   return Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    child: Container(
+    child: SizedBox(
       width: 350,
       height: 336,
       child: Column(
@@ -209,7 +211,7 @@ Widget dialogAlertBtn(
               size: 55,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Text(
@@ -217,7 +219,7 @@ Widget dialogAlertBtn(
             textAlign: TextAlign.center,
             style: textAlert,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -225,7 +227,7 @@ Widget dialogAlertBtn(
             textAlign: TextAlign.center,
             style: textAlertSub,
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Container(
@@ -265,7 +267,7 @@ Widget dialogAlertDualBtn(
   return Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
-    child: Container(
+    child: SizedBox(
       width: 350,
       height: 336,
       child: Column(
@@ -283,7 +285,7 @@ Widget dialogAlertDualBtn(
               size: 55,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Text(
@@ -291,7 +293,7 @@ Widget dialogAlertDualBtn(
             textAlign: TextAlign.center,
             style: textAlert,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -299,7 +301,7 @@ Widget dialogAlertDualBtn(
             textAlign: TextAlign.center,
             style: textAlertSub,
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Row(
@@ -318,7 +320,7 @@ Widget dialogAlertDualBtn(
                           style: textAlertBtn2,
                         ),
                       ))),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
               Container(

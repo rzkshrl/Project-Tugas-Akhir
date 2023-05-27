@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, unnecessary_overrides
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,8 +13,6 @@ import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../theme/textstyle.dart';
 
 class DataPegawaiController extends GetxController {
-  //TODO: Implement DataPegawaiController
-
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool isSuccess = false;
   Completer<bool> completer = Completer<bool>();
