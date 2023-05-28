@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:intl/intl.dart';
 import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
@@ -28,6 +29,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
     final controller = Get.put(RekapScanlogPerController());
     cDropdown.pinRekapC.clear();
     textC.datepickerC.clear();
+    final dateFormatter = DateFormat('MMMM yyyy', 'id-ID');
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),
@@ -98,20 +100,27 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                     Row(
                       children: [
                         Text(
-                          'November 2022',
+                          controller.start == null
+                              ? dateFormatter.format(controller.end.value)
+                              : dateFormatter.format(controller.start!),
                           style: getTextSubHeader(context),
                         ),
                         Text(
-                          ' / ',
+                          ' - ',
                           style: getTextSubHeader(context),
                         ),
                         Text(
-                          'Februari 2023',
+                          controller.end.value == DateTime.now()
+                              ? '--'
+                              : dateFormatter.format(controller.end.value),
                           style: getTextSubHeader(context),
                         ),
                       ],
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 2.h,
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 1.8.w),
@@ -120,7 +129,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                     children: [
                       dropdownNormalField2(
                           context,
-                          16.w,
+                          18.w,
                           cDropdown.pinRekapKey.value,
                           (value) {
                             if (value != null) {
@@ -133,7 +142,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                             return controller.namaList[index];
                           },
                           null,
-                          'Pilih PIN Pegawai',
+                          'Pilih Pegawai...',
                           Colors.transparent,
                           dark,
                           Blue1,
@@ -201,33 +210,55 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                       SizedBox(
                         width: 1.5.w,
                       ),
-                      btnDefaultIcon1(13.w, Blue1, IconlyLight.swap, Yellow1,
-                          "Preview Rekap", getTextBtnAction(context), () {
-                        if (textC.datepickerKey.value.currentState!
-                                .validate() &&
-                            cDropdown.pinRekapKey.value.currentState!
-                                .validate()) {
-                          controller.previewPDF(cDropdown.pinRekapC.text);
-                        }
-                      }),
-                      SizedBox(
-                        width: 1.5.w,
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              btnDefaultIcon1(
+                                  13.w,
+                                  Blue1,
+                                  IconlyLight.swap,
+                                  Yellow1,
+                                  "Preview Rekap",
+                                  getTextBtnAction(context), () {
+                                if (textC.datepickerKey.value.currentState!
+                                        .validate() &&
+                                    cDropdown.pinRekapKey.value.currentState!
+                                        .validate()) {
+                                  controller
+                                      .previewPDF(cDropdown.pinRekapC.text);
+                                }
+                              }),
+                              SizedBox(
+                                width: 1.5.w,
+                              ),
+                              btnDefaultIcon1(
+                                  13.w,
+                                  Blue1,
+                                  IconlyLight.swap,
+                                  Yellow1,
+                                  "Unduh Rekap",
+                                  getTextBtnAction(context), () {
+                                if (textC.datepickerKey.value.currentState!
+                                        .validate() &&
+                                    cDropdown.pinRekapKey.value.currentState!
+                                        .validate()) {
+                                  controller.unduhPDF(cDropdown.pinRekapC.text);
+                                }
+                              }),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 4.h,
+                          ),
+                        ],
                       ),
-                      btnDefaultIcon1(13.w, Blue1, IconlyLight.swap, Yellow1,
-                          "Unduh Rekap", getTextBtnAction(context), () {
-                        if (textC.datepickerKey.value.currentState!
-                                .validate() &&
-                            cDropdown.pinRekapKey.value.currentState!
-                                .validate()) {
-                          controller.unduhPDF(cDropdown.pinRekapC.text);
-                        }
-                      }),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 3.h,
-                ),
+                // SizedBox(
+                //   height: 3.h,
+                // ),
                 controller.isClicked.value == false
                     ? Container(
                         decoration:

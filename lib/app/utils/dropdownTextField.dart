@@ -129,7 +129,7 @@ Widget dropdownNormalField2(
       children: [
         Container(
           width: width,
-          height: 7.3.h,
+          height: 12.3.h,
           decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(12),

@@ -83,8 +83,8 @@ Widget textformDatePicker(
   return Form(
     key: textC.datepickerKey.value,
     child: SizedBox(
-      width: 344,
-      height: 65,
+      width: 24.w,
+      height: 12.3.h,
       child: TextFormField(
         readOnly: true,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -118,7 +118,7 @@ Widget textformDatePicker(
             errorBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: errorBg, width: 1.8),
                 borderRadius: BorderRadius.circular(12),
-                gapPadding: 2),
+                gapPadding: 1),
             focusedErrorBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: error, width: 1.8),
                 borderRadius: BorderRadius.circular(12)),
