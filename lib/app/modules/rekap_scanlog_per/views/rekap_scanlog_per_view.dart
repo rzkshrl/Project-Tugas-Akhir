@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
+import 'package:project_tugas_akhir/app/utils/datePicker.dart';
 import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
@@ -18,6 +19,7 @@ import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/btnDefault.dart';
+import '../../../utils/dialogDefault.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_scanlog_per_controller.dart';
 
@@ -152,102 +154,81 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                       SizedBox(
                         width: 1.5.w,
                       ),
-                      textformDatePicker(
-                          controller.end.value.isAtSameMomentAs(DateTime.now())
-                              ? TextEditingController(text: '')
-                              : textC.datepickerC, () {
-                        Get.dialog(
-                          Dialog(
-                            child: Container(
-                              padding: EdgeInsets.all(1.h),
-                              height: 40.h,
-                              width: 20.w,
-                              // color: light,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: SfDateRangePicker(
-                                todayHighlightColor: Blue1,
-                                selectionColor: Blue1,
-                                rangeSelectionColor: Blue1.withOpacity(0.2),
-                                startRangeSelectionColor:
-                                    Blue1.withOpacity(0.5),
-                                endRangeSelectionColor: Blue1.withOpacity(0.5),
-                                monthViewSettings:
-                                    const DateRangePickerMonthViewSettings(
-                                  firstDayOfWeek: 1,
-                                ),
-                                selectionMode:
-                                    DateRangePickerSelectionMode.range,
-                                showActionButtons: true,
-                                cancelText: "Batal",
-                                confirmText: "OK",
-                                onCancel: () => Get.back(),
-                                onSubmit: (value) {
-                                  if (value != null) {
-                                    if ((value as PickerDateRange).endDate !=
-                                        null) {
-                                      controller.pickRangeDate(
-                                          value.startDate!, value.endDate!);
-                                      Get.back();
-                                    } else {
-                                      Get.defaultDialog(
-                                          title: 'Terjadi Kesalahan',
-                                          middleText:
-                                              'Pilih tanggal jangkauan\n(Senin-Sabtu, dsb)\n(tekan tanggal dua kali \nuntuk memilih tanggal yang sama)');
-                                    }
-                                  } else {
-                                    Get.defaultDialog(
-                                        title: 'Terjadi Kesalahan',
-                                        middleText: 'Tanggal tidak dipilih');
-                                  }
-                                },
-                              ),
-                            ),
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 1.h,
                           ),
-                        );
-                      }),
+                          textformDatePicker(
+                              controller.end.value
+                                      .isAtSameMomentAs(DateTime.now())
+                                  ? TextEditingController(text: '')
+                                  : textC.datepickerC, () {
+                            Get.dialog(datePickerDialog(
+                                DateRangePickerSelectionMode.range, (value) {
+                              if (value != null) {
+                                if ((value as PickerDateRange).endDate !=
+                                    null) {
+                                  controller.pickRangeDate(
+                                      value.startDate!, value.endDate!);
+                                  Get.back();
+                                } else {
+                                  Get.dialog(dialogAlertOnly(
+                                      IconlyLight.danger,
+                                      "Terjadi Kesalahan.",
+                                      "Pilih tanggal jangkauan\n(Senin-Sabtu, dsb)\n(tekan tanggal dua kali \nuntuk memilih tanggal yang sama)",
+                                      getTextAlert(context),
+                                      getTextAlertSub(context)));
+                                }
+                              } else {
+                                Get.dialog(dialogAlertOnly(
+                                    IconlyLight.danger,
+                                    "Terjadi Kesalahan.",
+                                    "Tanggal tidak dipilih.",
+                                    getTextAlert(context),
+                                    getTextAlertSub(context)));
+                              }
+                            }, null, null));
+                          }, 24.w, light, Blue1, dark, Blue1,
+                              getTextLogin(Get.context!)),
+                        ],
+                      ),
                       SizedBox(
                         width: 1.5.w,
                       ),
                       Column(
                         children: [
-                          Row(
-                            children: [
-                              btnDefaultIcon1(
-                                  13.w,
-                                  Blue1,
-                                  IconlyLight.swap,
-                                  Yellow1,
-                                  "Preview Rekap",
-                                  getTextBtnAction(context), () {
-                                if (textC.datepickerKey.value.currentState!
-                                        .validate() &&
-                                    cDropdown.pinRekapKey.value.currentState!
-                                        .validate()) {
-                                  controller
-                                      .previewPDF(cDropdown.pinRekapC.text);
-                                }
-                              }),
-                              SizedBox(
-                                width: 1.5.w,
-                              ),
-                              btnDefaultIcon1(
-                                  13.w,
-                                  Blue1,
-                                  IconlyLight.swap,
-                                  Yellow1,
-                                  "Unduh Rekap",
-                                  getTextBtnAction(context), () {
-                                if (textC.datepickerKey.value.currentState!
-                                        .validate() &&
-                                    cDropdown.pinRekapKey.value.currentState!
-                                        .validate()) {
-                                  controller.unduhPDF(cDropdown.pinRekapC.text);
-                                }
-                              }),
-                            ],
+                          btnDefaultIcon1(
+                              13.w,
+                              Blue1,
+                              IconlyLight.document,
+                              Yellow1,
+                              "Preview Rekap",
+                              getTextBtnAction(context), () {
+                            if (textC.datepickerKey.value.currentState!
+                                    .validate() &&
+                                cDropdown.pinRekapKey.value.currentState!
+                                    .validate()) {
+                              controller.previewPDF(cDropdown.pinRekapC.text);
+                            }
+                          }),
+                          SizedBox(
+                            height: 1.h,
                           ),
+                          btnDefaultIcon1(
+                              13.w,
+                              Blue1,
+                              IconlyLight.arrow_down,
+                              Yellow1,
+                              "Unduh Rekap",
+                              getTextBtnAction(context), () {
+                            if (textC.datepickerKey.value.currentState!
+                                    .validate() &&
+                                cDropdown.pinRekapKey.value.currentState!
+                                    .validate()) {
+                              controller.unduhPDF(cDropdown.pinRekapC.text);
+                            }
+                          }),
                           SizedBox(
                             height: 4.h,
                           ),
@@ -281,7 +262,11 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                                       },
                                       child: ListTile(
                                         title: Text(data.nama!),
+                                        titleTextStyle:
+                                            getTextTableData(context),
                                         subtitle: Text(data.pin!),
+                                        subtitleTextStyle:
+                                            getTextTableData(context),
                                       ),
                                     );
                                   });

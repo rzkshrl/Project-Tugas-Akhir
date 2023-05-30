@@ -115,11 +115,6 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                         "Refresh Data", getTextBtnAction(context), () {
                       apiC.getAllPresenceData(context);
                     }),
-                    SizedBox(
-                      width: 1.5.w,
-                    ),
-                    textButton1(IconlyLight.calendar, Blue1, "Filter Tanggal",
-                        getTextBtn(context), () {}),
                   ],
                 ),
               ),
@@ -147,7 +142,9 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                               },
                               child: ListTile(
                                 title: Text(data.nama!),
+                                titleTextStyle: getTextTableData(context),
                                 subtitle: Text(data.pin!),
+                                subtitleTextStyle: getTextTableData(context),
                               ),
                             );
                           });

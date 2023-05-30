@@ -114,7 +114,7 @@ Widget dropdownNormalField2(
     Key? key,
     void Function(String?)? onChanged,
     List<String> items,
-    String Function(String)? itemAsString,
+    String Function(String?)? itemAsString,
     IconData? prefixIcon,
     String hintText,
     Color containerColor,
@@ -129,7 +129,7 @@ Widget dropdownNormalField2(
       children: [
         Container(
           width: width,
-          height: 12.3.h,
+          height: 6.3.h,
           decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(12),
@@ -164,7 +164,7 @@ Widget dropdownNormalField2(
                       borderRadius: BorderRadius.circular(12),
                     ))),
             popupProps: PopupProps.menu(
-              constraints: BoxConstraints(maxHeight: 18.h),
+              constraints: BoxConstraints(maxHeight: 24.h),
               scrollbarProps:
                   ScrollbarProps(trackVisibility: true, trackColor: dark),
               fit: FlexFit.loose,

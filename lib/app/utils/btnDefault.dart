@@ -50,6 +50,54 @@ Widget btnDefaultIcon1(
   );
 }
 
+Widget btnDefaultIcon2(
+    double width,
+    Color btnColor,
+    IconData icon,
+    Color iconColor,
+    Color borderColor,
+    String textBtn,
+    TextStyle textStyleBtn,
+    VoidCallback onPressed) {
+  return Container(
+    width: width,
+    height: 40,
+    decoration: BoxDecoration(
+        color: btnColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: borderColor, width: 3)),
+    child: TextButton(
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: iconColor,
+            size: 20,
+          ),
+          SizedBox(
+            width: 0.6.w,
+          ),
+          ResponsiveVisibility(
+            hiddenWhen: const [
+              rspnsvlue.Condition.smallerThan(name: DESKTOP),
+              rspnsvlue.Condition.smallerThan(name: MOBILE),
+              rspnsvlue.Condition.equals(name: MOBILE),
+              rspnsvlue.Condition.equals(name: TABLET),
+            ],
+            child: Text(
+              textBtn,
+              style: textStyleBtn,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 Widget textButton1(IconData icon, Color iconColor, String textBtn,
     TextStyle textStyleBtn, VoidCallback onPressed) {
   return TextButton(

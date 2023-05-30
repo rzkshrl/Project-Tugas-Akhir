@@ -37,6 +37,11 @@ class TextFieldController extends GetxController {
   final yearAPILiburC = TextEditingController();
   final yearAPILiburKey = GlobalKey<FormState>().obs;
 
+  final addLiburC = TextEditingController();
+  final addLiburKey = GlobalKey<FormState>().obs;
+  final addNamaLiburC = TextEditingController();
+  final addNamaLiburKey = GlobalKey<FormState>().obs;
+
   final datepickerC = TextEditingController();
   final datepickerKey = GlobalKey<FormState>().obs;
 
@@ -62,13 +67,6 @@ class TextFieldController extends GetxController {
   final terlambatJamKerjaKey = GlobalKey<FormState>().obs;
   final pulLebihAwalJamKerjaC = TextEditingController();
   final pulLebihAwalJamKerjaKey = GlobalKey<FormState>().obs;
-
-  final namaJadwalKerjaC = TextEditingController();
-  final namaJadwalKerjaKey = GlobalKey<FormState>().obs;
-  final kodeJadwalKerjaC = TextEditingController();
-  final kodeJadwalKerjaKey = GlobalKey<FormState>().obs;
-  final ketJadwalKerjaC = TextEditingController();
-  final ketJadwalKerjaKey = GlobalKey<FormState>().obs;
 
   final emailValidator = MultiValidator([
     EmailValidator(errorText: "Email tidak valid"),

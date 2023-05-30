@@ -26,6 +26,7 @@ class JamKerjaController extends GetxController {
   ];
 
   var selectedDays = [].obs;
+  Rx<String?> selectedDay = ''.obs;
 
   void toggleDay(String day) {
     if (selectedDays.contains(day)) {
@@ -36,17 +37,38 @@ class JamKerjaController extends GetxController {
     selectedDays.refresh();
   }
 
-  bool isDaySelected(String day) {
+  void resetSelectedDay() {
+    selectedDay.value = null;
+  }
+
+  bool isDaysSelected(String day) {
     return selectedDays.contains(day);
+  }
+
+  bool isDaySelected(String day) {
+    return selectedDay.value == day;
   }
 
   bool isAtLeastOneDaySelected() {
     return selectedDays.isNotEmpty;
   }
 
+  void setSelectedDayFromFirestore(String day) {
+    selectedDay.value = day;
+  }
+
+  void getJamKerja(String doc) {
+    firestore.collection('JamKerja').doc(doc).get().then((docSnapshot) {
+      final data = docSnapshot.data();
+      if (data != null && data.containsKey('hariKerja')) {
+        setSelectedDayFromFirestore(data['hariKerja']);
+      }
+    });
+  }
+
   Future<void> addJamKerja(
       String namaJamKerja,
-      String kodeJamKerja,
+      String kepegawaianJamKerja,
       String ketJamKerja,
       String masukJamKerja,
       String keluarJamKerja,
@@ -59,16 +81,17 @@ class JamKerjaController extends GetxController {
     try {
       var jamkerja = firestore.collection('JamKerja');
 
-      final DocumentReference docRef = jamkerja.doc(kodeJamKerja);
+      final DocumentReference docRef = jamkerja.doc(namaJamKerja);
       final checkData = await docRef.get();
+
       if (kDebugMode) {
-        print(selectedDays);
+        print(selectedDay);
       }
 
       if (checkData.exists == false) {
-        await jamkerja.doc(kodeJamKerja).set({
+        await jamkerja.doc(namaJamKerja).set({
           'nama': namaJamKerja,
-          'kode': kodeJamKerja,
+          'kepegawaian': kepegawaianJamKerja,
           'ket': ketJamKerja,
           'jadwal_masuk': masukJamKerja,
           'jadwal_keluar': keluarJamKerja,
@@ -78,7 +101,7 @@ class JamKerjaController extends GetxController {
           'batasAkhir_keluar': batasAkhirKeluarJamKerja,
           'keterlambatan': terlambatJamKerja,
           'pulang_awal': pulLebihAwalJamKerja,
-          'hariKerja': selectedDays.toList()
+          'hariKerja': selectedDay.value.toString()
         });
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
@@ -103,7 +126,7 @@ class JamKerjaController extends GetxController {
   Future<void> editJamKerja(
       String doc,
       String namaJamKerja,
-      String kodeJamKerja,
+      String kepegawaianJamKerja,
       String ketJamKerja,
       String masukJamKerja,
       String keluarJamKerja,
@@ -115,13 +138,13 @@ class JamKerjaController extends GetxController {
       String pulLebihAwalJamKerja) async {
     try {
       var jamkerja = firestore.collection('JamKerja');
-      if (kDebugMode) {
-        print(selectedDays);
-      }
 
+      if (kDebugMode) {
+        print(selectedDay);
+      }
       await jamkerja.doc(doc).update({
         'nama': namaJamKerja,
-        'kode': kodeJamKerja,
+        'kepegawaian': kepegawaianJamKerja,
         'ket': ketJamKerja,
         'jadwal_masuk': masukJamKerja,
         'jadwal_keluar': keluarJamKerja,
@@ -131,7 +154,7 @@ class JamKerjaController extends GetxController {
         'batasAkhir_keluar': batasAkhirKeluarJamKerja,
         'keterlambatan': terlambatJamKerja,
         'pulang_awal': pulLebihAwalJamKerja,
-        'hariKerja': selectedDays.toList()
+        'hariKerja': selectedDay.value.toString()
       });
       Get.dialog(
         dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',

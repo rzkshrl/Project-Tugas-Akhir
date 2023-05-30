@@ -12,6 +12,7 @@ import '../theme/theme.dart';
 import 'package:project_tugas_akhir/app/data/models/firestorejamkerjamodel.dart';
 
 import 'dialogTextField.dart';
+import 'dropdownTextField.dart';
 
 class JamKerjaDTS extends DataTableSource {
   final List<JamKerjaModel> jamKerjaList;
@@ -21,7 +22,7 @@ class JamKerjaDTS extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    JamKerjaModel? data = jamKerjaList[index];
+    JamKerjaModel data = jamKerjaList[index];
     return DataRow(
       cells: [
         DataCell(Text(
@@ -29,7 +30,7 @@ class JamKerjaDTS extends DataTableSource {
           style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
-          "${data.kode}",
+          "${data.nama}",
           style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
@@ -50,7 +51,7 @@ class JamKerjaDTS extends DataTableSource {
         )),
         DataCell(IconButton(
             onPressed: () {
-              c.deleteJamKerja(data.kode!);
+              c.deleteJamKerja(data.nama!);
             },
             icon: Icon(
               IconlyLight.delete,
@@ -59,7 +60,7 @@ class JamKerjaDTS extends DataTableSource {
         DataCell(IconButton(
             onPressed: () {
               textC.namaJamKerjaC.text = data.nama!;
-              textC.kodeJamKerjaC.text = data.kode!;
+              cDropdown.kepgTambahDataPegC.text = data.kepg!;
               textC.ketJamKerjaC.text = data.ket!;
               textC.masukJamKerjaC.text = data.jadwalMasuk!;
               textC.keluarJamKerjaC.text = data.jadwalKeluar!;
@@ -69,12 +70,15 @@ class JamKerjaDTS extends DataTableSource {
               textC.batasAkhirkeluarJamKerjaC.text = data.batasAkhirKeluar!;
               textC.terlambatJamKerjaC.text = data.terlambat!;
               textC.pulLebihAwalJamKerjaC.text = data.pulangLebihAwal!;
+              c.getJamKerja(data.nama!);
               Get.dialog(dialogTextJamKerja(
+                  true,
                   Get.context!,
                   btnDefaultIcon1(10.w, Blue4, IconlyLight.tick_square, Yellow1,
                       "Kirim", getTextBtnAction(Get.context!), () {
                     if (textC.namaJamKerjaKey.value.currentState!.validate() &&
-                        textC.kodeJamKerjaKey.value.currentState!.validate() &&
+                        cDropdown.kepgTambahDataPegKey.value.currentState!
+                            .validate() &&
                         textC.ketJamKerjaKey.value.currentState!.validate() &&
                         textC.masukJamKerjaKey.value.currentState!.validate() &&
                         textC.keluarJamKerjaKey.value.currentState!
@@ -90,12 +94,11 @@ class JamKerjaDTS extends DataTableSource {
                         textC.terlambatJamKerjaKey.value.currentState!
                             .validate() &&
                         textC.pulLebihAwalJamKerjaKey.value.currentState!
-                            .validate() &&
-                        c.isAtLeastOneDaySelected()) {
+                            .validate()) {
                       c.editJamKerja(
-                          data.kode!,
+                          data.nama!,
                           textC.namaJamKerjaC.text,
-                          textC.kodeJamKerjaC.text,
+                          cDropdown.kepgTambahDataPegC.text,
                           textC.ketJamKerjaC.text,
                           textC.masukJamKerjaC.text,
                           textC.keluarJamKerjaC.text,

@@ -27,6 +27,16 @@ MaterialStateProperty<Color?>? thumbColorScrollbar =
   return Blue1.withOpacity(0.4);
 });
 
+MaterialStateProperty<Color?>? fillColorRadioButton =
+    MaterialStateProperty.resolveWith<Color?>((states) {
+  if (states.contains(MaterialState.selected)) {
+    return light;
+  } else if (states.contains(MaterialState.hovered)) {
+    return light.withOpacity(0.8);
+  }
+  return light.withOpacity(0.4);
+});
+
 MaterialStateProperty<Color?>? trackColorScrollbar =
     MaterialStateProperty.resolveWith<Color?>((states) {
   if (states.contains(MaterialState.dragged)) {

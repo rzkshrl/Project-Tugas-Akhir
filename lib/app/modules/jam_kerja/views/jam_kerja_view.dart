@@ -15,6 +15,7 @@ import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 
 import '../../../utils/btnDefault.dart';
+import '../../../utils/dropdownTextField.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/jam_kerja_controller.dart';
@@ -99,7 +100,7 @@ class JamKerjaView extends GetView<JamKerjaController> {
                     btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
                         "Tambah Data", getTextBtnAction(context), () {
                       textC.namaJamKerjaC.clear();
-                      textC.kodeJamKerjaC.clear();
+                      cDropdown.kepgTambahDataPegC.clear();
                       textC.ketJamKerjaC.clear();
                       textC.masukJamKerjaC.clear();
                       textC.keluarJamKerjaC.clear();
@@ -110,20 +111,27 @@ class JamKerjaView extends GetView<JamKerjaController> {
                       textC.terlambatJamKerjaC.clear();
                       textC.pulLebihAwalJamKerjaC.clear();
                       Get.dialog(dialogTextJamKerja(
+                          false,
                           context,
                           btnDefaultIcon1(10.w, Blue4, IconlyLight.tick_square,
                               Yellow1, "Kirim", getTextBtnAction(context), () {
-                            if (textC.namaJamKerjaKey.value.currentState!.validate() &&
-                                textC.kodeJamKerjaKey.value.currentState!
+                            if (textC
+                                    .namaJamKerjaKey.value.currentState!
                                     .validate() &&
-                                textC.ketJamKerjaKey.value.currentState!
+                                cDropdown
+                                    .kepgTambahDataPegKey.value.currentState!
                                     .validate() &&
-                                textC.masukJamKerjaKey.value.currentState!
+                                textC
+                                    .ketJamKerjaKey.value.currentState!
                                     .validate() &&
-                                textC.keluarJamKerjaKey.value.currentState!
+                                textC
+                                    .masukJamKerjaKey.value.currentState!
                                     .validate() &&
-                                textC.batasAwalmasukJamKerjaKey.value
-                                    .currentState!
+                                textC
+                                    .keluarJamKerjaKey.value.currentState!
+                                    .validate() &&
+                                textC
+                                    .batasAwalmasukJamKerjaKey.value.currentState!
                                     .validate() &&
                                 textC.batasAkhirmasukJamKerjaKey.value
                                     .currentState!
@@ -138,11 +146,10 @@ class JamKerjaView extends GetView<JamKerjaController> {
                                     .validate() &&
                                 textC
                                     .pulLebihAwalJamKerjaKey.value.currentState!
-                                    .validate() &&
-                                controller.isAtLeastOneDaySelected()) {
+                                    .validate()) {
                               c.addJamKerja(
                                   textC.namaJamKerjaC.text,
-                                  textC.kodeJamKerjaC.text,
+                                  cDropdown.kepgTambahDataPegC.text,
                                   textC.ketJamKerjaC.text,
                                   textC.masukJamKerjaC.text,
                                   textC.keluarJamKerjaC.text,

@@ -117,7 +117,30 @@ class HariLiburView extends GetView<HariLiburController> {
                       width: 1.5.w,
                     ),
                     btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
-                        "Tambah Hari Libur", getTextBtnAction(context), () {})
+                        "Tambah Hari Libur", getTextBtnAction(context), () {
+                      textC.addLiburC.clear();
+                      textC.datepickerC.clear();
+                      Get.dialog(
+                        dialogAddLibur(
+                            context,
+                            btnDefaultIcon1(
+                                10.w,
+                                Blue4,
+                                IconlyLight.tick_square,
+                                Yellow1,
+                                "Kirim",
+                                getTextBtnAction(context), () {
+                              if (textC.addNamaLiburKey.value.currentState!
+                                      .validate() &&
+                                  textC.datepickerKey.value.currentState!
+                                      .validate()) {
+                                controller.addHariLibur(
+                                    textC.addNamaLiburC.text,
+                                    textC.datepickerC.text);
+                              }
+                            })),
+                      );
+                    })
                   ],
                 ),
               ),

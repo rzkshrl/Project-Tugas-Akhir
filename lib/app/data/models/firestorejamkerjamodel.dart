@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class JamKerjaModel {
   String? nama;
-  String? kode;
+  String? kepg;
   String? ket;
   String? jadwalMasuk;
   String? jadwalKeluar;
@@ -12,10 +12,11 @@ class JamKerjaModel {
   String? batasAkhirKeluar;
   String? terlambat;
   String? pulangLebihAwal;
+  String? hariKerja;
 
   JamKerjaModel(
       {this.nama,
-      this.kode,
+      this.kepg,
       this.ket,
       this.jadwalMasuk,
       this.jadwalKeluar,
@@ -24,13 +25,14 @@ class JamKerjaModel {
       this.batasAkhirMasuk,
       this.batasAkhirKeluar,
       this.terlambat,
-      this.pulangLebihAwal});
+      this.pulangLebihAwal,
+      this.hariKerja});
 
   factory JamKerjaModel.fromJson(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
     return (JamKerjaModel(
       nama: data['nama'],
-      kode: data['kode'],
+      kepg: data['kepegawaian'],
       ket: data['ket'],
       jadwalMasuk: data['jadwal_masuk'],
       jadwalKeluar: data['jadwal_keluar'],
@@ -40,13 +42,14 @@ class JamKerjaModel {
       batasAkhirKeluar: data['batasAkhir_keluar'],
       terlambat: data['keterlambatan'],
       pulangLebihAwal: data['pulang_awal'],
+      hariKerja: data['hariKerja'],
     ));
   }
 
   Map<String, dynamic> toJson() {
     return {
       "nama": nama,
-      "kode": kode,
+      "kepg": kepg,
       "ket": ket,
       "jadwal_masuk": jadwalMasuk,
       "jadwal_keluar": jadwalKeluar,
@@ -56,6 +59,7 @@ class JamKerjaModel {
       "batasAkhir_keluar": batasAkhirKeluar,
       "keterlambatan": terlambat,
       "pulang_awal": pulangLebihAwal,
+      "hariKerja": hariKerja
     };
   }
 }

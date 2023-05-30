@@ -79,18 +79,29 @@ Widget textformNormalWeb(
 }
 
 Widget textformDatePicker(
-    TextEditingController? controller, void Function()? onTap) {
+    TextEditingController? controller,
+    void Function()? onTap,
+    double width,
+    Color fillColor,
+    Color focusedBorderColor,
+    Color enabledBorderColor,
+    Color suffixIconColor,
+    TextStyle style) {
   return Form(
     key: textC.datepickerKey.value,
-    child: SizedBox(
-      width: 24.w,
-      height: 12.3.h,
+    child: Container(
+      width: width,
+      height: 7.4.h,
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: TextFormField(
         readOnly: true,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: textC.normalValidator,
         controller: controller,
-        style: getTextLogin(Get.context!),
+        style: style,
         decoration: InputDecoration(
             helperText: ' ',
             helperStyle: getTextErrorFormLogin(Get.context!),
@@ -102,7 +113,7 @@ Widget textformDatePicker(
                 right: 0.8.w,
               ),
               child: IconButton(
-                color: Blue1,
+                color: suffixIconColor,
                 splashRadius: 1,
                 iconSize: 20,
                 icon: const Icon(IconlyLight.calendar),
@@ -112,7 +123,7 @@ Widget textformDatePicker(
             suffixIconColor: Blue1,
             hintText: 'Pilih rentang tanggal presensi...',
             focusColor: Blue1,
-            fillColor: light,
+            fillColor: fillColor,
             filled: true,
             errorStyle: getTextErrorFormLogin(Get.context!),
             errorBorder: OutlineInputBorder(
@@ -123,11 +134,11 @@ Widget textformDatePicker(
                 borderSide: BorderSide(color: error, width: 1.8),
                 borderRadius: BorderRadius.circular(12)),
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Blue1, width: 1.8),
+                borderSide: BorderSide(color: focusedBorderColor, width: 1.8),
                 borderRadius: BorderRadius.circular(12)),
             hintStyle: getTextHintFormLogin(Get.context!),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: dark),
+                borderSide: BorderSide(width: 1, color: enabledBorderColor),
                 borderRadius: BorderRadius.circular(12))),
       ),
     ),

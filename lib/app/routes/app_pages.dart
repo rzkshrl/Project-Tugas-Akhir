@@ -12,8 +12,6 @@ import '../modules/hari_libur/bindings/hari_libur_binding.dart';
 import '../modules/hari_libur/views/hari_libur_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
-import '../modules/jadwal_kerja/bindings/jadwal_kerja_binding.dart';
-import '../modules/jadwal_kerja/views/jadwal_kerja_view.dart';
 import '../modules/jam_kerja/bindings/jam_kerja_binding.dart';
 import '../modules/jam_kerja/views/jam_kerja_view.dart';
 
@@ -87,11 +85,6 @@ class AppPages {
       name: _Paths.DATA_PEGAWAI,
       page: () => const DataPegawaiView(),
       binding: DataPegawaiBinding(),
-    ),
-    GetPage(
-      name: _Paths.JADWAL_KERJA,
-      page: () => const JadwalKerjaView(),
-      binding: JadwalKerjaBinding(),
     ),
     GetPage(
       name: _Paths.JAM_KERJA,

@@ -171,7 +171,6 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                         padding: const EdgeInsets.only(right: 16),
                         child: AnimatedRotation(
                           turns: controller.isExpanded1.value ||
-                                  Get.currentRoute == Routes.JADWAL_KERJA ||
                                   Get.currentRoute == Routes.JAM_KERJA ||
                                   Get.currentRoute == Routes.KET_IZIN ||
                                   Get.currentRoute == Routes.HARI_LIBUR
@@ -181,7 +180,6 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                           child: FaIcon(
                             FontAwesomeIcons.chevronDown,
                             color: controller.isExpanded1.value ||
-                                    Get.currentRoute == Routes.JADWAL_KERJA ||
                                     Get.currentRoute == Routes.JAM_KERJA ||
                                     Get.currentRoute == Routes.KET_IZIN ||
                                     Get.currentRoute == Routes.HARI_LIBUR
@@ -194,13 +192,11 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                       onExpansionChanged: (value) {
                         controller.expand1(value);
                       },
-                      initiallyExpanded:
-                          Get.currentRoute == Routes.JADWAL_KERJA ||
-                                  Get.currentRoute == Routes.JAM_KERJA ||
-                                  Get.currentRoute == Routes.KET_IZIN ||
-                                  Get.currentRoute == Routes.HARI_LIBUR
-                              ? true
-                              : false,
+                      initiallyExpanded: Get.currentRoute == Routes.JAM_KERJA ||
+                              Get.currentRoute == Routes.KET_IZIN ||
+                              Get.currentRoute == Routes.HARI_LIBUR
+                          ? true
+                          : false,
                       title: Padding(
                         padding: const EdgeInsets.only(left: 4.5),
                         child: Text(
@@ -223,8 +219,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                       ),
                       backgroundColor: Blue2,
                       collapsedBackgroundColor:
-                          Get.currentRoute == Routes.JADWAL_KERJA ||
-                                  Get.currentRoute == Routes.JAM_KERJA ||
+                          Get.currentRoute == Routes.JAM_KERJA ||
                                   Get.currentRoute == Routes.KET_IZIN ||
                                   Get.currentRoute == Routes.HARI_LIBUR
                               ? Blue2
@@ -233,22 +228,13 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                       children: [
                         buildDrawerItemSubMenu(
                             text: Text(
-                              "Jadwal Kerja",
-                              style: Get.currentRoute == Routes.JADWAL_KERJA
-                                  ? getTextItemSubMenu(context)
-                                  : getTextItemSubMenuDisabled(context),
-                            ),
-                            visualDensity: const VisualDensity(vertical: -2),
-                            onTap: () => navigate(5)),
-                        buildDrawerItemSubMenu(
-                            text: Text(
                               "Jam Kerja",
                               style: Get.currentRoute == Routes.JAM_KERJA
                                   ? getTextItemSubMenu(context)
                                   : getTextItemSubMenuDisabled(context),
                             ),
                             visualDensity: const VisualDensity(vertical: -2),
-                            onTap: () => navigate(6)),
+                            onTap: () => navigate(5)),
                         buildDrawerItemSubMenu(
                             text: Text(
                               "Hari Libur/Cuti Bersama",
@@ -257,7 +243,7 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                                   : getTextItemSubMenuDisabled(context),
                             ),
                             visualDensity: const VisualDensity(vertical: -2),
-                            onTap: () => navigate(7)),
+                            onTap: () => navigate(6)),
                       ],
                     ),
                   ),
@@ -335,10 +321,8 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
     } else if (index == 4) {
       Get.offAllNamed(Routes.DATA_PEGAWAI);
     } else if (index == 5) {
-      Get.offAllNamed(Routes.JADWAL_KERJA);
-    } else if (index == 6) {
       Get.offAllNamed(Routes.JAM_KERJA);
-    } else if (index == 7) {
+    } else if (index == 6) {
       Get.offAllNamed(Routes.HARI_LIBUR);
     }
   }

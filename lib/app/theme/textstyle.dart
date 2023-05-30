@@ -141,6 +141,18 @@ getTextSubHeader(BuildContext context) {
       fontWeight: FontWeight.w700);
 }
 
+getTextItemPegawai(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 12.0),
+        const Condition.equals(name: MOBILE, value: 12.0),
+        const Condition.equals(name: TABLET, value: 14.0),
+        const Condition.equals(name: DESKTOP, value: 16.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w600);
+}
+
 getTextTable(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
@@ -353,6 +365,19 @@ getTextBtnAction(BuildContext context) {
         const Condition.equals(name: DESKTOP, value: 14.0),
       ]).value,
       color: Yellow1,
+      fontWeight: FontWeight.w700);
+}
+
+getTextBtnAction2(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 8.0),
+        const Condition.smallerThan(name: MOBILE, value: 8.0),
+        const Condition.equals(name: MOBILE, value: 8.0),
+        const Condition.equals(name: TABLET, value: 12.0),
+        const Condition.equals(name: DESKTOP, value: 14.0),
+      ]).value,
+      color: Blue1,
       fontWeight: FontWeight.w700);
 }
 
