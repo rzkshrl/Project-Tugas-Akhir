@@ -204,7 +204,7 @@ Widget dialogTextJamKerja(bool isEdit, BuildContext context, Widget btnAction) {
               ],
             ),
             SizedBox(
-              height: 1.h,
+              height: 2.5.h,
             ),
             textformDialogWeb(
                 context,
@@ -240,9 +240,9 @@ Widget dialogTextJamKerja(bool isEdit, BuildContext context, Widget btnAction) {
                 cDropdown.kepgTambahDataPegC.text == ''
                     ? null
                     : cDropdown.kepgTambahDataPegC.text),
-            // SizedBox(
-            //   height: 1.5.h,
-            // ),
+            SizedBox(
+              height: 3.h,
+            ),
             textformDialogWeb(
               context,
               textC.ketJamKerjaKey.value,
@@ -262,317 +262,322 @@ Widget dialogTextJamKerja(bool isEdit, BuildContext context, Widget btnAction) {
             // SizedBox(
             //   height: 1.5.h,
             // ),
-            Container(
-              width: 60.4.w,
-              height: 45.5.h,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Yellow1),
-                  borderRadius: BorderRadius.circular(22)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-                    width: 12.4.w,
-                    height: 35.h,
-                    child: StatefulBuilder(builder: (context, setState) {
-                      return ListView.builder(
-                        itemCount: dayPickC.daysOfWeek.length,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(bottom: 0),
-                        itemBuilder: (context, index) {
-                          final day = dayPickC.daysOfWeek[index];
-                          return Theme(
-                            data: Theme.of(context).copyWith(
-                              unselectedWidgetColor: light,
-                              radioTheme: RadioThemeData(
-                                fillColor: fillColorRadioButton,
+            SingleChildScrollView(
+              child: Container(
+                width: 60.4.w,
+                height: 42.5.h,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Yellow1),
+                    borderRadius: BorderRadius.circular(22)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: 12.4.w,
+                      height: 35.h,
+                      child: StatefulBuilder(builder: (context, setState) {
+                        return ListView.builder(
+                          itemCount: dayPickC.daysOfWeek.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(bottom: 0),
+                          itemBuilder: (context, index) {
+                            final day = dayPickC.daysOfWeek[index];
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                unselectedWidgetColor: light,
+                                radioTheme: RadioThemeData(
+                                  fillColor: fillColorRadioButton,
+                                ),
                               ),
-                            ),
-                            child: RadioListTile<String>(
-                              title: Text(
-                                day,
-                                style: getTextFormDialog(context),
+                              child: RadioListTile<String>(
+                                title: Text(
+                                  day,
+                                  style: getTextFormDialog(context),
+                                ),
+                                value: day,
+                                groupValue: dayPickC.selectedDay.value,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    dayPickC.selectedDay.value = value!;
+                                  });
+                                },
                               ),
-                              value: day,
-                              groupValue: dayPickC.selectedDay.value,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  dayPickC.selectedDay.value = value!;
-                                });
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    }),
-                  ),
-                  SizedBox(
-                    width: 40.4.w,
-                    height: 35.h,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 0.5.h,
-                                ),
-                                Text(
-                                  'Jadwal Jam Masuk',
-                                  style: getTextItemSubMenu(context),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                textformTimePicker(textC.masukJamKerjaKey.value,
-                                    textC.masukJamKerjaC, () {
-                                  if (isEdit == false) {
-                                    timepickerC.timePicker(
-                                      context,
-                                      textC.masukJamKerjaC,
-                                    );
-                                  } else if (isEdit == true) {
-                                    timepickerC.timePickerEdit(
-                                      context,
-                                      textC.masukJamKerjaC,
-                                    );
-                                  }
-                                }),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 1.w,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 0.5.h,
-                                ),
-                                Text(
-                                  'Keterlambatan',
-                                  style: getTextItemSubMenu(context),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                textformTimePicker(
-                                    textC.terlambatJamKerjaKey.value,
-                                    textC.terlambatJamKerjaC, () {
-                                  if (isEdit == false) {
-                                    timepickerC.timePicker(
-                                      context,
-                                      textC.terlambatJamKerjaC,
-                                    );
-                                  } else if (isEdit == true) {
-                                    timepickerC.timePickerEdit(
-                                      context,
-                                      textC.terlambatJamKerjaC,
-                                    );
-                                  }
-                                }),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 1.w,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 0.5.h,
-                                ),
-                                Text(
-                                  'Jadwal Jam Keluar',
-                                  style: getTextItemSubMenu(context),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                textformTimePicker(
-                                    textC.keluarJamKerjaKey.value,
-                                    textC.keluarJamKerjaC, () {
-                                  if (isEdit == false) {
-                                    timepickerC.timePicker(
-                                      context,
-                                      textC.keluarJamKerjaC,
-                                    );
-                                  } else if (isEdit == true) {
-                                    timepickerC.timePickerEdit(
-                                      context,
-                                      textC.keluarJamKerjaC,
-                                    );
-                                  }
-                                }),
-                              ],
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Batas Awal Jam Masuk',
-                                  style: getTextItemSubMenu(context),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                textformTimePicker(
-                                    textC.batasAwalmasukJamKerjaKey.value,
-                                    textC.batasAwalmasukJamKerjaC, () {
-                                  if (isEdit == false) {
-                                    timepickerC.timePicker(
-                                      context,
-                                      textC.batasAwalmasukJamKerjaC,
-                                    );
-                                  } else if (isEdit == true) {
-                                    timepickerC.timePickerEdit(
-                                      context,
-                                      textC.batasAwalmasukJamKerjaC,
-                                    );
-                                  }
-                                }),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 1.w,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 2.5.h,
-                                ),
-                                Text(
-                                  'Pulang Lebih Awal',
-                                  style: getTextItemSubMenu(context),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                textformTimePicker(
-                                    textC.pulLebihAwalJamKerjaKey.value,
-                                    textC.pulLebihAwalJamKerjaC, () {
-                                  if (isEdit == false) {
-                                    timepickerC.timePicker(
-                                      context,
-                                      textC.pulLebihAwalJamKerjaC,
-                                    );
-                                  } else if (isEdit == true) {
-                                    timepickerC.timePickerEdit(
-                                      context,
-                                      textC.pulLebihAwalJamKerjaC,
-                                    );
-                                  }
-                                }),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 1.w,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Batas Akhir Jam Masuk',
-                                  style: getTextItemSubMenu(context),
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                textformTimePicker(
-                                    textC.batasAkhirmasukJamKerjaKey.value,
-                                    textC.batasAkhirmasukJamKerjaC, () {
-                                  if (isEdit == false) {
-                                    timepickerC.timePicker(
-                                      context,
-                                      textC.batasAkhirmasukJamKerjaC,
-                                    );
-                                  } else if (isEdit == true) {
-                                    timepickerC.timePickerEdit(
-                                      context,
-                                      textC.batasAkhirmasukJamKerjaC,
-                                    );
-                                  }
-                                }),
-                              ],
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Batas Awal Jam Keluar',
-                                  style: getTextItemSubMenu(context),
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                textformTimePicker(
-                                    textC.batasAwalkeluarJamKerjaKey.value,
-                                    textC.batasAwalkeluarJamKerjaC, () {
-                                  if (isEdit == false) {
-                                    timepickerC.timePicker(
-                                      context,
-                                      textC.batasAwalkeluarJamKerjaC,
-                                    );
-                                  } else if (isEdit == true) {
-                                    timepickerC.timePickerEdit(
-                                      context,
-                                      textC.batasAwalkeluarJamKerjaC,
-                                    );
-                                  }
-                                }),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 4.5.w,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Batas Akhir Jam Keluar',
-                                  style: getTextItemSubMenu(context),
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                textformTimePicker(
-                                    textC.batasAkhirkeluarJamKerjaKey.value,
-                                    textC.batasAkhirkeluarJamKerjaC, () {
-                                  if (isEdit == false) {
-                                    timepickerC.timePicker(
-                                      context,
-                                      textC.batasAkhirkeluarJamKerjaC,
-                                    );
-                                  } else if (isEdit == true) {
-                                    timepickerC.timePickerEdit(
-                                      context,
-                                      textC.batasAkhirkeluarJamKerjaC,
-                                    );
-                                  }
-                                }),
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
+                            );
+                          },
+                        );
+                      }),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 40.4.w,
+                      height: 35.h,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 0.5.h,
+                                    ),
+                                    Text(
+                                      'Jadwal Jam Masuk',
+                                      style: getTextItemSubMenu(context),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    textformTimePicker(
+                                        textC.masukJamKerjaKey.value,
+                                        textC.masukJamKerjaC, () {
+                                      if (isEdit == false) {
+                                        timepickerC.timePicker(
+                                          context,
+                                          textC.masukJamKerjaC,
+                                        );
+                                      } else if (isEdit == true) {
+                                        timepickerC.timePickerEdit(
+                                          context,
+                                          textC.masukJamKerjaC,
+                                        );
+                                      }
+                                    }),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 0.5.h,
+                                    ),
+                                    Text(
+                                      'Keterlambatan',
+                                      style: getTextItemSubMenu(context),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    textformTimePicker(
+                                        textC.terlambatJamKerjaKey.value,
+                                        textC.terlambatJamKerjaC, () {
+                                      if (isEdit == false) {
+                                        timepickerC.timePicker(
+                                          context,
+                                          textC.terlambatJamKerjaC,
+                                        );
+                                      } else if (isEdit == true) {
+                                        timepickerC.timePickerEdit(
+                                          context,
+                                          textC.terlambatJamKerjaC,
+                                        );
+                                      }
+                                    }),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 0.5.h,
+                                    ),
+                                    Text(
+                                      'Jadwal Jam Keluar',
+                                      style: getTextItemSubMenu(context),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    textformTimePicker(
+                                        textC.keluarJamKerjaKey.value,
+                                        textC.keluarJamKerjaC, () {
+                                      if (isEdit == false) {
+                                        timepickerC.timePicker(
+                                          context,
+                                          textC.keluarJamKerjaC,
+                                        );
+                                      } else if (isEdit == true) {
+                                        timepickerC.timePickerEdit(
+                                          context,
+                                          textC.keluarJamKerjaC,
+                                        );
+                                      }
+                                    }),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Batas Awal Jam Masuk',
+                                      style: getTextItemSubMenu(context),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    textformTimePicker(
+                                        textC.batasAwalmasukJamKerjaKey.value,
+                                        textC.batasAwalmasukJamKerjaC, () {
+                                      if (isEdit == false) {
+                                        timepickerC.timePicker(
+                                          context,
+                                          textC.batasAwalmasukJamKerjaC,
+                                        );
+                                      } else if (isEdit == true) {
+                                        timepickerC.timePickerEdit(
+                                          context,
+                                          textC.batasAwalmasukJamKerjaC,
+                                        );
+                                      }
+                                    }),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 2.5.h,
+                                    ),
+                                    Text(
+                                      'Pulang Lebih Awal',
+                                      style: getTextItemSubMenu(context),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    textformTimePicker(
+                                        textC.pulLebihAwalJamKerjaKey.value,
+                                        textC.pulLebihAwalJamKerjaC, () {
+                                      if (isEdit == false) {
+                                        timepickerC.timePicker(
+                                          context,
+                                          textC.pulLebihAwalJamKerjaC,
+                                        );
+                                      } else if (isEdit == true) {
+                                        timepickerC.timePickerEdit(
+                                          context,
+                                          textC.pulLebihAwalJamKerjaC,
+                                        );
+                                      }
+                                    }),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Batas Akhir Jam Masuk',
+                                      style: getTextItemSubMenu(context),
+                                    ),
+                                    SizedBox(
+                                      height: 1.5.h,
+                                    ),
+                                    textformTimePicker(
+                                        textC.batasAkhirmasukJamKerjaKey.value,
+                                        textC.batasAkhirmasukJamKerjaC, () {
+                                      if (isEdit == false) {
+                                        timepickerC.timePicker(
+                                          context,
+                                          textC.batasAkhirmasukJamKerjaC,
+                                        );
+                                      } else if (isEdit == true) {
+                                        timepickerC.timePickerEdit(
+                                          context,
+                                          textC.batasAkhirmasukJamKerjaC,
+                                        );
+                                      }
+                                    }),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Batas Awal Jam Keluar',
+                                      style: getTextItemSubMenu(context),
+                                    ),
+                                    SizedBox(
+                                      height: 1.5.h,
+                                    ),
+                                    textformTimePicker(
+                                        textC.batasAwalkeluarJamKerjaKey.value,
+                                        textC.batasAwalkeluarJamKerjaC, () {
+                                      if (isEdit == false) {
+                                        timepickerC.timePicker(
+                                          context,
+                                          textC.batasAwalkeluarJamKerjaC,
+                                        );
+                                      } else if (isEdit == true) {
+                                        timepickerC.timePickerEdit(
+                                          context,
+                                          textC.batasAwalkeluarJamKerjaC,
+                                        );
+                                      }
+                                    }),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 4.5.w,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Batas Akhir Jam Keluar',
+                                      style: getTextItemSubMenu(context),
+                                    ),
+                                    SizedBox(
+                                      height: 1.5.h,
+                                    ),
+                                    textformTimePicker(
+                                        textC.batasAkhirkeluarJamKerjaKey.value,
+                                        textC.batasAkhirkeluarJamKerjaC, () {
+                                      if (isEdit == false) {
+                                        timepickerC.timePicker(
+                                          context,
+                                          textC.batasAkhirkeluarJamKerjaC,
+                                        );
+                                      } else if (isEdit == true) {
+                                        timepickerC.timePickerEdit(
+                                          context,
+                                          textC.batasAkhirkeluarJamKerjaC,
+                                        );
+                                      }
+                                    }),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
 

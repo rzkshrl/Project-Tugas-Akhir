@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TimePickerController extends GetxController {
-  var selectedTime = const TimeOfDay(hour: -1, minute: -1).obs;
+  var selectedTime = TimeOfDay.now().obs;
 
   Future<void> timePicker(
       BuildContext context, TextEditingController controller) async {

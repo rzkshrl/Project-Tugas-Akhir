@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -27,9 +26,8 @@ class HomeView extends GetView<HomeController> {
     if (kIsWeb) {
       String? roles = authC.userData.value.role;
       if (kDebugMode) {
-print("ROLES : $roles");
+        print("ROLES : $roles");
       }
-      
 
       if (roles == null) {
         return Scaffold(
@@ -63,14 +61,8 @@ print("ROLES : $roles");
                 getTextAlertBtn(context)),
           );
         } else {
-          // return FutureBuilder(
-          //     future: apiC.getDeviceInfo(context),
-          //     builder: (context, snap) {
-          //       if (snap.connectionState == ConnectionState.waiting) {
-          //         return LoadingView();
-          //       }
+          if (roles == 'super-admin') {}
           return const RiwayatPresensiView();
-          // });
         }
       }
     } else {

@@ -30,7 +30,7 @@ class JamKerjaDTS extends DataTableSource {
           style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
-          "${data.nama}",
+          "${data.hariKerja}",
           style: getTextTableData(Get.context!),
         )),
         DataCell(Text(

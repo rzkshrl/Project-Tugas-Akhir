@@ -151,7 +151,7 @@ Widget textformTimePicker(
     key: key,
     child: SizedBox(
       width: 124,
-      height: 7.h,
+      height: 8.h,
       child: TextFormField(
         readOnly: true,
         textAlign: TextAlign.center,

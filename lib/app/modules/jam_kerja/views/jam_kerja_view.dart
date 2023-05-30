@@ -191,7 +191,7 @@ class JamKerjaView extends GetView<JamKerjaController> {
                             ),
                             DataColumn2(
                               label: Text(
-                                'Kode',
+                                'Hari',
                                 style: getTextTable(context),
                               ),
                               size: ColumnSize.S,
