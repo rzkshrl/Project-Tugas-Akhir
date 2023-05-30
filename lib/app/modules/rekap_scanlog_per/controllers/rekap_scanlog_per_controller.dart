@@ -16,8 +16,6 @@ import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../utils/textfield.dart';
 
 class RekapScanlogPerController extends GetxController {
-
-
   late Stream<List<KepegawaianModel>> firestoreKepegawaianList;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<KepegawaianModel> kepegawaianList = [];
@@ -79,6 +77,19 @@ class RekapScanlogPerController extends GetxController {
           kepegawaianList.map((kepegawaian) => kepegawaian.pin!).toList();
       update();
     });
+  }
+
+  List<DateTime> generateDateRange() {
+    final List<DateTime> dateRange = [];
+    var currentDate = start;
+
+    while (currentDate!.isBefore(end.value) ||
+        currentDate.isAtSameMomentAs(end.value)) {
+      dateRange.add(currentDate);
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+
+    return dateRange;
   }
 
   Future<void> unduhPDF(String pin) async {
