@@ -78,14 +78,17 @@ class AuthController extends GetxController {
     CollectionReference users = firestore.collection("Users");
 
     String emailUser = auth.currentUser!.email.toString();
+    final splitEmail = emailUser.split('@');
 
     final checkuser = await users.doc(emailUser).get();
 
     if (checkuser.data() == null) {
       users.doc(emailUser).set({
         'uid': auth.currentUser!.uid,
+        'name': auth.currentUser!.displayName,
         'email': auth.currentUser!.email,
         'role': "user",
+        'bidang': 'Pegawai',
         'profile': '',
         'password': password,
         'lastSignInDate':
@@ -96,6 +99,7 @@ class AuthController extends GetxController {
     } else {
       // return null;
       users.doc(emailUser).update({
+        'uid': auth.currentUser!.uid,
         'lastSignInDate':
             auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
       });
@@ -111,7 +115,7 @@ class AuthController extends GetxController {
 
     userData.value = (UserModel(
         uid: auth.currentUser!.uid,
-        name: auth.currentUser!.displayName,
+        name: splitEmail[0],
         email: auth.currentUser!.email,
         photoUrl: checkUserData['profile'],
         password: password,

@@ -26,6 +26,7 @@ abstract class Routes {
   static const RIWAYAT_PRESENSI_MOBILE = _Paths.RIWAYAT_PRESENSI_MOBILE;
   static const PROFILE_MOBILE = _Paths.PROFILE_MOBILE;
   static const DETAIL_PRESENSI = _Paths.DETAIL_PRESENSI;
+  static const SUPER_ADMIN = _Paths.SUPER_ADMIN;
 }
 
 abstract class _Paths {
@@ -51,4 +52,5 @@ abstract class _Paths {
   static const RIWAYAT_PRESENSI_MOBILE = '/riwayat-presensi-mobile';
   static const PROFILE_MOBILE = '/profile-mobile';
   static const DETAIL_PRESENSI = '/detail-presensi';
+  static const SUPER_ADMIN = '/super-admin';
 }

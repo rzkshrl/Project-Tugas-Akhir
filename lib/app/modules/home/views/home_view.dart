@@ -15,6 +15,7 @@ import '../../../controller/auth_controller.dart';
 import '../../../utils/dialogDefault.dart';
 
 import '../../beranda_mobile/views/beranda_mobile_view.dart';
+import '../../super-admin/views/super_admin_view.dart';
 import '../controllers/home_controller.dart';
 import 'package:flutter/foundation.dart';
 
@@ -45,7 +46,11 @@ class HomeView extends GetView<HomeController> {
               getTextAlertBtn(context)),
         );
       } else {
-        if (roles != "admin") {
+        if (roles == "admin") {
+          return const RiwayatPresensiView();
+        } else if (roles == 'super-admin') {
+          return const SuperAdminView();
+        } else {
           return Scaffold(
             backgroundColor: error.withOpacity(0.5),
             body: dialogAlertBtn(() {
@@ -60,9 +65,6 @@ class HomeView extends GetView<HomeController> {
                 getTextAlertSub(context),
                 getTextAlertBtn(context)),
           );
-        } else {
-          if (roles == 'super-admin') {}
-          return const RiwayatPresensiView();
         }
       }
     } else {

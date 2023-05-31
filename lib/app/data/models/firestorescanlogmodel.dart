@@ -85,7 +85,7 @@ class KepegawaianModel {
   String? bidang;
 
   KepegawaianModel(
-      {this.pin, this.nip, this.nama, this.kepegawaian, this.bidang, t});
+      {this.pin, this.nip, this.nama, this.kepegawaian, this.bidang});
 
   factory KepegawaianModel.fromSnapshot(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;

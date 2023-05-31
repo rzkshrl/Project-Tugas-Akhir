@@ -355,6 +355,89 @@ Widget textformPassWeb(
   );
 }
 
+Widget textformPassWebDialog(
+    BuildContext context,
+    Iterable<String>? autofillHints,
+    IconData? prefixIcon,
+    Color? prefixIconColor,
+    String hintText,
+    void Function()? onEditingComplete,
+    bool enabled) {
+  return Form(
+    key: textC.passWebKey.value,
+    child: Obx(
+      () => SizedBox(
+        width: 344,
+        height: 65,
+        child: TextFormField(
+          enabled: enabled,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofillHints: autofillHints,
+          style: getTextFormDialog(context),
+          validator: textC.passValidator,
+          obscureText: textC.isPasswordHidden.value,
+          controller: textC.passWebC,
+          onEditingComplete: onEditingComplete,
+          decoration: InputDecoration(
+            helperText: ' ',
+            helperStyle: getTextErrorFormLogin(context),
+            isDense: true,
+            contentPadding: const EdgeInsets.all(20),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(
+                left: 1.w,
+                right: 0.8.w,
+              ),
+              child: Align(
+                  widthFactor: 0.5,
+                  heightFactor: 0.5,
+                  child: Icon(
+                    prefixIcon,
+                    size: 26,
+                  )),
+            ),
+            prefixIconColor: prefixIconColor,
+            hintText: hintText,
+            hintStyle: getTextHintFormLogin(context),
+            fillColor: light,
+            filled: true,
+            errorStyle: getTextErrorFormLogin(context),
+            errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: errorBg, width: 1.8),
+                borderRadius: BorderRadius.circular(12),
+                gapPadding: 2),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: error, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Yellow1, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            suffixIcon: Padding(
+              padding: EdgeInsets.only(
+                right: 0.35.w,
+              ),
+              child: IconButton(
+                color: Blue1,
+                splashRadius: 1,
+                iconSize: 20,
+                icon: Icon(textC.isPasswordHidden.value
+                    ? FontAwesomeIcons.eye
+                    : FontAwesomeIcons.eyeSlash),
+                onPressed: () {
+                  textC.isPasswordHidden.value = !textC.isPasswordHidden.value;
+                },
+              ),
+            ),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: Yellow1),
+                borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 Widget textformNormalMobile(
     BuildContext context,
     Key? key,

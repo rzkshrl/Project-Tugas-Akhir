@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
 String userModelToJson(UserModel data) => json.encode(data.toJson());
@@ -13,6 +15,7 @@ class UserModel {
   String? role;
   String? creationTime;
   String? lastSignInTime;
+  String? bidang;
 
   UserModel(
       {this.uid,
@@ -22,18 +25,21 @@ class UserModel {
       this.password,
       this.role,
       this.creationTime,
-      this.lastSignInTime});
+      this.lastSignInTime,
+      this.bidang});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromJson(DocumentSnapshot json) {
+    final data = json.data() as Map<String, dynamic>;
     return UserModel(
-        uid: json['uid'],
-        name: json['name'],
-        email: json['email'],
-        photoUrl: json['photoUrl'],
-        password: json['password'],
-        role: json['roles'],
-        creationTime: json['creationTime'],
-        lastSignInTime: json['lastSignInTime']);
+        uid: data['uid'],
+        name: data['name'],
+        email: data['email'],
+        photoUrl: data['profile'],
+        password: data['password'],
+        role: data['role'],
+        creationTime: data['creationTime'],
+        lastSignInTime: data['lastSignInDate'],
+        bidang: data['bidang']);
   }
 
   Map<String, dynamic> toJson() {
@@ -45,7 +51,8 @@ class UserModel {
       "password": password,
       "role": role,
       "creationTime": creationTime,
-      "lastSignInTime": lastSignInTime
+      "lastSignInTime": lastSignInTime,
+      "bidang": bidang
     };
     // data['uid'] = uid;
     // data['name'] = name;

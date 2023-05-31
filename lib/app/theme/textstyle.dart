@@ -46,6 +46,17 @@ getTextFormDialog2(BuildContext context) {
       color: dark);
 }
 
+getTextFormDialog3(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 12.0),
+        const Condition.equals(name: MOBILE, value: 12.0),
+        const Condition.equals(name: TABLET, value: 14.0),
+        const Condition.equals(name: DESKTOP, value: 16.0),
+      ]).value,
+      color: light);
+}
+
 getTextAdmin(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [

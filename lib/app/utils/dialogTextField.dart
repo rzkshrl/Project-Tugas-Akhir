@@ -12,11 +12,13 @@ import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../modules/jam_kerja/controllers/jam_kerja_controller.dart';
+import '../modules/super-admin/controllers/super_admin_controller.dart';
 import '../theme/theme.dart';
 
 final timepickerC = Get.put(TimePickerController(), permanent: true);
 final dayPickC = Get.put(JamKerjaController());
 final hariLiburC = Get.put(HariLiburController());
+final superAdminC = Get.put(SuperAdminController());
 
 Widget dialogTextFieldSevenField(
     BuildContext context, Widget btnAction, bool enabled) {
@@ -159,6 +161,140 @@ Widget dialogTextFieldSevenField(
           //     Yellow1,
           //     Yellow1,
           //     false),
+          SizedBox(
+            height: 1.5.h,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 3.8.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                btnAction,
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget dialogTextFieldDataUser(
+    BuildContext context, Widget btnAction, bool enabled) {
+  return AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    backgroundColor: Blue1,
+    content: SizedBox(
+      width: 120.h,
+      height: 90.h,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 5.h,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 3.w,
+              ),
+              Text(
+                "Tambah Data",
+                style: getTextDialogFieldHeader(context),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 2.5.h,
+          ),
+          textformDialogWeb(
+              context,
+              textC.namaDataUserKey.value,
+              45.4.w,
+              textC.namaDataUserC,
+              textC.normalValidator,
+              null,
+              null,
+              null,
+              null,
+              "Masukkan nama pegawai...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              false),
+          SizedBox(
+            height: 1.5.h,
+          ),
+          dropdownNormalField3(
+              context,
+              45.4.w,
+              cDropdown.roleDataUserKey.value,
+              (value) {
+                if (value != null) {
+                  cDropdown.roleDataUserC.text = value;
+                }
+              },
+              superAdminC.itemRoleUser,
+              (item) {
+                int index = superAdminC.itemRoleUser.indexOf(item!);
+                return superAdminC.itemRoleView[index];
+              },
+              null,
+              "Pilih Role Pegawai...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              cDropdown.roleDataUserC.text == ''
+                  ? null
+                  : cDropdown.roleDataUserC.text),
+          SizedBox(
+            height: 4.5.h,
+          ),
+          dropdownNormalField(
+              context, 45.4.w, cDropdown.jabatanDataUserKey.value, (value) {
+            if (value != null) {
+              cDropdown.jabatanDataUserC.text = value;
+            }
+          },
+              [
+                'Kepala Sekolah',
+                'Operator Sekolah',
+                'Guru Kelas',
+                'Guru Mapel'
+              ],
+              null,
+              "Pilih Jabatan Pegawai...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              Yellow1,
+              cDropdown.jabatanDataUserC.text == ''
+                  ? null
+                  : cDropdown.jabatanDataUserC.text),
+          SizedBox(
+            height: 4.5.h,
+          ),
+          textformDialogWeb(
+              context,
+              textC.emailDataUserKey.value,
+              45.4.w,
+              textC.emailDataUserC,
+              textC.emailValidator,
+              null,
+              null,
+              null,
+              null,
+              "Masukkan email pegawai...",
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              false),
+          SizedBox(
+            height: 1.5.h,
+          ),
+          textformPassWebDialog(context, null, null, null,
+              'Masukkan password pegawai', null, enabled),
           SizedBox(
             height: 1.5.h,
           ),

@@ -8,11 +8,15 @@ import 'package:get/get.dart';
 class DropdownTextFieldController extends GetxController {
   final kepgTambahDataPegKey = GlobalKey<FormState>().obs;
   final bidangTambahDataPegKey = GlobalKey<FormState>().obs;
+  final roleDataUserKey = GlobalKey<FormState>().obs;
+  final jabatanDataUserKey = GlobalKey<FormState>().obs;
   final pinRekapKey = GlobalKey<FormState>().obs;
 
   final TextEditingController kepgTambahDataPegC = TextEditingController();
   final TextEditingController pinRekapC = TextEditingController();
   final TextEditingController bidangTambahDataPegC = TextEditingController();
+  final TextEditingController roleDataUserC = TextEditingController();
+  final TextEditingController jabatanDataUserC = TextEditingController();
 
   final jadkerCon = "".obs;
   setJadker(String jadker) {

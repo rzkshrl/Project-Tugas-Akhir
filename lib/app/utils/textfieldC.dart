@@ -24,15 +24,20 @@ class TextFieldController extends GetxController {
   final namaTambahDataPegC = TextEditingController();
   final pinTambahDataPegC = TextEditingController();
   final nipTambahDataPegC = TextEditingController();
-  final alamatTambahDataPegC = TextEditingController();
   final emailTambahDataPegC = TextEditingController();
   final bidangTambahDataPegC = TextEditingController();
   final namaTambahDataPegKey = GlobalKey<FormState>().obs;
   final pinTambahDataPegKey = GlobalKey<FormState>().obs;
   final nipTambahDataPegKey = GlobalKey<FormState>().obs;
-  final alamatTambahDataPegKey = GlobalKey<FormState>().obs;
   final emailTambahDataPegKey = GlobalKey<FormState>().obs;
   final bidangTambahDataPegKey = GlobalKey<FormState>().obs;
+
+  final namaDataUserC = TextEditingController();
+  final emailDataUserC = TextEditingController();
+  final passDataUserC = TextEditingController();
+  final namaDataUserKey = GlobalKey<FormState>().obs;
+  final emailDataUserKey = GlobalKey<FormState>().obs;
+  final passDataUserKey = GlobalKey<FormState>().obs;
 
   final yearAPILiburC = TextEditingController();
   final yearAPILiburKey = GlobalKey<FormState>().obs;

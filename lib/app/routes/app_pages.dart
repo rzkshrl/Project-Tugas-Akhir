@@ -1,5 +1,3 @@
-// ignore_for_file: constant_identifier_names
-
 import 'package:get/get.dart';
 
 import '../modules/beranda_mobile/bindings/beranda_mobile_binding.dart';
@@ -14,7 +12,6 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/jam_kerja/bindings/jam_kerja_binding.dart';
 import '../modules/jam_kerja/views/jam_kerja_view.dart';
-
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/login_mobile/bindings/login_mobile_binding.dart';
@@ -37,6 +34,10 @@ import '../modules/riwayat_presensi/bindings/riwayat_presensi_binding.dart';
 import '../modules/riwayat_presensi/views/riwayat_presensi_view.dart';
 import '../modules/riwayat_presensi_mobile/bindings/riwayat_presensi_mobile_binding.dart';
 import '../modules/riwayat_presensi_mobile/views/riwayat_presensi_mobile_view.dart';
+import '../modules/super-admin/bindings/super_admin_binding.dart';
+import '../modules/super-admin/views/super_admin_view.dart';
+
+// ignore_for_file: constant_identifier_names
 
 part 'app_routes.dart';
 
@@ -130,6 +131,11 @@ class AppPages {
       name: _Paths.DETAIL_PRESENSI,
       page: () => const DetailPresensiView(),
       binding: DetailPresensiBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUPER_ADMIN,
+      page: () => const SuperAdminView(),
+      binding: SuperAdminBinding(),
     ),
   ];
 }
