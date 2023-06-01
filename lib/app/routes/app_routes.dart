@@ -27,6 +27,8 @@ abstract class Routes {
   static const PROFILE_MOBILE = _Paths.PROFILE_MOBILE;
   static const DETAIL_PRESENSI = _Paths.DETAIL_PRESENSI;
   static const SUPER_ADMIN = _Paths.SUPER_ADMIN;
+  static const UBAH_PROFIL_MOBILE = _Paths.UBAH_PROFIL_MOBILE;
+  static const UBAH_SANDI_MOBILE = _Paths.UBAH_SANDI_MOBILE;
 }
 
 abstract class _Paths {
@@ -53,4 +55,6 @@ abstract class _Paths {
   static const PROFILE_MOBILE = '/profile-mobile';
   static const DETAIL_PRESENSI = '/detail-presensi';
   static const SUPER_ADMIN = '/super-admin';
+  static const UBAH_PROFIL_MOBILE = '/ubah-profil-mobile';
+  static const UBAH_SANDI_MOBILE = '/ubah-sandi-mobile';
 }

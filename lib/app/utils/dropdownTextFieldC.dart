@@ -11,12 +11,14 @@ class DropdownTextFieldController extends GetxController {
   final roleDataUserKey = GlobalKey<FormState>().obs;
   final jabatanDataUserKey = GlobalKey<FormState>().obs;
   final pinRekapKey = GlobalKey<FormState>().obs;
+  final bidangUbahProfilKey = GlobalKey<FormState>().obs;
 
   final TextEditingController kepgTambahDataPegC = TextEditingController();
   final TextEditingController pinRekapC = TextEditingController();
   final TextEditingController bidangTambahDataPegC = TextEditingController();
   final TextEditingController roleDataUserC = TextEditingController();
   final TextEditingController jabatanDataUserC = TextEditingController();
+  final TextEditingController bidangUbahProfilC = TextEditingController();
 
   final jadkerCon = "".obs;
   setJadker(String jadker) {

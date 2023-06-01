@@ -9,7 +9,7 @@ import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
 
-import '../modules/data_pegawai/controllers/data_pegawai_controller.dart';
+import '../web/data_pegawai/controllers/data_pegawai_controller.dart';
 import '../theme/textstyle.dart';
 import 'btnDefault.dart';
 import 'dropdownTextField.dart';
@@ -71,8 +71,6 @@ class KepegawaianDTS extends DataTableSource {
                         textC.nipTambahDataPegKey.value.currentState!
                             .validate() &&
                         cDropdown.bidangTambahDataPegKey.value.currentState!
-                            .validate() &&
-                        textC.emailTambahDataPegKey.value.currentState!
                             .validate()) {
                       c.editPegawai(
                         data.pin!,

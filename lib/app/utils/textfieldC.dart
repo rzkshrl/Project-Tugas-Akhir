@@ -35,9 +35,11 @@ class TextFieldController extends GetxController {
   final namaDataUserC = TextEditingController();
   final emailDataUserC = TextEditingController();
   final passDataUserC = TextEditingController();
+  final pinDataUserC = TextEditingController();
   final namaDataUserKey = GlobalKey<FormState>().obs;
   final emailDataUserKey = GlobalKey<FormState>().obs;
   final passDataUserKey = GlobalKey<FormState>().obs;
+  final pinDataUserKey = GlobalKey<FormState>().obs;
 
   final yearAPILiburC = TextEditingController();
   final yearAPILiburKey = GlobalKey<FormState>().obs;
@@ -49,6 +51,9 @@ class TextFieldController extends GetxController {
 
   final datepickerC = TextEditingController();
   final datepickerKey = GlobalKey<FormState>().obs;
+
+  final namaUbahProfilC = TextEditingController();
+  final namaUbahProfilKey = GlobalKey<FormState>().obs;
 
   final namaJamKerjaC = TextEditingController();
   final namaJamKerjaKey = GlobalKey<FormState>().obs;

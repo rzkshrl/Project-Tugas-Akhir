@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconly/iconly.dart';
-import 'package:project_tugas_akhir/app/modules/home/views/home_view.dart';
+import 'package:project_tugas_akhir/app/web/home/views/home_view.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 
@@ -29,6 +29,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   await initializeDateFormatting('id_ID', null)
       .then((_) => runApp(ProjectTugasAkhir()));
   runApp(ProjectTugasAkhir());

@@ -130,3 +130,28 @@ Widget textButton1(IconData icon, Color iconColor, String textBtn,
     ),
   );
 }
+
+Widget textButtonMobile1(IconData icon, Color iconColor, String textBtn,
+    TextStyle textStyleBtn, VoidCallback onPressed) {
+  return TextButton(
+    onPressed: onPressed,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          color: iconColor,
+          size: 20,
+        ),
+        SizedBox(
+          width: 0.6.w,
+        ),
+        Text(
+          textBtn,
+          style: textStyleBtn,
+        ),
+      ],
+    ),
+  );
+}

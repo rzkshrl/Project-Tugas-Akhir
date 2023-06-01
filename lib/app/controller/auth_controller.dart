@@ -78,7 +78,6 @@ class AuthController extends GetxController {
     CollectionReference users = firestore.collection("Users");
 
     String emailUser = auth.currentUser!.email.toString();
-    final splitEmail = emailUser.split('@');
 
     final checkuser = await users.doc(emailUser).get();
 
@@ -90,7 +89,6 @@ class AuthController extends GetxController {
         'role': "user",
         'bidang': 'Pegawai',
         'profile': '',
-        'password': password,
         'lastSignInDate':
             auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
         'creationTime':
@@ -99,7 +97,6 @@ class AuthController extends GetxController {
     } else {
       // return null;
       users.doc(emailUser).update({
-        'uid': auth.currentUser!.uid,
         'lastSignInDate':
             auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
       });
@@ -115,11 +112,12 @@ class AuthController extends GetxController {
 
     userData.value = (UserModel(
         uid: auth.currentUser!.uid,
-        name: splitEmail[0],
+        name: checkUserData['name'],
+        bidang: checkUserData['bidang'],
         email: auth.currentUser!.email,
         photoUrl: checkUserData['profile'],
-        password: password,
         role: checkUserData['role'],
+        pin: checkUserData['pin'],
         creationTime:
             auth.currentUser!.metadata.creationTime!.toIso8601String(),
         lastSignInTime:
@@ -160,23 +158,42 @@ class AuthController extends GetxController {
           email: email, password: password);
 
       if (myUser.user!.emailVerified) {
-        auth.authStateChanges().listen((User? user) async {
-          if (user == null) {
-            if (kDebugMode) {
-              print('User is currently signed out!');
-            }
-          } else {
-            if (kDebugMode) {
-              print('User is signed in!');
-            }
+        // auth.authStateChanges().listen((User? user) async {
+        //   if (user == null) {
+        //     if (kDebugMode) {
+        //       print('User is currently signed out!');
+        //     }
+        //   } else {
+        //     if (kDebugMode) {
+        //       print('User is signed in!');
+        //     }
 
-            syncUsers(password, context);
-            isAuth.value = true;
-            await Future.delayed(const Duration(seconds: 5));
+        syncUsers(password, context);
+        isAuth.value = true;
+        if (kIsWeb) {
+          Get.dialog(
+            dialogAlertOnlySingleMsgAnimation('assets/lootie/loading.json',
+                'Memuat...', getTextAlert(Get.context!)),
+            barrierDismissible: false,
+          );
+        } else {
+          Get.dialog(
+            dialogAlertOnlySingleMsgAnimationMobile(
+                'assets/lootie/loading.json',
+                'Memuat...',
+                getTextAlert(Get.context!)),
+            barrierDismissible: false,
+          );
+        }
 
-            await Get.offAllNamed(Routes.HOME);
-          }
-        });
+        await Future.delayed(
+          const Duration(seconds: 5),
+        );
+        Get.back();
+
+        await Get.offAllNamed(Routes.HOME);
+        // }
+        // });
       } else {
         Get.dialog(dialogAlertBtn(() async {
           myUser.user!.sendEmailVerification();
@@ -285,6 +302,10 @@ class AuthController extends GetxController {
   //logout
   void logout() async {
     await auth.signOut();
-    Get.offAllNamed(Routes.LOGIN);
+    if (kIsWeb) {
+      Get.offAllNamed(Routes.LOGIN);
+    } else {
+      Get.offAllNamed(Routes.LOGIN_MOBILE);
+    }
   }
 }

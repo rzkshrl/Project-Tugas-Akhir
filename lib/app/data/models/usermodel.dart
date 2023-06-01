@@ -11,22 +11,22 @@ class UserModel {
   String? name;
   String? email;
   String? photoUrl;
-  String? password;
   String? role;
   String? creationTime;
   String? lastSignInTime;
   String? bidang;
+  String? pin;
 
   UserModel(
       {this.uid,
       this.name,
       this.email,
       this.photoUrl,
-      this.password,
       this.role,
       this.creationTime,
       this.lastSignInTime,
-      this.bidang});
+      this.bidang,
+      this.pin});
 
   factory UserModel.fromJson(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
@@ -35,11 +35,11 @@ class UserModel {
         name: data['name'],
         email: data['email'],
         photoUrl: data['profile'],
-        password: data['password'],
         role: data['role'],
         creationTime: data['creationTime'],
         lastSignInTime: data['lastSignInDate'],
-        bidang: data['bidang']);
+        bidang: data['bidang'],
+        pin: data['pin']);
   }
 
   Map<String, dynamic> toJson() {
@@ -48,11 +48,11 @@ class UserModel {
       "name": name,
       "email": email,
       "photoUrl": photoUrl,
-      "password": password,
       "role": role,
       "creationTime": creationTime,
       "lastSignInTime": lastSignInTime,
-      "bidang": bidang
+      "bidang": bidang,
+      "pin": pin
     };
     // data['uid'] = uid;
     // data['name'] = name;

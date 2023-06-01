@@ -3,15 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
+
 import 'package:project_tugas_akhir/app/data/models/usermodel.dart';
-import 'package:project_tugas_akhir/app/modules/super-admin/controllers/super_admin_controller.dart';
+import 'package:project_tugas_akhir/app/web/super-admin/controllers/super_admin_controller.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
+import 'package:project_tugas_akhir/app/utils/stringGlobal.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
 
-import '../modules/data_pegawai/controllers/data_pegawai_controller.dart';
 import '../theme/textstyle.dart';
 import 'btnDefault.dart';
 import 'dropdownTextField.dart';
@@ -30,14 +30,14 @@ class UserDTS extends DataTableSource {
     return DataRow(
       cells: [
         DataCell(Text(
-          "${data.name!}",
+          data.name!,
           style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
           // "${data.role}",
-          data.role == "super-admin"
+          data.role == superAdmin
               ? "Super-Admin"
-              : data.role == "admin"
+              : data.role == admin
                   ? "Admin"
                   : "Pegawai",
           style: getTextTableData(Get.context!),
@@ -52,7 +52,7 @@ class UserDTS extends DataTableSource {
         )),
         DataCell(IconButton(
             onPressed: () {
-              // c.deleteDoc(data.pin!);
+              c.deleteDoc(data.email!, data.uid!);
             },
             icon: Icon(
               IconlyLight.delete,
@@ -63,9 +63,9 @@ class UserDTS extends DataTableSource {
               textC.namaDataUserC.text = data.name!;
               cDropdown.roleDataUserC.text = data.role!;
               textC.emailDataUserC.text = data.email!;
-              textC.passDataUserC.text = data.password!;
               cDropdown.jabatanDataUserC.text = data.bidang!;
-              Get.dialog(dialogTextFieldSevenField(
+              textC.pinDataUserC.text = data.pin!;
+              Get.dialog(dialogTextFieldEditDataUser(
                   Get.context!,
                   btnDefaultIcon1(10.w, Blue4, IconlyLight.tick_square, Yellow1,
                       "Kirim", getTextBtnAction(Get.context!), () {
@@ -75,15 +75,16 @@ class UserDTS extends DataTableSource {
                         textC.passDataUserKey.value.currentState!.validate() &&
                         cDropdown.jabatanDataUserKey.value.currentState!
                             .validate() &&
-                        textC.emailDataUserKey.value.currentState!.validate()) {
+                        textC.emailDataUserKey.value.currentState!.validate() &&
+                        textC.pinDataUserKey.value.currentState!.validate()) {
                       c.editUser(
                           data.email!,
-                          Get.context!,
-                          textC.namaTambahDataPegC.text,
+                          data.uid!,
+                          textC.namaDataUserC.text,
                           cDropdown.roleDataUserC.text,
                           cDropdown.jabatanDataUserC.text,
                           textC.emailDataUserC.text,
-                          textC.passDataUserC.text);
+                          textC.pinDataUserC.text);
                     }
                   }),
                   true));

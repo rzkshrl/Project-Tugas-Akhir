@@ -7,6 +7,7 @@ environment:
 
 dependencies:
   animated_splash_screen: ^1.3.0
+  bcrypt: ^1.1.3
   build_runner: ^2.3.3
   cloud_firestore: ^4.3.1
   cupertino_icons: ^1.0.2
@@ -16,6 +17,7 @@ dependencies:
   dwds: ^16.0.1
   firebase_auth: ^4.2.6
   firebase_core: ^2.5.0
+  firebase_storage: ^11.2.2
   flutter:
     sdk: flutter
   flutter_cors: ^1.3.2
@@ -25,17 +27,20 @@ dependencies:
   hexcolor: ^3.0.1
   iconly: ^1.0.1
   icons_plus: ^4.0.0
-  intl: ^0.18.1
+  image_picker: ^0.8.7+5
+  intl: ^0.17.0
   json_annotation: ^4.8.0
   linked_scroll_controller: ^0.2.0
   lottie: ^2.3.2
+  node_interop: ^2.1.0
   pdf: ^3.10.3
   printing: ^5.10.4
   responsive_framework: ^0.2.0
   sizer: ^2.0.15
   syncfusion_flutter_calendar: ^21.1.38
+  syncfusion_flutter_charts: ^21.2.3
   syncfusion_flutter_datepicker: ^21.1.38
-  syncfusion_flutter_pdfviewer: ^21.2.6
+  syncfusion_flutter_pdfviewer: ^21.2.3
   universal_html: ^2.2.1
   url_launcher: ^6.1.10
 
@@ -49,6 +54,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/lootie/
+    - assets/tugas-akhir-e1997-firebase-adminsdk.json
   fonts:
     - family: Inter
       fonts:

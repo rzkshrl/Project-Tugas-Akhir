@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
-import '../modules/jam_kerja/controllers/jam_kerja_controller.dart';
+import '../web/jam_kerja/controllers/jam_kerja_controller.dart';
 import '../theme/textstyle.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';

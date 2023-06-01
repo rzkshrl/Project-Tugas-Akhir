@@ -356,28 +356,29 @@ Widget textformPassWeb(
 }
 
 Widget textformPassWebDialog(
-    BuildContext context,
-    Iterable<String>? autofillHints,
-    IconData? prefixIcon,
-    Color? prefixIconColor,
-    String hintText,
-    void Function()? onEditingComplete,
-    bool enabled) {
+  BuildContext context,
+  Key key,
+  TextEditingController controller,
+  IconData? prefixIcon,
+  Color? prefixIconColor,
+  String hintText,
+  bool enabled,
+  bool enabled2,
+  double width,
+) {
   return Form(
-    key: textC.passWebKey.value,
+    key: key,
     child: Obx(
       () => SizedBox(
-        width: 344,
+        width: width,
         height: 65,
         child: TextFormField(
-          enabled: enabled,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          autofillHints: autofillHints,
+          enabled: enabled2,
+          readOnly: enabled,
           style: getTextFormDialog(context),
           validator: textC.passValidator,
           obscureText: textC.isPasswordHidden.value,
-          controller: textC.passWebC,
-          onEditingComplete: onEditingComplete,
+          controller: controller,
           decoration: InputDecoration(
             helperText: ' ',
             helperStyle: getTextErrorFormLogin(context),
@@ -399,7 +400,7 @@ Widget textformPassWebDialog(
             prefixIconColor: prefixIconColor,
             hintText: hintText,
             hintStyle: getTextHintFormLogin(context),
-            fillColor: light,
+            fillColor: Colors.transparent,
             filled: true,
             errorStyle: getTextErrorFormLogin(context),
             errorBorder: OutlineInputBorder(
@@ -417,7 +418,7 @@ Widget textformPassWebDialog(
                 right: 0.35.w,
               ),
               child: IconButton(
-                color: Blue1,
+                color: Yellow1,
                 splashRadius: 1,
                 iconSize: 20,
                 icon: Icon(textC.isPasswordHidden.value
@@ -428,7 +429,7 @@ Widget textformPassWebDialog(
                 },
               ),
             ),
-            border: OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: Yellow1),
                 borderRadius: BorderRadius.circular(12)),
           ),

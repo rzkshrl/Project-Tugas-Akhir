@@ -236,7 +236,7 @@ Widget dropdownNormalField3(
             // key: _divisi,
             autoValidateMode: AutovalidateMode.onUserInteraction,
             validator: textC.normalValidator,
-            clearButtonProps: ClearButtonProps(isVisible: false),
+            clearButtonProps: const ClearButtonProps(isVisible: false),
             items: items,
             itemAsString: itemAsString,
             onChanged: onChanged,

@@ -18,6 +18,7 @@ import '../data/models/devicemodel.dart';
 import '../data/models/firestorescanlogmodel.dart';
 import '../theme/textstyle.dart';
 import '../utils/dialogDefault.dart';
+import '../utils/stringGlobal.dart';
 import '../utils/urlHTTP.dart';
 
 import 'dart:async';
@@ -464,39 +465,39 @@ class APIController extends GetxController {
                 );
             final checkData = await scanlogPegawai.get();
             if (pin != null) {
+              // if (checkData.exists == false) {
+              //   await scanlogPegawai.set({
+              //     'pin': pin,
+              //     'date_time': hour >= 6 && hour <= 8
+              //         ? scan.toIso8601String()
+              //         : hour >= 9 && hour <= 17
+              //             ? scan.toIso8601String()
+              //             : scan.toIso8601String(),
+              //     'status': hour >= 6 && hour <= 8
+              //         ? 'Masuk'
+              //         : hour >= 9 && hour <= 17
+              //             ? 'Keluar'
+              //             : 'Tanpa Keterangan'
+              //   });
+              // } else {
+              //   await scanlogPegawai.update({
+              //     'pin': pin,
+              //     'date_time': hour >= 6 && hour <= 8
+              //         ? scan.toIso8601String()
+              //         : hour >= 9 && hour <= 17
+              //             ? scan.toIso8601String()
+              //             : scan.toIso8601String(),
+              //     'status': hour >= 6 && hour <= 8
+              //         ? 'Masuk'
+              //         : hour >= 9 && hour <= 17
+              //             ? 'Keluar'
+              //             : 'Tanpa Keterangan'
+              //   });
+              // }
               if (kepgData.value.kepegawaian == "PNS") {
                 switch (scan.weekday) {
                   case DateTime.monday:
-                    if (jamKerjaData.value.hariKerja == 'Senin') {
-                      // if (checkData.exists == false) {
-                      //   await scanlogPegawai.set({
-                      //     'pin': pin,
-                      //     'date_time': hour >= 6 && hour <= 8
-                      //         ? scan.toIso8601String()
-                      //         : hour >= 9 && hour <= 17
-                      //             ? scan.toIso8601String()
-                      //             : scan.toIso8601String(),
-                      //     'status': hour >= 6 && hour <= 8
-                      //         ? 'Masuk'
-                      //         : hour >= 9 && hour <= 17
-                      //             ? 'Keluar'
-                      //             : 'Tanpa Keterangan'
-                      //   });
-                      // } else {
-                      //   await scanlogPegawai.update({
-                      //     'pin': pin,
-                      //     'date_time': hour >= 6 && hour <= 8
-                      //         ? scan.toIso8601String()
-                      //         : hour >= 9 && hour <= 17
-                      //             ? scan.toIso8601String()
-                      //             : scan.toIso8601String(),
-                      //     'status': hour >= 6 && hour <= 8
-                      //         ? 'Masuk'
-                      //         : hour >= 9 && hour <= 17
-                      //             ? 'Keluar'
-                      //             : 'Tanpa Keterangan'
-                      //   });
-                      // }
+                    if (jamKerjaData.value.hariKerja == senin) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -513,7 +514,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.tuesday:
-                    if (jamKerjaData.value.hariKerja == 'Selasa') {
+                    if (jamKerjaData.value.hariKerja == selasa) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -530,7 +531,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.wednesday:
-                    if (jamKerjaData.value.hariKerja == 'Rabu') {
+                    if (jamKerjaData.value.hariKerja == rabu) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -547,7 +548,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.thursday:
-                    if (jamKerjaData.value.hariKerja == 'Kamis') {
+                    if (jamKerjaData.value.hariKerja == kamis) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -564,7 +565,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.friday:
-                    if (jamKerjaData.value.hariKerja == 'Jumat') {
+                    if (jamKerjaData.value.hariKerja == jumat) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -581,7 +582,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.saturday:
-                    if (jamKerjaData.value.hariKerja == 'Sabtu') {
+                    if (jamKerjaData.value.hariKerja == sabtu) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -603,7 +604,7 @@ class APIController extends GetxController {
               } else if (kepgData.value.kepegawaian == "NON-PNS") {
                 switch (scan.weekday) {
                   case DateTime.monday:
-                    if (jamKerjaData.value.hariKerja == 'Senin') {
+                    if (jamKerjaData.value.hariKerja == senin) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -620,7 +621,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.tuesday:
-                    if (jamKerjaData.value.hariKerja == 'Selasa') {
+                    if (jamKerjaData.value.hariKerja == selasa) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -637,7 +638,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.wednesday:
-                    if (jamKerjaData.value.hariKerja == 'Rabu') {
+                    if (jamKerjaData.value.hariKerja == rabu) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -654,7 +655,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.thursday:
-                    if (jamKerjaData.value.hariKerja == 'Kamis') {
+                    if (jamKerjaData.value.hariKerja == kamis) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -671,7 +672,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.friday:
-                    if (jamKerjaData.value.hariKerja == 'Jumat') {
+                    if (jamKerjaData.value.hariKerja == jumat) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
@@ -688,7 +689,7 @@ class APIController extends GetxController {
                     }
                     break;
                   case DateTime.saturday:
-                    if (jamKerjaData.value.hariKerja == 'Sabtu') {
+                    if (jamKerjaData.value.hariKerja == sabtu) {
                       if (checkData.exists == false) {
                         await scanlogPegawai.set({
                           'pin': pin,
