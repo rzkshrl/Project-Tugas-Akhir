@@ -11,6 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
 import 'package:universal_html/html.dart' as html;
 
+import '../../../data/models/firestorejamkerjamodel.dart';
 import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../utils/textfield.dart';
 
@@ -18,9 +19,14 @@ class RekapPresensiPerController extends GetxController {
   late Stream<List<KepegawaianModel>> firestoreKepegawaianList;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<KepegawaianModel> kepegawaianList = [];
+  List<JamKerjaModel> jamKerjaList = [];
   var pinList = <String>[].obs;
   var namaList = <String>[].obs;
   final isClicked = false.obs;
+
+  var totalKeterlambatan = Duration.zero.obs;
+  var totalPulangLebihAwal = Duration.zero.obs;
+  DateFormat formatter = DateFormat('HH:mm');
 
   final pdfURL = "".obs;
 
@@ -84,6 +90,7 @@ class RekapPresensiPerController extends GetxController {
 
   Future<void> unduhPDF(String pin) async {
     final QuerySnapshot<Map<String, dynamic>> presensiSnapshot;
+    final QuerySnapshot<Map<String, dynamic>> jamKerjaSnapshot;
 
     if (start == null) {
       presensiSnapshot = await firestore
@@ -118,6 +125,15 @@ class RekapPresensiPerController extends GetxController {
         .map((e) => PresensiModel.fromJson(e.data()))
         .toList();
 
+    var kepgData =
+        kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin);
+
+    jamKerjaSnapshot = await firestore.collection('JamKerja').get();
+
+    jamKerjaList = jamKerjaSnapshot.docs
+        .map((doc) => JamKerjaModel.fromJson(doc))
+        .toList();
+
     List<GroupedPresensiModel> groupedData = groupAttendanceData(presensiData);
 
     List<GroupedPresensiModel> combinedData = [];
@@ -147,6 +163,31 @@ class RekapPresensiPerController extends GetxController {
         ));
       }
     }
+
+    for (var presensi in combinedData) {
+      final jamKerja = jamKerjaList
+          .firstWhere((jamKerja) => jamKerja.kepg == kepgData.kepegawaian);
+
+      var jadwalMasuk = formatter.parse(jamKerja.jadwalMasuk!);
+      var jadwalKeluar = formatter.parse(jamKerja.jadwalKeluar!);
+
+      if (jamKerja != null) {
+        final durasiKerja = jadwalKeluar.difference(jadwalMasuk);
+        final durasiPresensi =
+            presensi.dateTimeKeluar!.difference(presensi.dateTimeMasuk!);
+
+        if (durasiPresensi > durasiKerja) {
+          final keterlambatan = durasiPresensi - durasiKerja;
+          totalKeterlambatan.value += keterlambatan;
+        } else if (durasiPresensi < durasiKerja) {
+          final pulangLebihAwal = durasiKerja - durasiPresensi;
+          totalPulangLebihAwal.value += pulangLebihAwal;
+        }
+      }
+    }
+
+    print(totalKeterlambatan.value);
+    print(totalPulangLebihAwal.value);
 
     final pdf = pw.Document();
     var formatterTime = DateFormat('HH:mm', 'id-ID');
@@ -311,25 +352,21 @@ class RekapPresensiPerController extends GetxController {
                         children: [
                           pw.Text('PIN: $pin',
                               style: const pw.TextStyle(fontSize: 8)),
-                          pw.Text(
-                              'NIP: ${kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin).nip!}',
+                          pw.Text('NIP: ${kepgData.nip!}',
                               style: const pw.TextStyle(fontSize: 8)),
                         ]),
                     pw.Column(
                         mainAxisAlignment: pw.MainAxisAlignment.center,
                         children: [
-                          pw.Text(
-                              'Nama: ${kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin).nama!}',
+                          pw.Text('Nama: ${kepgData.nama!}',
                               style: const pw.TextStyle(fontSize: 8)),
-                          pw.Text(
-                              'Jabatan: ${kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin).bidang!}',
+                          pw.Text('Jabatan: ${kepgData.bidang!}',
                               style: const pw.TextStyle(fontSize: 8)),
                         ]),
                     pw.Column(
                         mainAxisAlignment: pw.MainAxisAlignment.start,
                         children: [
-                          pw.Text(
-                              'Kepegawaian: ${kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin).kepegawaian!}',
+                          pw.Text('Kepegawaian: ${kepgData.kepegawaian!}',
                               style: const pw.TextStyle(fontSize: 8)),
                           pw.Text('Madrasah: MIM JETIS LOR',
                               style: const pw.TextStyle(fontSize: 8)),

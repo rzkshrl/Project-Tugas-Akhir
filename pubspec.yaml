@@ -55,7 +55,6 @@ flutter:
   assets:
     - assets/icons/
     - assets/lootie/
-    - assets/tugas-akhir-e1997-firebase-adminsdk.json
   fonts:
     - family: Inter
       fonts:
