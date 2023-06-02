@@ -13,7 +13,7 @@ class UbahSandiMobileView extends GetView<UbahSandiMobileController> {
         title: const Text('UbahSandiMobileView'),
         centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'UbahSandiMobileView is working',
           style: TextStyle(fontSize: 20),

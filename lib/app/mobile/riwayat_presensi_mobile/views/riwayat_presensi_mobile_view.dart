@@ -27,7 +27,7 @@ class RiwayatPresensiMobileView
       (pin);
     }
     final c = Get.put(CalendarsController(pin));
-    final controller = Get.put(RiwayatPresensiMobileController());
+    // final controller = Get.put(RiwayatPresensiMobileController());
     final liburC = Get.put(HariLiburController());
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Scaffold(

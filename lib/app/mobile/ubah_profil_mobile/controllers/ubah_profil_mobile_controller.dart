@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,11 +30,15 @@ class UbahProfilMobileController extends GetxController {
       image =
           await picker.pickImage(source: ImageSource.gallery, imageQuality: 75);
       if (image != null) {
-        print(image!.name);
-        print(image!.name.split(".").last);
-        print(image!.path);
+        if (kDebugMode) {
+          print(image!.name);
+          print(image!.name.split(".").last);
+          print(image!.path);
+        }
       } else {
-        print(image);
+        if (kDebugMode) {
+          print(image);
+        }
       }
       update();
     } else if (status == PermissionStatus.denied) {
