@@ -21,6 +21,7 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
     String? nama = authC.userData.value.name;
     String? email = authC.userData.value.email;
     String? bidang = authC.userData.value.bidang;
+    String? profile = authC.userData.value.photoUrl;
 
     var defaultImage =
         "https://ui-avatars.com/api/?name=${nama}&background=fff38a&color=5175c0&font-size=0.33";
@@ -65,7 +66,11 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                         width: 38.w,
                         color: Colors.grey.shade200,
                         child: Image.network(
-                          defaultImage,
+                          profile != null
+                              ? profile != ''
+                                  ? profile
+                                  : defaultImage
+                              : defaultImage,
                           fit: BoxFit.cover,
                         ),
                       ),

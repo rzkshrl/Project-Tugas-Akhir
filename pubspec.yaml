@@ -34,6 +34,7 @@ dependencies:
   lottie: ^2.3.2
   node_interop: ^2.1.0
   pdf: ^3.10.3
+  permission_handler: ^10.2.0
   printing: ^5.10.4
   responsive_framework: ^0.2.0
   sizer: ^2.0.15

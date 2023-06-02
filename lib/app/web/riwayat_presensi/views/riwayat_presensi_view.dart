@@ -91,15 +91,15 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                   Row(
                     children: [
                       Text(
-                        'November 2022',
+                        '',
                         style: getTextSubHeader(context),
                       ),
                       Text(
-                        ' / ',
+                        '',
                         style: getTextSubHeader(context),
                       ),
                       Text(
-                        'Februari 2023',
+                        '',
                         style: getTextSubHeader(context),
                       ),
                     ],

@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:universal_html/html.dart' as html;
 
 import '../../../data/models/firestorescanlogmodel.dart';
@@ -26,8 +25,6 @@ class RekapPresensiPerController extends GetxController {
   final pdfURL = "".obs;
 
   final pdfBytes = Rx<Uint8List?>(null);
-
-  late PdfViewerController pdfViewerController;
 
   DateTime? start;
   final end = DateTime.now().obs;
@@ -49,7 +46,6 @@ class RekapPresensiPerController extends GetxController {
     });
 
     fetchKepegawaianList();
-    pdfViewerController = PdfViewerController();
   }
 
   Future fetchPinData() async {
@@ -168,33 +164,63 @@ class RekapPresensiPerController extends GetxController {
           children: [
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
-              child: pw.Text('PIN',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-            ),
-            pw.Container(
-              padding: const pw.EdgeInsets.all(5),
-              child: pw.Text('Nama',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-            ),
-            pw.Container(
-              padding: const pw.EdgeInsets.all(5),
-              child: pw.Text('Jabatan',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              child: pw.Text('No.',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Tanggal',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Jam Kerja/Shift',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Jam Masuk',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Scan Masuk',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Keterlambatan',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Jam Keluar',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Scan Keluar',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Durasi Kerja',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Keterangan',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
           ],
         ),
@@ -203,25 +229,7 @@ class RekapPresensiPerController extends GetxController {
             children: [
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
-                child: pw.Text(combinedData[i].pin!,
-                    style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text(
-                    kepegawaianData
-                        .firstWhere((kepegawaian) =>
-                            kepegawaian.pin == combinedData[i].pin)
-                        .nama!,
-                    style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text(
-                    kepegawaianData
-                        .firstWhere((kepegawaian) =>
-                            kepegawaian.pin == combinedData[i].pin)
-                        .bidang!,
+                child: pw.Text("${i + 1}.",
                     style: const pw.TextStyle(fontSize: 10)),
               ),
               pw.Container(
@@ -232,6 +240,14 @@ class RekapPresensiPerController extends GetxController {
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                   formatterTime.format(combinedData[i].dateTimeMasuk!),
                   style: const pw.TextStyle(fontSize: 10),
@@ -239,10 +255,26 @@ class RekapPresensiPerController extends GetxController {
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                   formatterTime.format(combinedData[i].dateTimeKeluar!),
                   style: const pw.TextStyle(fontSize: 10),
                 ),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
               ),
             ],
           ),
@@ -254,21 +286,68 @@ class RekapPresensiPerController extends GetxController {
           build: (pw.Context context) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Text('Kartu Scanlog', style: const pw.TextStyle(fontSize: 12)),
-              pw.Text('PIN: $pin', style: const pw.TextStyle(fontSize: 10)),
-              pw.Text(
-                'Tanggal: ${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}',
-                style: const pw.TextStyle(fontSize: 10),
-              ),
-              pw.SizedBox(height: 20),
+              pw.Center(
+                  child: pw.Text('LAPORAN RINCIAN HARIAN',
+                      style: pw.TextStyle(
+                          fontSize: 12, fontWeight: pw.FontWeight.bold))),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Nama Madrasah: MIM JETIS LOR',
+                        style: pw.TextStyle(
+                            fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                    pw.Text(
+                      'Tanggal: ${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}',
+                      style: pw.TextStyle(
+                          fontSize: 8, fontWeight: pw.FontWeight.bold),
+                    ),
+                  ]),
+              pw.SizedBox(height: 10),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text('PIN: $pin',
+                              style: const pw.TextStyle(fontSize: 8)),
+                          pw.Text(
+                              'NIP: ${kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin).nip!}',
+                              style: const pw.TextStyle(fontSize: 8)),
+                        ]),
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                              'Nama: ${kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin).nama!}',
+                              style: const pw.TextStyle(fontSize: 8)),
+                          pw.Text(
+                              'Jabatan: ${kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin).bidang!}',
+                              style: const pw.TextStyle(fontSize: 8)),
+                        ]),
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                              'Kepegawaian: ${kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin).kepegawaian!}',
+                              style: const pw.TextStyle(fontSize: 8)),
+                          pw.Text('Madrasah: MIM JETIS LOR',
+                              style: const pw.TextStyle(fontSize: 8)),
+                        ]),
+                  ]),
+              pw.SizedBox(height: 10),
               pw.Table(
                 columnWidths: {
-                  0: const pw.FixedColumnWidth(50),
-                  1: const pw.FixedColumnWidth(100),
-                  2: const pw.FixedColumnWidth(100),
-                  3: const pw.FixedColumnWidth(100),
-                  4: const pw.FixedColumnWidth(100),
-                  5: const pw.FixedColumnWidth(100),
+                  0: const pw.FixedColumnWidth(20),
+                  1: const pw.FixedColumnWidth(60),
+                  2: const pw.FixedColumnWidth(80),
+                  3: const pw.FixedColumnWidth(50),
+                  4: const pw.FixedColumnWidth(50),
+                  5: const pw.FixedColumnWidth(52),
+                  6: const pw.FixedColumnWidth(50),
+                  7: const pw.FixedColumnWidth(50),
+                  8: const pw.FixedColumnWidth(50),
+                  9: const pw.FixedColumnWidth(100),
                 },
                 border: pw.TableBorder.all(color: PdfColors.grey),
                 children: tableRows,
@@ -285,7 +364,7 @@ class RekapPresensiPerController extends GetxController {
       ..href = url
       ..style.display = 'none'
       ..download =
-          'Rekapitulasi Scanlog PIN $pin (${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}).pdf';
+          'Laporan Presensi PIN $pin (${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}).pdf';
 
     html.document.body?.children.add(anchor);
     anchor.click();

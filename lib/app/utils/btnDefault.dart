@@ -1,9 +1,12 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_framework/responsive_value.dart' as rspnsvlue;
 import 'package:sizer/sizer.dart';
+
+import '../theme/textstyle.dart';
 
 Widget btnDefaultIcon1(
     double width,
@@ -152,6 +155,25 @@ Widget textButtonMobile1(IconData icon, Color iconColor, String textBtn,
           style: textStyleBtn,
         ),
       ],
+    ),
+  );
+}
+
+Widget btnMobile(
+    Color containerColor, void Function()? onPressed, String textBtn) {
+  return Container(
+    width: 68.5.w,
+    height: 6.2.h,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      color: containerColor,
+    ),
+    child: TextButton(
+      onPressed: onPressed,
+      child: Text(
+        textBtn,
+        style: getTextLoginBtnActiveMobile(Get.context!),
+      ),
     ),
   );
 }

@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:universal_html/html.dart' as html;
 
 import '../../../data/models/firestorescanlogmodel.dart';
@@ -26,8 +25,6 @@ class RekapScanlogPerController extends GetxController {
   final pdfURL = "".obs;
 
   final pdfBytes = Rx<Uint8List?>(null);
-
-  late PdfViewerController pdfViewerController;
 
   DateTime? start;
   final end = DateTime.now().obs;
@@ -48,7 +45,6 @@ class RekapScanlogPerController extends GetxController {
     });
 
     fetchKepegawaianList();
-    pdfViewerController = PdfViewerController();
   }
 
   Future fetchPinData() async {
@@ -77,19 +73,6 @@ class RekapScanlogPerController extends GetxController {
           kepegawaianList.map((kepegawaian) => kepegawaian.pin!).toList();
       update();
     });
-  }
-
-  List<DateTime> generateDateRange() {
-    final List<DateTime> dateRange = [];
-    var currentDate = start;
-
-    while (currentDate!.isBefore(end.value) ||
-        currentDate.isAtSameMomentAs(end.value)) {
-      dateRange.add(currentDate);
-      currentDate = currentDate.add(const Duration(days: 1));
-    }
-
-    return dateRange;
   }
 
   Future<void> unduhPDF(String pin) async {
@@ -146,33 +129,63 @@ class RekapScanlogPerController extends GetxController {
           children: [
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('No.',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
               child: pw.Text('PIN',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('NIP',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Nama',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Jabatan',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Kepegawaian',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Madrasah',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Tanggal',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Scan Masuk',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Scan Keluar',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
           ],
         ),
@@ -181,8 +194,22 @@ class RekapScanlogPerController extends GetxController {
             children: [
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("${i + 1}.",
+                    style: const pw.TextStyle(fontSize: 8)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(groupedData[i].pin!,
-                    style: const pw.TextStyle(fontSize: 10)),
+                    style: const pw.TextStyle(fontSize: 8)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text(
+                    kepegawaianData
+                        .firstWhere((kepegawaian) =>
+                            kepegawaian.pin == groupedData[i].pin)
+                        .nip!,
+                    style: const pw.TextStyle(fontSize: 8)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
@@ -191,7 +218,7 @@ class RekapScanlogPerController extends GetxController {
                         .firstWhere((kepegawaian) =>
                             kepegawaian.pin == groupedData[i].pin)
                         .nama!,
-                    style: const pw.TextStyle(fontSize: 10)),
+                    style: const pw.TextStyle(fontSize: 8)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
@@ -200,26 +227,40 @@ class RekapScanlogPerController extends GetxController {
                         .firstWhere((kepegawaian) =>
                             kepegawaian.pin == groupedData[i].pin)
                         .bidang!,
-                    style: const pw.TextStyle(fontSize: 10)),
+                    style: const pw.TextStyle(fontSize: 8)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text(
+                    kepegawaianData
+                        .firstWhere((kepegawaian) =>
+                            kepegawaian.pin == groupedData[i].pin)
+                        .kepegawaian!,
+                    style: const pw.TextStyle(fontSize: 8)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("MIM JETIS LOR",
+                    style: const pw.TextStyle(fontSize: 8)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                     dateFormatter.format(groupedData[i].dateTimeMasuk!),
-                    style: const pw.TextStyle(fontSize: 10)),
+                    style: const pw.TextStyle(fontSize: 8)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                   formatterTime.format(groupedData[i].dateTimeMasuk!),
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: const pw.TextStyle(fontSize: 8),
                 ),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                   formatterTime.format(groupedData[i].dateTimeKeluar!),
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: const pw.TextStyle(fontSize: 8),
                 ),
               ),
             ],
@@ -241,12 +282,16 @@ class RekapScanlogPerController extends GetxController {
               pw.SizedBox(height: 20),
               pw.Table(
                 columnWidths: {
-                  0: const pw.FixedColumnWidth(50),
-                  1: const pw.FixedColumnWidth(100),
+                  0: const pw.FixedColumnWidth(40),
+                  1: const pw.FixedColumnWidth(40),
                   2: const pw.FixedColumnWidth(100),
                   3: const pw.FixedColumnWidth(100),
                   4: const pw.FixedColumnWidth(100),
-                  5: const pw.FixedColumnWidth(100),
+                  5: const pw.FixedColumnWidth(80),
+                  6: const pw.FixedColumnWidth(80),
+                  7: const pw.FixedColumnWidth(80),
+                  8: const pw.FixedColumnWidth(80),
+                  9: const pw.FixedColumnWidth(80),
                 },
                 border: pw.TableBorder.all(color: PdfColors.grey),
                 children: tableRows,
@@ -327,33 +372,63 @@ class RekapScanlogPerController extends GetxController {
           children: [
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('No.',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
               child: pw.Text('PIN',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('NIP',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Nama',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Jabatan',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Kepegawaian',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Madrasah',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Tanggal',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Scan Masuk',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Scan Keluar',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
             ),
           ],
         ),
@@ -362,8 +437,22 @@ class RekapScanlogPerController extends GetxController {
             children: [
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("${i + 1}.",
+                    style: const pw.TextStyle(fontSize: 8)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(groupedData[i].pin!,
-                    style: const pw.TextStyle(fontSize: 10)),
+                    style: const pw.TextStyle(fontSize: 8)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text(
+                    kepegawaianData
+                        .firstWhere((kepegawaian) =>
+                            kepegawaian.pin == groupedData[i].pin)
+                        .nip!,
+                    style: const pw.TextStyle(fontSize: 8)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
@@ -372,7 +461,7 @@ class RekapScanlogPerController extends GetxController {
                         .firstWhere((kepegawaian) =>
                             kepegawaian.pin == groupedData[i].pin)
                         .nama!,
-                    style: const pw.TextStyle(fontSize: 10)),
+                    style: const pw.TextStyle(fontSize: 8)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
@@ -381,26 +470,40 @@ class RekapScanlogPerController extends GetxController {
                         .firstWhere((kepegawaian) =>
                             kepegawaian.pin == groupedData[i].pin)
                         .bidang!,
-                    style: const pw.TextStyle(fontSize: 10)),
+                    style: const pw.TextStyle(fontSize: 8)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text(
+                    kepegawaianData
+                        .firstWhere((kepegawaian) =>
+                            kepegawaian.pin == groupedData[i].pin)
+                        .kepegawaian!,
+                    style: const pw.TextStyle(fontSize: 8)),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("MIM JETIS LOR",
+                    style: const pw.TextStyle(fontSize: 8)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                     dateFormatter.format(groupedData[i].dateTimeMasuk!),
-                    style: const pw.TextStyle(fontSize: 10)),
+                    style: const pw.TextStyle(fontSize: 8)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                   formatterTime.format(groupedData[i].dateTimeMasuk!),
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: const pw.TextStyle(fontSize: 8),
                 ),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                   formatterTime.format(groupedData[i].dateTimeKeluar!),
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: const pw.TextStyle(fontSize: 8),
                 ),
               ),
             ],
@@ -423,12 +526,16 @@ class RekapScanlogPerController extends GetxController {
               pw.SizedBox(height: 20),
               pw.Table(
                 columnWidths: {
-                  0: const pw.FixedColumnWidth(50),
-                  1: const pw.FixedColumnWidth(100),
+                  0: const pw.FixedColumnWidth(40),
+                  1: const pw.FixedColumnWidth(40),
                   2: const pw.FixedColumnWidth(100),
                   3: const pw.FixedColumnWidth(100),
                   4: const pw.FixedColumnWidth(100),
-                  5: const pw.FixedColumnWidth(100),
+                  5: const pw.FixedColumnWidth(80),
+                  6: const pw.FixedColumnWidth(80),
+                  7: const pw.FixedColumnWidth(80),
+                  8: const pw.FixedColumnWidth(80),
+                  9: const pw.FixedColumnWidth(80),
                 },
                 border: pw.TableBorder.all(color: PdfColors.grey),
                 children: tableRows,
@@ -502,6 +609,5 @@ class RekapScanlogPerController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    pdfViewerController.dispose();
   }
 }

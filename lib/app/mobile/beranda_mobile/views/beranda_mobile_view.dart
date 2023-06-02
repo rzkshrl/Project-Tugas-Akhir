@@ -125,7 +125,7 @@ class BerandaMobileView extends GetView<BerandaMobileController> {
                     yValueMapper: (Attendance data, _) => data.percentage,
                     dataLabelMapper: (Attendance data, _) =>
                         data.label, // Keterangan grafik
-                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
                   ),
                 ],
               ),

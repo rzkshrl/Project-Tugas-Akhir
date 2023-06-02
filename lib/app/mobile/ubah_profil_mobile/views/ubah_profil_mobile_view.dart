@@ -1,16 +1,33 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
+import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
+import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
+import '../../../utils/textfield.dart';
 import '../controllers/ubah_profil_mobile_controller.dart';
 
 class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
   const UbahProfilMobileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final authC = Get.put(AuthController());
+
+    String? nama = authC.userData.value.name;
+    String? profile = authC.userData.value.photoUrl;
+    String? bidang = authC.userData.value.bidang;
+    textC.namaUbahProfilC.text = nama!;
+    cDropdown.bidangUbahProfilC.text = bidang!;
+
+    var defaultImage =
+        "https://ui-avatars.com/api/?name=${nama}&background=fff38a&color=5175c0&font-size=0.33";
     return Scaffold(
         backgroundColor: light,
         body: SingleChildScrollView(
@@ -41,8 +58,121 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                 ),
               ),
               SizedBox(
-                height: 1.5.h,
+                height: 3.5.h,
               ),
+              Stack(
+                children: [
+                  GetBuilder<UbahProfilMobileController>(builder: (c) {
+                    if (controller.image != null) {
+                      return Center(
+                        child: ClipOval(
+                          child: Container(
+                            width: 38.w,
+                            color: Colors.grey.shade200,
+                            child: Image.file(
+                              File(controller.image!.path),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: ClipOval(
+                          child: Container(
+                            width: 38.w,
+                            color: Colors.grey.shade200,
+                            child: Image.network(
+                              profile != null
+                                  ? profile != ''
+                                      ? profile
+                                      : defaultImage
+                                  : defaultImage,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }),
+                  Positioned(
+                      top: 12.5.h,
+                      left: 50.w,
+                      child: ClipOval(
+                        child: Material(
+                          color: Blue1,
+                          child: IconButton(
+                            onPressed: () {
+                              controller.pickImage();
+                            },
+                            icon: Icon(
+                              IconlyLight.camera,
+                              color: light,
+                            ),
+                          ),
+                        ),
+                      ))
+                ],
+              ),
+              SizedBox(
+                height: 3.5.h,
+              ),
+              Center(
+                child: textformNormalMobile(
+                    context,
+                    textC.namaUbahProfilKey.value,
+                    textC.namaUbahProfilC,
+                    textC.normalValidator,
+                    null,
+                    TextInputType.name,
+                    IconlyLight.user,
+                    Blue1,
+                    "Email",
+                    light,
+                    dark,
+                    Blue1),
+              ),
+              SizedBox(
+                height: 2.2.h,
+              ),
+              Center(
+                child: dropdownNormalFieldMobile(
+                    context, 254, cDropdown.bidangUbahProfilKey.value, (value) {
+                  if (value != null) {
+                    cDropdown.bidangUbahProfilC.text = value;
+                  }
+                },
+                    [
+                      'Kepala Sekolah',
+                      'Operator Sekolah',
+                      'Guru Kelas',
+                      'Guru Mapel'
+                    ],
+                    IconlyLight.user_1,
+                    "Pilih Bidang Kerja Pegawai...",
+                    Colors.transparent,
+                    dark,
+                    Blue1,
+                    Blue1,
+                    cDropdown.bidangUbahProfilC.text == ''
+                        ? null
+                        : cDropdown.bidangUbahProfilC.text),
+              ),
+              SizedBox(
+                height: 2.5.h,
+              ),
+              Center(
+                child: btnMobile(Blue1, () {
+                  if (textC.namaUbahProfilKey.value.currentState!.validate() &&
+                      cDropdown.bidangUbahProfilKey.value.currentState!
+                          .validate()) {
+                    controller.ubahProfil(
+                      textC.namaUbahProfilC.text,
+                      cDropdown.bidangUbahProfilC.text,
+                    );
+                  }
+                }, "Kirim"),
+              )
             ],
           ),
         ));
