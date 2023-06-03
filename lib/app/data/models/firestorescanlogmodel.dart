@@ -33,6 +33,13 @@ class GroupedPresensiModel {
   String? pin;
   DateTime? dateTimeMasuk;
   DateTime? dateTimeKeluar;
+  String? keterlambatan;
+  String? pulangLebihAwal;
+  String? jamMasuk;
+  String? jamKeluar;
+  String? durasiKerja;
+  String? ket;
+  String? shift;
 
   GroupedPresensiModel({this.pin, this.dateTimeMasuk, this.dateTimeKeluar});
 }

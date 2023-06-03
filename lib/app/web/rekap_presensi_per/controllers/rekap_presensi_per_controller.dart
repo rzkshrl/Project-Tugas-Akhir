@@ -20,6 +20,9 @@ class RekapPresensiPerController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<KepegawaianModel> kepegawaianList = [];
   List<JamKerjaModel> jamKerjaList = [];
+  List<String> keterlambatanList = [];
+  List<String> pulangLebihAwalList = [];
+  List<GroupedPresensiModel> presensiList = [];
   var pinList = <String>[].obs;
   var namaList = <String>[].obs;
   final isClicked = false.obs;
@@ -86,6 +89,53 @@ class RekapPresensiPerController extends GetxController {
     return date1.year == date2.year &&
         date1.month == date2.month &&
         date1.day == date2.day;
+  }
+
+  DateTime _parseTime(String time, DateTime date) {
+    var parts = time.split(':');
+    var hour = int.parse(parts[0]);
+    var minute = int.parse(parts[1]);
+
+    return DateTime(date.year, date.month, date.day, hour, minute);
+  }
+
+  String _formatDuration(Duration duration) {
+    var hours = duration.inHours.toString().padLeft(2, '0');
+    var minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+
+    return '$hours:$minutes';
+  }
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+    String hours = twoDigits(duration.inHours.remainder(60));
+    String minutes = twoDigits(duration.inMinutes.remainder(60));
+
+    return "$hours:$minutes";
+  }
+
+  void calculatePresensi() {
+    for (int i = 0; i < presensiList.length; i++) {
+      GroupedPresensiModel presensi = presensiList[i];
+      JamKerjaModel jamKerja = jamKerjaList[i];
+
+      DateTime masuk = presensi.dateTimeMasuk!;
+      DateTime keluar = presensi.dateTimeKeluar!;
+
+      DateTime jadwalMasuk = DateTime.parse(jamKerja.jadwalMasuk!);
+      DateTime jadwalKeluar = DateTime.parse(jamKerja.jadwalKeluar!);
+
+      // Hitung keterlambatan
+      Duration keterlambatan = masuk.difference(jadwalMasuk);
+      String keterlambatanFormatted = formatDuration(keterlambatan);
+      keterlambatanList.add(keterlambatanFormatted);
+
+      // Hitung pulang lebih awal
+      Duration pulangLebihAwal = jadwalKeluar.difference(keluar);
+      String pulangLebihAwalFormatted = formatDuration(pulangLebihAwal);
+      pulangLebihAwalList.add(pulangLebihAwalFormatted);
+    }
   }
 
   Future<void> unduhPDF(String pin) async {
@@ -164,30 +214,62 @@ class RekapPresensiPerController extends GetxController {
       }
     }
 
-    for (var presensi in combinedData) {
-      final jamKerja = jamKerjaList
-          .firstWhere((jamKerja) => jamKerja.kepg == kepgData.kepegawaian);
+    final jamKerja = jamKerjaList
+        .firstWhere((jamKerja) => jamKerja.kepg == kepgData.kepegawaian);
 
-      var jadwalMasuk = formatter.parse(jamKerja.jadwalMasuk!);
-      var jadwalKeluar = formatter.parse(jamKerja.jadwalKeluar!);
+    // for (var presensi in combinedData) {
+    //   if (presensi.dateTimeMasuk != null && presensi.dateTimeKeluar != null) {
+    //     // Hitung keterlambatan
+    //     if (presensi.dateTimeMasuk!.isAfter(
+    //         _parseTime(jamKerja.batasAwalMasuk!, presensi.dateTimeMasuk!))) {
+    //       // Keterlambatan dalam bentuk Durasi
+    //       Duration keterlambatan = presensi.dateTimeMasuk!.difference(
+    //           _parseTime(jamKerja.jadwalMasuk!, presensi.dateTimeMasuk!));
+    //       presensi.keterlambatan = _formatDuration(keterlambatan);
+    //     }
 
-      if (jamKerja != null) {
-        final durasiKerja = jadwalKeluar.difference(jadwalMasuk);
-        final durasiPresensi =
-            presensi.dateTimeKeluar!.difference(presensi.dateTimeMasuk!);
+    //     // Hitung pulang lebih awal
+    //     if (presensi.dateTimeKeluar!.isBefore(
+    //         _parseTime(jamKerja.batasAwalKeluar!, presensi.dateTimeKeluar!))) {
+    //       // Pulang lebih awal dalam bentuk Durasi
+    //       Duration pulangLebihAwal =
+    //           _parseTime(jamKerja.jadwalKeluar!, presensi.dateTimeKeluar!)
+    //               .difference(presensi.dateTimeKeluar!);
+    //       presensi.pulangLebihAwal = _formatDuration(pulangLebihAwal);
+    //     }
 
-        if (durasiPresensi > durasiKerja) {
-          final keterlambatan = durasiPresensi - durasiKerja;
-          totalKeterlambatan.value += keterlambatan;
-        } else if (durasiPresensi < durasiKerja) {
-          final pulangLebihAwal = durasiKerja - durasiPresensi;
-          totalPulangLebihAwal.value += pulangLebihAwal;
-        }
-      }
-    }
+    //     var jadwalMasuk = formatter.parse(jamKerja.jadwalMasuk!);
+    //     var jadwalKeluar = formatter.parse(jamKerja.jadwalKeluar!);
 
-    print(totalKeterlambatan.value);
-    print(totalPulangLebihAwal.value);
+    //     final durasiKerja = jadwalKeluar.difference(jadwalMasuk);
+    //     final durasiPresensi =
+    //         presensi.dateTimeKeluar!.difference(presensi.dateTimeMasuk!);
+
+    //     if (durasiPresensi > durasiKerja) {
+    //       final keterlambatan = durasiPresensi - durasiKerja;
+    //       totalKeterlambatan.value += keterlambatan;
+    //     } else if (durasiPresensi < durasiKerja) {
+    //       final pulangLebihAwal = durasiKerja - durasiPresensi;
+    //       totalPulangLebihAwal.value += pulangLebihAwal;
+    //     }
+
+    //   }
+    // }
+
+    // final totalKeterlambatanHours =
+    //     totalKeterlambatan.value.inHours.toString().padLeft(2, '0');
+    // final totalKeterlambatanMinutes =
+    //     (totalKeterlambatan.value.inMinutes % 60).toString().padLeft(2, '0');
+
+    // final totalPulangLebihAwalHours =
+    //     totalPulangLebihAwal.value.inHours.toString().padLeft(2, '0');
+    // final totalPulangLebihAwalMinutes =
+    //     (totalPulangLebihAwal.value.inMinutes % 60).toString().padLeft(2, '0');
+
+    // print('$totalKeterlambatanHours:$totalKeterlambatanMinutes');
+    // print('$totalPulangLebihAwalHours:$totalPulangLebihAwalMinutes');
+
+    calculatePresensi();
 
     final pdf = pw.Document();
     var formatterTime = DateFormat('HH:mm', 'id-ID');
@@ -207,61 +289,67 @@ class RekapPresensiPerController extends GetxController {
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('No.',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Tanggal',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Jam Kerja/Shift',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Jam Masuk',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Scan Masuk',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Keterlambatan',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Jam Keluar',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Scan Keluar',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Pulang Lebih Awal',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Durasi Kerja',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
               child: pw.Text('Keterangan',
                   style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
             ),
           ],
         ),
@@ -296,7 +384,8 @@ class RekapPresensiPerController extends GetxController {
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
-                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
+                child: pw.Text(keterlambatanList[i],
+                    style: const pw.TextStyle(fontSize: 10)),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.all(5),
@@ -306,6 +395,13 @@ class RekapPresensiPerController extends GetxController {
                 padding: const pw.EdgeInsets.all(5),
                 child: pw.Text(
                   formatterTime.format(combinedData[i].dateTimeKeluar!),
+                  style: const pw.TextStyle(fontSize: 10),
+                ),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text(
+                  pulangLebihAwalList[i],
                   style: const pw.TextStyle(fontSize: 10),
                 ),
               ),
@@ -336,11 +432,11 @@ class RekapPresensiPerController extends GetxController {
                   children: [
                     pw.Text('Nama Madrasah: MIM JETIS LOR',
                         style: pw.TextStyle(
-                            fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                            fontSize: 6, fontWeight: pw.FontWeight.bold)),
                     pw.Text(
                       'Tanggal: ${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}',
                       style: pw.TextStyle(
-                          fontSize: 8, fontWeight: pw.FontWeight.bold),
+                          fontSize: 6, fontWeight: pw.FontWeight.bold),
                     ),
                   ]),
               pw.SizedBox(height: 10),
@@ -351,41 +447,42 @@ class RekapPresensiPerController extends GetxController {
                         mainAxisAlignment: pw.MainAxisAlignment.start,
                         children: [
                           pw.Text('PIN: $pin',
-                              style: const pw.TextStyle(fontSize: 8)),
+                              style: const pw.TextStyle(fontSize: 6)),
                           pw.Text('NIP: ${kepgData.nip!}',
-                              style: const pw.TextStyle(fontSize: 8)),
+                              style: const pw.TextStyle(fontSize: 6)),
                         ]),
                     pw.Column(
                         mainAxisAlignment: pw.MainAxisAlignment.center,
                         children: [
                           pw.Text('Nama: ${kepgData.nama!}',
-                              style: const pw.TextStyle(fontSize: 8)),
+                              style: const pw.TextStyle(fontSize: 6)),
                           pw.Text('Jabatan: ${kepgData.bidang!}',
-                              style: const pw.TextStyle(fontSize: 8)),
+                              style: const pw.TextStyle(fontSize: 6)),
                         ]),
                     pw.Column(
                         mainAxisAlignment: pw.MainAxisAlignment.start,
                         children: [
                           pw.Text('Kepegawaian: ${kepgData.kepegawaian!}',
-                              style: const pw.TextStyle(fontSize: 8)),
+                              style: const pw.TextStyle(fontSize: 6)),
                           pw.Text('Madrasah: MIM JETIS LOR',
-                              style: const pw.TextStyle(fontSize: 8)),
+                              style: const pw.TextStyle(fontSize: 6)),
                         ]),
                   ]),
               pw.SizedBox(height: 10),
               pw.Table(
-                columnWidths: {
-                  0: const pw.FixedColumnWidth(20),
-                  1: const pw.FixedColumnWidth(60),
-                  2: const pw.FixedColumnWidth(80),
-                  3: const pw.FixedColumnWidth(50),
-                  4: const pw.FixedColumnWidth(50),
-                  5: const pw.FixedColumnWidth(52),
-                  6: const pw.FixedColumnWidth(50),
-                  7: const pw.FixedColumnWidth(50),
-                  8: const pw.FixedColumnWidth(50),
-                  9: const pw.FixedColumnWidth(100),
-                },
+                // columnWidths: {
+                //   0: const pw.FixedColumnWidth(20),
+                //   1: const pw.FixedColumnWidth(60),
+                //   2: const pw.FixedColumnWidth(60),
+                //   3: const pw.FixedColumnWidth(50),
+                //   4: const pw.FixedColumnWidth(50),
+                //   5: const pw.FixedColumnWidth(52),
+                //   6: const pw.FixedColumnWidth(50),
+                //   7: const pw.FixedColumnWidth(50),
+                //   8: const pw.FixedColumnWidth(50),
+                //   9: const pw.FixedColumnWidth(50),
+                //   10: const pw.FixedColumnWidth(50),
+                // },
                 border: pw.TableBorder.all(color: PdfColors.grey),
                 children: tableRows,
               ),
