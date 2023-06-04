@@ -9,6 +9,7 @@ class LupaSandiMobileView extends GetView<LupaSandiMobileController> {
   const LupaSandiMobileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: light, body: SingleChildScrollView());
+    return Scaffold(
+        backgroundColor: light, body: const SingleChildScrollView());
   }
 }

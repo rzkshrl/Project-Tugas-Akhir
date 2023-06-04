@@ -278,10 +278,14 @@ class APIController extends GetxController {
       while (true) {
         var response =
             await Future.wait([dio.post('$url&page=$pageNumber&limit=100')]);
-        print('JINGAN');
+        if (kDebugMode) {
+          print('JINGAN');
+        }
         final data = response[0].data['Data'];
 
-        print(data);
+        if (kDebugMode) {
+          print(data);
+        }
 
         res.addAll(data);
 

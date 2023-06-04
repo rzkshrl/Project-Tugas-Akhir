@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-import 'firestorejamkerjamodel.dart';
 
 List<KepegawaianModel> kepegawaianList = [];
 List<PresensiModel> presensiList = [];

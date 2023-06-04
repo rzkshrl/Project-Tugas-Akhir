@@ -27,9 +27,9 @@ class RekapPresensiPerController extends GetxController {
   var namaList = <String>[].obs;
   final isClicked = false.obs;
 
-  var totalKeterlambatan = Duration();
-  var totalPulangLebihAwal = Duration();
-  var totalDurasiPresensi = Duration();
+  var totalKeterlambatan = const Duration();
+  var totalPulangLebihAwal = const Duration();
+  var totalDurasiPresensi = const Duration();
   DateFormat formatter = DateFormat('HH:mm');
 
   final pdfURL = "".obs;
@@ -92,14 +92,6 @@ class RekapPresensiPerController extends GetxController {
         date1.day == date2.day;
   }
 
-  DateTime _parseTime(String time, DateTime date) {
-    var parts = time.split(':');
-    var hour = int.parse(parts[0]);
-    var minute = int.parse(parts[1]);
-
-    return DateTime(date.year, date.month, date.day, hour, minute);
-  }
-
   String formatDuration(Duration duration) {
     var hours = duration.inHours.toString().padLeft(2, '0');
     var minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
@@ -130,7 +122,9 @@ class RekapPresensiPerController extends GetxController {
           (jk) => jk.hariKerja == hari && jk.kepg == kepgData.kepegawaian,
         );
       } catch (e) {
-        print("JamKerjaModel tidak ditemukan");
+        if (kDebugMode) {
+          print("JamKerjaModel tidak ditemukan");
+        }
         return;
       }
 

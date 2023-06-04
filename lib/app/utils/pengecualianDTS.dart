@@ -8,8 +8,6 @@ import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
 
-import '../data/models/firestorehariliburmodel.dart';
-
 import '../data/models/firestorepengecualianmodel.dart';
 import '../theme/textstyle.dart';
 import '../theme/theme.dart';

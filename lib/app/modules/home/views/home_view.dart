@@ -13,7 +13,6 @@ import 'package:project_tugas_akhir/app/utils/stringGlobal.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
-import '../../../data/models/usermodel.dart';
 import '../../../utils/dialogDefault.dart';
 
 import '../../../mobile/beranda_mobile/views/beranda_mobile_view.dart';
@@ -27,14 +26,6 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     authC.readUser();
-
-    void fetchData() async {
-      UserModel user = await authC.readUser();
-      String? roles = user.role;
-      if (kDebugMode) {
-        print("ROLES di onInit: $roles");
-      }
-    }
 
     return GetBuilder<AuthController>(builder: (c) {
       if (kIsWeb) {
