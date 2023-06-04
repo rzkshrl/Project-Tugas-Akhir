@@ -92,7 +92,7 @@ Widget textformDatePicker(
     key: textC.datepickerKey.value,
     child: Container(
       width: width,
-      height: 7.4.h,
+      height: 9.2.h,
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),

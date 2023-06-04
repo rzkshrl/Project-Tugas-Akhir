@@ -156,7 +156,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                       Column(
                         children: [
                           SizedBox(
-                            height: 1.h,
+                            height: 3.h,
                           ),
                           textformDatePicker(
                               controller.end.value
