@@ -54,14 +54,5 @@ class UserModel {
       "bidang": bidang,
       "pin": pin
     };
-    // data['uid'] = uid;
-    // data['name'] = name;
-    // data['email'] = email;
-    // data['photoUrl'] = photoUrl;
-    // data['roles'] = roles;
-    // data['creationTime'] = creationTime;
-    // data['lastSignInTime'] = lastSignInTime;
-    // data['updatedTime'] = updatedTime;
-    // return data;
   }
 }

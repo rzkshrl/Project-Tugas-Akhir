@@ -93,7 +93,5 @@ class UbahProfilMobileController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    textC.namaTambahDataPegC.dispose();
-    cDropdown.bidangUbahProfilC.dispose();
   }
 }

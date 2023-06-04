@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../controller/auth_controller.dart';
 import '../../../controller/calendars_controller.dart';
@@ -14,6 +15,8 @@ import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/loading.dart';
 import '../../../web/hari_libur/controllers/hari_libur_controller.dart';
+import '../../beranda_mobile/controllers/beranda_mobile_controller.dart';
+import '../../beranda_mobile/views/beranda_mobile_view.dart';
 import '../controllers/riwayat_presensi_mobile_controller.dart';
 
 class RiwayatPresensiMobileView
@@ -30,6 +33,7 @@ class RiwayatPresensiMobileView
     // final controller = Get.put(RiwayatPresensiMobileController());
     final liburC = Get.put(HariLiburController());
     FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final testC = Get.put(BerandaMobileController());
     return Scaffold(
         backgroundColor: light,
         body: SingleChildScrollView(
@@ -200,7 +204,23 @@ class RiwayatPresensiMobileView
                             );
                           });
                     }),
-              )
+              ),
+              SizedBox(
+                height: 0.5.h,
+              ),
+              SfCircularChart(
+                legend: Legend(isVisible: true),
+                series: <CircularSeries>[
+                  DoughnutSeries<Attendance, String>(
+                    dataSource: testC.attendanceData,
+                    xValueMapper: (Attendance data, _) => data.category,
+                    yValueMapper: (Attendance data, _) => data.percentage,
+                    dataLabelMapper: (Attendance data, _) =>
+                        data.label, // Keterangan grafik
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  ),
+                ],
+              ),
             ],
           ),
         ));

@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconly/iconly.dart';
-import 'package:project_tugas_akhir/app/web/home/views/home_view.dart';
+import 'package:project_tugas_akhir/app/modules/home/views/home_view.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 
@@ -15,6 +15,7 @@ import 'package:project_tugas_akhir/app/theme/theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'app/controller/auth_controller.dart';
+import 'app/modules/home/controllers/home_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'app/theme/textstyle.dart';
 import 'app/utils/dialogDefault.dart';
@@ -32,6 +33,7 @@ Future<void> main() async {
 
   await initializeDateFormatting('id_ID', null)
       .then((_) => runApp(ProjectTugasAkhir()));
+
   runApp(ProjectTugasAkhir());
 }
 
@@ -92,6 +94,7 @@ class ProjectTugasAkhir extends StatelessWidget {
               return FutureBuilder(
                   future: Future.delayed(const Duration(seconds: 0)),
                   builder: (context, snap) {
+                    Get.put<HomeController>(HomeController());
                     if (snap.connectionState == ConnectionState.done) {
                       return AnnotatedRegion(
                         value: SystemUiOverlayStyle(

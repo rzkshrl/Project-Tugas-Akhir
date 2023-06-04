@@ -248,6 +248,42 @@ getTextAlertBtn2(BuildContext context) {
       fontWeight: FontWeight.w400);
 }
 
+getTextAlertMobile(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
+        const Condition.equals(name: MOBILE, value: 15.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w300);
+}
+
+getTextAlertSubMobile(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
+        const Condition.equals(name: MOBILE, value: 15.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w300);
+}
+
+getTextAlertBtnMobile(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
+        const Condition.equals(name: MOBILE, value: 15.0),
+      ]).value,
+      color: Blue1,
+      fontWeight: FontWeight.w400);
+}
+
+getTextAlertBtn2Mobile(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
+        const Condition.equals(name: MOBILE, value: 15.0),
+      ]).value,
+      color: light,
+      fontWeight: FontWeight.w400);
+}
+
 getTextMenu(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 36.0, valueWhen: [

@@ -29,8 +29,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final controller = Get.put(RekapScanlogPerController());
-    // cDropdown.pinRekapC.clear();
-    textC.datepickerC.clear();
+
     final dateFormatter = DateFormat('MMMM yyyy', 'id-ID');
     return Scaffold(
       backgroundColor: light,

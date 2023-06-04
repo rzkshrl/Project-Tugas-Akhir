@@ -65,7 +65,8 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                     padding: EdgeInsets.only(right: 3.w, left: 3.w),
                     child: ClipOval(
                       child: Container(
-                        width: 38.w,
+                        width: 40.w,
+                        height: 18.5.h,
                         color: Colors.grey.shade200,
                         child: Image.network(
                           profile != null
@@ -217,8 +218,10 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                         if (kDebugMode) {
                           print(e);
                         }
-                        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-                            "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
+                        Get.dialog(dialogAlertOnlySingleMsg(
+                            IconlyLight.danger,
+                            "Terjadi Kesalahan!.",
+                            getTextAlertMobile(Get.context!)));
                       }
                     },
                         IconlyLight.danger,
@@ -228,10 +231,10 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                         'OK',
                         'Peringatan!',
                         'Apakah anda yakin ingin keluar?',
-                        getTextAlert(Get.context!),
-                        getTextAlertSub(Get.context!),
-                        getTextAlertBtn(Get.context!),
-                        getTextAlertBtn2(Get.context!)));
+                        getTextAlertMobile(Get.context!),
+                        getTextAlertSubMobile(Get.context!),
+                        getTextAlertBtnMobile(Get.context!),
+                        getTextAlertBtn2Mobile(Get.context!)));
                   },
                   borderRadius: BorderRadius.circular(20),
                   child: Container(

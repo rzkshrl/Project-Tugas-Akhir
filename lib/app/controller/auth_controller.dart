@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/models/usermodel.dart';
 import '../routes/app_pages.dart';
@@ -23,22 +24,9 @@ class AuthController extends GetxController {
 
   var userData = UserModel().obs;
 
-  Stream<QuerySnapshot<Object?>> streamDataUsers() {
-    CollectionReference users = firestore.collection("Users");
-    return users.snapshots();
-  }
-
-  Future<DocumentSnapshot<Object?>> getUserDoc() async {
-    String emailUser = auth.currentUser!.email.toString();
-    DocumentReference user = firestore.collection("Users").doc(emailUser);
-    return user.get();
-  }
-
-  Future<DocumentSnapshot<Object?>> role() async {
-    String emailUser = auth.currentUser!.email.toString();
-    CollectionReference users = firestore.collection('Users');
-
-    return users.doc(emailUser).get();
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamDataUsers() async* {
+    var email = auth.currentUser!.email;
+    yield* firestore.collection("Users").doc(email).snapshots();
   }
 
   Future<void> firstInitialized() async {
@@ -58,49 +46,17 @@ class AuthController extends GetxController {
       }
       return false;
     } catch (e) {
-      // Dialog(
-      //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      //   backgroundColor: Colors.white,
-      //   child: Container(
-      //     width: 193.93,
-      //     height: 194.73,
-      //     child: Column(
-      //       children: [Icon(PhosphorIcons.xCircle)],
-      //     ),
-      //   ),
-      // );
       return false;
     }
   }
 
   //store user data
-  void syncUsers(String password, BuildContext context) async {
+  void syncUsers(String? password) async {
     CollectionReference users = firestore.collection("Users");
 
     String emailUser = auth.currentUser!.email.toString();
 
     final checkuser = await users.doc(emailUser).get();
-
-    if (checkuser.data() == null) {
-      users.doc(emailUser).set({
-        'uid': auth.currentUser!.uid,
-        'name': auth.currentUser!.displayName,
-        'email': auth.currentUser!.email,
-        'role': "user",
-        'bidang': 'Pegawai',
-        'profile': '',
-        'lastSignInDate':
-            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
-        'creationTime':
-            auth.currentUser!.metadata.creationTime!.toIso8601String(),
-      });
-    } else {
-      // return null;
-      users.doc(emailUser).update({
-        'lastSignInDate':
-            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
-      });
-    }
 
     final checkUserData = checkuser.data() as Map<String, dynamic>;
 
@@ -124,6 +80,58 @@ class AuthController extends GetxController {
             auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
 
     userData.refresh();
+
+    if (checkuser.data() == null) {
+      users.doc(emailUser).set({
+        'uid': auth.currentUser!.uid,
+        'name': auth.currentUser!.displayName,
+        'email': auth.currentUser!.email,
+        'role': "user",
+        'bidang': 'Pegawai',
+        'profile': '',
+        'lastSignInDate':
+            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
+        'creationTime':
+            auth.currentUser!.metadata.creationTime!.toIso8601String(),
+      });
+    } else {
+      // return null;
+      users.doc(emailUser).update({
+        'lastSignInDate':
+            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
+      });
+    }
+  }
+
+  Future<UserModel> readUser() async {
+    CollectionReference users = firestore.collection("Users");
+
+    String emailUser = auth.currentUser!.email.toString();
+
+    final checkuser = await users.doc(emailUser).get();
+
+    final checkUserData = checkuser.data() as Map<String, dynamic>;
+
+    // userData(UserModel.fromJson(checkUserData));
+
+    if (kDebugMode) {
+      print("User Data : $checkUserData");
+    }
+
+    userData.value = (UserModel(
+        uid: auth.currentUser!.uid,
+        name: checkUserData['name'],
+        bidang: checkUserData['bidang'],
+        email: auth.currentUser!.email,
+        photoUrl: checkUserData['profile'],
+        role: checkUserData['role'],
+        pin: checkUserData['pin'],
+        creationTime:
+            auth.currentUser!.metadata.creationTime!.toIso8601String(),
+        lastSignInTime:
+            auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
+
+    return userData.value;
   }
 
   //lupa sandi
@@ -158,17 +166,7 @@ class AuthController extends GetxController {
           email: email, password: password);
 
       if (myUser.user!.emailVerified) {
-        // auth.authStateChanges().listen((User? user) async {
-        //   if (user == null) {
-        //     if (kDebugMode) {
-        //       print('User is currently signed out!');
-        //     }
-        //   } else {
-        //     if (kDebugMode) {
-        //       print('User is signed in!');
-        //     }
-
-        syncUsers(password, context);
+        syncUsers(password);
         isAuth.value = true;
         if (kIsWeb) {
           Get.dialog(
@@ -258,7 +256,7 @@ class AuthController extends GetxController {
         password: password,
       );
 
-      syncUsers(password, context);
+      syncUsers(password);
       await myUser.user!.sendEmailVerification();
       Get.dialog(dialogAlertBtn(() {
         Get.back();

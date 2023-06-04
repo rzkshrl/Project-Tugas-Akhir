@@ -23,6 +23,7 @@ class BerandaMobileView extends GetView<BerandaMobileController> {
     String namaDisplay = namaSplit[0];
     String? email = authC.userData.value.email;
     String? bidang = authC.userData.value.bidang;
+    String? profile = authC.userData.value.photoUrl;
 
     var defaultImage =
         "https://ui-avatars.com/api/?name=${nama}&background=fff38a&color=5175c0&font-size=0.33";
@@ -64,10 +65,15 @@ class BerandaMobileView extends GetView<BerandaMobileController> {
                     padding: EdgeInsets.only(right: 3.w, left: 3.w),
                     child: ClipOval(
                       child: Container(
-                        width: 38.w,
+                        width: 40.w,
+                        height: 18.5.h,
                         color: Colors.grey.shade200,
                         child: Image.network(
-                          defaultImage,
+                          profile != null
+                              ? profile != ''
+                                  ? profile
+                                  : defaultImage
+                              : defaultImage,
                           fit: BoxFit.cover,
                         ),
                       ),

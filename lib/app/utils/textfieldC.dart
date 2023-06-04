@@ -58,6 +58,11 @@ class TextFieldController extends GetxController {
   final namaUbahProfilC = TextEditingController();
   final namaUbahProfilKey = GlobalKey<FormState>().obs;
 
+  final sandiAwalUbahSandiC = TextEditingController();
+  final sandiAwalUbahSandiKey = GlobalKey<FormState>().obs;
+  final sandiBaruUbahSandiC = TextEditingController();
+  final sandiBaruUbahSandiKey = GlobalKey<FormState>().obs;
+
   final namaJamKerjaC = TextEditingController();
   final namaJamKerjaKey = GlobalKey<FormState>().obs;
   final kodeJamKerjaC = TextEditingController();

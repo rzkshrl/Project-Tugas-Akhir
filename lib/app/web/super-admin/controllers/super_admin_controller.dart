@@ -36,6 +36,7 @@ class SuperAdminController extends GetxController {
         email: email,
         password: password,
       );
+      await userCredential.user!.sendEmailVerification();
       return userCredential;
     } catch (e) {
       if (kDebugMode) {

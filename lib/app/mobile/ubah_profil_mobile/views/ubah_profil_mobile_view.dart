@@ -41,20 +41,36 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                 height: 6.h,
               ),
               Padding(
-                padding: EdgeInsets.only(right: 6.w, left: 6.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: EdgeInsets.only(right: 6.w),
+                child: Row(
                   children: [
-                    Text(
-                      'Ubah Profil',
-                      style: getTextHeaderWelcomeScreen(context, 16),
-                    ),
+                    IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Icon(
+                          IconlyLight.arrow_left,
+                          color: Blue1,
+                          size: 25,
+                        )),
                     SizedBox(
                       height: 0.5.h,
                     ),
-                    Text(
-                      'Ubah Foto dan Data Profil Anda',
-                      style: getTextSubHeaderWelcomeScreen(context, 15),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Ubah Profil',
+                          style: getTextHeaderWelcomeScreen(context, 16),
+                        ),
+                        SizedBox(
+                          height: 0.5.h,
+                        ),
+                        Text(
+                          'Ubah Foto dan Data Profil Anda',
+                          style: getTextSubHeaderWelcomeScreen(context, 15),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -65,14 +81,15 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
               Stack(
                 children: [
                   GetBuilder<UbahProfilMobileController>(builder: (c) {
-                    if (controller.image != null) {
+                    if (c.image != null) {
                       return Center(
                         child: ClipOval(
                           child: Container(
-                            width: 38.w,
+                            width: 40.w,
+                            height: 18.5.h,
                             color: Colors.grey.shade200,
                             child: Image.file(
-                              File(controller.image!.path),
+                              File(c.image!.path),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -82,7 +99,8 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                       return Center(
                         child: ClipOval(
                           child: Container(
-                            width: 38.w,
+                            width: 40.w,
+                            height: 18.5.h,
                             color: Colors.grey.shade200,
                             child: Image.network(
                               profile != null
@@ -139,7 +157,8 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
               ),
               Center(
                 child: dropdownNormalFieldMobile(
-                    context, 254, cDropdown.bidangUbahProfilKey.value, (value) {
+                    context, 68.5.w, cDropdown.bidangUbahProfilKey.value,
+                    (value) {
                   if (value != null) {
                     cDropdown.bidangUbahProfilC.text = value;
                   }

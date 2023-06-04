@@ -28,8 +28,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
-    // cDropdown.pinRekapC.clear();
-    textC.datepickerC.clear();
+
     final dateFormatter = DateFormat('MMMM yyyy', 'id-ID');
     return Scaffold(
       backgroundColor: light,
