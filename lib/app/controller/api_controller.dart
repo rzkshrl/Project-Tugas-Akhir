@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:project_tugas_akhir/app/data/models/firestorejamkerjamodel.dart';
+import 'package:project_tugas_akhir/app/data/models/firestorepengecualianmodel.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,6 +38,8 @@ class APIController extends GetxController {
   var liburData = <LiburModel>[].obs;
   var kepgData = KepegawaianModel().obs;
   var jamKerjaData = JamKerjaModel().obs;
+  var pengecualianData = PengecualianModel().obs;
+  var pengecualianDataLibur = PengecualianModel().obs;
   var presensiList = [].obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -200,14 +203,14 @@ class APIController extends GetxController {
       String? allPresensi, String? newPresensi) async {
     String urlGet = "http://$ip:$port$urlGetDeviceInfo?sn=${sn}";
 
-    var res = await Future.wait([dio.post(urlGet)]);
+    var res = await dio.post(urlGet);
 
     if (kDebugMode) {
-      print('HASIL DEVINFO : ${res[0].data['Result']}');
+      print('HASIL DEVINFO : ${res.data['Result']}');
       // print('BODY : ${res[0].data['DEVINFO']}');
     }
 
-    if (res[0].data['Result'] == 'false') {
+    if (res.data['Result'] == 'false') {
       Get.dialog(dialogAlertOnly(
           IconlyLight.danger,
           "Terjadi Kesalahan.",
@@ -215,7 +218,7 @@ class APIController extends GetxController {
           getTextAlert(Get.context!),
           getTextAlertSub(Get.context!)));
     } else {
-      Map<String, dynamic> data = res[0].data['DEVINFO'];
+      Map<String, dynamic> data = res.data['DEVINFO'];
       deviceInfo(DeviceInfoModel.fromJson(data));
       deviceInfo.refresh();
       if (allPresensi != deviceInfo.value.allPresensi) {
@@ -263,12 +266,22 @@ class APIController extends GetxController {
     try {
       showLoadingDialog();
 
-      getDeviceInfo2(ip, port, sn, allPresensi, newPresensi);
+      // getDeviceInfo2(ip, port, sn, allPresensi, newPresensi);
+
+      if (kDebugMode) {
+        print("Serial Number : $sn");
+        print("IP server dan Port : $ip:$port");
+        print("All Presensi : $allPresensi");
+        print("New Presensi : $newPresensi");
+      }
 
       while (true) {
         var response =
             await Future.wait([dio.post('$url&page=$pageNumber&limit=100')]);
+        print('JINGAN');
         final data = response[0].data['Data'];
+
+        print(data);
 
         res.addAll(data);
 
@@ -410,6 +423,11 @@ class APIController extends GetxController {
           jamKerjaData.value = JamKerjaModel.fromJson(documentSnapshot);
         }
 
+        if (jamKerjaQuerySnapshot.size > 0) {
+          DocumentSnapshot documentSnapshot = jamKerjaQuerySnapshot.docs[0];
+          jamKerjaData.value = JamKerjaModel.fromJson(documentSnapshot);
+        }
+
         for (var presenceData in presence!) {
           // final date = presenceData.date!;
           final scanInDay = presenceData.scanInDay;
@@ -420,6 +438,7 @@ class APIController extends GetxController {
             var datePresensi =
                 formatterDoc.format(DateTime.parse(scan.toIso8601String()));
             final hour = scan.hour;
+            final year = scan.year;
 
             final jamKerja = jamKerjaData.value;
 
@@ -430,6 +449,36 @@ class APIController extends GetxController {
             bool isKeluar =
                 hour >= int.parse(jamKerja.batasAwalKeluar!.split(':')[0]) &&
                     hour <= int.parse(jamKerja.batasAkhirKeluar!.split(':')[0]);
+
+            final pengecualianTahunPresensiQuerySnapshot = await firestore
+                .collection('Pengecualian')
+                .where('nama', arrayContains: year.toString())
+                .where('statusPengecualian', isEqualTo: 'Bukan')
+                .get();
+
+            if (pengecualianTahunPresensiQuerySnapshot.size > 0) {
+              DocumentSnapshot documentSnapshot = kepegQuerySnapshot.docs[0];
+              pengecualianData.value =
+                  PengecualianModel.fromJson(documentSnapshot);
+            }
+
+            var isRamadhan = pengecualianData.value.nama!.contains(ramadhan) ||
+                pengecualianData.value.nama!.contains(ramadhan.toUpperCase());
+            var isRamadhanJamKerja =
+                jamKerjaData.value.nama!.contains(ramadhan.toUpperCase()) ||
+                    jamKerjaData.value.nama!.contains(ramadhan);
+
+            // final pengecualianLiburRutinQuerySnapshot = await firestore
+            //     .collection('Pengecualian')
+            //     .where('nama', arrayContains: year.toString())
+            //     .where('statusPengecualian', isEqualTo: 'Ya')
+            //     .get();
+
+            // if (pengecualianLiburRutinQuerySnapshot.size > 0) {
+            //   DocumentSnapshot documentSnapshot = kepegQuerySnapshot.docs[0];
+            //   pengecualianDataLibur.value =
+            //       PengecualianModel.fromJson(documentSnapshot);
+            // }
 
             String doc = '';
             if (isMasuk) {
@@ -495,218 +544,436 @@ class APIController extends GetxController {
               //   });
               // }
               if (kepgData.value.kepegawaian == "PNS") {
-                switch (scan.weekday) {
-                  case DateTime.monday:
-                    if (jamKerjaData.value.hariKerja == senin) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                if (isRamadhan == isRamadhanJamKerja) {
+                  switch (scan.weekday) {
+                    case DateTime.monday:
+                      if (jamKerjaData.value.hariKerja == senin) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.tuesday:
-                    if (jamKerjaData.value.hariKerja == selasa) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.tuesday:
+                      if (jamKerjaData.value.hariKerja == selasa) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.wednesday:
-                    if (jamKerjaData.value.hariKerja == rabu) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.wednesday:
+                      if (jamKerjaData.value.hariKerja == rabu) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.thursday:
-                    if (jamKerjaData.value.hariKerja == kamis) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.thursday:
+                      if (jamKerjaData.value.hariKerja == kamis) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.friday:
-                    if (jamKerjaData.value.hariKerja == jumat) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.friday:
+                      if (jamKerjaData.value.hariKerja == jumat) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.saturday:
-                    if (jamKerjaData.value.hariKerja == sabtu) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.saturday:
+                      if (jamKerjaData.value.hariKerja == sabtu) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  default:
-                    null;
+                      break;
+                    default:
+                      null;
+                  }
+                } else {
+                  switch (scan.weekday) {
+                    case DateTime.monday:
+                      if (jamKerjaData.value.hariKerja == senin) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.tuesday:
+                      if (jamKerjaData.value.hariKerja == selasa) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.wednesday:
+                      if (jamKerjaData.value.hariKerja == rabu) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.thursday:
+                      if (jamKerjaData.value.hariKerja == kamis) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.friday:
+                      if (jamKerjaData.value.hariKerja == jumat) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.saturday:
+                      if (jamKerjaData.value.hariKerja == sabtu) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    default:
+                      null;
+                  }
                 }
               } else if (kepgData.value.kepegawaian == "NON-PNS") {
-                switch (scan.weekday) {
-                  case DateTime.monday:
-                    if (jamKerjaData.value.hariKerja == senin) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                if (isRamadhan == isRamadhanJamKerja) {
+                  switch (scan.weekday) {
+                    case DateTime.monday:
+                      if (jamKerjaData.value.hariKerja == senin) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.tuesday:
-                    if (jamKerjaData.value.hariKerja == selasa) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.tuesday:
+                      if (jamKerjaData.value.hariKerja == selasa) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.wednesday:
-                    if (jamKerjaData.value.hariKerja == rabu) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.wednesday:
+                      if (jamKerjaData.value.hariKerja == rabu) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.thursday:
-                    if (jamKerjaData.value.hariKerja == kamis) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.thursday:
+                      if (jamKerjaData.value.hariKerja == kamis) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.friday:
-                    if (jamKerjaData.value.hariKerja == jumat) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.friday:
+                      if (jamKerjaData.value.hariKerja == jumat) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  case DateTime.saturday:
-                    if (jamKerjaData.value.hariKerja == sabtu) {
-                      if (checkData.exists == false) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
-                      } else {
-                        await scanlogPegawai.update({
-                          'pin': pin,
-                          'date_time': dateTime,
-                          'status': status
-                        });
+                      break;
+                    case DateTime.saturday:
+                      if (jamKerjaData.value.hariKerja == sabtu) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
                       }
-                    }
-                    break;
-                  default:
-                    null;
+                      break;
+                    default:
+                      null;
+                  }
+                } else {
+                  switch (scan.weekday) {
+                    case DateTime.monday:
+                      if (jamKerjaData.value.hariKerja == senin) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.tuesday:
+                      if (jamKerjaData.value.hariKerja == selasa) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.wednesday:
+                      if (jamKerjaData.value.hariKerja == rabu) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.thursday:
+                      if (jamKerjaData.value.hariKerja == kamis) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.friday:
+                      if (jamKerjaData.value.hariKerja == jumat) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    case DateTime.saturday:
+                      if (jamKerjaData.value.hariKerja == sabtu) {
+                        if (checkData.exists == false) {
+                          await scanlogPegawai.set({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        } else {
+                          await scanlogPegawai.update({
+                            'pin': pin,
+                            'date_time': dateTime,
+                            'status': status
+                          });
+                        }
+                      }
+                      break;
+                    default:
+                      null;
+                  }
                 }
               }
             }

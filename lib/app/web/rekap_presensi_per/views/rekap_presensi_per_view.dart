@@ -189,7 +189,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                               }
                             }, null, null));
                           }, 24.w, light, Blue1, dark, Blue1,
-                              getTextLogin(Get.context!)),
+                              getTextLogin(Get.context!), null),
                         ],
                       ),
                       SizedBox(

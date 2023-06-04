@@ -86,7 +86,8 @@ Widget textformDatePicker(
     Color focusedBorderColor,
     Color enabledBorderColor,
     Color suffixIconColor,
-    TextStyle style) {
+    TextStyle style,
+    IconData? prefixIcon) {
   return Form(
     key: textC.datepickerKey.value,
     child: Container(
@@ -107,6 +108,13 @@ Widget textformDatePicker(
             helperStyle: getTextErrorFormLogin(Get.context!),
             isDense: true,
             contentPadding: const EdgeInsets.all(20),
+            prefixIcon: Align(
+                widthFactor: 0.5,
+                heightFactor: 0.5,
+                child: Icon(
+                  prefixIcon,
+                  size: 26,
+                )),
             suffixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,

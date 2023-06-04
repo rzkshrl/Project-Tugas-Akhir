@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/web/hari_libur/controllers/hari_libur_controller.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/utils/datePicker.dart';
@@ -12,13 +13,16 @@ import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../web/jam_kerja/controllers/jam_kerja_controller.dart';
+import '../web/pengecualian/controllers/pengecualian_controller.dart';
 import '../web/super-admin/controllers/super_admin_controller.dart';
 import '../theme/theme.dart';
+import 'dialogDefault.dart';
 
 final timepickerC = Get.put(TimePickerController(), permanent: true);
 final dayPickC = Get.put(JamKerjaController());
 final hariLiburC = Get.put(HariLiburController());
 final superAdminC = Get.put(SuperAdminController());
+final pengecualianC = Get.put(PengecualianController());
 
 Widget dialogTextFieldSevenField(
     BuildContext context, Widget btnAction, bool enabled) {
@@ -1038,6 +1042,131 @@ Widget dialogAddLibur(BuildContext context, Widget btnAction) {
               Yellow1,
               Yellow1,
               getTextFormDialog(context),
+              null,
+            ),
+            SizedBox(
+              height: 1.5.h,
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 3.8.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  btnAction,
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget dialogAddPengecualian(BuildContext context, Widget btnAction) {
+  return Obx(
+    () => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      backgroundColor: Blue1,
+      content: SizedBox(
+        width: 35.w,
+        height: 45.h,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 2.h,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 2.w,
+                ),
+                Text(
+                  "Tambah Data",
+                  style: getTextDialogFieldHeader(context),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 2.5.h,
+            ),
+            textformDialogWeb(
+                context,
+                textC.addPengecualianKey.value,
+                42.4.w,
+                textC.addPengecualianC,
+                textC.normalValidator,
+                null,
+                null,
+                null,
+                null,
+                "Masukkan nama pengecualian...",
+                Colors.transparent,
+                Yellow1,
+                Yellow1,
+                false),
+            dropdownNormalField(
+                context, 45.4.w, cDropdown.addPengecualianStatusLiburKey.value,
+                (value) {
+              if (value != null) {
+                cDropdown.addPengecualianStatusLiburC.text = value;
+              }
+            },
+                [
+                  'Ya',
+                  'Bukan',
+                ],
+                null,
+                "Pilih Status Libur Pengecualian...",
+                Colors.transparent,
+                Yellow1,
+                Yellow1,
+                Yellow1,
+                cDropdown.addPengecualianStatusLiburC.text == ''
+                    ? null
+                    : cDropdown.addPengecualianStatusLiburC.text),
+            SizedBox(
+              height: 2.5.h,
+            ),
+            textformDatePicker(
+              pengecualianC.end.value.isAtSameMomentAs(DateTime.now())
+                  ? TextEditingController(text: '')
+                  : textC.datepickerC,
+              () {
+                Get.dialog(datePickerDialog(DateRangePickerSelectionMode.range,
+                    (value) {
+                  if (value != null) {
+                    if ((value as PickerDateRange).endDate != null) {
+                      pengecualianC.pickRangeDate(
+                          value.startDate!, value.endDate!);
+                      Get.back();
+                    } else {
+                      Get.dialog(dialogAlertOnly(
+                          IconlyLight.danger,
+                          "Terjadi Kesalahan.",
+                          "Pilih tanggal jangkauan\n(Senin-Sabtu, dsb)\n(tekan tanggal dua kali \nuntuk memilih tanggal yang sama)",
+                          getTextAlert(context),
+                          getTextAlertSub(context)));
+                    }
+                  } else {
+                    Get.dialog(dialogAlertOnly(
+                        IconlyLight.danger,
+                        "Terjadi Kesalahan.",
+                        "Tanggal tidak dipilih.",
+                        getTextAlert(context),
+                        getTextAlertSub(context)));
+                  }
+                }, null, null));
+              },
+              42.4.w,
+              Colors.transparent,
+              Yellow1,
+              Yellow1,
+              Yellow1,
+              getTextFormDialog(context),
+              null,
             ),
             SizedBox(
               height: 1.5.h,

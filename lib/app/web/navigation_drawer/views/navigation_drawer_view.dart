@@ -244,6 +244,15 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
                             ),
                             visualDensity: const VisualDensity(vertical: -2),
                             onTap: () => navigate(6)),
+                        buildDrawerItemSubMenu(
+                            text: Text(
+                              "Pengecualian",
+                              style: Get.currentRoute == Routes.PENGECUALIAN
+                                  ? getTextItemSubMenu(context)
+                                  : getTextItemSubMenuDisabled(context),
+                            ),
+                            visualDensity: const VisualDensity(vertical: -2),
+                            onTap: () => navigate(7)),
                       ],
                     ),
                   ),
@@ -324,6 +333,8 @@ class NavigationDrawerView extends GetView<NavigationDrawerController> {
       Get.offAllNamed(Routes.JAM_KERJA);
     } else if (index == 6) {
       Get.offAllNamed(Routes.HARI_LIBUR);
+    } else if (index == 7) {
+      Get.offAllNamed(Routes.PENGECUALIAN);
     }
   }
 }

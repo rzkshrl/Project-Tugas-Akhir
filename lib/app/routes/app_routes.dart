@@ -29,6 +29,7 @@ abstract class Routes {
   static const SUPER_ADMIN = _Paths.SUPER_ADMIN;
   static const UBAH_PROFIL_MOBILE = _Paths.UBAH_PROFIL_MOBILE;
   static const UBAH_SANDI_MOBILE = _Paths.UBAH_SANDI_MOBILE;
+  static const PENGECUALIAN = _Paths.PENGECUALIAN;
 }
 
 abstract class _Paths {
@@ -57,4 +58,5 @@ abstract class _Paths {
   static const SUPER_ADMIN = '/super-admin';
   static const UBAH_PROFIL_MOBILE = '/ubah-profil-mobile';
   static const UBAH_SANDI_MOBILE = '/ubah-sandi-mobile';
+  static const PENGECUALIAN = '/pengecualian';
 }

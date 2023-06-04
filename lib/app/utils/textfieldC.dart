@@ -52,6 +52,9 @@ class TextFieldController extends GetxController {
   final datepickerC = TextEditingController();
   final datepickerKey = GlobalKey<FormState>().obs;
 
+  final addPengecualianC = TextEditingController();
+  final addPengecualianKey = GlobalKey<FormState>().obs;
+
   final namaUbahProfilC = TextEditingController();
   final namaUbahProfilKey = GlobalKey<FormState>().obs;
 

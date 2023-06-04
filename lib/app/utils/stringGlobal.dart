@@ -11,3 +11,6 @@ String kamis = 'Kamis';
 String jumat = 'Jumat';
 String sabtu = 'Sabtu';
 String minggu = 'Minggu';
+
+String ramadhan = 'Ramadhan';
+String ramadhanUpperCase = 'RAMADHAN';

@@ -118,7 +118,7 @@ class HariLiburView extends GetView<HariLiburController> {
                     ),
                     btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
                         "Tambah Hari Libur", getTextBtnAction(context), () {
-                      textC.addLiburC.clear();
+                      textC.addNamaLiburC.clear();
                       textC.datepickerC.clear();
                       Get.dialog(
                         dialogAddLibur(

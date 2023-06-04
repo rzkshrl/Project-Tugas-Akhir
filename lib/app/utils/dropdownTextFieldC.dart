@@ -12,7 +12,10 @@ class DropdownTextFieldController extends GetxController {
   final jabatanDataUserKey = GlobalKey<FormState>().obs;
   final pinRekapKey = GlobalKey<FormState>().obs;
   final bidangUbahProfilKey = GlobalKey<FormState>().obs;
+  final addPengecualianStatusLiburKey = GlobalKey<FormState>().obs;
 
+  final TextEditingController addPengecualianStatusLiburC =
+      TextEditingController();
   final TextEditingController kepgTambahDataPegC = TextEditingController();
   final TextEditingController pinRekapC = TextEditingController();
   final TextEditingController bidangTambahDataPegC = TextEditingController();

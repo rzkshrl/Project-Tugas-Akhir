@@ -4,41 +4,52 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
+import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:project_tugas_akhir/app/utils/textfield.dart';
 import 'package:sizer/sizer.dart';
 
 import '../data/models/firestorehariliburmodel.dart';
-import '../web/hari_libur/controllers/hari_libur_controller.dart';
+
+import '../data/models/firestorepengecualianmodel.dart';
 import '../theme/textstyle.dart';
 import '../theme/theme.dart';
 import 'package:intl/intl.dart';
 
+import '../web/pengecualian/controllers/pengecualian_controller.dart';
 import 'btnDefault.dart';
 
-class HolidayDTS extends DataTableSource {
-  final List<HolidayModel> holidayList;
+class PengecualianDTS extends DataTableSource {
+  final List<PengecualianModel> pengecualianList;
 
-  HolidayDTS(this.holidayList);
+  PengecualianDTS(this.pengecualianList);
 
-  final c = Get.put(HariLiburController());
+  final c = Get.put(PengecualianController());
 
   @override
   DataRow getRow(int index) {
-    HolidayModel data = holidayList[index];
+    PengecualianModel data = pengecualianList[index];
     var formatter = DateFormat('d MMMM yyyy', 'id-ID');
     return DataRow(
       cells: [
         DataCell(Text(
-          "${data.name}",
+          "${data.nama}",
           style: getTextTableData(Get.context!),
         )),
         DataCell(Text(
-          "${formatter.format(DateTime.parse("${data.date!}"))}",
+          "${data.statusPengecualian}",
+          style: getTextTableData(Get.context!),
+        )),
+        DataCell(Text(
+          "${formatter.format(data.dateStart!)}",
+          style: getTextTableData(Get.context!),
+        )),
+        DataCell(Text(
+          "${formatter.format(data.dateEnd!)}",
           style: getTextTableData(Get.context!),
         )),
         DataCell(IconButton(
             onPressed: () {
-              c.deleteHariLibur(data.date!);
+              c.deletePengecualian(data.nama!);
             },
             icon: Icon(
               IconlyLight.delete,
@@ -46,19 +57,26 @@ class HolidayDTS extends DataTableSource {
             ))),
         DataCell(IconButton(
             onPressed: () {
-              textC.addNamaLiburC.text = data.name!;
+              textC.addPengecualianC.text = data.nama!;
+              cDropdown.addPengecualianStatusLiburC.text =
+                  data.statusPengecualian!;
               textC.datepickerC.text =
-                  formatter.format(DateTime.parse(data.date!));
+                  "${formatter.format(data.dateStart!)} - ${formatter.format(data.dateEnd!)}";
               Get.dialog(
-                dialogAddLibur(
+                dialogAddPengecualian(
                     Get.context!,
                     btnDefaultIcon1(10.w, Blue4, IconlyLight.tick_square,
                         Yellow1, "Kirim", getTextBtnAction(Get.context!), () {
-                      if (textC.addNamaLiburKey.value.currentState!
+                      if (textC.addPengecualianKey.value.currentState!
+                              .validate() &&
+                          cDropdown
+                              .addPengecualianStatusLiburKey.value.currentState!
                               .validate() &&
                           textC.datepickerKey.value.currentState!.validate()) {
-                        c.editHariLibur(data.date!, textC.addNamaLiburC.text,
-                            textC.datepickerC.text);
+                        c.editPengecualian(
+                            data.nama!,
+                            textC.addPengecualianC.text,
+                            cDropdown.addPengecualianStatusLiburC.text);
                       }
                     })),
               );
@@ -75,7 +93,7 @@ class HolidayDTS extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => holidayList.length;
+  int get rowCount => pengecualianList.length;
 
   @override
   int get selectedRowCount => 0;

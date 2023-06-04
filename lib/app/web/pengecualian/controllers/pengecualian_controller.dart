@@ -1,70 +1,57 @@
-// ignore_for_file: unnecessary_overrides
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../../../data/models/firestorehariliburmodel.dart';
+import '../../../data/models/firestorepengecualianmodel.dart';
 import '../../../theme/textstyle.dart';
 import '../../../utils/dialogDefault.dart';
 import '../../../utils/textfield.dart';
 
-class HariLiburController extends GetxController {
+class PengecualianController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late Stream<List<HolidayModel>> firestoreHolidayList;
+  late Stream<List<PengecualianModel>> firestorePengecualianList;
+
   @override
   void onInit() {
     super.onInit();
-    firestoreHolidayList = firestore
-        .collection('Holiday')
-        .orderBy('date', descending: true)
+    firestorePengecualianList = firestore
+        .collection('Pengecualian')
+        .orderBy('dateStart', descending: true)
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs
-            .map((documentSnapshot) => HolidayModel.fromJson(documentSnapshot))
+            .map((documentSnapshot) =>
+                PengecualianModel.fromJson(documentSnapshot))
             .toList());
   }
 
-  final selectedDate = DateTime.now().obs;
+  DateTime? start;
+  final end = DateTime.now().obs;
   final dateFormatter = DateFormat('d MMMM yyyy', 'id-ID');
-  final dateDefFormatter = DateFormat('yyyy-MM-dd');
 
-  DateRangePickerController datePickerController = DateRangePickerController();
-
-  void selectDateHariLibur(DateRangePickerSelectionChangedArgs args) {
-    selectedDate.value = args.value;
-
-    final dateFormatted = dateFormatter.format(selectedDate.value);
-    textC.datepickerC.text = dateFormatted;
-    if (kDebugMode) {
-      print(textC.datepickerC.text);
-    }
+  void pickRangeDate(DateTime pickStart, DateTime pickEnd) {
+    start = pickStart;
+    end.value = pickEnd;
+    update();
+    var startFormatted = dateFormatter.format(start!);
+    var endFormatted = dateFormatter.format(end.value);
+    textC.datepickerC.text = '$startFormatted - $endFormatted';
   }
 
-  Future<void> addHariLibur(
-    String nama,
-    String date,
-  ) async {
+  Future<void> addPengecualian(String nama, String statusPengecualian) async {
     try {
-      var hariLibur = firestore.collection('Holiday');
+      var hariLibur = firestore.collection('Pengecualian');
 
-      if (kDebugMode) {
-        print(date);
-      }
-
-      final tanggal = dateFormatter.parse(date);
-
-      final formattedDate = dateDefFormatter.format(tanggal);
-
-      final DocumentReference docRef = hariLibur.doc(date);
+      final DocumentReference docRef = hariLibur.doc(nama);
       final checkData = await docRef.get();
 
       if (checkData.exists == false) {
-        await hariLibur.doc(formattedDate).set({
-          'name': nama,
-          'date': formattedDate,
+        await hariLibur.doc(nama).set({
+          'nama': nama,
+          'statusPengecualian': statusPengecualian,
+          'dateStart': start!.toIso8601String(),
+          'dateEnd': end.value.toIso8601String()
         });
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
@@ -86,29 +73,20 @@ class HariLiburController extends GetxController {
     }
   }
 
-  Future<void> editHariLibur(
-    String doc,
-    String nama,
-    String date,
-  ) async {
+  Future<void> editPengecualian(
+      String doc, String nama, String statusPengecualian) async {
     try {
-      final hariLibur = firestore.collection('Holiday');
+      var hariLibur = firestore.collection('Pengecualian');
 
-      if (kDebugMode) {
-        print(date);
-      }
-
-      final tanggal = dateFormatter.parse(date);
-
-      final formattedDate = dateDefFormatter.format(tanggal);
-
-      await hariLibur.doc(doc).update({
-        'name': nama,
-        'date': formattedDate,
+      await hariLibur.doc(nama).update({
+        'nama': nama,
+        'statusPengecualian': statusPengecualian,
+        'dateStart': start!.toIso8601String(),
+        'DateEnd': end.value.toIso8601String()
       });
       Get.dialog(
         dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
-            'Berhasil Mengubah Data!', getTextAlert(Get.context!), () {
+            'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {
           Get.back();
           Get.back();
         }),
@@ -122,13 +100,13 @@ class HariLiburController extends GetxController {
     }
   }
 
-  Future<void> deleteHariLibur(String doc) async {
+  Future<void> deletePengecualian(String doc) async {
     Get.dialog(dialogAlertDualBtn(() async {
       Get.back();
     }, () async {
       Get.back();
       try {
-        await firestore.collection('Holiday').doc(doc).delete();
+        await firestore.collection('Pengecualian').doc(doc).delete();
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
               'Berhasil Menghapus Data!', getTextAlert(Get.context!), () {

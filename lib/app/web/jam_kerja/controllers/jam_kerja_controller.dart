@@ -210,8 +210,11 @@ class JamKerjaController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    firestoreJamKerjaList = firestore.collection('JamKerja').snapshots().map(
-        (querySnapshot) => querySnapshot.docs
+    firestoreJamKerjaList = firestore
+        .collection('JamKerja')
+        .orderBy('hariKerja', descending: true)
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
             .map((documentSnapshot) => JamKerjaModel.fromJson(documentSnapshot))
             .toList());
   }
