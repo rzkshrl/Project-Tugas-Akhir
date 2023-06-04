@@ -27,8 +27,9 @@ class RekapPresensiPerController extends GetxController {
   var namaList = <String>[].obs;
   final isClicked = false.obs;
 
-  var totalKeterlambatan = Duration.zero.obs;
-  var totalPulangLebihAwal = Duration.zero.obs;
+  var totalKeterlambatan = Duration();
+  var totalPulangLebihAwal = Duration();
+  var totalDurasiPresensi = Duration();
   DateFormat formatter = DateFormat('HH:mm');
 
   final pdfURL = "".obs;
@@ -99,14 +100,14 @@ class RekapPresensiPerController extends GetxController {
     return DateTime(date.year, date.month, date.day, hour, minute);
   }
 
-  String _formatDuration(Duration duration) {
+  String formatDuration(Duration duration) {
     var hours = duration.inHours.toString().padLeft(2, '0');
     var minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
 
     return '$hours:$minutes';
   }
 
-  String formatDuration(Duration duration) {
+  String formatDuration2(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
 
     String hours = twoDigits(duration.inHours.remainder(60));
@@ -115,26 +116,67 @@ class RekapPresensiPerController extends GetxController {
     return "$hours:$minutes";
   }
 
-  void calculatePresensi() {
-    for (int i = 0; i < presensiList.length; i++) {
-      GroupedPresensiModel presensi = presensiList[i];
-      JamKerjaModel jamKerja = jamKerjaList[i];
+  void hitungKeterlambatanPulangLebihAwal(
+      List<GroupedPresensiModel> presensiList, KepegawaianModel kepgData) {
+    keterlambatanList.clear();
+    pulangLebihAwalList.clear();
 
-      DateTime masuk = presensi.dateTimeMasuk!;
-      DateTime keluar = presensi.dateTimeKeluar!;
+    for (var presensi in presensiList) {
+      JamKerjaModel jamKerja;
+      var hari = DateFormat.EEEE('id_ID').format(presensi.dateTimeMasuk!);
 
-      DateTime jadwalMasuk = DateTime.parse(jamKerja.jadwalMasuk!);
-      DateTime jadwalKeluar = DateTime.parse(jamKerja.jadwalKeluar!);
+      try {
+        jamKerja = jamKerjaList.firstWhere(
+          (jk) => jk.hariKerja == hari && jk.kepg == kepgData.kepegawaian,
+        );
+      } catch (e) {
+        print("JamKerjaModel tidak ditemukan");
+        return;
+      }
 
-      // Hitung keterlambatan
-      Duration keterlambatan = masuk.difference(jadwalMasuk);
-      String keterlambatanFormatted = formatDuration(keterlambatan);
-      keterlambatanList.add(keterlambatanFormatted);
+      // ignore: unnecessary_null_comparison
+      if (jamKerja != null) {
+        var jadwalMasuk = DateTime.parse(
+            "${presensi.dateTimeMasuk?.toIso8601String().substring(0, 10)} ${jamKerja.jadwalMasuk}");
+        var jadwalKeluar = DateTime.parse(
+            "${presensi.dateTimeKeluar?.toIso8601String().substring(0, 10)} ${jamKerja.jadwalKeluar}");
 
-      // Hitung pulang lebih awal
-      Duration pulangLebihAwal = jadwalKeluar.difference(keluar);
-      String pulangLebihAwalFormatted = formatDuration(pulangLebihAwal);
-      pulangLebihAwalList.add(pulangLebihAwalFormatted);
+        if (presensi.dateTimeMasuk != null &&
+            presensi.dateTimeMasuk!.hour != 0 &&
+            presensi.dateTimeMasuk!.minute != 0 &&
+            presensi.dateTimeMasuk!.isAfter(jadwalMasuk)) {
+          var keterlambatan = presensi.dateTimeMasuk!.difference(jadwalMasuk);
+          var keterlambatanFormatted =
+              "${keterlambatan.inHours.toString().padLeft(2, '0')}:${keterlambatan.inMinutes.remainder(60).toString().padLeft(2, '0')}";
+          keterlambatanList.add(keterlambatanFormatted);
+          totalKeterlambatan += keterlambatan;
+        } else if (presensi.dateTimeMasuk!.hour == 0 &&
+            presensi.dateTimeMasuk!.minute == 0) {
+          keterlambatanList.add("00:00");
+        } else {
+          keterlambatanList.add("00:00");
+        }
+
+        if (presensi.dateTimeKeluar != null &&
+            presensi.dateTimeKeluar!.minute != 0 &&
+            presensi.dateTimeKeluar!.hour != 0 &&
+            presensi.dateTimeKeluar!.isBefore(jadwalKeluar)) {
+          var pulangLebihAwal =
+              jadwalKeluar.difference(presensi.dateTimeKeluar!);
+          var pulangLebihAwalFormatted =
+              "${pulangLebihAwal.inHours.toString().padLeft(2, '0')}:${pulangLebihAwal.inMinutes.remainder(60).toString().padLeft(2, '0')}";
+          pulangLebihAwalList.add(pulangLebihAwalFormatted);
+          totalPulangLebihAwal += pulangLebihAwal;
+        } else if (presensi.dateTimeKeluar!.hour == 0 &&
+            presensi.dateTimeKeluar!.minute == 0) {
+          pulangLebihAwalList.add("00:00");
+        } else {
+          pulangLebihAwalList.add("00:00");
+        }
+      } else {
+        keterlambatanList.add("00:00");
+        pulangLebihAwalList.add("00:00");
+      }
     }
   }
 
@@ -214,69 +256,15 @@ class RekapPresensiPerController extends GetxController {
       }
     }
 
-    final jamKerja = jamKerjaList
-        .firstWhere((jamKerja) => jamKerja.kepg == kepgData.kepegawaian);
-
-    // for (var presensi in combinedData) {
-    //   if (presensi.dateTimeMasuk != null && presensi.dateTimeKeluar != null) {
-    //     // Hitung keterlambatan
-    //     if (presensi.dateTimeMasuk!.isAfter(
-    //         _parseTime(jamKerja.batasAwalMasuk!, presensi.dateTimeMasuk!))) {
-    //       // Keterlambatan dalam bentuk Durasi
-    //       Duration keterlambatan = presensi.dateTimeMasuk!.difference(
-    //           _parseTime(jamKerja.jadwalMasuk!, presensi.dateTimeMasuk!));
-    //       presensi.keterlambatan = _formatDuration(keterlambatan);
-    //     }
-
-    //     // Hitung pulang lebih awal
-    //     if (presensi.dateTimeKeluar!.isBefore(
-    //         _parseTime(jamKerja.batasAwalKeluar!, presensi.dateTimeKeluar!))) {
-    //       // Pulang lebih awal dalam bentuk Durasi
-    //       Duration pulangLebihAwal =
-    //           _parseTime(jamKerja.jadwalKeluar!, presensi.dateTimeKeluar!)
-    //               .difference(presensi.dateTimeKeluar!);
-    //       presensi.pulangLebihAwal = _formatDuration(pulangLebihAwal);
-    //     }
-
-    //     var jadwalMasuk = formatter.parse(jamKerja.jadwalMasuk!);
-    //     var jadwalKeluar = formatter.parse(jamKerja.jadwalKeluar!);
-
-    //     final durasiKerja = jadwalKeluar.difference(jadwalMasuk);
-    //     final durasiPresensi =
-    //         presensi.dateTimeKeluar!.difference(presensi.dateTimeMasuk!);
-
-    //     if (durasiPresensi > durasiKerja) {
-    //       final keterlambatan = durasiPresensi - durasiKerja;
-    //       totalKeterlambatan.value += keterlambatan;
-    //     } else if (durasiPresensi < durasiKerja) {
-    //       final pulangLebihAwal = durasiKerja - durasiPresensi;
-    //       totalPulangLebihAwal.value += pulangLebihAwal;
-    //     }
-
-    //   }
-    // }
-
-    // final totalKeterlambatanHours =
-    //     totalKeterlambatan.value.inHours.toString().padLeft(2, '0');
-    // final totalKeterlambatanMinutes =
-    //     (totalKeterlambatan.value.inMinutes % 60).toString().padLeft(2, '0');
-
-    // final totalPulangLebihAwalHours =
-    //     totalPulangLebihAwal.value.inHours.toString().padLeft(2, '0');
-    // final totalPulangLebihAwalMinutes =
-    //     (totalPulangLebihAwal.value.inMinutes % 60).toString().padLeft(2, '0');
-
-    // print('$totalKeterlambatanHours:$totalKeterlambatanMinutes');
-    // print('$totalPulangLebihAwalHours:$totalPulangLebihAwalMinutes');
-
-    calculatePresensi();
-
     final pdf = pw.Document();
     var formatterTime = DateFormat('HH:mm', 'id-ID');
 
-    const int rowsPerPage = 18;
+    const int rowsPerPage = 24;
 
     final totalPages = (combinedData.length / rowsPerPage).ceil();
+
+    final int totalPresensi = combinedData.length;
+    int hadirCount = 0;
 
     for (var pageIndex = 0; pageIndex < totalPages; pageIndex++) {
       final startRow = pageIndex * rowsPerPage;
@@ -353,69 +341,112 @@ class RekapPresensiPerController extends GetxController {
             ),
           ],
         ),
-        for (var i = startRow; i < endRow && i < combinedData.length; i++)
-          pw.TableRow(
-            children: [
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text("${i + 1}.",
-                    style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text(
-                    dateFormatter.format(combinedData[i].dateTimeMasuk!),
-                    style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text(
-                  formatterTime.format(combinedData[i].dateTimeMasuk!),
-                  style: const pw.TextStyle(fontSize: 10),
-                ),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text(keterlambatanList[i],
-                    style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text(
-                  formatterTime.format(combinedData[i].dateTimeKeluar!),
-                  style: const pw.TextStyle(fontSize: 10),
-                ),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text(
-                  pulangLebihAwalList[i],
-                  style: const pw.TextStyle(fontSize: 10),
-                ),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
-              ),
-              pw.Container(
-                padding: const pw.EdgeInsets.all(5),
-                child: pw.Text("", style: const pw.TextStyle(fontSize: 10)),
-              ),
-            ],
-          ),
       ];
+
+      for (var i = startRow; i < endRow && i < combinedData.length; i++) {
+        hitungKeterlambatanPulangLebihAwal(combinedData, kepgData);
+        var hari =
+            DateFormat.EEEE('id_ID').format(combinedData[i].dateTimeMasuk!);
+
+        JamKerjaModel jamKerja = jamKerjaList.firstWhere((jamKerja) =>
+            jamKerja.hariKerja == hari &&
+            jamKerja.kepg == kepgData.kepegawaian);
+
+        var jadwalMasuk = DateTime.parse(
+            "${combinedData[i].dateTimeMasuk?.toIso8601String().substring(0, 10)} ${jamKerja.jadwalMasuk}");
+        var jadwalKeluar = DateTime.parse(
+            "${combinedData[i].dateTimeKeluar?.toIso8601String().substring(0, 10)} ${jamKerja.jadwalKeluar}");
+
+        var durasiKerja = jadwalKeluar.difference(jadwalMasuk);
+        var durasiPresensi = combinedData[i]
+            .dateTimeKeluar!
+            .difference(combinedData[i].dateTimeMasuk!);
+
+        totalDurasiPresensi += durasiPresensi;
+
+        var durasiPresensiFormatted =
+            "${durasiPresensi.inHours.toString().padLeft(2, '0')}:${durasiPresensi.inMinutes.remainder(60).toString().padLeft(2, '0')}";
+
+        if (combinedData[i].dateTimeMasuk!.hour != 0 &&
+            combinedData[i].dateTimeMasuk!.minute != 0 &&
+            combinedData[i].dateTimeKeluar!.hour != 0 &&
+            combinedData[i].dateTimeKeluar!.minute != 0) {
+          hadirCount++;
+        }
+
+        tableRows.add(pw.TableRow(
+          children: [
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child:
+                  pw.Text("${i + 1}.", style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                  dateFormatter.format(combinedData[i].dateTimeMasuk!),
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(jamKerja.nama!,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(jamKerja.jadwalMasuk!,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                formatterTime.format(combinedData[i].dateTimeMasuk!),
+                style: const pw.TextStyle(fontSize: 6),
+              ),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(keterlambatanList[i],
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(jamKerja.jadwalKeluar!,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                formatterTime.format(combinedData[i].dateTimeKeluar!),
+                style: const pw.TextStyle(fontSize: 6),
+              ),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(pulangLebihAwalList[i],
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(durasiPresensiFormatted,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text("", style: const pw.TextStyle(fontSize: 6)),
+            ),
+          ],
+        ));
+      }
+
+      double persentaseKehadiran = (hadirCount / totalPresensi) * 100;
+      var persentase = persentaseKehadiran.toStringAsFixed(1);
+
+      var totalDurasiPresensiFormatted = formatDuration2(totalDurasiPresensi);
+
+      var totalKeterlambatanFormatted = formatDuration2(totalKeterlambatan);
+
+      var totalPulangLebihAwalFormatted = formatDuration2(totalPulangLebihAwal);
 
       pdf.addPage(
         pw.Page(
@@ -470,22 +501,45 @@ class RekapPresensiPerController extends GetxController {
                   ]),
               pw.SizedBox(height: 10),
               pw.Table(
-                // columnWidths: {
-                //   0: const pw.FixedColumnWidth(20),
-                //   1: const pw.FixedColumnWidth(60),
-                //   2: const pw.FixedColumnWidth(60),
-                //   3: const pw.FixedColumnWidth(50),
-                //   4: const pw.FixedColumnWidth(50),
-                //   5: const pw.FixedColumnWidth(52),
-                //   6: const pw.FixedColumnWidth(50),
-                //   7: const pw.FixedColumnWidth(50),
-                //   8: const pw.FixedColumnWidth(50),
-                //   9: const pw.FixedColumnWidth(50),
-                //   10: const pw.FixedColumnWidth(50),
-                // },
                 border: pw.TableBorder.all(color: PdfColors.grey),
                 children: tableRows,
               ),
+              pw.SizedBox(height: 10),
+              pw.Text('Evaluasi Kehadiran Pegawai :',
+                  style: pw.TextStyle(
+                      fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text('Kehadiran: ${groupedData.length.toString()}',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text('Persentase Kehadiran: $persentase%',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                              'Total Keterlambatan: $totalKeterlambatanFormatted',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text(
+                              'Total Pulang Lebih Awal: $totalPulangLebihAwalFormatted',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                              'Total Durasi Kerja: $totalDurasiPresensiFormatted',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text('Tidak Hadir: ',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                  ]),
             ],
           ),
         ),

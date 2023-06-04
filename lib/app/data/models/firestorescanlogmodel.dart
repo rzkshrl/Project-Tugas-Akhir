@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import 'firestorejamkerjamodel.dart';
 
 List<KepegawaianModel> kepegawaianList = [];
 List<PresensiModel> presensiList = [];
@@ -42,6 +45,20 @@ class GroupedPresensiModel {
   String? shift;
 
   GroupedPresensiModel({this.pin, this.dateTimeMasuk, this.dateTimeKeluar});
+
+  Duration? getKeterlambatan(DateTime jadwalMasuk, DateTime dateTimeMasuk) {
+    if (jadwalMasuk.isBefore(dateTimeMasuk)) {
+      return dateTimeMasuk.difference(jadwalMasuk);
+    }
+    return null;
+  }
+
+  Duration? getPulangLebihAwal(DateTime jadwalKeluar, DateTime dateTimeKeluar) {
+    if (jadwalKeluar.isAfter(dateTimeKeluar)) {
+      return jadwalKeluar.difference(dateTimeKeluar);
+    }
+    return null;
+  }
 }
 
 class LiburModel {
