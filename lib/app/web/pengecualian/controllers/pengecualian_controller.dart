@@ -45,15 +45,16 @@ class PengecualianController extends GetxController {
     try {
       var hariLibur = firestore.collection('Pengecualian');
 
-      final DocumentReference docRef = hariLibur.doc(nama);
+      final docRef = hariLibur.doc();
       final checkData = await docRef.get();
 
       if (checkData.exists == false) {
-        await hariLibur.doc(nama).set({
+        await docRef.set({
           'nama': nama,
           'statusPengecualian': statusPengecualian,
           'dateStart': start!.toIso8601String(),
-          'dateEnd': end.value.toIso8601String()
+          'dateEnd': end.value.toIso8601String(),
+          'id': docRef.id
         });
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
@@ -80,7 +81,7 @@ class PengecualianController extends GetxController {
     try {
       var hariLibur = firestore.collection('Pengecualian');
 
-      await hariLibur.doc(nama).update({
+      await hariLibur.doc(doc).update({
         'nama': nama,
         'statusPengecualian': statusPengecualian,
         'dateStart': start!.toIso8601String(),

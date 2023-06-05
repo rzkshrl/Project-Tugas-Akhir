@@ -82,7 +82,7 @@ class JamKerjaController extends GetxController {
     try {
       var jamkerja = firestore.collection('JamKerja');
 
-      final DocumentReference docRef = jamkerja.doc(namaJamKerja);
+      final docRef = jamkerja.doc();
       final checkData = await docRef.get();
 
       if (kDebugMode) {
@@ -90,7 +90,7 @@ class JamKerjaController extends GetxController {
       }
 
       if (checkData.exists == false) {
-        await jamkerja.doc(namaJamKerja).set({
+        await docRef.set({
           'nama': namaJamKerja,
           'kepegawaian': kepegawaianJamKerja,
           'ket': ketJamKerja,
@@ -102,7 +102,8 @@ class JamKerjaController extends GetxController {
           'batasAkhir_keluar': batasAkhirKeluarJamKerja,
           'keterlambatan': terlambatJamKerja,
           'pulang_awal': pulLebihAwalJamKerja,
-          'hariKerja': selectedDay.value.toString()
+          'hariKerja': selectedDay.value.toString(),
+          'id': docRef.id
         });
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
@@ -143,6 +144,7 @@ class JamKerjaController extends GetxController {
       if (kDebugMode) {
         print(selectedDay);
       }
+
       await jamkerja.doc(doc).update({
         'nama': namaJamKerja,
         'kepegawaian': kepegawaianJamKerja,

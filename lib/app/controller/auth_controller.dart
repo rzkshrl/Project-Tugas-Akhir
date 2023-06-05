@@ -192,57 +192,101 @@ class AuthController extends GetxController {
         // }
         // });
       } else {
-        Get.dialog(dialogAlertBtn(() async {
-          myUser.user!.sendEmailVerification();
-          Get.back();
-          await Get.dialog(dialogAlertBtn(() {
+        if (kIsWeb) {
+          Get.dialog(dialogAlertBtn(() async {
+            myUser.user!.sendEmailVerification();
             Get.back();
+            await Get.dialog(dialogAlertBtn(() {
+              Get.back();
+            },
+                IconlyLight.tick_square,
+                111.29,
+                "OK",
+                "Email sukses terkirim!",
+                "Cek inbox email Anda",
+                getTextAlertBtn(context),
+                getTextAlertSub(context),
+                getTextAlertBtn(context)));
           },
-              IconlyLight.tick_square,
+              IconlyLight.danger,
               111.29,
-              "OK",
-              "Email sukses terkirim!",
-              "Cek inbox email Anda",
+              "Kirim",
+              "Email Belum Diverifikasi!",
+              "klik tombol Kirim untuk mengirim email verifikasi",
               getTextAlert(context),
               getTextAlertSub(context),
               getTextAlertBtn(context)));
-        },
-            IconlyLight.danger,
-            111.29,
-            "Kirim",
-            "Email Belum Diverifikasi!",
-            "klik tombol Kirim untuk mengirim email verifikasi",
-            getTextAlert(context),
-            getTextAlertSub(context),
-            getTextAlertBtn(context)));
+        } else {
+          Get.dialog(dialogAlertBtn(() async {
+            myUser.user!.sendEmailVerification();
+            Get.back();
+            await Get.dialog(dialogAlertBtn(() {
+              Get.back();
+            },
+                IconlyLight.tick_square,
+                111.29,
+                "OK",
+                "Email sukses terkirim!",
+                "Cek inbox email Anda",
+                getTextAlertBtnMobile(context),
+                getTextAlertSubMobile(context),
+                getTextAlertBtnMobile(context)));
+          },
+              IconlyLight.danger,
+              111.29,
+              "Kirim",
+              "Email Belum Diverifikasi!",
+              "klik tombol Kirim untuk mengirim email verifikasi",
+              getTextAlertMobile(context),
+              getTextAlertSubMobile(context),
+              getTextAlertBtnMobile(context)));
+        }
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         if (kDebugMode) {
           print('No user found for that email.');
         }
-
-        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-            "Akun tidak ditemukan!", getTextAlert(context)));
+        if (kIsWeb) {
+          Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+              "Akun tidak ditemukan!", getTextAlert(context)));
+        } else {
+          Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+              "Akun tidak ditemukan!", getTextAlertMobile(context)));
+        }
       } else if (e.code == 'wrong-password') {
         if (kDebugMode) {
           print('Wrong password provided for that user.');
         }
-
-        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-            "Kata sandi yang dimasukkan salah!", getTextAlert(context)));
+        if (kIsWeb) {
+          Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+              "Kata sandi yang dimasukkan salah!", getTextAlert(context)));
+        } else {
+          Get.dialog(dialogAlertOnlySingleMsg(
+              IconlyLight.danger,
+              "Kata sandi yang dimasukkan salah!",
+              getTextAlertMobile(context)));
+        }
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-
-      Get.dialog(dialogAlertOnly(
-          IconlyLight.danger,
-          "Terjadi Kesalahan.",
-          "Tidak dapat masuk.",
-          getTextAlert(context),
-          getTextAlertSub(context)));
+      if (kIsWeb) {
+        Get.dialog(dialogAlertOnly(
+            IconlyLight.danger,
+            "Terjadi Kesalahan.",
+            "Tidak dapat masuk.",
+            getTextAlert(context),
+            getTextAlertSub(context)));
+      } else {
+        Get.dialog(dialogAlertOnly(
+            IconlyLight.danger,
+            "Terjadi Kesalahan.",
+            "Tidak dapat masuk.",
+            getTextAlertMobile(context),
+            getTextAlertSubMobile(context)));
+      }
     }
   }
 

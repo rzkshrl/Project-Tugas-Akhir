@@ -58,14 +58,13 @@ class HariLiburController extends GetxController {
 
       final formattedDate = dateDefFormatter.format(tanggal);
 
-      final DocumentReference docRef = hariLibur.doc(date);
+      final docRef = hariLibur.doc();
       final checkData = await docRef.get();
 
       if (checkData.exists == false) {
-        await hariLibur.doc(formattedDate).set({
-          'name': nama,
-          'date': formattedDate,
-        });
+        await hariLibur
+            .doc(formattedDate)
+            .set({'name': nama, 'date': formattedDate, 'id': docRef.id});
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
               'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {
@@ -102,10 +101,7 @@ class HariLiburController extends GetxController {
 
       final formattedDate = dateDefFormatter.format(tanggal);
 
-      await hariLibur.doc(doc).update({
-        'name': nama,
-        'date': formattedDate,
-      });
+      await hariLibur.doc(doc).update({'name': nama, 'date': formattedDate});
       Get.dialog(
         dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
             'Berhasil Mengubah Data!', getTextAlert(Get.context!), () {

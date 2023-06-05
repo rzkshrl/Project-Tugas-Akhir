@@ -84,12 +84,13 @@ class APIController extends GetxController {
         List<String> tanggal = libur.holidayDate!.split('-');
         String liburDate =
             '${tanggal[0]}-${tanggal[1]}-${tanggal[2].padLeft(2, '0')}';
-        final liburCol = firestore.collection('Holiday').doc(liburDate);
+        final liburCol = firestore.collection('Holiday').doc();
         final checkData = await liburCol.get();
         if (checkData.exists == false) {
           await liburCol.set({
             'name': libur.holidayName,
             'date': liburDate,
+            'id': liburCol.id
           });
         }
       }

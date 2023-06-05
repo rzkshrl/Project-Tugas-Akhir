@@ -13,6 +13,7 @@ class JamKerjaModel {
   String? terlambat;
   String? pulangLebihAwal;
   String? hariKerja;
+  String? id;
 
   JamKerjaModel(
       {this.nama,
@@ -26,24 +27,25 @@ class JamKerjaModel {
       this.batasAkhirKeluar,
       this.terlambat,
       this.pulangLebihAwal,
-      this.hariKerja});
+      this.hariKerja,
+      this.id});
 
   factory JamKerjaModel.fromJson(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
     return (JamKerjaModel(
-      nama: data['nama'],
-      kepg: data['kepegawaian'],
-      ket: data['ket'],
-      jadwalMasuk: data['jadwal_masuk'],
-      jadwalKeluar: data['jadwal_keluar'],
-      batasAwalMasuk: data['batasAwal_masuk'],
-      batasAwalKeluar: data['batasAwal_keluar'],
-      batasAkhirMasuk: data['batasAkhir_masuk'],
-      batasAkhirKeluar: data['batasAkhir_keluar'],
-      terlambat: data['keterlambatan'],
-      pulangLebihAwal: data['pulang_awal'],
-      hariKerja: data['hariKerja'],
-    ));
+        nama: data['nama'],
+        kepg: data['kepegawaian'],
+        ket: data['ket'],
+        jadwalMasuk: data['jadwal_masuk'],
+        jadwalKeluar: data['jadwal_keluar'],
+        batasAwalMasuk: data['batasAwal_masuk'],
+        batasAwalKeluar: data['batasAwal_keluar'],
+        batasAkhirMasuk: data['batasAkhir_masuk'],
+        batasAkhirKeluar: data['batasAkhir_keluar'],
+        terlambat: data['keterlambatan'],
+        pulangLebihAwal: data['pulang_awal'],
+        hariKerja: data['hariKerja'],
+        id: data['id']));
   }
 
   Map<String, dynamic> toJson() {

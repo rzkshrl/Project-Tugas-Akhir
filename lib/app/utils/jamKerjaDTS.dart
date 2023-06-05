@@ -51,7 +51,7 @@ class JamKerjaDTS extends DataTableSource {
         )),
         DataCell(IconButton(
             onPressed: () {
-              c.deleteJamKerja(data.nama!);
+              c.deleteJamKerja(data.id!);
             },
             icon: Icon(
               IconlyLight.delete,
@@ -70,7 +70,7 @@ class JamKerjaDTS extends DataTableSource {
               textC.batasAkhirkeluarJamKerjaC.text = data.batasAkhirKeluar!;
               textC.terlambatJamKerjaC.text = data.terlambat!;
               textC.pulLebihAwalJamKerjaC.text = data.pulangLebihAwal!;
-              c.getJamKerja(data.nama!);
+              c.getJamKerja(data.id!);
               Get.dialog(dialogTextJamKerja(
                   true,
                   Get.context!,
@@ -96,7 +96,7 @@ class JamKerjaDTS extends DataTableSource {
                         textC.pulLebihAwalJamKerjaKey.value.currentState!
                             .validate()) {
                       c.editJamKerja(
-                          data.nama!,
+                          data.id!,
                           textC.namaJamKerjaC.text,
                           cDropdown.kepgTambahDataPegC.text,
                           textC.ketJamKerjaC.text,

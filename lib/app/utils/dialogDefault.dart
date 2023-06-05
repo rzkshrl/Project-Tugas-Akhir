@@ -172,7 +172,7 @@ Widget dialogAlertBtnSingleMsgAnimation(
     backgroundColor: Blue1,
     child: SizedBox(
       width: 35.w,
-      height: 27.4.h,
+      height: 37.4.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

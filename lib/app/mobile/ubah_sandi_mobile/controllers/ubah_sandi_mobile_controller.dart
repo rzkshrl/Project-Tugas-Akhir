@@ -33,10 +33,6 @@ class UbahSandiMobileController extends GetxController {
             email: emailUser, password: sandiLama);
         await auth.currentUser!.updatePassword(sandiBaru);
 
-        var docUsers = firestore.collection("Users").doc(emailUser);
-        await docUsers.update({
-          "password": sandiBaru,
-        });
         Get.dialog(
           dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
               'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {

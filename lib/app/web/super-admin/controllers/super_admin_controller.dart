@@ -104,32 +104,40 @@ class SuperAdminController extends GetxController {
   Future<void> editUser(String docIdentify, String uid, String nama,
       String role, String jabatan, String email, String pin) async {
     CollectionReference pegawai = firestore.collection("Users");
+    try {
+      if (kDebugMode) {
+        print(docIdentify);
+        print(uid);
+      }
 
-    if (kDebugMode) {
-      print(uid);
+      User? user =
+          await auth.authStateChanges().firstWhere((user) => user?.uid == uid);
+
+      if (user != null) {
+        await user.updateEmail(email);
+        await user.updateDisplayName(nama);
+      }
+
+      await pegawai.doc(docIdentify).update({
+        'name': nama,
+        'email': email,
+        'role': role,
+        'bidang': jabatan,
+        'pin': pin
+      });
+      Get.dialog(
+        dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
+            'Berhasil Mengubah User!', getTextAlert(Get.context!), () {
+          Get.back();
+        }),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+          "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
     }
-
-    User? user =
-        await auth.authStateChanges().firstWhere((user) => user?.uid == uid);
-
-    if (user != null) {
-      await user.updateEmail(email);
-      await user.updateDisplayName(nama);
-    }
-
-    await pegawai.doc(docIdentify).update({
-      'name': nama,
-      'email': email,
-      'role': role,
-      'bidang': jabatan,
-      'pin': pin
-    });
-    Get.dialog(
-      dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
-          'Berhasil Mengubah User!', getTextAlert(Get.context!), () {
-        Get.back();
-      }),
-    );
   }
 
   Future<void> deleteDoc(String doc, String uid) async {

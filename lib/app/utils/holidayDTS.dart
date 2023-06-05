@@ -38,7 +38,7 @@ class HolidayDTS extends DataTableSource {
         )),
         DataCell(IconButton(
             onPressed: () {
-              c.deleteHariLibur(data.date!);
+              c.deleteHariLibur(data.id!);
             },
             icon: Icon(
               IconlyLight.delete,
@@ -57,7 +57,7 @@ class HolidayDTS extends DataTableSource {
                       if (textC.addNamaLiburKey.value.currentState!
                               .validate() &&
                           textC.datepickerKey.value.currentState!.validate()) {
-                        c.editHariLibur(data.date!, textC.addNamaLiburC.text,
+                        c.editHariLibur(data.id!, textC.addNamaLiburC.text,
                             textC.datepickerC.text);
                       }
                     })),

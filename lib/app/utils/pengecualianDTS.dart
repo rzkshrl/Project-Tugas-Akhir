@@ -47,7 +47,7 @@ class PengecualianDTS extends DataTableSource {
         )),
         DataCell(IconButton(
             onPressed: () {
-              c.deletePengecualian(data.nama!);
+              c.deletePengecualian(data.id!);
             },
             icon: Icon(
               IconlyLight.delete,
@@ -72,7 +72,7 @@ class PengecualianDTS extends DataTableSource {
                               .validate() &&
                           textC.datepickerKey.value.currentState!.validate()) {
                         c.editPengecualian(
-                            data.nama!,
+                            data.id!,
                             textC.addPengecualianC.text,
                             cDropdown.addPengecualianStatusLiburC.text);
                       }
