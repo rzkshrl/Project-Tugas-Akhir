@@ -28,7 +28,7 @@ Widget datePickerDialog(
           startRangeSelectionColor: Blue1.withOpacity(0.5),
           endRangeSelectionColor: Blue1.withOpacity(0.5),
           monthViewSettings: const DateRangePickerMonthViewSettings(
-            firstDayOfWeek: 1,
+            firstDayOfWeek: 7,
           ),
           selectionMode: selectionMode,
           showActionButtons: true,

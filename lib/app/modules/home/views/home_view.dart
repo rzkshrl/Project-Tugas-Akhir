@@ -16,6 +16,7 @@ import '../../../controller/auth_controller.dart';
 import '../../../utils/dialogDefault.dart';
 
 import '../../../mobile/beranda_mobile/views/beranda_mobile_view.dart';
+import '../../../utils/session.dart';
 import '../../../web/super-admin/views/super_admin_view.dart';
 import '../controllers/home_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -25,13 +26,16 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
-    authC.readUser();
 
     return GetBuilder<AuthController>(builder: (c) {
       if (kIsWeb) {
+        final storedUserData = StorageService.getUserData();
+        if (storedUserData != null) {
+          authC.userData.value = storedUserData;
+        }
         String? roles = c.userData.value.role;
         if (kDebugMode) {
-          print("ROLES : $roles");
+          print("ROLES WEB 1 : $roles");
         }
 
         if (roles == null) {
@@ -80,7 +84,7 @@ class HomeView extends GetView<HomeController> {
 
         String? roles = c.userData.value.role;
         if (kDebugMode) {
-          print("ROLES : $roles");
+          print("ROLES MOBILE : $roles");
         }
         if (roles == null) {
           return Scaffold(

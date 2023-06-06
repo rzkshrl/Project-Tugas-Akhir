@@ -5,9 +5,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/modules/home/views/home_view.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
+
 import 'package:sizer/sizer.dart';
 
 import 'package:get/get.dart';
@@ -19,6 +21,8 @@ import 'app/modules/home/controllers/home_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'app/theme/textstyle.dart';
 import 'app/utils/dialogDefault.dart';
+
+import 'app/utils/session.dart';
 import 'firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
 // ignore: depend_on_referenced_packages
@@ -30,10 +34,10 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  Get.put(SessionController());
+  await GetStorage.init();
   await initializeDateFormatting('id_ID', null)
       .then((_) => runApp(ProjectTugasAkhir()));
-
   runApp(ProjectTugasAkhir());
 }
 
@@ -41,6 +45,7 @@ class ProjectTugasAkhir extends StatelessWidget {
   // const ProjectTugasAkhir({super.key});
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   final authC = Get.put(AuthController());
+  final sessionController = Get.put(SessionController());
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -58,34 +63,39 @@ class ProjectTugasAkhir extends StatelessWidget {
                     return const LoadingView();
                   }
                   return Sizer(builder: (context, orientation, screenType) {
-                    return GetMaterialApp(
-                      builder: (context, child) => ResponsiveWrapper.builder(
-                          BouncingScrollWrapper.builder(context, child!),
-                          breakpoints: [
-                            const ResponsiveBreakpoint.resize(240,
-                                name: MOBILE),
-                            const ResponsiveBreakpoint.resize(650,
-                                name: TABLET),
-                            const ResponsiveBreakpoint.resize(900,
-                                name: TABLET),
-                            const ResponsiveBreakpoint.resize(1000,
-                                name: DESKTOP),
-                            const ResponsiveBreakpoint.resize(2468, name: '4K')
-                          ]),
-                      title: "MonitorPresence MIM Jetis Lor",
-                      theme: ThemeData(
-                        scaffoldBackgroundColor: light,
-                        fontFamily: 'Inter',
-                        primaryColor: light,
-                        // scrollbarTheme: ScrollbarThemeData(
-                        //   thumbColor: thumbColorScrollbar,
-                        //   trackColor: trackColorScrollbar,
-                        //   thumbVisibility: MaterialStatePropertyAll(true),
-                        // )),
+                    return Obx(
+                      () => GetMaterialApp(
+                        builder: (context, child) => ResponsiveWrapper.builder(
+                            BouncingScrollWrapper.builder(context, child!),
+                            breakpoints: [
+                              const ResponsiveBreakpoint.resize(240,
+                                  name: MOBILE),
+                              const ResponsiveBreakpoint.resize(650,
+                                  name: TABLET),
+                              const ResponsiveBreakpoint.resize(900,
+                                  name: TABLET),
+                              const ResponsiveBreakpoint.resize(1000,
+                                  name: DESKTOP),
+                              const ResponsiveBreakpoint.resize(2468,
+                                  name: '4K')
+                            ]),
+                        title: "MonitorPresence MIM Jetis Lor",
+                        theme: ThemeData(
+                          scaffoldBackgroundColor: light,
+                          fontFamily: 'Inter',
+                          primaryColor: light,
+                          // scrollbarTheme: ScrollbarThemeData(
+                          //   thumbColor: thumbColorScrollbar,
+                          //   trackColor: trackColorScrollbar,
+                          //   thumbVisibility: MaterialStatePropertyAll(true),
+                          // )),
+                        ),
+                        initialRoute: sessionController.isLoggedIn.value
+                            ? Routes.HOME
+                            : Routes.LOGIN,
+                        getPages: AppPages.routes,
+                        debugShowCheckedModeBanner: false,
                       ),
-                      initialRoute: Routes.LOGIN,
-                      getPages: AppPages.routes,
-                      debugShowCheckedModeBanner: false,
                     );
                   });
                 });

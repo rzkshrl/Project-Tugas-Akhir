@@ -356,7 +356,7 @@ class RekapScanlogPerController extends GetxController {
 
     List<GroupedPresensiModel> groupedData = groupAttendanceData(presensiData);
 
-    final pdf = pw.Document();
+    final pdfPreview = pw.Document();
     var formatterTime = DateFormat('HH:mm', 'id-ID');
 
     const int rowsPerPage = 18;
@@ -510,7 +510,7 @@ class RekapScanlogPerController extends GetxController {
           ),
       ];
 
-      pdf.addPage(
+      pdfPreview.addPage(
         pw.Page(
           pageFormat: PdfPageFormat.a4,
           orientation: pw.PageOrientation.landscape,
@@ -545,7 +545,7 @@ class RekapScanlogPerController extends GetxController {
         ),
       );
     }
-    final bytes = await pdf.save();
+    final bytes = await pdfPreview.save();
     final blob = html.Blob([bytes], 'application/pdf');
     final url = html.Url.createObjectUrlFromBlob(blob);
     pdfBytes.value = bytes;
@@ -609,5 +609,6 @@ class RekapScanlogPerController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+    textC.datepickerC.clear();
   }
 }

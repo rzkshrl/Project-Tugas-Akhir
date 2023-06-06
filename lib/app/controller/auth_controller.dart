@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/models/usermodel.dart';
 import '../routes/app_pages.dart';
 import '../utils/dialogDefault.dart';
+import '../utils/session.dart';
 
 class AuthController extends GetxController {
   var isLoading = false.obs;
@@ -20,6 +22,8 @@ class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   Stream<User?> get streamAuthStatus => auth.userChanges();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  final sessionController = Get.put(SessionController());
 
   var userData = UserModel().obs;
 
@@ -50,57 +54,27 @@ class AuthController extends GetxController {
   }
 
   //store user data
-  void syncUsers(String? password) async {
-    CollectionReference users = firestore.collection("Users");
 
-    String emailUser = auth.currentUser!.email.toString();
-
-    final checkuser = await users.doc(emailUser).get();
-
-    final checkUserData = checkuser.data() as Map<String, dynamic>;
-
-    // userData(UserModel.fromJson(checkUserData));
-
-    if (kDebugMode) {
-      print("User Data : $checkUserData");
-    }
-
-    userData.value = (UserModel(
-        uid: auth.currentUser!.uid,
-        name: checkUserData['name'],
-        bidang: checkUserData['bidang'],
-        email: auth.currentUser!.email,
-        photoUrl: checkUserData['profile'],
-        role: checkUserData['role'],
-        pin: checkUserData['pin'],
-        creationTime:
-            auth.currentUser!.metadata.creationTime!.toIso8601String(),
-        lastSignInTime:
-            auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
-
-    userData.refresh();
-
-    if (checkuser.data() == null) {
-      users.doc(emailUser).set({
-        'uid': auth.currentUser!.uid,
-        'name': auth.currentUser!.displayName,
-        'email': auth.currentUser!.email,
-        'role': "user",
-        'bidang': 'Pegawai',
-        'profile': '',
-        'lastSignInDate':
-            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
-        'creationTime':
-            auth.currentUser!.metadata.creationTime!.toIso8601String(),
-      });
-    } else {
-      // return null;
-      users.doc(emailUser).update({
-        'lastSignInDate':
-            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
-      });
-    }
-  }
+  // if (checkuser.data() == null) {
+  //   users.doc(emailUser).set({
+  //     'uid': auth.currentUser!.uid,
+  //     'name': auth.currentUser!.displayName,
+  //     'email': auth.currentUser!.email,
+  //     'role': "user",
+  //     'bidang': 'Pegawai',
+  //     'profile': '',
+  //     'lastSignInDate':
+  //         auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
+  //     'creationTime':
+  //         auth.currentUser!.metadata.creationTime!.toIso8601String(),
+  //   });
+  // } else {
+  //   // return null;
+  //   users.doc(emailUser).update({
+  //     'lastSignInDate':
+  //         auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
+  //   });
+  // }
 
   Future<UserModel> readUser() async {
     CollectionReference users = firestore.collection("Users");
@@ -130,6 +104,7 @@ class AuthController extends GetxController {
         lastSignInTime:
             auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
 
+    StorageService.saveUserData(userData.value);
     return userData.value;
   }
 
@@ -164,8 +139,10 @@ class AuthController extends GetxController {
       UserCredential myUser = await auth.signInWithEmailAndPassword(
           email: email, password: password);
 
+      sessionController.login(myUser.user!.email!);
+
       if (myUser.user!.emailVerified) {
-        syncUsers(password);
+        readUser();
         isAuth.value = true;
         if (kIsWeb) {
           Get.dialog(
@@ -287,56 +264,6 @@ class AuthController extends GetxController {
             getTextAlertMobile(context),
             getTextAlertSubMobile(context)));
       }
-    }
-  }
-
-  //register
-  void register(String email, String password, BuildContext context) async {
-    try {
-      UserCredential myUser =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      syncUsers(password);
-      await myUser.user!.sendEmailVerification();
-      Get.dialog(dialogAlertBtn(() {
-        Get.back();
-      },
-          IconlyLight.tick_square,
-          111.29,
-          "OK",
-          "Sukses daftar akun baru!",
-          "Cek inbox email Anda untuk verifikasi akun",
-          getTextAlert(context),
-          getTextAlertSub(context),
-          getTextAlertBtn(context)));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        // ignore: avoid_print
-        print('The password provided is too weak.');
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
-            "Kata Sandi terlalu lemah!",
-            "Gunakan kombinasi kata sandi yang kuat",
-            getTextAlert(context),
-            getTextAlertSub(context)));
-      } else if (e.code == 'email-already-in-use') {
-        // ignore: avoid_print
-        print('The account already exists for that email.');
-        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-            "Email sudah terpakai pada akun lain!", getTextAlert(context)));
-      }
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-      Get.dialog(dialogAlertOnly(
-          IconlyLight.danger,
-          "Terjadi Kesalahan.",
-          "Tidak dapat mendaftarkan akun ini.",
-          getTextAlert(context),
-          getTextAlertSub(context)));
     }
   }
 

@@ -12,6 +12,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
 import '../../../routes/app_pages.dart';
+import '../../../utils/loading.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/riwayat_presensi_controller.dart';
 
@@ -128,6 +129,9 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                 child: StreamBuilder<List<KepegawaianModel>>(
                     stream: controller.firestoreKepegawaianList,
                     builder: (context, snap) {
+                      if (!snap.hasData) {
+                        return const LoadingView();
+                      }
                       final kepegawaianList =
                           // ignore: unnecessary_cast
                           snap.data! as List<KepegawaianModel>;

@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
+import 'package:project_tugas_akhir/app/data/models/firestorehariliburmodel.dart';
 import 'package:universal_html/html.dart' as html;
 
 import '../../../data/models/firestorejamkerjamodel.dart';
@@ -20,16 +21,21 @@ class RekapPresensiPerController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<KepegawaianModel> kepegawaianList = [];
   List<JamKerjaModel> jamKerjaList = [];
+  List<HolidayModel> holidayList = [];
   List<String> keterlambatanList = [];
   List<String> pulangLebihAwalList = [];
+  List<String> durasiKerjaList = [];
   List<GroupedPresensiModel> presensiList = [];
   var pinList = <String>[].obs;
   var namaList = <String>[].obs;
   final isClicked = false.obs;
 
-  var totalKeterlambatan = const Duration();
-  var totalPulangLebihAwal = const Duration();
-  var totalDurasiPresensi = const Duration();
+  // var totalKeterlambatan = const Duration(hours: 0, minutes: 0);
+  // var totalPulangLebihAwal = const Duration(hours: 0, minutes: 0);
+  // var totalDurasiPresensi = const Duration(hours: 0, minutes: 0);
+  int totalKeterlambatanInMinutes = 0;
+  int totalPulangLebihAwalInMinutes = 0;
+  int totalDurasiPresensiInMinutes = 0;
   DateFormat formatter = DateFormat('HH:mm');
 
   final pdfURL = "".obs;
@@ -92,22 +98,6 @@ class RekapPresensiPerController extends GetxController {
         date1.day == date2.day;
   }
 
-  String formatDuration(Duration duration) {
-    var hours = duration.inHours.toString().padLeft(2, '0');
-    var minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-
-    return '$hours:$minutes';
-  }
-
-  String formatDuration2(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-
-    String hours = twoDigits(duration.inHours.remainder(60));
-    String minutes = twoDigits(duration.inMinutes.remainder(60));
-
-    return "$hours:$minutes";
-  }
-
   void hitungKeterlambatanPulangLebihAwal(
       List<GroupedPresensiModel> presensiList, KepegawaianModel kepgData) {
     keterlambatanList.clear();
@@ -140,10 +130,12 @@ class RekapPresensiPerController extends GetxController {
             presensi.dateTimeMasuk!.minute != 0 &&
             presensi.dateTimeMasuk!.isAfter(jadwalMasuk)) {
           var keterlambatan = presensi.dateTimeMasuk!.difference(jadwalMasuk);
+          var keterlambatanInMinutes = keterlambatan.inMinutes;
           var keterlambatanFormatted =
               "${keterlambatan.inHours.toString().padLeft(2, '0')}:${keterlambatan.inMinutes.remainder(60).toString().padLeft(2, '0')}";
           keterlambatanList.add(keterlambatanFormatted);
-          totalKeterlambatan += keterlambatan;
+          totalKeterlambatanInMinutes += keterlambatanInMinutes;
+          // totalKeterlambatan += keterlambatan;
         } else if (presensi.dateTimeMasuk!.hour == 0 &&
             presensi.dateTimeMasuk!.minute == 0) {
           keterlambatanList.add("00:00");
@@ -157,10 +149,12 @@ class RekapPresensiPerController extends GetxController {
             presensi.dateTimeKeluar!.isBefore(jadwalKeluar)) {
           var pulangLebihAwal =
               jadwalKeluar.difference(presensi.dateTimeKeluar!);
+          var pulangLebihAwalInMinutes = pulangLebihAwal.inMinutes;
           var pulangLebihAwalFormatted =
               "${pulangLebihAwal.inHours.toString().padLeft(2, '0')}:${pulangLebihAwal.inMinutes.remainder(60).toString().padLeft(2, '0')}";
           pulangLebihAwalList.add(pulangLebihAwalFormatted);
-          totalPulangLebihAwal += pulangLebihAwal;
+          totalPulangLebihAwalInMinutes += pulangLebihAwalInMinutes;
+          // totalPulangLebihAwal += pulangLebihAwal;
         } else if (presensi.dateTimeKeluar!.hour == 0 &&
             presensi.dateTimeKeluar!.minute == 0) {
           pulangLebihAwalList.add("00:00");
@@ -174,9 +168,25 @@ class RekapPresensiPerController extends GetxController {
     }
   }
 
+  String hitungTotal(List<String> list) {
+    Duration total = Duration();
+
+    for (var keterlambatanFormatted in list) {
+      var parts = keterlambatanFormatted.split(':');
+      var hours = int.parse(parts[0]);
+      var minutes = int.parse(parts[1]);
+
+      var data = Duration(hours: hours, minutes: minutes);
+      total += data;
+    }
+
+    return "${total.inHours.toString().padLeft(2, '0')}:${total.inMinutes.remainder(60).toString().padLeft(2, '0')}";
+  }
+
   Future<void> unduhPDF(String pin) async {
     final QuerySnapshot<Map<String, dynamic>> presensiSnapshot;
     final QuerySnapshot<Map<String, dynamic>> jamKerjaSnapshot;
+    final QuerySnapshot<Map<String, dynamic>> holidaySnapshot;
 
     if (start == null) {
       presensiSnapshot = await firestore
@@ -220,6 +230,11 @@ class RekapPresensiPerController extends GetxController {
         .map((doc) => JamKerjaModel.fromJson(doc))
         .toList();
 
+    holidaySnapshot = await firestore.collection('Holiday').get();
+
+    holidayList =
+        holidaySnapshot.docs.map((doc) => HolidayModel.fromJson(doc)).toList();
+
     List<GroupedPresensiModel> groupedData = groupAttendanceData(presensiData);
 
     List<GroupedPresensiModel> combinedData = [];
@@ -258,7 +273,8 @@ class RekapPresensiPerController extends GetxController {
     final totalPages = (combinedData.length / rowsPerPage).ceil();
 
     final int totalPresensi = combinedData.length;
-    int hadirCount = 0;
+    int hadirCountHoliday = 0;
+    int tidakHadirCount = 0;
 
     for (var pageIndex = 0; pageIndex < totalPages; pageIndex++) {
       final startRow = pageIndex * rowsPerPage;
@@ -346,26 +362,43 @@ class RekapPresensiPerController extends GetxController {
             jamKerja.hariKerja == hari &&
             jamKerja.kepg == kepgData.kepegawaian);
 
-        var jadwalMasuk = DateTime.parse(
-            "${combinedData[i].dateTimeMasuk?.toIso8601String().substring(0, 10)} ${jamKerja.jadwalMasuk}");
-        var jadwalKeluar = DateTime.parse(
-            "${combinedData[i].dateTimeKeluar?.toIso8601String().substring(0, 10)} ${jamKerja.jadwalKeluar}");
-
-        var durasiKerja = jadwalKeluar.difference(jadwalMasuk);
         var durasiPresensi = combinedData[i]
             .dateTimeKeluar!
             .difference(combinedData[i].dateTimeMasuk!);
 
-        totalDurasiPresensi += durasiPresensi;
-
         var durasiPresensiFormatted =
             "${durasiPresensi.inHours.toString().padLeft(2, '0')}:${durasiPresensi.inMinutes.remainder(60).toString().padLeft(2, '0')}";
 
-        if (combinedData[i].dateTimeMasuk!.hour != 0 &&
-            combinedData[i].dateTimeMasuk!.minute != 0 &&
-            combinedData[i].dateTimeKeluar!.hour != 0 &&
-            combinedData[i].dateTimeKeluar!.minute != 0) {
-          hadirCount++;
+        durasiKerjaList.add(durasiPresensiFormatted);
+        var date =
+            combinedData[i].dateTimeMasuk!.toIso8601String().split('T')[0];
+
+        var tanggalPresensi =
+            dateFormatter.format(combinedData[i].dateTimeMasuk!);
+
+        HolidayModel? holiday;
+        for (var h in holidayList) {
+          if (h.date == date) {
+            holiday = h;
+            break;
+          }
+        }
+
+        var keterangan = holiday != null ? holiday.name : '';
+        var isHoliday = holidayList.any((holiday) => holiday.date == date);
+        var isAbsen = !isHoliday &&
+            combinedData[i].dateTimeMasuk!.hour == 0 &&
+            combinedData[i].dateTimeMasuk!.minute == 0 &&
+            combinedData[i].dateTimeKeluar!.hour == 0 &&
+            combinedData[i].dateTimeKeluar!.minute == 0;
+
+        if (isHoliday) {
+          hadirCountHoliday++;
+        } else if (combinedData[i].dateTimeMasuk!.hour == 0 &&
+            combinedData[i].dateTimeMasuk!.minute == 0 &&
+            combinedData[i].dateTimeKeluar!.hour == 0 &&
+            combinedData[i].dateTimeKeluar!.minute == 0) {
+          tidakHadirCount++;
         }
 
         tableRows.add(pw.TableRow(
@@ -377,8 +410,7 @@ class RekapPresensiPerController extends GetxController {
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
-              child: pw.Text(
-                  dateFormatter.format(combinedData[i].dateTimeMasuk!),
+              child: pw.Text(tanggalPresensi,
                   style: const pw.TextStyle(fontSize: 6)),
             ),
             pw.Container(
@@ -427,20 +459,33 @@ class RekapPresensiPerController extends GetxController {
             ),
             pw.Container(
               padding: const pw.EdgeInsets.all(5),
-              child: pw.Text("", style: const pw.TextStyle(fontSize: 6)),
+              child: pw.Text(isAbsen ? 'Tanpa Keterangan' : keterangan!,
+                  style: const pw.TextStyle(fontSize: 6)),
             ),
           ],
         ));
       }
 
-      double persentaseKehadiran = (hadirCount / totalPresensi) * 100;
-      var persentase = persentaseKehadiran.toStringAsFixed(1);
+      if (kDebugMode) {
+        print('hadirCount: ${groupedData.length}');
+        print('hadirCountHoliday: $hadirCountHoliday');
+        print('tidakHadirCount: $tidakHadirCount');
+        print('totalPresensi: $totalPresensi');
+      }
 
-      var totalDurasiPresensiFormatted = formatDuration2(totalDurasiPresensi);
+      double persentaseKehadiran = (tidakHadirCount / totalPresensi) * 100;
+      double persentaseFix = 100 - persentaseKehadiran;
+      var persentase = persentaseFix.toStringAsFixed(1);
 
-      var totalKeterlambatanFormatted = formatDuration2(totalKeterlambatan);
+      if (persentaseKehadiran > 100) {
+        persentase = '100.0';
+      }
 
-      var totalPulangLebihAwalFormatted = formatDuration2(totalPulangLebihAwal);
+      var totalDurasiPresensiFormatted = hitungTotal(durasiKerjaList);
+
+      var totalKeterlambatanFormatted = hitungTotal(keterlambatanList);
+
+      var totalPulangLebihAwalFormatted = hitungTotal(pulangLebihAwalList);
 
       pdf.addPage(
         pw.Page(
@@ -530,7 +575,8 @@ class RekapPresensiPerController extends GetxController {
                           pw.Text(
                               'Total Durasi Kerja: $totalDurasiPresensiFormatted',
                               style: const pw.TextStyle(fontSize: 6)),
-                          pw.Text('Tidak Hadir: ',
+                          pw.Text(
+                              'Tidak Hadir: ${tidakHadirCount == 0 ? '-' : tidakHadirCount}',
                               style: const pw.TextStyle(fontSize: 6)),
                         ]),
                   ]),
@@ -546,12 +592,427 @@ class RekapPresensiPerController extends GetxController {
       ..href = url
       ..style.display = 'none'
       ..download =
-          'Laporan Presensi PIN $pin (${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}).pdf';
+          'Laporan Presensi ${kepgData.nama} : (${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}).pdf';
 
     html.document.body?.children.add(anchor);
     anchor.click();
     html.document.body?.children.remove(anchor);
     html.Url.revokeObjectUrl(url);
+  }
+
+  Future<void> previewPDF(String pin) async {
+    isClicked.value = true;
+    update();
+    final QuerySnapshot<Map<String, dynamic>> presensiSnapshot;
+    final QuerySnapshot<Map<String, dynamic>> jamKerjaSnapshot;
+    final QuerySnapshot<Map<String, dynamic>> holidaySnapshot;
+
+    if (start == null) {
+      presensiSnapshot = await firestore
+          .collection('Kepegawaian')
+          .doc(pin)
+          .collection('Presensi')
+          .where("date_time", isLessThan: end.value.toIso8601String())
+          .orderBy("date_time", descending: false)
+          .get();
+    } else {
+      presensiSnapshot = await firestore
+          .collection('Kepegawaian')
+          .doc(pin)
+          .collection('Presensi')
+          .where("date_time", isGreaterThan: start!.toIso8601String())
+          .where("date_time",
+              isLessThan:
+                  end.value.add(const Duration(days: 1)).toIso8601String())
+          .orderBy("date_time", descending: false)
+          .get();
+    }
+
+    DocumentSnapshot<Map<String, dynamic>> kepegawaianSnapshot =
+        await firestore.collection('Kepegawaian').doc(pin).get();
+
+    final KepegawaianModel kepegawaianModel =
+        KepegawaianModel.fromSnapshot(kepegawaianSnapshot);
+
+    List<KepegawaianModel> kepegawaianData = [kepegawaianModel];
+
+    List<PresensiModel> presensiData = presensiSnapshot.docs
+        .map((e) => PresensiModel.fromJson(e.data()))
+        .toList();
+
+    var kepgData =
+        kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin);
+
+    jamKerjaSnapshot = await firestore.collection('JamKerja').get();
+
+    jamKerjaList = jamKerjaSnapshot.docs
+        .map((doc) => JamKerjaModel.fromJson(doc))
+        .toList();
+
+    holidaySnapshot = await firestore.collection('Holiday').get();
+
+    holidayList =
+        holidaySnapshot.docs.map((doc) => HolidayModel.fromJson(doc)).toList();
+
+    List<GroupedPresensiModel> groupedData = groupAttendanceData(presensiData);
+
+    List<GroupedPresensiModel> combinedData = [];
+
+    for (DateTime date = start!;
+        date.isBefore(end.value) || isSameDay(date, end.value);
+        date = date.add(const Duration(days: 1))) {
+      if (date.weekday == DateTime.sunday) {
+        continue;
+      }
+      bool isPresensiExist = false;
+
+      for (var presensi in groupedData) {
+        if (presensi.dateTimeMasuk != null &&
+            isSameDay(presensi.dateTimeMasuk!, date)) {
+          combinedData.add(presensi);
+          isPresensiExist = true;
+          break;
+        }
+      }
+
+      if (!isPresensiExist) {
+        combinedData.add(GroupedPresensiModel(
+          pin: pin,
+          dateTimeMasuk: DateTime(date.year, date.month, date.day),
+          dateTimeKeluar: DateTime(date.year, date.month, date.day),
+        ));
+      }
+    }
+
+    final pdfPreview = pw.Document();
+    var formatterTime = DateFormat('HH:mm', 'id-ID');
+
+    const int rowsPerPage = 24;
+
+    final totalPages = (combinedData.length / rowsPerPage).ceil();
+
+    final int totalPresensi = combinedData.length;
+    int hadirCountHoliday = 0;
+    int tidakHadirCount = 0;
+
+    for (var pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+      final startRow = pageIndex * rowsPerPage;
+      final endRow = (pageIndex + 1) * rowsPerPage;
+
+      final tableRows = <pw.TableRow>[
+        pw.TableRow(
+          children: [
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('No.',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Tanggal',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Jam Kerja/Shift',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Jam Masuk',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Scan Masuk',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Keterlambatan',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Jam Keluar',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Scan Keluar',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Pulang Lebih Awal',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Durasi Kerja',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text('Keterangan',
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            ),
+          ],
+        ),
+      ];
+
+      for (var i = startRow; i < endRow && i < combinedData.length; i++) {
+        hitungKeterlambatanPulangLebihAwal(combinedData, kepgData);
+        var hari =
+            DateFormat.EEEE('id_ID').format(combinedData[i].dateTimeMasuk!);
+
+        JamKerjaModel jamKerja = jamKerjaList.firstWhere((jamKerja) =>
+            jamKerja.hariKerja == hari &&
+            jamKerja.kepg == kepgData.kepegawaian);
+
+        var durasiPresensi = combinedData[i]
+            .dateTimeKeluar!
+            .difference(combinedData[i].dateTimeMasuk!);
+
+        var durasiPresensiFormatted =
+            "${durasiPresensi.inHours.toString().padLeft(2, '0')}:${durasiPresensi.inMinutes.remainder(60).toString().padLeft(2, '0')}";
+
+        durasiKerjaList.add(durasiPresensiFormatted);
+        var date =
+            combinedData[i].dateTimeMasuk!.toIso8601String().split('T')[0];
+
+        var tanggalPresensi =
+            dateFormatter.format(combinedData[i].dateTimeMasuk!);
+
+        HolidayModel? holiday;
+        for (var h in holidayList) {
+          if (h.date == date) {
+            holiday = h;
+            break;
+          }
+        }
+
+        var keterangan = holiday != null ? holiday.name : '';
+        var isHoliday = holidayList.any((holiday) => holiday.date == date);
+        var isAbsen = !isHoliday &&
+            combinedData[i].dateTimeMasuk!.hour == 0 &&
+            combinedData[i].dateTimeMasuk!.minute == 0 &&
+            combinedData[i].dateTimeKeluar!.hour == 0 &&
+            combinedData[i].dateTimeKeluar!.minute == 0;
+
+        if (isHoliday) {
+          hadirCountHoliday++;
+        } else if (combinedData[i].dateTimeMasuk!.hour == 0 &&
+            combinedData[i].dateTimeMasuk!.minute == 0 &&
+            combinedData[i].dateTimeKeluar!.hour == 0 &&
+            combinedData[i].dateTimeKeluar!.minute == 0) {
+          tidakHadirCount++;
+        }
+
+        tableRows.add(pw.TableRow(
+          children: [
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child:
+                  pw.Text("${i + 1}.", style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(tanggalPresensi,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(jamKerja.nama!,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(jamKerja.jadwalMasuk!,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                formatterTime.format(combinedData[i].dateTimeMasuk!),
+                style: const pw.TextStyle(fontSize: 6),
+              ),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(keterlambatanList[i],
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(jamKerja.jadwalKeluar!,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                formatterTime.format(combinedData[i].dateTimeKeluar!),
+                style: const pw.TextStyle(fontSize: 6),
+              ),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(pulangLebihAwalList[i],
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(durasiPresensiFormatted,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(isAbsen ? 'Tanpa Keterangan' : keterangan!,
+                  style: const pw.TextStyle(fontSize: 6)),
+            ),
+          ],
+        ));
+      }
+
+      if (kDebugMode) {
+        print('hadirCount: ${groupedData.length}');
+        print('hadirCountHoliday: $hadirCountHoliday');
+        print('tidakHadirCount: $tidakHadirCount');
+        print('totalPresensi: $totalPresensi');
+      }
+
+      double persentaseKehadiran = (tidakHadirCount / totalPresensi) * 100;
+      double persentaseFix = 100 - persentaseKehadiran;
+      var persentase = persentaseFix.toStringAsFixed(1);
+
+      if (persentaseKehadiran > 100) {
+        persentase = '100.0';
+      }
+
+      var totalDurasiPresensiFormatted = hitungTotal(durasiKerjaList);
+
+      var totalKeterlambatanFormatted = hitungTotal(keterlambatanList);
+
+      var totalPulangLebihAwalFormatted = hitungTotal(pulangLebihAwalList);
+
+      pdfPreview.addPage(
+        pw.Page(
+          orientation: pw.PageOrientation.landscape,
+          build: (pw.Context context) => pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Center(
+                  child: pw.Text('LAPORAN RINCIAN HARIAN',
+                      style: pw.TextStyle(
+                          fontSize: 12, fontWeight: pw.FontWeight.bold))),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Nama Madrasah: MIM JETIS LOR',
+                        style: pw.TextStyle(
+                            fontSize: 6, fontWeight: pw.FontWeight.bold)),
+                    pw.Text(
+                      'Tanggal: ${dateFormatter.format(start!).toString()} - ${dateFormatter.format(end.value).toString()}',
+                      style: pw.TextStyle(
+                          fontSize: 6, fontWeight: pw.FontWeight.bold),
+                    ),
+                  ]),
+              pw.SizedBox(height: 10),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text('PIN: $pin',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text('NIP: ${kepgData.nip!}',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text('Nama: ${kepgData.nama!}',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text('Jabatan: ${kepgData.bidang!}',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text('Kepegawaian: ${kepgData.kepegawaian!}',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text('Madrasah: MIM JETIS LOR',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                  ]),
+              pw.SizedBox(height: 10),
+              pw.Table(
+                border: pw.TableBorder.all(color: PdfColors.grey),
+                children: tableRows,
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text('Evaluasi Kehadiran Pegawai :',
+                  style: pw.TextStyle(
+                      fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text('Kehadiran: ${groupedData.length.toString()}',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text('Persentase Kehadiran: $persentase%',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                              'Total Keterlambatan: $totalKeterlambatanFormatted',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text(
+                              'Total Pulang Lebih Awal: $totalPulangLebihAwalFormatted',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                    pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                              'Total Durasi Kerja: $totalDurasiPresensiFormatted',
+                              style: const pw.TextStyle(fontSize: 6)),
+                          pw.Text(
+                              'Tidak Hadir: ${tidakHadirCount == 0 ? '-' : tidakHadirCount}',
+                              style: const pw.TextStyle(fontSize: 6)),
+                        ]),
+                  ]),
+            ],
+          ),
+        ),
+      );
+    }
+    final bytes = await pdfPreview.save();
+    final blob = html.Blob([bytes], 'application/pdf');
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    pdfBytes.value = bytes;
+    pdfURL.value = url;
+    if (kDebugMode) {
+      print(pdfURL);
+    }
+    update();
   }
 
   void exportData(List dataList) {
@@ -607,5 +1068,6 @@ class RekapPresensiPerController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+    textC.datepickerC.clear();
   }
 }

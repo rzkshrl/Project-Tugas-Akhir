@@ -42,6 +42,19 @@ class UserModel {
         pin: data['pin']);
   }
 
+  factory UserModel.fromJson2(Map<String, dynamic> data) {
+    return UserModel(
+        uid: data['uid'],
+        name: data['name'],
+        email: data['email'],
+        photoUrl: data['profile'],
+        role: data['role'],
+        creationTime: data['creationTime'],
+        lastSignInTime: data['lastSignInDate'],
+        bidang: data['bidang'],
+        pin: data['pin']);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "uid": uid,

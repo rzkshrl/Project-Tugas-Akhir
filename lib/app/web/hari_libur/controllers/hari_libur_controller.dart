@@ -62,8 +62,7 @@ class HariLiburController extends GetxController {
       final checkData = await docRef.get();
 
       if (checkData.exists == false) {
-        await hariLibur
-            .doc(formattedDate)
+        await docRef
             .set({'name': nama, 'date': formattedDate, 'id': docRef.id});
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',

@@ -28,6 +28,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
+    final controller = Get.put(RekapPresensiPerController());
 
     final dateFormatter = DateFormat('MMMM yyyy', 'id-ID');
     return Scaffold(
@@ -207,7 +208,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                                     .validate() &&
                                 cDropdown.pinRekapKey.value.currentState!
                                     .validate()) {
-                              // controller.previewPDF(cDropdown.pinRekapC.text);
+                              controller.previewPDF(cDropdown.pinRekapC.text);
                             }
                           }),
                           SizedBox(
