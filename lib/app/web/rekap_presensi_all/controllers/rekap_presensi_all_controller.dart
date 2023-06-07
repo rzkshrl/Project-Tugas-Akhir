@@ -1,9 +1,12 @@
 // ignore_for_file: unnecessary_overrides
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class RekapPresensiAllController extends GetxController {
-  final count = 0.obs;
+  DateTime? start;
+  final end = DateTime.now().obs;
+  final dateFormatter = DateFormat('d MMMM yyyy', 'id-ID');
   @override
   void onInit() {
     super.onInit();
@@ -19,5 +22,5 @@ class RekapPresensiAllController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  void pickRangeDate(DateTime dateTime, DateTime dateTime2) {}
 }
