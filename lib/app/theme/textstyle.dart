@@ -37,11 +37,11 @@ getTextFormJamKerja(BuildContext context) {
 
 getTextFormDialog2(BuildContext context) {
   return TextStyle(
-      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
-        const Condition.smallerThan(name: DESKTOP, value: 12.0),
-        const Condition.equals(name: MOBILE, value: 12.0),
-        const Condition.equals(name: TABLET, value: 14.0),
-        const Condition.equals(name: DESKTOP, value: 16.0),
+      fontSize: ResponsiveValue(context, defaultValue: 14.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 10.0),
+        const Condition.equals(name: MOBILE, value: 10.0),
+        const Condition.equals(name: TABLET, value: 12.0),
+        const Condition.equals(name: DESKTOP, value: 14.0),
       ]).value,
       color: dark);
 }

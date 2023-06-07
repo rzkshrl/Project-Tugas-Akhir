@@ -204,14 +204,14 @@ class APIController extends GetxController {
       String? allPresensi, String? newPresensi) async {
     String urlGet = "http://$ip:$port$urlGetDeviceInfo?sn=${sn}";
 
-    var res = await dio.post(urlGet);
+    var res = await Future.wait([dio.post(urlGet)]);
 
     if (kDebugMode) {
-      print('HASIL DEVINFO : ${res.data['Result']}');
+      print('HASIL DEVINFO : ${res[0].data['Result']}');
       // print('BODY : ${res[0].data['DEVINFO']}');
     }
 
-    if (res.data['Result'] == 'false') {
+    if (res[0].data['Result'] == 'false') {
       Get.dialog(dialogAlertOnly(
           IconlyLight.danger,
           "Terjadi Kesalahan.",
@@ -219,7 +219,7 @@ class APIController extends GetxController {
           getTextAlert(Get.context!),
           getTextAlertSub(Get.context!)));
     } else {
-      Map<String, dynamic> data = res.data['DEVINFO'];
+      Map<String, dynamic> data = res[0].data['DEVINFO'];
       deviceInfo(DeviceInfoModel.fromJson(data));
       deviceInfo.refresh();
       if (allPresensi != deviceInfo.value.allPresensi) {
@@ -267,31 +267,19 @@ class APIController extends GetxController {
     try {
       showLoadingDialog();
 
-      // getDeviceInfo2(ip, port, sn, allPresensi, newPresensi);
-
-      if (kDebugMode) {
-        print("Serial Number : $sn");
-        print("IP server dan Port : $ip:$port");
-        print("All Presensi : $allPresensi");
-        print("New Presensi : $newPresensi");
-      }
+      getDeviceInfo2(ip, port, sn, allPresensi, newPresensi);
 
       while (true) {
         var response =
             await Future.wait([dio.post('$url&page=$pageNumber&limit=100')]);
-        if (kDebugMode) {
-          print('JINGAN');
-        }
         final data = response[0].data['Data'];
 
-        if (kDebugMode) {
-          print(data);
-        }
+        if (data != null) {
+          res.addAll(data);
 
-        res.addAll(data);
-
-        if (data.length < 100) {
-          break;
+          if (data.length < 100) {
+            break;
+          }
         }
 
         pageNumber++;
@@ -371,7 +359,8 @@ class APIController extends GetxController {
           .toList();
 
       if (kDebugMode) {
-        exportData(groupedData.value);
+        print('download data gaes');
+        // exportData(groupedData.value);
       }
 
       RxList<PresensiKepgModel> presenceData = <PresensiKepgModel>[].obs;
@@ -402,9 +391,13 @@ class APIController extends GetxController {
 
       presenceData.value = presenceModels;
 
+      // if (kDebugMode) {
+      //   print(presenceData.value[0].presence);
+      // }
+
       final stopwatch = Stopwatch()..start();
 
-      for (var data in presenceData) {
+      for (var data in presenceData.value) {
         final pin = data.pin;
         final presence = data.presence;
 

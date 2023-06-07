@@ -35,3 +35,13 @@ class PengecualianModel {
     };
   }
 }
+
+class PengecualianIterableModel {
+  String? nama;
+  String? statusPengecualian;
+  DateTime? date;
+  String? id;
+
+  PengecualianIterableModel(
+      {this.nama, this.statusPengecualian, this.date, this.id});
+}

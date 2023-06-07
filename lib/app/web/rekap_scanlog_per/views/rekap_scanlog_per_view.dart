@@ -20,6 +20,7 @@ import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/dialogDefault.dart';
+import '../../../utils/loading.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_scanlog_per_controller.dart';
 
@@ -248,6 +249,9 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
                         child: StreamBuilder<List<KepegawaianModel>>(
                             stream: controller.firestoreKepegawaianList,
                             builder: (context, snap) {
+                              if (!snap.hasData) {
+                                return const LoadingView();
+                              }
                               final kepegawaianList =
                                   snap.data!.obs as List<KepegawaianModel>;
                               return ListView.builder(

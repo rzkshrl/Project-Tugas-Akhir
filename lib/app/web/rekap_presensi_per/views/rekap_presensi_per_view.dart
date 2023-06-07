@@ -19,6 +19,7 @@ import '../../../utils/btnDefault.dart';
 import '../../../utils/datePicker.dart';
 import '../../../utils/dialogDefault.dart';
 import '../../../utils/dropdownTextField.dart';
+import '../../../utils/loading.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_presensi_per_controller.dart';
@@ -189,7 +190,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                               }
                             }, null, null));
                           }, 24.w, light, Blue1, dark, Blue1,
-                              getTextLogin(Get.context!), null),
+                              getTextFormDialog2(Get.context!), null),
                         ],
                       ),
                       SizedBox(
@@ -245,6 +246,9 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                         child: StreamBuilder<List<KepegawaianModel>>(
                             stream: controller.firestoreKepegawaianList,
                             builder: (context, snap) {
+                              if (!snap.hasData) {
+                                return const LoadingView();
+                              }
                               final kepegawaianList =
                                   snap.data!.obs as List<KepegawaianModel>;
                               return ListView.builder(
