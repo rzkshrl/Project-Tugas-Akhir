@@ -412,28 +412,38 @@ class RekapPresensiPerController extends GetxController {
           }
         }
 
+        // var keterangan = '';
         HolidayModel? holiday;
         for (var h in holidayList) {
-          if (h.date == combinedData[i].dateTimeMasuk!.toString()) {
+          if (h.date == date) {
             holiday = h;
             break;
           }
         }
-
-        // if (pengecualianCocok.isNotEmpty) {
-        //   var pengecualian = pengecualianCocok.first;
-        //   if (pengecualian.statusPengecualian == 'Ya') {
-        //     keterangan = pengecualian.nama!;
+        // PengecualianModel? pengecualian;
+        // for (var p in pengecualianCocok) {
+        //   if (p.statusPengecualian == 'Ya') {
+        //     pengecualian = p;
+        //     break;
         //   }
-        // } else if (keterangan.isEmpty && holiday != null) {
-        // var keterangan = holiday != null ? holiday.name : '';
+        // }
 
+        // if (pengecualian != null && holiday == null) {
+        //   // var pengecualian = pengecualianCocok.first;
+        //   // if (pengecualian.statusPengecualian == 'Ya') {
+        //   keterangan = pengecualian.nama!;
+        //   // }
+        // } else if (pengecualian == null && holiday != null) {
+        //   keterangan = holiday.name!;
+        // }
+        // else if (pengecualian != null && holiday != null) {
+        //   keterangan = '${pengecualian.nama!}, ${holiday.name!}';
         // }
 
         // var isHoliday = pengecualianCocok.isNotEmpty ||
         //     holidayList.any((holiday) => holiday.date == date);
-        var isHoliday = holidayList.any((holiday) => holiday.date == date);
         var keterangan = holiday != null ? holiday.name : '';
+        var isHoliday = holidayList.any((holiday) => holiday.date == date);
 
         var isAbsen = !isHoliday &&
             combinedData[i].dateTimeMasuk!.hour == 0 &&
