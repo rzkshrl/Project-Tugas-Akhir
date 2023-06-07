@@ -13,6 +13,7 @@ import 'package:project_tugas_akhir/app/data/models/firestorehariliburmodel.dart
 import 'package:universal_html/html.dart' as html;
 
 import '../../../data/models/firestorejamkerjamodel.dart';
+import '../../../data/models/firestorepengecualianmodel.dart';
 import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../utils/textfield.dart';
 
@@ -22,6 +23,7 @@ class RekapPresensiPerController extends GetxController {
   List<KepegawaianModel> kepegawaianList = [];
   List<JamKerjaModel> jamKerjaList = [];
   List<HolidayModel> holidayList = [];
+  List<PengecualianModel> pengecualianList = [];
   List<String> keterlambatanList = [];
   List<String> pulangLebihAwalList = [];
   List<String> durasiKerjaList = [];
@@ -29,6 +31,8 @@ class RekapPresensiPerController extends GetxController {
   var pinList = <String>[].obs;
   var namaList = <String>[].obs;
   final isClicked = false.obs;
+
+  RxList<DateTime> dateRangePengecualianList = RxList<DateTime>([]);
 
   // var totalKeterlambatan = const Duration(hours: 0, minutes: 0);
   // var totalPulangLebihAwal = const Duration(hours: 0, minutes: 0);
@@ -187,6 +191,7 @@ class RekapPresensiPerController extends GetxController {
     final QuerySnapshot<Map<String, dynamic>> presensiSnapshot;
     final QuerySnapshot<Map<String, dynamic>> jamKerjaSnapshot;
     final QuerySnapshot<Map<String, dynamic>> holidaySnapshot;
+    final QuerySnapshot<Map<String, dynamic>> pengecualianSnapshot;
 
     if (start == null) {
       presensiSnapshot = await firestore
@@ -235,9 +240,23 @@ class RekapPresensiPerController extends GetxController {
     holidayList =
         holidaySnapshot.docs.map((doc) => HolidayModel.fromJson(doc)).toList();
 
+    pengecualianSnapshot = await firestore.collection('Pengecualian').get();
+
+    pengecualianList = pengecualianSnapshot.docs
+        .map((doc) => PengecualianModel.fromJson(doc))
+        .toList();
+
+    // PengecualianModel pengecualianData = pengecualianList.firstWhere(
+    //     (pengecualian) =>
+    //         pengecualian.statusPengecualian == 'Ya' &&
+    //         pengecualian.dateStart!.year == start!.year &&
+    //         pengecualian.dateEnd!.year == start!.year);
+
     List<GroupedPresensiModel> groupedData = groupAttendanceData(presensiData);
 
     List<GroupedPresensiModel> combinedData = [];
+
+    List<PengecualianModel> pengecualianCocok = [];
 
     for (DateTime date = start!;
         date.isBefore(end.value) || isSameDay(date, end.value);
@@ -376,16 +395,46 @@ class RekapPresensiPerController extends GetxController {
         var tanggalPresensi =
             dateFormatter.format(combinedData[i].dateTimeMasuk!);
 
+        for (var pengecualian in pengecualianList) {
+          // Periksa apakah tanggal presensi sama dengan dateStart atau dateEnd pada pengecualian
+          if (combinedData[i]
+                  .dateTimeMasuk!
+                  .isAtSameMomentAs(pengecualian.dateStart!) ||
+              combinedData[i]
+                  .dateTimeMasuk!
+                  .isAtSameMomentAs(pengecualian.dateEnd!)) {
+            pengecualianCocok.add(pengecualian);
+          } else if (combinedData[i]
+                  .dateTimeMasuk!
+                  .isAfter(pengecualian.dateStart!) &&
+              combinedData[i].dateTimeMasuk!.isBefore(pengecualian.dateEnd!)) {
+            pengecualianCocok.add(pengecualian);
+          }
+        }
+
         HolidayModel? holiday;
         for (var h in holidayList) {
-          if (h.date == date) {
+          if (h.date == combinedData[i].dateTimeMasuk!.toString()) {
             holiday = h;
             break;
           }
         }
 
-        var keterangan = holiday != null ? holiday.name : '';
+        // if (pengecualianCocok.isNotEmpty) {
+        //   var pengecualian = pengecualianCocok.first;
+        //   if (pengecualian.statusPengecualian == 'Ya') {
+        //     keterangan = pengecualian.nama!;
+        //   }
+        // } else if (keterangan.isEmpty && holiday != null) {
+        // var keterangan = holiday != null ? holiday.name : '';
+
+        // }
+
+        // var isHoliday = pengecualianCocok.isNotEmpty ||
+        //     holidayList.any((holiday) => holiday.date == date);
         var isHoliday = holidayList.any((holiday) => holiday.date == date);
+        var keterangan = holiday != null ? holiday.name : '';
+
         var isAbsen = !isHoliday &&
             combinedData[i].dateTimeMasuk!.hour == 0 &&
             combinedData[i].dateTimeMasuk!.minute == 0 &&
