@@ -267,7 +267,7 @@ class APIController extends GetxController {
     try {
       showLoadingDialog();
 
-      getDeviceInfo2(ip, port, sn, allPresensi, newPresensi);
+      // getDeviceInfo2(ip, port, sn, allPresensi, newPresensi);
 
       while (true) {
         var response =
@@ -359,79 +359,118 @@ class APIController extends GetxController {
           .toList();
 
       if (kDebugMode) {
-        print('download data gaes');
+        print('download data gaes...');
+        // print('jajal print disini dulu ${groupedData.value.length}');
         // exportData(groupedData.value);
       }
 
-      RxList<PresensiKepgModel> presenceData = <PresensiKepgModel>[].obs;
+      // var presenceData = <PresensiKepgModel>[].obs;
 
-      List<PresensiKepgModel> presenceModels = [];
+      // List<PresensiKepgModel> presenceModels = [];
 
-      groupedMap.forEach((pin, presenceList) {
-        List<PresenceModel> presenceDates = [];
+      // groupedMap.forEach((pin, presenceList) {
+      //   List<PresenceModel> presenceDates = [];
 
-        for (var presence in presenceList) {
-          List<ScanInDayModel> scans = [];
+      //   for (var presence in presenceList) {
+      //     List<ScanInDayModel> scans = [];
 
-          presence['scanInDay'].forEach((scan) {
-            scans.add(ScanInDayModel(scan: DateTime.parse(scan['scan'])));
-          });
+      //     presence['scanInDay'].forEach((scan) {
+      //       scans.add(ScanInDayModel(scan: DateTime.parse(scan['scan'])));
+      //     });
 
-          presenceDates.add(PresenceModel(
-            date: presence['date'],
-            scanInDay: scans,
-          ));
-        }
+      //     presenceDates.add(PresenceModel(
+      //       date: presence['date'],
+      //       scanInDay: scans,
+      //     ));
+      //   }
 
-        presenceModels.add(PresensiKepgModel(
-          pin: pin,
-          presence: presenceDates,
-        ));
-      });
+      //   presenceModels.add(PresensiKepgModel(
+      //     pin: pin,
+      //     presence: presenceDates,
+      //   ));
+      // });
 
-      presenceData.value = presenceModels;
+      // presenceData.value = presenceModels;
 
-      // if (kDebugMode) {
-      //   print(presenceData.value[0].presence);
-      // }
+      List<PresensiKepgModel> presenceData = groupedData.value
+          .map((entry) => PresensiKepgModel(
+              pin: entry['pin'],
+              presence: (entry['presence'] as List<dynamic>)
+                  .map((item) => PresenceModel(
+                      date: item['date'],
+                      scanInDay: (item['scanInDay'] as List<dynamic>)
+                          .map((scanItem) => ScanInDayModel(
+                              scan: DateTime.parse(scanItem['scan'])))
+                          .toList()))
+                  .toList()))
+          .toList();
+
+      if (kDebugMode) {
+        print("data sudah dimasukkan ke dalam model gaes");
+      }
 
       final stopwatch = Stopwatch()..start();
 
-      for (var data in presenceData.value) {
+      if (kDebugMode) {
+        print("eksekusi ke firestore nih");
+        // print("nyoba print dulu : ${presenceData.length}");
+      }
+
+      for (var data in presenceData) {
         final pin = data.pin;
         final presence = data.presence;
 
-        final kepegQuerySnapshot = await firestore
-            .collection('Kepegawaian')
-            .where('pin', isEqualTo: pin)
-            .get();
+        if (kDebugMode) {
+          print("udah deklarasi variabel");
+          // print("nyoba print dulu : $pin");
+        }
+
+        final kepegQuerySnapshot =
+            await firestore.collection('Kepegawaian').doc(pin).get();
+
+        final KepegawaianModel kepegawaianModel =
+            KepegawaianModel.fromSnapshot(kepegQuerySnapshot);
+
+        List<KepegawaianModel> kepegawaianData = [kepegawaianModel];
+
+        var kepgData =
+            kepegawaianData.firstWhere((kepegawaian) => kepegawaian.pin == pin);
 
         final jamKerjaQuerySnapshot = await firestore
             .collection('JamKerja')
-            .where('kepegawaian', isEqualTo: kepgData.value.kepegawaian)
+            .where('kepegawaian', isEqualTo: kepgData.kepegawaian)
             .get();
 
-        if (kepegQuerySnapshot.size > 0) {
-          DocumentSnapshot documentSnapshot = kepegQuerySnapshot.docs[0];
-          kepgData.value = KepegawaianModel.fromSnapshot(documentSnapshot);
-        }
-
         if (jamKerjaQuerySnapshot.size > 0) {
           DocumentSnapshot documentSnapshot = jamKerjaQuerySnapshot.docs[0];
           jamKerjaData.value = JamKerjaModel.fromJson(documentSnapshot);
         }
 
-        if (jamKerjaQuerySnapshot.size > 0) {
-          DocumentSnapshot documentSnapshot = jamKerjaQuerySnapshot.docs[0];
-          jamKerjaData.value = JamKerjaModel.fromJson(documentSnapshot);
+        if (kDebugMode) {
+          print("udah masukin kepg ama jam kerja bang");
+          print("nyoba print dulu : ${jamKerjaData.value.hariKerja}");
         }
 
         for (var presenceData in presence!) {
           // final date = presenceData.date!;
           final scanInDay = presenceData.scanInDay;
 
+          if (kDebugMode) {
+            print("udah looping presenceData bang");
+            // print("nyoba print dulu : $pin");
+          }
+
           for (var scanInDayData in scanInDay!) {
+            if (kDebugMode) {
+              print("udah looping terakhir");
+              // print("nyoba print dulu : $pin");
+            }
             final scan = scanInDayData.scan!;
+
+            if (kDebugMode) {
+              print("ini deklarasi scan gaes");
+              // print("nyoba print dulu : $pin");
+            }
             var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
             var datePresensi =
                 formatterDoc.format(DateTime.parse(scan.toIso8601String()));
@@ -439,6 +478,11 @@ class APIController extends GetxController {
             final year = scan.year;
 
             final jamKerja = jamKerjaData.value;
+
+            if (kDebugMode) {
+              print("ini nyiapin jam kerja");
+              print("nyoba print dulu tahun: $year");
+            }
 
             bool isMasuk =
                 hour >= int.parse(jamKerja.batasAwalMasuk!.split(':')[0]) &&
@@ -448,23 +492,44 @@ class APIController extends GetxController {
                 hour >= int.parse(jamKerja.batasAwalKeluar!.split(':')[0]) &&
                     hour <= int.parse(jamKerja.batasAkhirKeluar!.split(':')[0]);
 
+            if (kDebugMode) {
+              print("ini udah bikin kondisi isMasuk dan isKeluar,");
+              // print("nyoba print dulu : $pin");
+            }
+
             final pengecualianTahunPresensiQuerySnapshot = await firestore
                 .collection('Pengecualian')
-                .where('nama', arrayContains: year.toString())
+                // .where('nama', arrayContains: year.toString())
                 .where('statusPengecualian', isEqualTo: 'Bukan')
                 .get();
 
             if (pengecualianTahunPresensiQuerySnapshot.size > 0) {
-              DocumentSnapshot documentSnapshot = kepegQuerySnapshot.docs[0];
+              DocumentSnapshot documentSnapshot =
+                  pengecualianTahunPresensiQuerySnapshot.docs[0];
               pengecualianData.value =
                   PengecualianModel.fromJson(documentSnapshot);
             }
 
+            if (kDebugMode) {
+              print("penge-cualian ");
+              print("nyoba print dulu : ${pengecualianData.value.nama}");
+            }
+
             var isRamadhan = pengecualianData.value.nama!.contains(ramadhan) ||
-                pengecualianData.value.nama!.contains(ramadhan.toUpperCase());
+                pengecualianData.value.nama!.contains(ramadhanUpperCase);
+
+            if (kDebugMode) {
+              print("is ramadhan");
+              // print("nyoba print dulu : $pin");
+            }
             var isRamadhanJamKerja =
-                jamKerjaData.value.nama!.contains(ramadhan.toUpperCase()) ||
+                jamKerjaData.value.nama!.contains(ramadhanUpperCase) ||
                     jamKerjaData.value.nama!.contains(ramadhan);
+
+            if (kDebugMode) {
+              print("ini udah bikin isRamadhan dan isRamadhanJamKerja");
+              // print("nyoba print dulu : $pin");
+            }
 
             // final pengecualianLiburRutinQuerySnapshot = await firestore
             //     .collection('Pengecualian')
@@ -541,7 +606,7 @@ class APIController extends GetxController {
               //             : 'Tanpa Keterangan'
               //   });
               // }
-              if (kepgData.value.kepegawaian == "PNS") {
+              if (kepgData.kepegawaian == "PNS") {
                 if (isRamadhan == isRamadhanJamKerja) {
                   switch (scan.weekday) {
                     case DateTime.monday:
@@ -757,7 +822,7 @@ class APIController extends GetxController {
                       null;
                   }
                 }
-              } else if (kepgData.value.kepegawaian == "NON-PNS") {
+              } else if (kepgData.kepegawaian == "NON-PNS") {
                 if (isRamadhan == isRamadhanJamKerja) {
                   switch (scan.weekday) {
                     case DateTime.monday:

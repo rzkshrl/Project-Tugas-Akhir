@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/models/usermodel.dart';
 import '../routes/app_pages.dart';

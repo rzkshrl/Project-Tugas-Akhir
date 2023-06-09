@@ -270,6 +270,7 @@ class RekapScanlogPerController extends GetxController {
       pdf.addPage(
         pw.Page(
           orientation: pw.PageOrientation.landscape,
+          pageFormat: PdfPageFormat.a4.landscape,
           build: (pw.Context context) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
@@ -512,8 +513,8 @@ class RekapScanlogPerController extends GetxController {
 
       pdfPreview.addPage(
         pw.Page(
-          pageFormat: PdfPageFormat.a4,
           orientation: pw.PageOrientation.landscape,
+          pageFormat: PdfPageFormat.a4.landscape,
           build: (pw.Context context) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [

@@ -3,7 +3,6 @@
 import 'package:get/get.dart';
 
 import '../../../controller/auth_controller.dart';
-import '../../../utils/session.dart';
 
 class HomeController extends GetxController {
   var currentIndex = 0.obs;

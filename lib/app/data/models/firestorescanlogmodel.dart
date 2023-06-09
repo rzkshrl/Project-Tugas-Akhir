@@ -33,29 +33,8 @@ class GroupedPresensiModel {
   String? pin;
   DateTime? dateTimeMasuk;
   DateTime? dateTimeKeluar;
-  String? keterlambatan;
-  String? pulangLebihAwal;
-  String? jamMasuk;
-  String? jamKeluar;
-  String? durasiKerja;
-  String? ket;
-  String? shift;
 
   GroupedPresensiModel({this.pin, this.dateTimeMasuk, this.dateTimeKeluar});
-
-  Duration? getKeterlambatan(DateTime jadwalMasuk, DateTime dateTimeMasuk) {
-    if (jadwalMasuk.isBefore(dateTimeMasuk)) {
-      return dateTimeMasuk.difference(jadwalMasuk);
-    }
-    return null;
-  }
-
-  Duration? getPulangLebihAwal(DateTime jadwalKeluar, DateTime dateTimeKeluar) {
-    if (jadwalKeluar.isAfter(dateTimeKeluar)) {
-      return jadwalKeluar.difference(dateTimeKeluar);
-    }
-    return null;
-  }
 }
 
 class LiburModel {
@@ -119,15 +98,4 @@ class KepegawaianModel {
       bidang: data['bidang'],
     );
   }
-
-  // Future<void> loadPresensi() async {
-  //   final presensiRef = FirebaseFirestore.instance
-  //       .collection('Kepegawaian')
-  //       .doc(pin)
-  //       .collection('Presensi');
-  //   final querySnapshot = await presensiRef.get();
-  //   this.presensi = querySnapshot.docs
-  //       .map((doc) => PresensiModel.fromJson(doc.data()))
-  //       .toList();
-  // }
 }

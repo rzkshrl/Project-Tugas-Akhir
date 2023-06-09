@@ -15,6 +15,7 @@ import 'package:universal_html/html.dart' as html;
 import '../../../data/models/firestorejamkerjamodel.dart';
 import '../../../data/models/firestorepengecualianmodel.dart';
 import '../../../data/models/firestorescanlogmodel.dart';
+import '../../../utils/fungsiRekap.dart';
 import '../../../utils/textfield.dart';
 
 class RekapPresensiPerController extends GetxController {
@@ -95,12 +96,6 @@ class RekapPresensiPerController extends GetxController {
           kepegawaianList.map((kepegawaian) => kepegawaian.pin!).toList();
       update();
     });
-  }
-
-  bool isSameDay(DateTime date1, DateTime date2) {
-    return date1.year == date2.year &&
-        date1.month == date2.month &&
-        date1.day == date2.day;
   }
 
   void hitungKeterlambatanPulangLebihAwal(
@@ -555,6 +550,7 @@ class RekapPresensiPerController extends GetxController {
       pdf.addPage(
         pw.Page(
           orientation: pw.PageOrientation.landscape,
+          pageFormat: PdfPageFormat.a4.landscape,
           build: (pw.Context context) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
@@ -974,6 +970,7 @@ class RekapPresensiPerController extends GetxController {
       pdfPreview.addPage(
         pw.Page(
           orientation: pw.PageOrientation.landscape,
+          pageFormat: PdfPageFormat.a4.landscape,
           build: (pw.Context context) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [

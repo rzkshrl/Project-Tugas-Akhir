@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'dart:html';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
