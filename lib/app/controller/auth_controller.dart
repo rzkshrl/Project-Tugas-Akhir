@@ -103,7 +103,10 @@ class AuthController extends GetxController {
         lastSignInTime:
             auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
 
-    StorageService.saveUserData(userData.value);
+    if (kIsWeb) {
+      StorageService.saveUserData(userData.value);
+    }
+
     return userData.value;
   }
 
@@ -138,11 +141,13 @@ class AuthController extends GetxController {
       UserCredential myUser = await auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      sessionController.login(myUser.user!.email!);
+      if (kIsWeb) {
+        sessionController.login(myUser.user!.email!);
+      }
 
       if (myUser.user!.emailVerified) {
-        readUser();
         isAuth.value = true;
+        readUser();
         if (kIsWeb) {
           Get.dialog(
             dialogAlertOnlySingleMsgAnimation('assets/lootie/loading.json',

@@ -31,7 +31,7 @@ class HomeView extends GetView<HomeController> {
       if (kIsWeb) {
         final storedUserData = StorageService.getUserData();
         if (storedUserData != null) {
-          authC.userData.value = storedUserData;
+          c.userData.value = storedUserData;
         }
         String? roles = c.userData.value.role;
         if (kDebugMode) {

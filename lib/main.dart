@@ -34,7 +34,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Get.put(SessionController());
+  if (kIsWeb) {
+    Get.put(SessionController());
+  }
   await GetStorage.init();
   await initializeDateFormatting('id_ID', null)
       .then((_) => runApp(ProjectTugasAkhir()));
@@ -45,7 +47,7 @@ class ProjectTugasAkhir extends StatelessWidget {
   // const ProjectTugasAkhir({super.key});
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   final authC = Get.put(AuthController());
-  final sessionController = Get.put(SessionController());
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -56,6 +58,7 @@ class ProjectTugasAkhir extends StatelessWidget {
                 "Terjadi Kesalahan!", getTextAlert(context)));
           }
           if (kIsWeb) {
+            final sessionController = Get.put(SessionController());
             return FutureBuilder(
                 future: Future.delayed(const Duration(seconds: 0)),
                 builder: (context, snapshot) {
@@ -158,6 +161,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    authC.readUser();
     return AnnotatedRegion(
         value: SystemUiOverlayStyle(
           statusBarBrightness: Brightness.dark,

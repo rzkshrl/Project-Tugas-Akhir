@@ -30,10 +30,9 @@ class RiwayatPresensiMobileView
       (pin);
     }
     final c = Get.put(CalendarsController(pin));
-    // final controller = Get.put(RiwayatPresensiMobileController());
+    final controller = Get.put(RiwayatPresensiMobileController());
     final liburC = Get.put(HariLiburController());
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final testC = Get.put(BerandaMobileController());
     return Scaffold(
         backgroundColor: light,
         body: SingleChildScrollView(
@@ -127,9 +126,36 @@ class RiwayatPresensiMobileView
                                         border: Border.all(color: Blue1)),
                                     dataSource: _PresensiDataSource(
                                         presensiList, holidayList),
+                                    onViewChanged:
+                                        (ViewChangedDetails details) {
+                                      DateTime? currentMonthStart = DateTime(
+                                          details.visibleDates[0].year,
+                                          details.visibleDates[0].month + 1,
+                                          1);
+
+                                      DateTime? currentMonthEnd = DateTime(
+                                          currentMonthStart.year,
+                                          currentMonthStart.month + 1,
+                                          0);
+
+                                      if (kDebugMode) {
+                                        print(currentMonthStart);
+                                        print(currentMonthEnd);
+                                      }
+
+                                      controller
+                                          .setCurrentMonth(currentMonthStart);
+
+                                      if (currentMonthStart != null &&
+                                          currentMonthEnd != null) {
+                                        controller.getPercentagePresence(
+                                            currentMonthStart, currentMonthEnd);
+                                      }
+                                    },
                                     monthCellBuilder: (BuildContext context,
                                         MonthCellDetails details) {
-                                      final DateTime date = details.date;
+                                      var date = details.date;
+
                                       final bool isLeadingDate =
                                           details.visibleDates[0].month ==
                                                   date.month &&
@@ -208,18 +234,130 @@ class RiwayatPresensiMobileView
               SizedBox(
                 height: 0.5.h,
               ),
-              SfCircularChart(
-                legend: Legend(isVisible: true),
-                series: <CircularSeries>[
-                  DoughnutSeries<Attendance, String>(
-                    dataSource: testC.attendanceData,
-                    xValueMapper: (Attendance data, _) => data.category,
-                    yValueMapper: (Attendance data, _) => data.percentage,
-                    dataLabelMapper: (Attendance data, _) =>
-                        data.label, // Keterangan grafik
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+              GetBuilder<RiwayatPresensiMobileController>(builder: (c) {
+                return SafeArea(
+                  child: Obx(
+                    () => SfCircularChart(
+                      title: ChartTitle(
+                          text: 'Persentase Presensi',
+                          textStyle:
+                              getTextSemiBoldHeaderWelcomeScreen(context, 15)),
+                      legend: Legend(isVisible: true),
+                      series: <CircularSeries>[
+                        DoughnutSeries<PercentageModel, String>(
+                          dataSource: c.percentageList.value,
+                          xValueMapper: (PercentageModel data, _) =>
+                              data.category,
+                          yValueMapper: (PercentageModel data, _) =>
+                              data.percentage,
+                          dataLabelMapper: (PercentageModel data, _) =>
+                              '${data.percentage!.toStringAsFixed(1)}%', // Keterangan grafik
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                );
+              }),
+              SizedBox(
+                height: 2.5.h,
+              ),
+              Center(
+                child: Container(
+                  height: 0.1.h,
+                  width: 70.w,
+                  decoration: BoxDecoration(color: Blue1.withOpacity(0.5)),
+                ),
+              ),
+              SizedBox(
+                height: 2.5.h,
+              ),
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Persentase Kehadiran Bulan ${controller.dateFormatter.format(controller.currentMonth.value)}',
+                      style: getTextSemiBoldHeaderWelcomeScreen(context, 16),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Obx(() {
+                      final List<PercentageModel> percentageList =
+                          controller.percentageList;
+
+                      if (percentageList.isEmpty) {
+                        return Text(
+                          'Memuat...',
+                          style: getTextSubHeaderWelcomeScreen(context, 16),
+                        );
+                      }
+
+                      final String kehadiran = percentageList
+                          .firstWhere((p) => p.category == 'Hadir')
+                          .percentage!
+                          .toStringAsFixed(1);
+
+                      return Text(
+                        '$kehadiran%',
+                        style: getTextSubHeaderWelcomeScreen(context, 16),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 2.5.h,
+              ),
+              Center(
+                child: Container(
+                  height: 0.1.h,
+                  width: 70.w,
+                  decoration: BoxDecoration(color: Blue1.withOpacity(0.5)),
+                ),
+              ),
+              SizedBox(
+                height: 2.5.h,
+              ),
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Persentase Ketidakhadiran Bulan ${controller.dateFormatter.format(controller.currentMonth.value)}',
+                      style: getTextSemiBoldHeaderWelcomeScreen(context, 16),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Obx(() {
+                      final List<PercentageModel> percentageList =
+                          controller.percentageList;
+
+                      if (percentageList.isEmpty) {
+                        return Text(
+                          'Memuat...',
+                          style: getTextSubHeaderWelcomeScreen(context, 16),
+                        );
+                      }
+
+                      final String kehadiran = percentageList
+                          .firstWhere((p) => p.category == 'Tidak Hadir')
+                          .percentage!
+                          .toStringAsFixed(1);
+
+                      return Text(
+                        '$kehadiran%',
+                        style: getTextSubHeaderWelcomeScreen(context, 16),
+                      );
+                    }),
+                    SizedBox(
+                      height: 9.5.h,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -284,37 +422,8 @@ class _PresensiDataSource extends CalendarDataSource {
       }
     }
 
-    // for (final data in presensiData) {
-    //   final DateTime? dateTimeMasuk = data.dateTimeMasuk!;
-    //   final DateTime? dateTimeKeluar = data.dateTimeKeluar!;
-
-    //   appointments.add(Appointment(
-    //     startTime: dateTimeMasuk!,
-    //     endTime: dateTimeKeluar!,
-    //     subject: 'Hadir',
-    //     color: Colors.green,
-    //   ));
-    // }
-
-    // print('$appointments');
     return appointments;
   }
-
-  // List<CalendarEvent> get events => [];
-
-  // @override
-  // DateTime getStartTime(int index) => presensiData[index].dateTimeMasuk!;
-
-  // @override
-  // DateTime getEndTime(int index) => presensiData[index].dateTimeKeluar!;
-
-  // @override
-  // String getSubject(int index) => presensiData[index].dateTimeMasuk! != null &&
-  //         presensiData[index].dateTimeKeluar! != null
-  //     ? "Hadir"
-  //     : "Tanpa Keterangan";
-
-  // int getCount() => presensiData.length;
 
   List<DateTime> get specialDates => _getSpecialDates();
 

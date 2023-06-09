@@ -37,6 +37,13 @@ class GroupedPresensiModel {
   GroupedPresensiModel({this.pin, this.dateTimeMasuk, this.dateTimeKeluar});
 }
 
+class PercentageModel {
+  String? category;
+  double? percentage;
+
+  PercentageModel(this.category, this.percentage);
+}
+
 class LiburModel {
   String? holidayName;
   String? holidayDate;

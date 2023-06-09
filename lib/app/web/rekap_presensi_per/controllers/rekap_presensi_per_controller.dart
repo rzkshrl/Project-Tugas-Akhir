@@ -168,43 +168,6 @@ class RekapPresensiPerController extends GetxController {
     }
   }
 
-  String hitungTotal(List<String> list) {
-    Duration total = const Duration();
-
-    for (var keterlambatanFormatted in list) {
-      var parts = keterlambatanFormatted.split(':');
-      var hours = int.parse(parts[0]);
-      var minutes = int.parse(parts[1]);
-
-      var data = Duration(hours: hours, minutes: minutes);
-      total += data;
-    }
-
-    return "${total.inHours.toString().padLeft(2, '0')}:${total.inMinutes.remainder(60).toString().padLeft(2, '0')}";
-  }
-
-  List<PengecualianIterableModel> generateDateRangePengecualian(
-      List<PengecualianIterableModel> dateRange,
-      PengecualianModel pengecualian) {
-    DateTime startDate = pengecualian.dateStart!;
-    DateTime endDate = pengecualian.dateEnd!;
-
-    for (var date = startDate;
-        date.isBefore(endDate) || date.isAtSameMomentAs(endDate);
-        date = date.add(const Duration(days: 1))) {
-      PengecualianIterableModel iterableModel = PengecualianIterableModel(
-        nama: pengecualian.nama,
-        statusPengecualian: pengecualian.statusPengecualian,
-        date: date,
-        id: pengecualian.id,
-      );
-
-      dateRange.add(iterableModel);
-    }
-
-    return dateRange;
-  }
-
   Future<void> unduhPDF(String pin) async {
     final QuerySnapshot<Map<String, dynamic>> presensiSnapshot;
     final QuerySnapshot<Map<String, dynamic>> jamKerjaSnapshot;
@@ -528,7 +491,7 @@ class RekapPresensiPerController extends GetxController {
         print('totalPresensi: $totalPresensi');
       }
 
-      double persentaseKehadiran = (tidakHadirCount / totalPresensi) * 100;
+      double persentaseKehadiran = ((tidakHadirCount) / totalPresensi) * 100;
       double persentaseFix = 100 - persentaseKehadiran;
       var persentase = persentaseFix.toStringAsFixed(1);
 

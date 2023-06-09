@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
+import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../controller/auth_controller.dart';
+import '../../../data/models/firestorescanlogmodel.dart';
 import '../controllers/beranda_mobile_controller.dart';
 
 class BerandaMobileView extends GetView<BerandaMobileController> {
@@ -17,6 +19,7 @@ class BerandaMobileView extends GetView<BerandaMobileController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final controller = Get.put(BerandaMobileController());
+    controller.getPercentagePresence();
 
     String? nama = authC.userData.value.name;
     List<String> namaSplit = nama!.split(' ');
@@ -122,19 +125,32 @@ class BerandaMobileView extends GetView<BerandaMobileController> {
               SizedBox(
                 height: 2.5.h,
               ),
-              SfCircularChart(
-                legend: Legend(isVisible: true),
-                series: <CircularSeries>[
-                  DoughnutSeries<Attendance, String>(
-                    dataSource: controller.attendanceData,
-                    xValueMapper: (Attendance data, _) => data.category,
-                    yValueMapper: (Attendance data, _) => data.percentage,
-                    dataLabelMapper: (Attendance data, _) =>
-                        data.label, // Keterangan grafik
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+              GetBuilder<BerandaMobileController>(builder: (c) {
+                return SafeArea(
+                  child: Obx(
+                    () => SfCircularChart(
+                      title: ChartTitle(
+                          text: 'Persentase Presensi Bulan Lalu',
+                          textStyle:
+                              getTextSemiBoldHeaderWelcomeScreen(context, 15)),
+                      legend: Legend(isVisible: true),
+                      series: <CircularSeries>[
+                        DoughnutSeries<PercentageModel, String>(
+                          dataSource: c.percentageList.value,
+                          xValueMapper: (PercentageModel data, _) =>
+                              data.category,
+                          yValueMapper: (PercentageModel data, _) =>
+                              data.percentage,
+                          dataLabelMapper: (PercentageModel data, _) =>
+                              '${data.percentage!.toStringAsFixed(1)}%', // Keterangan grafik
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                );
+              }),
               SizedBox(
                 height: 2.5.h,
               ),
@@ -153,124 +169,41 @@ class BerandaMobileView extends GetView<BerandaMobileController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Persentase Kehadiran Bulan April',
+                      'Persentase Kehadiran Bulan ${controller.dateFormatter.format(controller.previousMonth)}',
                       style: getTextSemiBoldHeaderWelcomeScreen(context, 16),
                     ),
                     SizedBox(
                       height: 1.h,
                     ),
-                    Text(
-                      '95%',
-                      style: getTextSubHeaderWelcomeScreen(context, 16),
-                    ),
+                    Obx(() {
+                      final List<PercentageModel> percentageList =
+                          controller.percentageList;
+
+                      if (percentageList.isEmpty) {
+                        return Text(
+                          'Memuat...',
+                          style: getTextSubHeaderWelcomeScreen(context, 16),
+                        );
+                      }
+
+                      final String kehadiran = percentageList
+                          .firstWhere((p) => p.category == 'Hadir')
+                          .percentage!
+                          .toStringAsFixed(1);
+
+                      return Text(
+                        '${kehadiran}%',
+                        style: getTextSubHeaderWelcomeScreen(context, 16),
+                      );
+                    }),
                   ],
                 ),
               ),
               SizedBox(
                 height: 9.5.h,
               ),
-              // Padding(
-              //   padding: EdgeInsets.only(right: 5.w, left: 5.w),
-              //   child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       Text(
-              //         'Riwayat Presensi 5 Hari terakhir',
-              //         style: getTextSemiBoldHeaderWelcomeScreen(context, 15),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 1.5.h,
-              // ),
-              // ListView.builder(
-              //     shrinkWrap: true,
-              //     physics: const NeverScrollableScrollPhysics(),
-              //     itemCount: 5,
-              //     padding: EdgeInsets.only(top: 1.h),
-              //     itemBuilder: (context, index) {
-              //       return Padding(
-              //         padding: EdgeInsets.only(bottom: 2.h),
-              //         child: Container(
-              //           height: 11.h,
-              //           decoration: BoxDecoration(
-              //               border: Border.all(color: Blue1),
-              //               borderRadius: BorderRadius.circular(20)),
-              //           child: Row(
-              //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Row(
-              //                 children: [
-              //                   Column(
-              //                     mainAxisAlignment: MainAxisAlignment.center,
-              //                     children: [
-              //                       Text(
-              //                         'Masuk',
-              //                         style: getTextSemiBoldHeaderWelcomeScreen(
-              //                             context, 15),
-              //                       ),
-              //                       SizedBox(
-              //                         height: 1.h,
-              //                       ),
-              //                       Text(
-              //                         '08.15.25',
-              //                         style: getTextSubHeaderWelcomeScreen(
-              //                             context, 15),
-              //                       )
-              //                     ],
-              //                   ),
-              //                   SizedBox(
-              //                     width: 5.5.w,
-              //                   ),
-              //                   Column(
-              //                     mainAxisAlignment: MainAxisAlignment.center,
-              //                     children: [
-              //                       Text(
-              //                         'Keluar',
-              //                         style: getTextSemiBoldHeaderWelcomeScreen(
-              //                             context, 15),
-              //                       ),
-              //                       SizedBox(
-              //                         height: 1.h,
-              //                       ),
-              //                       Text(
-              //                         '13.02.15',
-              //                         style: getTextSubHeaderWelcomeScreen(
-              //                             context, 15),
-              //                       )
-              //                     ],
-              //                   ),
-              //                 ],
-              //               ),
-              //               Column(
-              //                 children: [
-              //                   SizedBox(
-              //                     height: 1.h,
-              //                   ),
-              //                   Text(
-              //                     '10 Februari 2022',
-              //                     style: getTextSubHeaderWelcomeScreen(
-              //                         context, 15),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       );
-              //     })
             ],
           ),
         ));
   }
-}
-
-class Attendance {
-  final String category;
-  final double percentage;
-  final String label;
-
-  Attendance(this.category, this.percentage, this.label);
 }

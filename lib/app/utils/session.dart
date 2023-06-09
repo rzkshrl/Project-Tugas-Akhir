@@ -1,8 +1,7 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
-
-import 'dart:html';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:universal_html/html.dart' as html;
 
 import '../data/models/usermodel.dart';
 
@@ -13,30 +12,34 @@ class SessionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Check login status when the app starts
-    checkLoginStatus();
+
+    if (html.window != null || kIsWeb) {
+      // Check login status when the app starts
+      checkLoginStatus();
+    }
   }
 
   void checkLoginStatus() {
-    final isLoggedInValue = window.localStorage.containsKey('isLoggedIn') &&
-        window.localStorage['isLoggedIn'] == 'true';
+    final isLoggedInValue =
+        html.window.localStorage.containsKey('isLoggedIn') &&
+            html.window.localStorage['isLoggedIn'] == 'true';
     isLoggedIn.value = isLoggedInValue;
     if (isLoggedInValue) {
-      userEmail.value = window.localStorage['userEmail'] ?? '';
+      userEmail.value = html.window.localStorage['userEmail'] ?? '';
     }
   }
 
   void login(String email) {
-    window.localStorage['isLoggedIn'] = 'true';
-    window.localStorage['userEmail'] = email;
+    html.window.localStorage['isLoggedIn'] = 'true';
+    html.window.localStorage['userEmail'] = email;
 
     isLoggedIn.value = true;
     userEmail.value = email;
   }
 
   void logout() {
-    window.localStorage.remove('isLoggedIn');
-    window.localStorage.remove('userEmail');
+    html.window.localStorage.remove('isLoggedIn');
+    html.window.localStorage.remove('userEmail');
 
     isLoggedIn.value = false;
     userEmail.value = '';
