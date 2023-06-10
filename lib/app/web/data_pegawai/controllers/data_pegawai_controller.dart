@@ -11,6 +11,7 @@ import 'package:project_tugas_akhir/app/utils/dialogDefault.dart';
 
 import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../theme/textstyle.dart';
+import '../../../utils/kepegawaianDTS.dart';
 
 class DataPegawaiController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -18,6 +19,27 @@ class DataPegawaiController extends GetxController {
   Completer<bool> completer = Completer<bool>();
   late Stream<List<KepegawaianModel>> firestoreKepegawaianList;
   var isLoading = true.obs;
+
+  late KepegawaianDTS dts;
+
+  final RxInt _sortColumnIndex = RxInt(-1);
+  final RxBool _sortAscending = RxBool(true);
+
+  int get sortColumnIndex => _sortColumnIndex.value;
+  bool get sortAscending => _sortAscending.value;
+
+  set sortColumnIndex(int value) => _sortColumnIndex.value = value;
+  set sortAscending(bool value) => _sortAscending.value = value;
+
+  void sort<T>(
+    Comparable<T> Function(KepegawaianModel d) getField,
+    int columnIndex,
+    bool ascending,
+  ) {
+    dts.sort<T>(getField, ascending);
+    _sortColumnIndex.value = columnIndex;
+    _sortAscending.value = ascending;
+  }
 
   Future<void> addPegawai(BuildContext context, String nama, String pin,
       String kepg, String nip, String bidang) async {

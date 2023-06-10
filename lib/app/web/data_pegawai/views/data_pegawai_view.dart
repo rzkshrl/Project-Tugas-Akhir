@@ -160,62 +160,89 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                       final kepegawaianList =
                           snap.data! as List<KepegawaianModel>;
                       int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                      return PaginatedDataTable2(
-                        columns: [
-                          DataColumn2(
-                            label: Text(
-                              'PIN',
-                              style: getTextTable(context),
+                      var dts = KepegawaianDTS(kepegawaianList);
+
+                      return GetBuilder<DataPegawaiController>(builder: (c) {
+                        return PaginatedDataTable2(
+                          sortColumnIndex: c.sortColumnIndex,
+                          sortAscending: c.sortAscending,
+                          sortArrowIcon:
+                              Icons.keyboard_arrow_up, // custom arrow
+                          sortArrowAnimationDuration:
+                              const Duration(milliseconds: 0),
+                          columns: [
+                            DataColumn2(
+                              onSort: (columnIndex, ascending) =>
+                                  c.sort<String>(
+                                      (d) => d.pin!, columnIndex, ascending),
+                              label: Text(
+                                'PIN',
+                                style: getTextTable(context),
+                              ),
+                              size: ColumnSize.S,
                             ),
-                            size: ColumnSize.S,
-                          ),
-                          DataColumn2(
+                            DataColumn2(
+                              onSort: (columnIndex, ascending) =>
+                                  c.sort<String>(
+                                      (d) => d.nip!, columnIndex, ascending),
                               label: Text(
-                            'NIP',
-                            style: getTextTable(context),
-                          )),
-                          DataColumn2(
-                              label: Text(
-                            'Nama',
-                            style: getTextTable(context),
-                          )),
-                          DataColumn2(
-                              label: Text(
-                            'Kepegawaian',
-                            style: getTextTable(context),
-                          )),
-                          DataColumn2(
-                              label: Text(
-                            'Bidang',
-                            style: getTextTable(context),
-                          )),
-                          DataColumn2(
-                              label: Text(
-                                'Hapus',
+                                'NIP',
                                 style: getTextTable(context),
                               ),
-                              fixedWidth: 90),
-                          DataColumn2(
+                            ),
+                            DataColumn2(
+                              onSort: (columnIndex, ascending) =>
+                                  c.sort<String>(
+                                      (d) => d.nama!, columnIndex, ascending),
                               label: Text(
-                                'Ubah',
+                                'Nama',
                                 style: getTextTable(context),
                               ),
-                              fixedWidth: 90),
-                        ],
-                        dividerThickness: 0,
-                        horizontalMargin: 20,
-                        checkboxHorizontalMargin: 12,
-                        columnSpacing: 20,
-                        wrapInCard: false,
-                        minWidth: 950,
-                        renderEmptyRowsInTheEnd: false,
-                        source: KepegawaianDTS(kepegawaianList),
-                        onRowsPerPageChanged: (value) {
-                          rowsPerPage = value!;
-                        },
-                        initialFirstRowIndex: 0,
-                        rowsPerPage: rowsPerPage,
-                      );
+                            ),
+                            DataColumn2(
+                                onSort: (columnIndex, ascending) =>
+                                    c.sort<String>((d) => d.kepegawaian!,
+                                        columnIndex, ascending),
+                                label: Text(
+                                  'Kepegawaian',
+                                  style: getTextTable(context),
+                                )),
+                            DataColumn2(
+                                onSort: (columnIndex, ascending) =>
+                                    c.sort<String>((d) => d.bidang!,
+                                        columnIndex, ascending),
+                                label: Text(
+                                  'Bidang',
+                                  style: getTextTable(context),
+                                )),
+                            DataColumn2(
+                                label: Text(
+                                  'Hapus',
+                                  style: getTextTable(context),
+                                ),
+                                fixedWidth: 90),
+                            DataColumn2(
+                                label: Text(
+                                  'Ubah',
+                                  style: getTextTable(context),
+                                ),
+                                fixedWidth: 90),
+                          ],
+                          dividerThickness: 0,
+                          horizontalMargin: 20,
+                          checkboxHorizontalMargin: 12,
+                          columnSpacing: 20,
+                          wrapInCard: false,
+                          minWidth: 950,
+                          renderEmptyRowsInTheEnd: false,
+                          source: KepegawaianDTS(kepegawaianList),
+                          onRowsPerPageChanged: (value) {
+                            rowsPerPage = value!;
+                          },
+                          initialFirstRowIndex: 0,
+                          rowsPerPage: rowsPerPage,
+                        );
+                      });
                     }),
               )
             ],

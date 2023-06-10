@@ -20,6 +20,18 @@ class KepegawaianDTS extends DataTableSource {
 
   KepegawaianDTS(this.kepegawaianList);
 
+  void sort<T>(
+      Comparable<T> Function(KepegawaianModel d) getField, bool ascending) {
+    kepegawaianList.sort((a, b) {
+      final aValue = getField(a);
+      final bValue = getField(b);
+      return ascending
+          ? Comparable.compare(aValue, bValue)
+          : Comparable.compare(bValue, aValue);
+    });
+    notifyListeners();
+  }
+
   @override
   DataRow getRow(int index) {
     KepegawaianModel data = kepegawaianList[index];
