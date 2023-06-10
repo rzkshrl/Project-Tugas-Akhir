@@ -15,6 +15,7 @@ Color Grey1 = HexColor('#808080');
 Color Grey2 = HexColor('#868D95');
 Color Grey3 = HexColor('#D9D9D9');
 Color error = HexColor('#FF0000');
+Color redAppoint = HexColor('#6C7D01');
 Color errorBg = HexColor('#FF6C6C');
 
 MaterialStateProperty<Color?>? thumbColorScrollbar =

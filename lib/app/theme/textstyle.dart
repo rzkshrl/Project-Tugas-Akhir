@@ -128,6 +128,18 @@ getTextCalendarHoliday(BuildContext context) {
       fontWeight: FontWeight.w700);
 }
 
+getTextCalendarHolidayRutin(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 18.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 14.0),
+        const Condition.equals(name: MOBILE, value: 14.0),
+        const Condition.equals(name: TABLET, value: 16.0),
+        const Condition.equals(name: DESKTOP, value: 18.0),
+      ]).value,
+      color: redAppoint,
+      fontWeight: FontWeight.w700);
+}
+
 getTextCalendarTrail(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 18.0, valueWhen: [

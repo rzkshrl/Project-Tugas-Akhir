@@ -10,13 +10,14 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../controller/calendars_controller.dart';
 import '../../../data/models/firestorehariliburmodel.dart';
+import '../../../data/models/firestorepengecualianmodel.dart';
 import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
+import '../../../utils/fungsiRekap.dart';
 import '../../../utils/loading.dart';
 import '../../../web/hari_libur/controllers/hari_libur_controller.dart';
-import '../../beranda_mobile/controllers/beranda_mobile_controller.dart';
-import '../../beranda_mobile/views/beranda_mobile_view.dart';
+import '../../../web/pengecualian/controllers/pengecualian_controller.dart';
 import '../controllers/riwayat_presensi_mobile_controller.dart';
 
 class RiwayatPresensiMobileView
@@ -32,6 +33,7 @@ class RiwayatPresensiMobileView
     final c = Get.put(CalendarsController(pin));
     final controller = Get.put(RiwayatPresensiMobileController());
     final liburC = Get.put(HariLiburController());
+    final pengecualianC = Get.put(PengecualianController());
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Scaffold(
         backgroundColor: light,
@@ -94,140 +96,182 @@ class RiwayatPresensiMobileView
                             final holidayList =
                                 snap.data! as List<HolidayModel>;
 
-                            return Column(
-                              children: [
-                                Expanded(
-                                  child: SfCalendar(
-                                    view: CalendarView.month,
-                                    viewHeaderStyle:
-                                        ViewHeaderStyle(backgroundColor: light),
-                                    controller: c.controller,
-                                    todayHighlightColor: Blue1,
-                                    cellBorderColor: Grey1,
-                                    showNavigationArrow: true,
-                                    showDatePickerButton: true,
-                                    allowedViews: const [
-                                      CalendarView.month,
-                                      CalendarView.day,
-                                      CalendarView.week,
-                                    ],
-                                    appointmentTextStyle:
-                                        c.appointmentTextStyle,
-                                    monthViewSettings: const MonthViewSettings(
-                                      dayFormat: 'EEE',
-                                      appointmentDisplayMode:
-                                          MonthAppointmentDisplayMode.indicator,
-                                      showTrailingAndLeadingDates: true,
-                                      showAgenda: true,
-                                      agendaViewHeight: 140,
-                                    ),
-                                    selectionDecoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        border: Border.all(color: Blue1)),
-                                    dataSource: _PresensiDataSource(
-                                        presensiList, holidayList),
-                                    onViewChanged:
-                                        (ViewChangedDetails details) {
-                                      DateTime? currentMonthStart = DateTime(
-                                          details.visibleDates[0].year,
-                                          details.visibleDates[0].month + 1,
-                                          1);
+                            return StreamBuilder(
+                                stream: pengecualianC.firestorePengecualianList,
+                                builder: (context, snapshot) {
+                                  if (!snap.hasData) {
+                                    return const LoadingView();
+                                  }
+                                  final pengecualianList =
+                                      snap.data! as List<PengecualianModel>;
 
-                                      DateTime? currentMonthEnd = DateTime(
-                                          currentMonthStart.year,
-                                          currentMonthStart.month + 1,
-                                          0);
+                                  List<PengecualianIterableModel>
+                                      pengecualianRangeList = [];
 
-                                      if (kDebugMode) {
-                                        print(currentMonthStart);
-                                        print(currentMonthEnd);
-                                      }
+                                  var pengecualian = pengecualianList
+                                      .firstWhere((pengecualian) =>
+                                          pengecualian.statusPengecualian ==
+                                          'Ya');
 
-                                      controller
-                                          .setCurrentMonth(currentMonthStart);
-
-                                      if (currentMonthStart != null &&
-                                          currentMonthEnd != null) {
-                                        controller.getPercentagePresence(
-                                            currentMonthStart, currentMonthEnd);
-                                      }
-                                    },
-                                    monthCellBuilder: (BuildContext context,
-                                        MonthCellDetails details) {
-                                      var date = details.date;
-
-                                      final bool isLeadingDate =
-                                          details.visibleDates[0].month ==
-                                                  date.month &&
-                                              details.visibleDates[0].year ==
-                                                  date.year;
-                                      final bool isTrailingDate = details
-                                                  .visibleDates[details
-                                                          .visibleDates.length -
-                                                      1]
-                                                  .month ==
-                                              date.month &&
-                                          details
-                                                  .visibleDates[details
-                                                          .visibleDates.length -
-                                                      1]
-                                                  .year ==
-                                              date.year;
-                                      final bool isToday = date.year ==
-                                              DateTime.now().year &&
-                                          date.month == DateTime.now().month &&
-                                          date.day == DateTime.now().day;
-
-                                      final bool isHoliday = holidayList.any(
-                                          (data) =>
-                                              DateTime.parse(data.date!).year ==
-                                                  date.year &&
-                                              DateTime.parse(data.date!)
-                                                      .month ==
-                                                  date.month &&
-                                              DateTime.parse(data.date!).day ==
-                                                  date.day);
-                                      if (isLeadingDate || isTrailingDate) {
-                                        return Center(
-                                          child: Text(date.day.toString(),
-                                              style: getTextCalendarTrail(
-                                                  context)),
-                                        );
-                                      } else if (isHoliday) {
-                                        return Center(
-                                          child: Text(date.day.toString(),
-                                              style: getTextCalendarHoliday(
-                                                  context)),
-                                        );
-                                      } else if (details.date.weekday == 7) {
-                                        return Center(
-                                          child: Text(date.day.toString(),
-                                              style: getTextCalendarHoliday(
-                                                  context)),
-                                        );
-                                      } else {
-                                        return Container(
-                                          decoration: isToday
-                                              ? BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Blue1,
-                                                )
-                                              : null,
-                                          child: Center(
-                                            child: Text(date.day.toString(),
-                                                style: isToday
-                                                    ? getTextCalendarToday(
-                                                        context)
-                                                    : getTextCalendarDef(
-                                                        context)),
+                                  generateDateRangePengecualian(
+                                      pengecualianRangeList, pengecualian);
+                                  return Column(
+                                    children: [
+                                      Expanded(
+                                        child: SfCalendar(
+                                          view: CalendarView.month,
+                                          viewHeaderStyle: ViewHeaderStyle(
+                                              backgroundColor: light),
+                                          controller: c.controller,
+                                          todayHighlightColor: Blue1,
+                                          cellBorderColor: Grey1,
+                                          showNavigationArrow: true,
+                                          showDatePickerButton: true,
+                                          allowedViews: const [
+                                            CalendarView.month,
+                                            CalendarView.day,
+                                            CalendarView.week,
+                                          ],
+                                          appointmentTextStyle:
+                                              c.appointmentTextStyle,
+                                          monthViewSettings:
+                                              const MonthViewSettings(
+                                            dayFormat: 'EEE',
+                                            appointmentDisplayMode:
+                                                MonthAppointmentDisplayMode
+                                                    .indicator,
+                                            showTrailingAndLeadingDates: true,
+                                            showAgenda: true,
+                                            agendaViewHeight: 140,
                                           ),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
+                                          selectionDecoration: BoxDecoration(
+                                              color: Colors.transparent,
+                                              border: Border.all(color: Blue1)),
+                                          dataSource: _PresensiDataSource(
+                                              presensiList,
+                                              holidayList,
+                                              pengecualianList),
+                                          onViewChanged:
+                                              (ViewChangedDetails details) {
+                                            DateTime? currentMonthStart =
+                                                DateTime(
+                                                    details
+                                                        .visibleDates[0].year,
+                                                    details.visibleDates[0]
+                                                            .month +
+                                                        1,
+                                                    1);
+
+                                            DateTime? currentMonthEnd =
+                                                DateTime(
+                                                    currentMonthStart.year,
+                                                    currentMonthStart.month + 1,
+                                                    0);
+
+                                            if (kDebugMode) {
+                                              print(currentMonthStart);
+                                              print(currentMonthEnd);
+                                            }
+
+                                            controller.setCurrentMonth(
+                                                currentMonthStart);
+
+                                            if (currentMonthStart != null &&
+                                                currentMonthEnd != null) {
+                                              controller.getPercentagePresence(
+                                                  currentMonthStart,
+                                                  currentMonthEnd);
+                                            }
+                                          },
+                                          monthCellBuilder:
+                                              (BuildContext context,
+                                                  MonthCellDetails details) {
+                                            var date = details.date;
+
+                                            final bool isLeadingDate = details
+                                                        .visibleDates[0]
+                                                        .month ==
+                                                    date.month &&
+                                                details.visibleDates[0].year ==
+                                                    date.year;
+                                            final bool isTrailingDate = details
+                                                        .visibleDates[details
+                                                                .visibleDates
+                                                                .length -
+                                                            1]
+                                                        .month ==
+                                                    date.month &&
+                                                details
+                                                        .visibleDates[details
+                                                                .visibleDates
+                                                                .length -
+                                                            1]
+                                                        .year ==
+                                                    date.year;
+                                            final bool isToday = date.year ==
+                                                    DateTime.now().year &&
+                                                date.month ==
+                                                    DateTime.now().month &&
+                                                date.day == DateTime.now().day;
+
+                                            final bool isHoliday =
+                                                holidayList.any((data) =>
+                                                    DateTime.parse(data.date!)
+                                                            .year ==
+                                                        date.year &&
+                                                    DateTime.parse(data.date!)
+                                                            .month ==
+                                                        date.month &&
+                                                    DateTime.parse(data.date!)
+                                                            .day ==
+                                                        date.day);
+                                            if (isLeadingDate ||
+                                                isTrailingDate) {
+                                              return Center(
+                                                child: Text(date.day.toString(),
+                                                    style: getTextCalendarTrail(
+                                                        context)),
+                                              );
+                                            } else if (isHoliday) {
+                                              return Center(
+                                                child: Text(date.day.toString(),
+                                                    style:
+                                                        getTextCalendarHoliday(
+                                                            context)),
+                                              );
+                                            } else if (details.date.weekday ==
+                                                7) {
+                                              return Center(
+                                                child: Text(date.day.toString(),
+                                                    style:
+                                                        getTextCalendarHoliday(
+                                                            context)),
+                                              );
+                                            } else {
+                                              return Container(
+                                                decoration: isToday
+                                                    ? BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: Blue1,
+                                                      )
+                                                    : null,
+                                                child: Center(
+                                                  child: Text(
+                                                      date.day.toString(),
+                                                      style: isToday
+                                                          ? getTextCalendarToday(
+                                                              context)
+                                                          : getTextCalendarDef(
+                                                              context)),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                });
                           });
                     }),
               ),
@@ -367,16 +411,35 @@ class RiwayatPresensiMobileView
 
 class _PresensiDataSource extends CalendarDataSource {
   final List<PresensiModel> presensiData;
-
+  final List<PengecualianModel> pengecualianData;
   final List<HolidayModel> liburData;
 
-  _PresensiDataSource(this.presensiData, this.liburData);
+  _PresensiDataSource(this.presensiData, this.liburData, this.pengecualianData);
 
   @override
   List<Appointment> get appointments => getAppointments();
 
   List<Appointment> getAppointments() {
     final List<Appointment> appointments = [];
+    List<PengecualianIterableModel> pengecualianRangeList = [];
+
+    var pengecualian = pengecualianData
+        .firstWhere((pengecualian) => pengecualian.statusPengecualian == 'Ya');
+
+    generateDateRangePengecualian(pengecualianRangeList, pengecualian);
+
+    for (var dataLiburRutin in pengecualianRangeList) {
+      final DateTime date = dataLiburRutin.date!;
+      final String name = dataLiburRutin.nama!;
+
+      appointments.add(Appointment(
+        startTime: date,
+        endTime: date,
+        subject: name,
+        color: redAppoint,
+        isAllDay: true,
+      ));
+    }
 
     for (final dataLibur in liburData) {
       final DateTime dateTimeLibur = DateTime.parse(dataLibur.date!);
