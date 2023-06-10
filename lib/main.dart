@@ -59,6 +59,9 @@ class ProjectTugasAkhir extends StatelessWidget {
           }
           if (kIsWeb) {
             final sessionController = Get.put(SessionController());
+            final currentRoute = StorageService.getCurrentRoute();
+            print(currentRoute);
+
             return FutureBuilder(
                 future: Future.delayed(const Duration(seconds: 0)),
                 builder: (context, snapshot) {
@@ -94,7 +97,7 @@ class ProjectTugasAkhir extends StatelessWidget {
                           // )),
                         ),
                         initialRoute: sessionController.isLoggedIn.value
-                            ? Routes.HOME
+                            ? currentRoute ?? Routes.LOGIN
                             : Routes.LOGIN,
                         getPages: AppPages.routes,
                         debugShowCheckedModeBanner: false,

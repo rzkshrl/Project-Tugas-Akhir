@@ -10,11 +10,13 @@ import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';
 import '../../../controller/auth_controller.dart';
+import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/holidayDTS.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/session.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/hari_libur_controller.dart';
@@ -26,6 +28,7 @@ class HariLiburView extends GetView<HariLiburController> {
     final authC = Get.put(AuthController());
     final c = Get.put(HariLiburController());
     final apiC = Get.put(APIController(context1: context));
+    StorageService.saveCurrentRoute(Routes.HARI_LIBUR);
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),

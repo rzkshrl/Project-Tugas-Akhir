@@ -67,6 +67,8 @@ class AuthController extends GetxController {
       print("User Data : $checkUserData");
     }
 
+    final expirationTime = DateTime.now().add(const Duration(minutes: 10));
+
     userData.value = (UserModel(
         uid: auth.currentUser!.uid,
         name: checkUserData['name'],
@@ -82,7 +84,7 @@ class AuthController extends GetxController {
         status: checkUserData['status']));
 
     if (kIsWeb) {
-      StorageService.saveUserData(userData.value);
+      StorageService.saveUserDataWithExpiration(userData.value, expirationTime);
     }
 
     return userData.value;

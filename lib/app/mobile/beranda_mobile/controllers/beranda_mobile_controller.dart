@@ -255,7 +255,9 @@ class BerandaMobileController extends GetxController {
     ];
 
     for (var percent in percentageList) {
-      print(percent.percentage);
+      if (kDebugMode) {
+        print(percent.percentage);
+      }
     }
   }
 

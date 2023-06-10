@@ -10,11 +10,13 @@ import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
 import '../../../data/models/firestorepengecualianmodel.dart';
+import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/dialogTextField.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/session.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/pengecualian_controller.dart';
@@ -25,6 +27,7 @@ class PengecualianView extends GetView<PengecualianController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final c = Get.put(PengecualianController());
+    StorageService.saveCurrentRoute(Routes.PENGECUALIAN);
     return Scaffold(
         backgroundColor: light,
         drawer: const NavigationDrawerView(),

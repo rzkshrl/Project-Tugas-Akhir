@@ -11,11 +11,13 @@ import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
 import '../../../data/models/firestorejamkerjamodel.dart';
+import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 
 import '../../../utils/btnDefault.dart';
 import '../../../utils/dropdownTextField.dart';
+import '../../../utils/session.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/jam_kerja_controller.dart';
@@ -25,7 +27,7 @@ class JamKerjaView extends GetView<JamKerjaController> {
   @override
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
-
+    StorageService.saveCurrentRoute(Routes.JAM_KERJA);
     final c = Get.put(JamKerjaController());
     return Scaffold(
       backgroundColor: light,

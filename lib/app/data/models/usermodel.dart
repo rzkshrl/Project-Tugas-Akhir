@@ -6,6 +6,13 @@ UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
 String userModelToJson(UserModel data) => json.encode(data.toJson());
 
+class UserData {
+  final UserModel user;
+  final DateTime expirationTime;
+
+  UserData({required this.user, required this.expirationTime});
+}
+
 class UserModel {
   String? uid;
   String? name;

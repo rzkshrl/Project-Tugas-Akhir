@@ -1,11 +1,10 @@
-// ignore_for_file: unnecessary_string_interpolations, unnecessary_brace_in_string_interps
+// ignore_for_file: unnecessary_string_interpolations, unnecessary_brace_in_string_interps, invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
-import 'package:project_tugas_akhir/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

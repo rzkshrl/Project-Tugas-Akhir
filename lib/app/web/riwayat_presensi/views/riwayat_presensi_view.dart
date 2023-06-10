@@ -13,6 +13,7 @@ import 'package:sizer/sizer.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/session.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/riwayat_presensi_controller.dart';
 
@@ -23,6 +24,7 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
     final authC = Get.put(AuthController());
     final controller = Get.put(RiwayatPresensiController());
     final apiC = Get.put(APIController(context1: context));
+    StorageService.saveCurrentRoute(Routes.RIWAYAT_PRESENSI);
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),

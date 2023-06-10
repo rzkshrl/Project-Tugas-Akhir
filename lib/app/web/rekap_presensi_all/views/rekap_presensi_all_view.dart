@@ -4,17 +4,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
-import 'package:printing/printing.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../controller/auth_controller.dart';
+import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/datePicker.dart';
 import '../../../utils/dialogDefault.dart';
+import '../../../utils/session.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_presensi_all_controller.dart';
@@ -25,6 +26,7 @@ class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final controller = Get.put(RekapPresensiAllController());
+    StorageService.saveCurrentRoute(Routes.REKAP_PRESENSI_ALL);
     final dateFormatter = DateFormat('MMMM yyyy', 'id-ID');
     return Scaffold(
       backgroundColor: light,

@@ -20,6 +20,7 @@ import '../../../utils/datePicker.dart';
 import '../../../utils/dialogDefault.dart';
 import '../../../utils/dropdownTextField.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/session.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_presensi_per_controller.dart';
@@ -30,7 +31,7 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final controller = Get.put(RekapPresensiPerController());
-
+    StorageService.saveCurrentRoute(Routes.REKAP_PRESENSI_PER);
     final dateFormatter = DateFormat('MMMM yyyy', 'id-ID');
     return Scaffold(
       backgroundColor: light,

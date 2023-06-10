@@ -9,12 +9,14 @@ import 'package:project_tugas_akhir/app/utils/userDTS.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
+import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/dialogTextField.dart';
 import '../../../utils/dropdownTextField.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/session.dart';
 import '../../../utils/textfield.dart';
 
 import '../../../utils/userDisabledDTS.dart';
@@ -26,6 +28,7 @@ class SuperAdminView extends GetView<SuperAdminController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final c = Get.put(SuperAdminController());
+    StorageService.saveCurrentRoute(Routes.SUPER_ADMIN);
     return Scaffold(
       backgroundColor: light,
       appBar: PreferredSize(

@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_overrides
+// ignore_for_file: unnecessary_overrides, unused_local_variable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -248,8 +248,8 @@ class RiwayatPresensiMobileController extends GetxController {
 
     if (kDebugMode) {
       print('hadirCount: ${groupedData.length}');
-      print('tidakHadirCount: ${tidakHadirCount}');
-      print('totalPresensi: ${totalPresensi}');
+      print('tidakHadirCount: $tidakHadirCount');
+      print('totalPresensi: $totalPresensi');
     }
 
     double persentaseKetidakhadiran = (tidakHadirCount / totalPresensi) * 100;
@@ -261,6 +261,7 @@ class RiwayatPresensiMobileController extends GetxController {
     //   persentaseKetidakhadiran = 100.0;
     // }
 
+    // ignore: invalid_use_of_protected_member
     percentageList.value.clear();
     percentageList.value = [
       PercentageModel('Hadir', persentaseKehadiran),
@@ -268,7 +269,9 @@ class RiwayatPresensiMobileController extends GetxController {
     ];
 
     for (var percent in percentageList) {
-      print(percent.percentage);
+      if (kDebugMode) {
+        print(percent.percentage);
+      }
     }
   }
 

@@ -15,8 +15,10 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../controller/auth_controller.dart';
 import '../../../data/models/firestorehariliburmodel.dart';
+import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
+import '../../../utils/session.dart';
 import '../../hari_libur/controllers/hari_libur_controller.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../../pengecualian/controllers/pengecualian_controller.dart';
@@ -35,6 +37,7 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
     final c = Get.put(CalendarsController(pin));
     final liburC = Get.put(HariLiburController());
     final pengecualianC = Get.put(PengecualianController());
+    StorageService.saveCurrentRoute(Routes.DETAIL_PRESENSI);
     // final CalendarController calendarController = Get.put(CalendarController());
 
     if (kDebugMode) {

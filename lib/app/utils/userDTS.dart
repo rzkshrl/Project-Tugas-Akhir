@@ -7,14 +7,9 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/data/models/usermodel.dart';
 import 'package:project_tugas_akhir/app/web/super-admin/controllers/super_admin_controller.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
-import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:project_tugas_akhir/app/utils/stringGlobal.dart';
-import 'package:project_tugas_akhir/app/utils/textfield.dart';
-import 'package:sizer/sizer.dart';
 
 import '../theme/textstyle.dart';
-import 'btnDefault.dart';
-import 'dropdownTextField.dart';
 
 class UserDTS extends DataTableSource {
   final List<UserModel> userList;

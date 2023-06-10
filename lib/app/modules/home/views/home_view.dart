@@ -29,10 +29,30 @@ class HomeView extends GetView<HomeController> {
 
     return GetBuilder<AuthController>(builder: (c) {
       if (kIsWeb) {
-        final storedUserData = StorageService.getUserData();
+        final storedUserData = StorageService.getUserDataWithExpiration();
+
         if (storedUserData != null) {
-          c.userData.value = storedUserData;
+          // c.userData.value = storedUserData;
+          if (storedUserData.expirationTime.isAfter(DateTime.now())) {
+            c.userData.value = storedUserData.user;
+          } else {
+            return Scaffold(
+              backgroundColor: error.withOpacity(0.5),
+              body: dialogAlertBtn(() {
+                authC.logout();
+              },
+                  IconlyLight.danger,
+                  111.29,
+                  "Keluar",
+                  "Session Habis.",
+                  "Silahkan masuk ulang.",
+                  getTextAlert(context),
+                  getTextAlertSub(context),
+                  getTextAlertBtn(context)),
+            );
+          }
         }
+
         String? roles = c.userData.value.role;
         String? status = c.userData.value.status;
         if (kDebugMode) {

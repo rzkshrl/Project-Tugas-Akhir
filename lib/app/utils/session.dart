@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -49,15 +51,46 @@ class SessionController extends GetxController {
 class StorageService {
   static final _box = GetStorage();
 
-  static void saveUserData(UserModel user) {
-    _box.write('userData', user.toJson());
+  // static void saveUserData(UserModel user) {
+  //   _box.write('userData', user.toJson());
+  // }
+
+  static void saveUserDataWithExpiration(
+      UserModel user, DateTime expirationTime) {
+    final data = {
+      'user': user.toJson(),
+      'expirationTime': expirationTime.toIso8601String(),
+    };
+    _box.write('userData', data);
   }
 
-  static UserModel? getUserData() {
+  // static UserModel? getUserData() {
+  //   final data = _box.read('userData');
+  //   if (data != null) {
+  //     return UserModel.fromJson2(data);
+  //   }
+  //   return null;
+  // }
+
+  static UserData? getUserDataWithExpiration() {
     final data = _box.read('userData');
     if (data != null) {
-      return UserModel.fromJson2(data);
+      final expirationTime = DateTime.parse(data['expirationTime']);
+      if (expirationTime.isAfter(DateTime.now())) {
+        return UserData(
+          user: UserModel.fromJson2(data['user']),
+          expirationTime: expirationTime,
+        );
+      }
     }
     return null;
+  }
+
+  static void saveCurrentRoute(String route) {
+    _box.write('currentRoute', route);
+  }
+
+  static String? getCurrentRoute() {
+    return _box.read('currentRoute');
   }
 }

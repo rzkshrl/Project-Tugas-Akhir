@@ -10,11 +10,13 @@ import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
 import '../../../data/models/firestorescanlogmodel.dart';
+import '../../../routes/app_pages.dart';
 import '../../../theme/textstyle.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/kepegawaianDTS.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/session.dart';
 import '../../../utils/textfield.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/data_pegawai_controller.dart';
@@ -25,6 +27,7 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final c = Get.put(DataPegawaiController());
+    StorageService.saveCurrentRoute(Routes.DATA_PEGAWAI);
     return Scaffold(
       backgroundColor: light,
       drawer: const NavigationDrawerView(),

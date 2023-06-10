@@ -21,6 +21,7 @@ import '../../../theme/theme.dart';
 import '../../../utils/btnDefault.dart';
 import '../../../utils/dialogDefault.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/session.dart';
 import '../../navigation_drawer/views/navigation_drawer_view.dart';
 import '../controllers/rekap_scanlog_per_controller.dart';
 
@@ -30,7 +31,7 @@ class RekapScanlogPerView extends GetView<RekapScanlogPerController> {
   Widget build(BuildContext context) {
     final authC = Get.put(AuthController());
     final controller = Get.put(RekapScanlogPerController());
-
+    StorageService.saveCurrentRoute(Routes.REKAP_SCANLOG_PER);
     final dateFormatter = DateFormat('MMMM yyyy', 'id-ID');
     return Scaffold(
       backgroundColor: light,
