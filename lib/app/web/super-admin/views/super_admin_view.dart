@@ -228,7 +228,7 @@ class SuperAdminView extends GetView<SuperAdminController> {
               Center(
                 child: Text(
                   'User Nonaktif',
-                  style: getTextHeader(context),
+                  style: getTextHeaderDisabled(context),
                 ),
               ),
               SizedBox(
@@ -258,7 +258,7 @@ class SuperAdminView extends GetView<SuperAdminController> {
                             DataColumn2(
                               label: Text(
                                 'Nama',
-                                style: getTextTable(context),
+                                style: getTextTableDisabled(context),
                               ),
                               onSort: (columnIndex, ascending) {
                                 c.sortData(columnIndex, ascending);
@@ -267,7 +267,7 @@ class SuperAdminView extends GetView<SuperAdminController> {
                             DataColumn2(
                               label: Text(
                                 'Role',
-                                style: getTextTable(context),
+                                style: getTextTableDisabled(context),
                               ),
                               onSort: (columnIndex, ascending) {
                                 c.sortData(columnIndex, ascending);
@@ -276,7 +276,7 @@ class SuperAdminView extends GetView<SuperAdminController> {
                             DataColumn2(
                               label: Text(
                                 'Jabatan',
-                                style: getTextTable(context),
+                                style: getTextTableDisabled(context),
                               ),
                               onSort: (columnIndex, ascending) {
                                 c.sortData(columnIndex, ascending);
@@ -285,7 +285,7 @@ class SuperAdminView extends GetView<SuperAdminController> {
                             DataColumn2(
                               label: Text(
                                 'Email',
-                                style: getTextTable(context),
+                                style: getTextTableDisabled(context),
                               ),
                               onSort: (columnIndex, ascending) {
                                 c.sortData(columnIndex, ascending);
@@ -294,7 +294,7 @@ class SuperAdminView extends GetView<SuperAdminController> {
                             DataColumn2(
                                 label: Text(
                                   'Aktifkan',
-                                  style: getTextTable(context),
+                                  style: getTextTableDisabled(context),
                                 ),
                                 fixedWidth: 125),
                           ],

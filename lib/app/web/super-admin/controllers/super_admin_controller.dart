@@ -152,7 +152,7 @@ class SuperAdminController extends GetxController {
         111.29,
         'OK',
         'Peringatan!',
-        'Apakah anda yakin ingin menghapus data?',
+        'Apakah anda yakin ingin menonaktifkan user?',
         getTextAlert(Get.context!),
         getTextAlertSub(Get.context!),
         getTextAlertBtn(Get.context!),

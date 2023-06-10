@@ -80,6 +80,18 @@ getTextHeader(BuildContext context) {
       fontWeight: FontWeight.w900);
 }
 
+getTextHeaderDisabled(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 24.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 20.0),
+        const Condition.equals(name: MOBILE, value: 20.0),
+        const Condition.equals(name: TABLET, value: 22.0),
+        const Condition.equals(name: DESKTOP, value: 24.0),
+      ]).value,
+      color: Blue1.withOpacity(0.7),
+      fontWeight: FontWeight.w900);
+}
+
 getTextHeader2(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 34.0, valueWhen: [
@@ -188,6 +200,18 @@ getTextTable(BuildContext context) {
       fontWeight: FontWeight.w600);
 }
 
+getTextTableDisabled(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 16.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 12.0),
+        const Condition.equals(name: MOBILE, value: 12.0),
+        const Condition.equals(name: TABLET, value: 14.0),
+        const Condition.equals(name: DESKTOP, value: 16.0),
+      ]).value,
+      color: Blue1.withOpacity(0.7),
+      fontWeight: FontWeight.w600);
+}
+
 getTextTableData(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
@@ -197,6 +221,18 @@ getTextTableData(BuildContext context) {
         const Condition.equals(name: DESKTOP, value: 15.0),
       ]).value,
       color: Blue1,
+      fontWeight: FontWeight.w500);
+}
+
+getTextTableDataDisabled(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 11.0),
+        const Condition.equals(name: MOBILE, value: 11.0),
+        const Condition.equals(name: TABLET, value: 13.0),
+        const Condition.equals(name: DESKTOP, value: 15.0),
+      ]).value,
+      color: Blue1.withOpacity(0.7),
       fontWeight: FontWeight.w500);
 }
 

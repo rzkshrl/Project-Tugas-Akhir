@@ -56,7 +56,7 @@ class UserDisabledDTS extends DataTableSource {
       cells: [
         DataCell(Text(
           data.name!,
-          style: getTextTableData(Get.context!),
+          style: getTextTableDataDisabled(Get.context!),
         )),
         DataCell(Text(
           // "${data.role}",
@@ -65,15 +65,15 @@ class UserDisabledDTS extends DataTableSource {
               : data.role == admin
                   ? "Admin"
                   : "Pegawai",
-          style: getTextTableData(Get.context!),
+          style: getTextTableDataDisabled(Get.context!),
         )),
         DataCell(Text(
           "${data.bidang}",
-          style: getTextTableData(Get.context!),
+          style: getTextTableDataDisabled(Get.context!),
         )),
         DataCell(Text(
           "${data.email}",
-          style: getTextTableData(Get.context!),
+          style: getTextTableDataDisabled(Get.context!),
         )),
         DataCell(IconButton(
             onPressed: () {
@@ -81,7 +81,7 @@ class UserDisabledDTS extends DataTableSource {
             },
             icon: Icon(
               IconlyLight.plus,
-              color: Blue1,
+              color: Blue1.withOpacity(0.7),
             ))),
       ],
     );

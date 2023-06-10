@@ -171,8 +171,8 @@ Widget dialogAlertBtnSingleMsgAnimation(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     backgroundColor: Blue1,
     child: SizedBox(
-      width: 35.w,
-      height: 37.4.h,
+      width: 32.w,
+      height: 47.4.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
