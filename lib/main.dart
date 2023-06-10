@@ -60,7 +60,9 @@ class ProjectTugasAkhir extends StatelessWidget {
           if (kIsWeb) {
             final sessionController = Get.put(SessionController());
             final currentRoute = StorageService.getCurrentRoute();
-            print(currentRoute);
+            if (kDebugMode) {
+              print(currentRoute);
+            }
 
             return FutureBuilder(
                 future: Future.delayed(const Duration(seconds: 0)),
