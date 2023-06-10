@@ -16,6 +16,7 @@ class UserModel {
   String? lastSignInTime;
   String? bidang;
   String? pin;
+  String? status;
 
   UserModel(
       {this.uid,
@@ -26,7 +27,8 @@ class UserModel {
       this.creationTime,
       this.lastSignInTime,
       this.bidang,
-      this.pin});
+      this.pin,
+      this.status});
 
   factory UserModel.fromJson(DocumentSnapshot json) {
     final data = json.data() as Map<String, dynamic>;
@@ -39,7 +41,8 @@ class UserModel {
         creationTime: data['creationTime'],
         lastSignInTime: data['lastSignInDate'],
         bidang: data['bidang'],
-        pin: data['pin']);
+        pin: data['pin'],
+        status: data['status']);
   }
 
   factory UserModel.fromJson2(Map<String, dynamic> data) {
@@ -52,7 +55,8 @@ class UserModel {
         creationTime: data['creationTime'],
         lastSignInTime: data['lastSignInDate'],
         bidang: data['bidang'],
-        pin: data['pin']);
+        pin: data['pin'],
+        status: data['status']);
   }
 
   Map<String, dynamic> toJson() {
@@ -65,7 +69,8 @@ class UserModel {
       "creationTime": creationTime,
       "lastSignInTime": lastSignInTime,
       "bidang": bidang,
-      "pin": pin
+      "pin": pin,
+      "status": status
     };
   }
 }

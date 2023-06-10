@@ -159,48 +159,67 @@ class HariLiburView extends GetView<HariLiburController> {
                       }
                       final holidayList = snap.data! as List<HolidayModel>;
                       int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                      return PaginatedDataTable2(
-                          columns: [
-                            DataColumn2(
-                              label: Text(
-                                'Nama Hari Libur/Cuti Bersama',
-                                style: getTextTable(context),
-                              ),
-                              size: ColumnSize.M,
-                            ),
-                            DataColumn2(
-                              label: Text(
-                                'Tanggal',
-                                style: getTextTable(context),
-                              ),
-                              size: ColumnSize.M,
-                            ),
-                            DataColumn2(
+                      return GetBuilder<HariLiburController>(builder: (c) {
+                        return PaginatedDataTable2(
+                            sortColumnIndex: c.sortColumnIndex.value,
+                            sortAscending: c.sortAscending.value,
+                            sortArrowIcon: Icons.keyboard_arrow_up,
+                            sortArrowAnimationDuration:
+                                const Duration(milliseconds: 0),
+                            columns: [
+                              DataColumn2(
                                 label: Text(
-                                  'Hapus',
+                                  'Nama Hari Libur/Cuti Bersama',
                                   style: getTextTable(context),
                                 ),
-                                fixedWidth: 90),
-                            DataColumn2(
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
+                                size: ColumnSize.M,
+                              ),
+                              DataColumn2(
                                 label: Text(
-                                  'Ubah',
+                                  'Tanggal',
                                   style: getTextTable(context),
                                 ),
-                                fixedWidth: 90),
-                          ],
-                          dividerThickness: 0,
-                          horizontalMargin: 20,
-                          checkboxHorizontalMargin: 12,
-                          columnSpacing: 20,
-                          wrapInCard: false,
-                          minWidth: 950,
-                          renderEmptyRowsInTheEnd: false,
-                          onRowsPerPageChanged: (value) {
-                            rowsPerPage = value!;
-                          },
-                          initialFirstRowIndex: 0,
-                          rowsPerPage: rowsPerPage,
-                          source: HolidayDTS(holidayList));
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
+                                size: ColumnSize.M,
+                              ),
+                              DataColumn2(
+                                  label: Text(
+                                    'Hapus',
+                                    style: getTextTable(context),
+                                  ),
+                                  onSort: (columnIndex, ascending) {
+                                    c.sortData(columnIndex, ascending);
+                                  },
+                                  fixedWidth: 90),
+                              DataColumn2(
+                                  label: Text(
+                                    'Ubah',
+                                    style: getTextTable(context),
+                                  ),
+                                  onSort: (columnIndex, ascending) {
+                                    c.sortData(columnIndex, ascending);
+                                  },
+                                  fixedWidth: 90),
+                            ],
+                            dividerThickness: 0,
+                            horizontalMargin: 20,
+                            checkboxHorizontalMargin: 12,
+                            columnSpacing: 20,
+                            wrapInCard: false,
+                            minWidth: 950,
+                            renderEmptyRowsInTheEnd: false,
+                            onRowsPerPageChanged: (value) {
+                              rowsPerPage = value!;
+                            },
+                            initialFirstRowIndex: 0,
+                            rowsPerPage: rowsPerPage,
+                            source: HolidayDTS(holidayList));
+                      });
                     }),
               )
             ],

@@ -20,8 +20,39 @@ class JamKerjaDTS extends DataTableSource {
 
   JamKerjaDTS(this.jamKerjaList);
 
+  int sortColumnIndex = 0;
+  bool sortAscending = true;
+
+  void sortData() {
+    jamKerjaList.sort((a, b) {
+      int result = 0;
+      switch (c.sortColumnIndex.value) {
+        case 0:
+          result = a.nama!.compareTo(b.nama!);
+          break;
+        case 1:
+          result = a.hariKerja!.compareTo(b.hariKerja!);
+          break;
+        case 2:
+          result = a.jadwalMasuk!.compareTo(b.jadwalMasuk!);
+          break;
+        case 3:
+          result = a.jadwalKeluar!.compareTo(b.jadwalKeluar!);
+          break;
+        case 4:
+          result = a.terlambat!.compareTo(b.terlambat!);
+          break;
+        case 5:
+          result = a.pulangLebihAwal!.compareTo(b.pulangLebihAwal!);
+          break;
+      }
+      return c.sortAscending.value ? result : -result;
+    });
+  }
+
   @override
   DataRow getRow(int index) {
+    sortData();
     JamKerjaModel data = jamKerjaList[index];
     return DataRow(
       cells: [

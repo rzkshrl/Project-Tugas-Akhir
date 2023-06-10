@@ -16,6 +16,15 @@ class JamKerjaController extends GetxController {
 
   final isChecked = false.obs;
 
+  var sortColumnIndex = 0.obs;
+  var sortAscending = true.obs;
+
+  void sortData(int columnIndex, bool ascending) {
+    sortColumnIndex.value = columnIndex;
+    sortAscending.value = ascending;
+    update();
+  }
+
   final List<String> daysOfWeek = [
     senin,
     selasa,

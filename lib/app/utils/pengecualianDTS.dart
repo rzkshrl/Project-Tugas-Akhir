@@ -23,8 +23,33 @@ class PengecualianDTS extends DataTableSource {
 
   final c = Get.put(PengecualianController());
 
+  int sortColumnIndex = 0;
+  bool sortAscending = true;
+
+  void sortData() {
+    pengecualianList.sort((a, b) {
+      int result = 0;
+      switch (c.sortColumnIndex.value) {
+        case 0:
+          result = a.nama!.compareTo(b.nama!);
+          break;
+        case 1:
+          result = a.statusPengecualian!.compareTo(b.statusPengecualian!);
+          break;
+        case 2:
+          result = a.dateStart!.compareTo(b.dateStart!);
+          break;
+        case 3:
+          result = a.dateEnd!.compareTo(b.dateEnd!);
+          break;
+      }
+      return c.sortAscending.value ? result : -result;
+    });
+  }
+
   @override
   DataRow getRow(int index) {
+    sortData();
     PengecualianModel data = pengecualianList[index];
     var formatter = DateFormat('d MMMM yyyy', 'id-ID');
     return DataRow(

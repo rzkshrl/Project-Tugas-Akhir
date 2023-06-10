@@ -17,6 +17,7 @@ import '../../../utils/dropdownTextField.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/textfield.dart';
 
+import '../../../utils/userDisabledDTS.dart';
 import '../controllers/super_admin_controller.dart';
 
 class SuperAdminView extends GetView<SuperAdminController> {
@@ -131,10 +132,19 @@ class SuperAdminView extends GetView<SuperAdminController> {
               SizedBox(
                 height: 3.h,
               ),
+              Center(
+                child: Text(
+                  'User Aktif',
+                  style: getTextHeader(context),
+                ),
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
               Container(
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
-                height: 70.h,
+                height: 40.h,
                 child: StreamBuilder(
                     stream: c.firestoreUserList,
                     builder: (context, snap) {
@@ -144,55 +154,165 @@ class SuperAdminView extends GetView<SuperAdminController> {
                       final userList = snap.data! as List<UserModel>;
 
                       int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                      return PaginatedDataTable2(
-                        columns: [
-                          DataColumn2(
+                      return GetBuilder<SuperAdminController>(builder: (c) {
+                        return PaginatedDataTable2(
+                          sortColumnIndex: c.sortColumnIndex.value,
+                          sortAscending: c.sortAscending.value,
+                          sortArrowIcon: Icons.keyboard_arrow_up,
+                          sortArrowAnimationDuration:
+                              const Duration(milliseconds: 0),
+                          columns: [
+                            DataColumn2(
                               label: Text(
-                            'Nama',
-                            style: getTextTable(context),
-                          )),
-                          DataColumn2(
-                              label: Text(
-                            'Role',
-                            style: getTextTable(context),
-                          )),
-                          DataColumn2(
-                              label: Text(
-                            'Jabatan',
-                            style: getTextTable(context),
-                          )),
-                          DataColumn2(
-                              label: Text(
-                            'Email',
-                            style: getTextTable(context),
-                          )),
-                          DataColumn2(
-                              label: Text(
-                                'Hapus',
+                                'Nama',
                                 style: getTextTable(context),
                               ),
-                              fixedWidth: 90),
-                          DataColumn2(
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
+                            ),
+                            DataColumn2(
                               label: Text(
-                                'Ubah',
+                                'Role',
                                 style: getTextTable(context),
                               ),
-                              fixedWidth: 90),
-                        ],
-                        dividerThickness: 0,
-                        horizontalMargin: 20,
-                        checkboxHorizontalMargin: 12,
-                        columnSpacing: 20,
-                        wrapInCard: false,
-                        minWidth: 950,
-                        renderEmptyRowsInTheEnd: false,
-                        source: UserDTS(userList),
-                        onRowsPerPageChanged: (value) {
-                          rowsPerPage = value!;
-                        },
-                        initialFirstRowIndex: 0,
-                        rowsPerPage: rowsPerPage,
-                      );
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
+                            ),
+                            DataColumn2(
+                              label: Text(
+                                'Jabatan',
+                                style: getTextTable(context),
+                              ),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
+                            ),
+                            DataColumn2(
+                              label: Text(
+                                'Email',
+                                style: getTextTable(context),
+                              ),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
+                            ),
+                            DataColumn2(
+                                label: Text(
+                                  'Non-aktifkan',
+                                  style: getTextTable(context),
+                                ),
+                                fixedWidth: 125),
+                          ],
+                          dividerThickness: 0,
+                          horizontalMargin: 20,
+                          checkboxHorizontalMargin: 12,
+                          columnSpacing: 20,
+                          wrapInCard: false,
+                          minWidth: 950,
+                          renderEmptyRowsInTheEnd: false,
+                          source: UserDTS(userList),
+                          onRowsPerPageChanged: (value) {
+                            rowsPerPage = value!;
+                          },
+                          initialFirstRowIndex: 0,
+                          rowsPerPage: rowsPerPage,
+                        );
+                      });
+                    }),
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
+              Center(
+                child: Text(
+                  'User Nonaktif',
+                  style: getTextHeader(context),
+                ),
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
+              Container(
+                decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
+                width: 90.w,
+                height: 40.h,
+                child: StreamBuilder(
+                    stream: c.firestoreUserDisabledList,
+                    builder: (context, snap) {
+                      if (!snap.hasData) {
+                        return const LoadingView();
+                      }
+                      final userDisabledList = snap.data! as List<UserModel>;
+
+                      int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+                      return GetBuilder<SuperAdminController>(builder: (c) {
+                        return PaginatedDataTable2(
+                          sortColumnIndex: c.sortColumnIndex.value,
+                          sortAscending: c.sortAscending.value,
+                          sortArrowIcon: Icons.keyboard_arrow_up,
+                          sortArrowAnimationDuration:
+                              const Duration(milliseconds: 0),
+                          columns: [
+                            DataColumn2(
+                              label: Text(
+                                'Nama',
+                                style: getTextTable(context),
+                              ),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
+                            ),
+                            DataColumn2(
+                              label: Text(
+                                'Role',
+                                style: getTextTable(context),
+                              ),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
+                            ),
+                            DataColumn2(
+                              label: Text(
+                                'Jabatan',
+                                style: getTextTable(context),
+                              ),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
+                            ),
+                            DataColumn2(
+                              label: Text(
+                                'Email',
+                                style: getTextTable(context),
+                              ),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
+                            ),
+                            DataColumn2(
+                                label: Text(
+                                  'Aktifkan',
+                                  style: getTextTable(context),
+                                ),
+                                fixedWidth: 125),
+                          ],
+                          dividerThickness: 0,
+                          horizontalMargin: 20,
+                          checkboxHorizontalMargin: 12,
+                          columnSpacing: 20,
+                          wrapInCard: false,
+                          minWidth: 950,
+                          renderEmptyRowsInTheEnd: false,
+                          source: UserDisabledDTS(userDisabledList),
+                          onRowsPerPageChanged: (value) {
+                            rowsPerPage = value!;
+                          },
+                          initialFirstRowIndex: 0,
+                          rowsPerPage: rowsPerPage,
+                        );
+                      });
                     }),
               )
             ],

@@ -22,8 +22,27 @@ class HolidayDTS extends DataTableSource {
 
   final c = Get.put(HariLiburController());
 
+  int sortColumnIndex = 0;
+  bool sortAscending = true;
+
+  void sortData() {
+    holidayList.sort((a, b) {
+      int result = 0;
+      switch (c.sortColumnIndex.value) {
+        case 0:
+          result = a.name!.compareTo(b.name!);
+          break;
+        case 1:
+          result = a.date!.compareTo(b.date!);
+          break;
+      }
+      return c.sortAscending.value ? result : -result;
+    });
+  }
+
   @override
   DataRow getRow(int index) {
+    sortData();
     HolidayModel data = holidayList[index];
     var formatter = DateFormat('d MMMM yyyy', 'id-ID');
     return DataRow(

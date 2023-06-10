@@ -34,11 +34,12 @@ class HomeView extends GetView<HomeController> {
           c.userData.value = storedUserData;
         }
         String? roles = c.userData.value.role;
+        String? status = c.userData.value.status;
         if (kDebugMode) {
           print("ROLES WEB 1 : $roles");
         }
 
-        if (roles == null) {
+        if (roles == null || roles == '') {
           return Scaffold(
             backgroundColor: error.withOpacity(0.5),
             body: dialogAlertBtn(() {
@@ -49,6 +50,21 @@ class HomeView extends GetView<HomeController> {
                 "Keluar",
                 "Terjadi Masalah!",
                 "Silahkan masuk ulang.",
+                getTextAlert(context),
+                getTextAlertSub(context),
+                getTextAlertBtn(context)),
+          );
+        } else if (status == 'false') {
+          return Scaffold(
+            backgroundColor: error.withOpacity(0.5),
+            body: dialogAlertBtn(() {
+              authC.logout();
+            },
+                IconlyLight.danger,
+                111.29,
+                "Keluar",
+                "Terjadi Masalah!",
+                "Akun dinonaktifkan.",
                 getTextAlert(context),
                 getTextAlertSub(context),
                 getTextAlertBtn(context)),

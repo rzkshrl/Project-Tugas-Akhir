@@ -52,29 +52,6 @@ class AuthController extends GetxController {
     }
   }
 
-  //store user data
-
-  // if (checkuser.data() == null) {
-  //   users.doc(emailUser).set({
-  //     'uid': auth.currentUser!.uid,
-  //     'name': auth.currentUser!.displayName,
-  //     'email': auth.currentUser!.email,
-  //     'role': "user",
-  //     'bidang': 'Pegawai',
-  //     'profile': '',
-  //     'lastSignInDate':
-  //         auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
-  //     'creationTime':
-  //         auth.currentUser!.metadata.creationTime!.toIso8601String(),
-  //   });
-  // } else {
-  //   // return null;
-  //   users.doc(emailUser).update({
-  //     'lastSignInDate':
-  //         auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
-  //   });
-  // }
-
   Future<UserModel> readUser() async {
     CollectionReference users = firestore.collection("Users");
 
@@ -101,7 +78,8 @@ class AuthController extends GetxController {
         creationTime:
             auth.currentUser!.metadata.creationTime!.toIso8601String(),
         lastSignInTime:
-            auth.currentUser!.metadata.lastSignInTime!.toIso8601String()));
+            auth.currentUser!.metadata.lastSignInTime!.toIso8601String(),
+        status: checkUserData['status']));
 
     if (kIsWeb) {
       StorageService.saveUserData(userData.value);
@@ -170,8 +148,6 @@ class AuthController extends GetxController {
         Get.back();
 
         await Get.offAllNamed(Routes.HOME);
-        // }
-        // });
       } else {
         if (kIsWeb) {
           Get.dialog(dialogAlertBtn(() async {

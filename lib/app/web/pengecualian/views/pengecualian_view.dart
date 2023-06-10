@@ -145,62 +145,81 @@ class PengecualianView extends GetView<PengecualianController> {
                         final pengecualianList =
                             snap.data! as List<PengecualianModel>;
                         int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                        return PaginatedDataTable2(
-                            columns: [
-                              DataColumn2(
-                                label: Text(
-                                  'Nama Pengecualian',
-                                  style: getTextTable(context),
-                                ),
-                                size: ColumnSize.M,
-                              ),
-                              DataColumn2(
-                                label: Text(
-                                  'Status Libur',
-                                  style: getTextTable(context),
-                                ),
-                                size: ColumnSize.M,
-                              ),
-                              DataColumn2(
-                                label: Text(
-                                  'Tanggal Mulai',
-                                  style: getTextTable(context),
-                                ),
-                                size: ColumnSize.M,
-                              ),
-                              DataColumn2(
-                                label: Text(
-                                  'Tanggal Selesai',
-                                  style: getTextTable(context),
-                                ),
-                                size: ColumnSize.M,
-                              ),
-                              DataColumn2(
+                        return GetBuilder<PengecualianController>(builder: (c) {
+                          return PaginatedDataTable2(
+                              sortColumnIndex: c.sortColumnIndex.value,
+                              sortAscending: c.sortAscending.value,
+                              sortArrowIcon: Icons.keyboard_arrow_up,
+                              sortArrowAnimationDuration:
+                                  const Duration(milliseconds: 0),
+                              columns: [
+                                DataColumn2(
                                   label: Text(
-                                    'Hapus',
+                                    'Nama Pengecualian',
                                     style: getTextTable(context),
                                   ),
-                                  fixedWidth: 90),
-                              DataColumn2(
+                                  onSort: (columnIndex, ascending) {
+                                    c.sortData(columnIndex, ascending);
+                                  },
+                                  size: ColumnSize.M,
+                                ),
+                                DataColumn2(
                                   label: Text(
-                                    'Ubah',
+                                    'Status Libur',
                                     style: getTextTable(context),
                                   ),
-                                  fixedWidth: 90),
-                            ],
-                            dividerThickness: 0,
-                            horizontalMargin: 20,
-                            checkboxHorizontalMargin: 12,
-                            columnSpacing: 20,
-                            wrapInCard: false,
-                            minWidth: 950,
-                            renderEmptyRowsInTheEnd: false,
-                            onRowsPerPageChanged: (value) {
-                              rowsPerPage = value!;
-                            },
-                            initialFirstRowIndex: 0,
-                            rowsPerPage: rowsPerPage,
-                            source: PengecualianDTS(pengecualianList));
+                                  onSort: (columnIndex, ascending) {
+                                    c.sortData(columnIndex, ascending);
+                                  },
+                                  size: ColumnSize.M,
+                                ),
+                                DataColumn2(
+                                  label: Text(
+                                    'Tanggal Mulai',
+                                    style: getTextTable(context),
+                                  ),
+                                  onSort: (columnIndex, ascending) {
+                                    c.sortData(columnIndex, ascending);
+                                  },
+                                  size: ColumnSize.M,
+                                ),
+                                DataColumn2(
+                                  label: Text(
+                                    'Tanggal Selesai',
+                                    style: getTextTable(context),
+                                  ),
+                                  onSort: (columnIndex, ascending) {
+                                    c.sortData(columnIndex, ascending);
+                                  },
+                                  size: ColumnSize.M,
+                                ),
+                                DataColumn2(
+                                    label: Text(
+                                      'Hapus',
+                                      style: getTextTable(context),
+                                    ),
+                                    fixedWidth: 90),
+                                DataColumn2(
+                                    label: Text(
+                                      'Ubah',
+                                      style: getTextTable(context),
+                                    ),
+                                    fixedWidth: 90),
+                              ],
+                              dividerThickness: 0,
+                              horizontalMargin: 20,
+                              checkboxHorizontalMargin: 12,
+                              columnSpacing: 20,
+                              wrapInCard: false,
+                              minWidth: 950,
+                              renderEmptyRowsInTheEnd: false,
+                              onRowsPerPageChanged: (value) {
+                                rowsPerPage = value!;
+                              },
+                              initialFirstRowIndex: 0,
+                              rowsPerPage: rowsPerPage,
+                              source: PengecualianDTS(pengecualianList));
+                        });
                       }),
                 )
               ],

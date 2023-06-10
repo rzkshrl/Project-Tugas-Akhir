@@ -28,6 +28,15 @@ class PengecualianController extends GetxController {
             .toList());
   }
 
+  var sortColumnIndex = 0.obs;
+  var sortAscending = true.obs;
+
+  void sortData(int columnIndex, bool ascending) {
+    sortColumnIndex.value = columnIndex;
+    sortAscending.value = ascending;
+    update();
+  }
+
   DateTime? start;
   final end = DateTime.now().obs;
   final dateFormatter = DateFormat('d MMMM yyyy', 'id-ID');

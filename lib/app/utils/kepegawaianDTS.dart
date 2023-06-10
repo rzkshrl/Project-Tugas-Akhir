@@ -20,43 +20,71 @@ class KepegawaianDTS extends DataTableSource {
 
   KepegawaianDTS(this.kepegawaianList);
 
-  void sort<T>(
-      Comparable<T> Function(KepegawaianModel d) getField, bool ascending) {
+  int sortColumnIndex = 0;
+  bool sortAscending = true;
+
+  void sortData() {
     kepegawaianList.sort((a, b) {
-      final aValue = getField(a);
-      final bValue = getField(b);
-      return ascending
-          ? Comparable.compare(aValue, bValue)
-          : Comparable.compare(bValue, aValue);
+      int result = 0;
+      switch (c.sortColumnIndex.value) {
+        case 0:
+          final pinA = int.parse(a.pin!);
+          final pinB = int.parse(b.pin!);
+          result = pinA.compareTo(pinB);
+          break;
+        case 1:
+          result = a.nip!.compareTo(b.nip!);
+          break;
+        case 2:
+          result = a.nama!.compareTo(b.nama!);
+          break;
+        case 3:
+          result = a.kepegawaian!.compareTo(b.kepegawaian!);
+          break;
+        case 4:
+          result = a.bidang!.compareTo(b.bidang!);
+          break;
+      }
+      return c.sortAscending.value ? result : -result;
     });
-    notifyListeners();
   }
 
   @override
   DataRow getRow(int index) {
+    sortData();
     KepegawaianModel data = kepegawaianList[index];
     return DataRow(
       cells: [
-        DataCell(Text(
-          "${data.pin}",
-          style: getTextTableData(Get.context!),
-        )),
-        DataCell(Text(
-          "${data.nip}",
-          style: getTextTableData(Get.context!),
-        )),
-        DataCell(Text(
-          "${data.nama}",
-          style: getTextTableData(Get.context!),
-        )),
-        DataCell(Text(
-          "${data.kepegawaian}",
-          style: getTextTableData(Get.context!),
-        )),
-        DataCell(Text(
-          "${data.bidang}",
-          style: getTextTableData(Get.context!),
-        )),
+        DataCell(
+          Text(
+            "${data.pin}",
+            style: getTextTableData(Get.context!),
+          ),
+        ),
+        DataCell(
+          Text(
+            "${data.nip}",
+            style: getTextTableData(Get.context!),
+          ),
+        ),
+        DataCell(
+          Text(
+            "${data.nama}",
+            style: getTextTableData(Get.context!),
+          ),
+        ),
+        DataCell(
+          Text(
+            "${data.kepegawaian}",
+            style: getTextTableData(Get.context!),
+          ),
+        ),
+        DataCell(
+          Text(
+            "${data.bidang}",
+            style: getTextTableData(Get.context!),
+          ),
+        ),
         DataCell(IconButton(
             onPressed: () {
               c.deleteDoc(data.pin!);

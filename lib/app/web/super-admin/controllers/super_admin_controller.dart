@@ -14,6 +14,7 @@ import '../../../utils/dialogDefault.dart';
 
 class SuperAdminController extends GetxController {
   late Stream<List<UserModel>> firestoreUserList;
+  late Stream<List<UserModel>> firestoreUserDisabledList;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -24,10 +25,29 @@ class SuperAdminController extends GetxController {
   void onInit() {
     super.onInit();
 
-    firestoreUserList = firestore.collection('Users').snapshots().map(
-        (querySnapshot) => querySnapshot.docs
+    firestoreUserList = firestore
+        .collection('Users')
+        .where('status', isEqualTo: 'true')
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
             .map((documentSnapshot) => UserModel.fromJson(documentSnapshot))
             .toList());
+    firestoreUserDisabledList = firestore
+        .collection('Users')
+        .where('status', isEqualTo: 'false')
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map((documentSnapshot) => UserModel.fromJson(documentSnapshot))
+            .toList());
+  }
+
+  var sortColumnIndex = 0.obs;
+  var sortAscending = true.obs;
+
+  void sortData(int columnIndex, bool ascending) {
+    sortColumnIndex.value = columnIndex;
+    sortAscending.value = ascending;
+    update();
   }
 
   Future<UserCredential> createUser(String email, String password) async {
@@ -76,6 +96,7 @@ class SuperAdminController extends GetxController {
           'role': role,
           'bidang': jabatan,
           'pin': pin,
+          'status': 'true',
           'profile': '',
           'lastSignInDate': '',
           'creationTime': DateTime.now().toIso8601String(),
@@ -101,64 +122,19 @@ class SuperAdminController extends GetxController {
     }
   }
 
-  Future<void> editUser(String docIdentify, String uid, String nama,
-      String role, String jabatan, String email, String pin) async {
-    CollectionReference pegawai = firestore.collection("Users");
-    try {
-      if (kDebugMode) {
-        print(docIdentify);
-        print(uid);
-      }
-
-      User? user =
-          await auth.authStateChanges().firstWhere((user) => user?.uid == uid);
-
-      if (user != null) {
-        await user.updateEmail(email);
-        await user.updateDisplayName(nama);
-      }
-
-      await pegawai.doc(docIdentify).update({
-        'name': nama,
-        'email': email,
-        'role': role,
-        'bidang': jabatan,
-        'pin': pin
-      });
-      Get.dialog(
-        dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
-            'Berhasil Mengubah User!', getTextAlert(Get.context!), () {
-          Get.back();
-        }),
-      );
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-          "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
-    }
-  }
-
   Future<void> deleteDoc(String doc, String uid) async {
     Get.dialog(dialogAlertDualBtn(() async {
       Get.back();
     }, () async {
       Get.back();
       try {
-        if (kDebugMode) {
-          print(uid);
-        }
-        User? user = await auth
-            .authStateChanges()
-            .firstWhere((user) => user?.uid == uid);
-        if (user != null) {
-          await user.delete();
-        }
-        await firestore.collection('Users').doc(doc).delete();
+        await firestore
+            .collection('Users')
+            .doc(doc)
+            .update({'status': 'false'});
         Get.dialog(
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
-              'Berhasil Menghapus Data!', getTextAlert(Get.context!), () {
+              'Berhasil Menonaktifkan User!', getTextAlert(Get.context!), () {
             Get.back();
           }),
         );
@@ -181,6 +157,26 @@ class SuperAdminController extends GetxController {
         getTextAlertSub(Get.context!),
         getTextAlertBtn(Get.context!),
         getTextAlertBtn2(Get.context!)));
+  }
+
+  Future<void> restoreDoc(String doc, String uid) async {
+    try {
+      await firestore.collection('Users').doc(doc).update({'status': 'true'});
+      Get.dialog(
+        dialogAlertBtnSingleMsgAnimation(
+            'assets/lootie/finish.json',
+            'Berhasil Mengaktifkan kembali User!',
+            getTextAlert(Get.context!), () {
+          Get.back();
+        }),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+          "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
+    }
   }
 
   @override

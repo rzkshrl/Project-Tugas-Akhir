@@ -180,76 +180,101 @@ class JamKerjaView extends GetView<JamKerjaController> {
                       }
                       final jamKerjaList = snap.data! as List<JamKerjaModel>;
                       int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                      return PaginatedDataTable2(
-                          columns: [
-                            DataColumn2(
-                              label: Text(
-                                'Nama',
-                                style: getTextTable(context),
-                              ),
-                              size: ColumnSize.M,
-                            ),
-                            DataColumn2(
-                              label: Text(
-                                'Hari',
-                                style: getTextTable(context),
-                              ),
-                              size: ColumnSize.S,
-                            ),
-                            DataColumn2(
-                              label: Text(
-                                'Jam Masuk',
-                                style: getTextTable(context),
-                              ),
-                              size: ColumnSize.S,
-                            ),
-                            DataColumn2(
-                              label: Text(
-                                'Jam Keluar',
-                                style: getTextTable(context),
-                              ),
-                              size: ColumnSize.S,
-                            ),
-                            DataColumn2(
-                              label: Text(
-                                'Keterlambatan',
-                                style: getTextTable(context),
-                              ),
-                              size: ColumnSize.M,
-                            ),
-                            DataColumn2(
-                              label: Text(
-                                'Pulang Lebih Awal',
-                                style: getTextTable(context),
-                              ),
-                              size: ColumnSize.M,
-                            ),
-                            DataColumn2(
+                      return GetBuilder<JamKerjaController>(builder: (c) {
+                        return PaginatedDataTable2(
+                            sortColumnIndex: c.sortColumnIndex.value,
+                            sortAscending: c.sortAscending.value,
+                            sortArrowIcon: Icons.keyboard_arrow_up,
+                            sortArrowAnimationDuration:
+                                const Duration(milliseconds: 0),
+                            columns: [
+                              DataColumn2(
                                 label: Text(
-                                  'Hapus',
+                                  'Nama',
                                   style: getTextTable(context),
                                 ),
-                                fixedWidth: 90),
-                            DataColumn2(
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
+                                size: ColumnSize.M,
+                              ),
+                              DataColumn2(
                                 label: Text(
-                                  'Ubah',
+                                  'Hari',
                                   style: getTextTable(context),
                                 ),
-                                fixedWidth: 90),
-                          ],
-                          dividerThickness: 0,
-                          horizontalMargin: 20,
-                          checkboxHorizontalMargin: 12,
-                          columnSpacing: 20,
-                          wrapInCard: false,
-                          minWidth: 950,
-                          renderEmptyRowsInTheEnd: false,
-                          onRowsPerPageChanged: (value) {
-                            rowsPerPage = value!;
-                          },
-                          initialFirstRowIndex: 0,
-                          rowsPerPage: rowsPerPage,
-                          source: JamKerjaDTS(jamKerjaList));
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
+                                size: ColumnSize.S,
+                              ),
+                              DataColumn2(
+                                label: Text(
+                                  'Jam Masuk',
+                                  style: getTextTable(context),
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
+                                size: ColumnSize.S,
+                              ),
+                              DataColumn2(
+                                label: Text(
+                                  'Jam Keluar',
+                                  style: getTextTable(context),
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
+                                size: ColumnSize.S,
+                              ),
+                              DataColumn2(
+                                label: Text(
+                                  'Keterlambatan',
+                                  style: getTextTable(context),
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
+                                size: ColumnSize.M,
+                              ),
+                              DataColumn2(
+                                label: Text(
+                                  'Pulang Lebih Awal',
+                                  style: getTextTable(context),
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
+                                size: ColumnSize.M,
+                              ),
+                              DataColumn2(
+                                  label: Text(
+                                    'Hapus',
+                                    style: getTextTable(context),
+                                  ),
+                                  fixedWidth: 90),
+                              DataColumn2(
+                                  label: Text(
+                                    'Ubah',
+                                    style: getTextTable(context),
+                                  ),
+                                  fixedWidth: 90),
+                            ],
+                            dividerThickness: 0,
+                            horizontalMargin: 20,
+                            checkboxHorizontalMargin: 12,
+                            columnSpacing: 20,
+                            wrapInCard: false,
+                            minWidth: 950,
+                            renderEmptyRowsInTheEnd: false,
+                            onRowsPerPageChanged: (value) {
+                              rowsPerPage = value!;
+                            },
+                            initialFirstRowIndex: 0,
+                            rowsPerPage: rowsPerPage,
+                            source: JamKerjaDTS(jamKerjaList));
+                      });
                     }),
               )
             ],

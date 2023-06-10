@@ -22,23 +22,13 @@ class DataPegawaiController extends GetxController {
 
   late KepegawaianDTS dts;
 
-  final RxInt _sortColumnIndex = RxInt(-1);
-  final RxBool _sortAscending = RxBool(true);
+  var sortColumnIndex = 0.obs;
+  var sortAscending = true.obs;
 
-  int get sortColumnIndex => _sortColumnIndex.value;
-  bool get sortAscending => _sortAscending.value;
-
-  set sortColumnIndex(int value) => _sortColumnIndex.value = value;
-  set sortAscending(bool value) => _sortAscending.value = value;
-
-  void sort<T>(
-    Comparable<T> Function(KepegawaianModel d) getField,
-    int columnIndex,
-    bool ascending,
-  ) {
-    dts.sort<T>(getField, ascending);
-    _sortColumnIndex.value = columnIndex;
-    _sortAscending.value = ascending;
+  void sortData(int columnIndex, bool ascending) {
+    sortColumnIndex.value = columnIndex;
+    sortAscending.value = ascending;
+    update();
   }
 
   Future<void> addPegawai(BuildContext context, String nama, String pin,

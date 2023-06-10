@@ -16,12 +16,12 @@ import '../theme/textstyle.dart';
 import 'btnDefault.dart';
 import 'dropdownTextField.dart';
 
-class UserDTS extends DataTableSource {
+class UserDisabledDTS extends DataTableSource {
   final List<UserModel> userList;
 
   final c = Get.put(SuperAdminController());
 
-  UserDTS(this.userList);
+  UserDisabledDTS(this.userList);
 
   int sortColumnIndex = 0;
   bool sortAscending = true;
@@ -77,10 +77,10 @@ class UserDTS extends DataTableSource {
         )),
         DataCell(IconButton(
             onPressed: () {
-              c.deleteDoc(data.email!, data.uid!);
+              c.restoreDoc(data.email!, data.uid!);
             },
             icon: Icon(
-              IconlyLight.delete,
+              IconlyLight.plus,
               color: Blue1,
             ))),
       ],

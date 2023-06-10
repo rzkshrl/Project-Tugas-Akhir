@@ -160,21 +160,20 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                       final kepegawaianList =
                           snap.data! as List<KepegawaianModel>;
                       int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                      var dts = KepegawaianDTS(kepegawaianList);
 
                       return GetBuilder<DataPegawaiController>(builder: (c) {
                         return PaginatedDataTable2(
-                          sortColumnIndex: c.sortColumnIndex,
-                          sortAscending: c.sortAscending,
+                          sortColumnIndex: c.sortColumnIndex.value,
+                          sortAscending: c.sortAscending.value,
                           sortArrowIcon:
                               Icons.keyboard_arrow_up, // custom arrow
                           sortArrowAnimationDuration:
                               const Duration(milliseconds: 0),
                           columns: [
                             DataColumn2(
-                              onSort: (columnIndex, ascending) =>
-                                  c.sort<String>(
-                                      (d) => d.pin!, columnIndex, ascending),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
                               label: Text(
                                 'PIN',
                                 style: getTextTable(context),
@@ -182,35 +181,35 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                               size: ColumnSize.S,
                             ),
                             DataColumn2(
-                              onSort: (columnIndex, ascending) =>
-                                  c.sort<String>(
-                                      (d) => d.nip!, columnIndex, ascending),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
                               label: Text(
                                 'NIP',
                                 style: getTextTable(context),
                               ),
                             ),
                             DataColumn2(
-                              onSort: (columnIndex, ascending) =>
-                                  c.sort<String>(
-                                      (d) => d.nama!, columnIndex, ascending),
+                              onSort: (columnIndex, ascending) {
+                                c.sortData(columnIndex, ascending);
+                              },
                               label: Text(
                                 'Nama',
                                 style: getTextTable(context),
                               ),
                             ),
                             DataColumn2(
-                                onSort: (columnIndex, ascending) =>
-                                    c.sort<String>((d) => d.kepegawaian!,
-                                        columnIndex, ascending),
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
                                 label: Text(
                                   'Kepegawaian',
                                   style: getTextTable(context),
                                 )),
                             DataColumn2(
-                                onSort: (columnIndex, ascending) =>
-                                    c.sort<String>((d) => d.bidang!,
-                                        columnIndex, ascending),
+                                onSort: (columnIndex, ascending) {
+                                  c.sortData(columnIndex, ascending);
+                                },
                                 label: Text(
                                   'Bidang',
                                   style: getTextTable(context),
