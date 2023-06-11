@@ -419,9 +419,11 @@ class APIController extends GetxController {
 
             var hari = DateFormat.EEEE('id_ID').format(scan);
 
-            JamKerjaModel jamKerja = jamKerjaList.firstWhere((jamKerja) =>
-                jamKerja.hariKerja == hari &&
-                jamKerja.kepg == kepgData.kepegawaian);
+            JamKerjaModel? jamKerja = jamKerjaList.isNotEmpty
+                ? jamKerjaList.firstWhere((jamKerja) =>
+                    jamKerja.hariKerja == hari &&
+                    jamKerja.kepg == kepgData.kepegawaian)
+                : null;
 
             JamKerjaModel? jamKerjaRamadhan = jamKerjaList.isNotEmpty
                 ? jamKerjaList.firstWhere((jamKerja) =>
@@ -462,7 +464,7 @@ class APIController extends GetxController {
                     hour <=
                         int.parse(
                             jamKerjaRamadhan.batasAkhirMasuk!.split(':')[0])
-                : hour >= int.parse(jamKerja.batasAwalMasuk!.split(':')[0]) &&
+                : hour >= int.parse(jamKerja!.batasAwalMasuk!.split(':')[0]) &&
                     hour <= int.parse(jamKerja.batasAkhirMasuk!.split(':')[0]);
 
             bool isKeluar = isRamadhanJamKerja
@@ -472,7 +474,7 @@ class APIController extends GetxController {
                     hour <=
                         int.parse(
                             jamKerjaRamadhan.batasAkhirKeluar!.split(':')[0])
-                : hour >= int.parse(jamKerja.batasAwalKeluar!.split(':')[0]) &&
+                : hour >= int.parse(jamKerja!.batasAwalKeluar!.split(':')[0]) &&
                     hour <= int.parse(jamKerja.batasAkhirKeluar!.split(':')[0]);
 
             if (kDebugMode) {
