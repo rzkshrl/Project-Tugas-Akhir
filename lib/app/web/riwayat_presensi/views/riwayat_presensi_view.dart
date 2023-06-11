@@ -114,7 +114,7 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    btnDefaultIcon1(13.w, Blue1, IconlyLight.swap, Yellow1,
+                    btnDefaultIcon1(15.w, Blue1, IconlyLight.swap, Yellow1,
                         "Refresh Data", getTextBtnAction(context), () {
                       apiC.getAllPresenceData(context);
                     }),

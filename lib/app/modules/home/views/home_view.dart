@@ -35,6 +35,7 @@ class HomeView extends GetView<HomeController> {
           // c.userData.value = storedUserData;
           if (storedUserData.expirationTime.isAfter(DateTime.now())) {
             c.userData.value = storedUserData.user;
+          } else if (authC.isAuth.isFalse) {
           } else {
             return Scaffold(
               backgroundColor: error.withOpacity(0.5),

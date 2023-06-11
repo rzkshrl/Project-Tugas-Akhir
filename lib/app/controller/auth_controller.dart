@@ -253,6 +253,7 @@ class AuthController extends GetxController {
   void logout() async {
     await auth.signOut();
     if (kIsWeb) {
+      sessionController.logout();
       Get.offAllNamed(Routes.LOGIN);
     } else {
       Get.offAllNamed(Routes.LOGIN_MOBILE);

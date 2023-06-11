@@ -98,7 +98,7 @@ class PengecualianView extends GetView<PengecualianController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
+                      btnDefaultIcon1(15.w, Blue1, IconlyLight.plus, Yellow1,
                           "Tambah Data", getTextBtnAction(context), () {
                         textC.addPengecualianC.clear();
                         cDropdown.addPengecualianStatusLiburC.clear();

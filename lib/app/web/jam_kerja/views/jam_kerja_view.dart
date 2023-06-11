@@ -99,7 +99,7 @@ class JamKerjaView extends GetView<JamKerjaController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
+                    btnDefaultIcon1(15.w, Blue1, IconlyLight.plus, Yellow1,
                         "Tambah Data", getTextBtnAction(context), () {
                       textC.namaJamKerjaC.clear();
                       cDropdown.kepgTambahDataPegC.clear();

@@ -99,7 +99,9 @@ class ProjectTugasAkhir extends StatelessWidget {
                           // )),
                         ),
                         initialRoute: sessionController.isLoggedIn.value
-                            ? currentRoute ?? Routes.LOGIN
+                            ? currentRoute != null
+                                ? Routes.HOME
+                                : Routes.LOGIN
                             : Routes.LOGIN,
                         getPages: AppPages.routes,
                         debugShowCheckedModeBanner: false,

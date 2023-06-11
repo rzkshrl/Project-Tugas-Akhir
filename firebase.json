@@ -4,8 +4,18 @@
     "public": "build/web",
     "ignore": [
       "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+      "**/.*"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "destination": "/proxy-server/proxy.js"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
+  
 }

@@ -100,7 +100,7 @@ class HariLiburView extends GetView<HariLiburController> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     btnDefaultIcon1(
-                        13.w,
+                        18.w,
                         Blue1,
                         FontAwesomeIcons.rotate,
                         Yellow1,
@@ -119,7 +119,7 @@ class HariLiburView extends GetView<HariLiburController> {
                     SizedBox(
                       width: 1.5.w,
                     ),
-                    btnDefaultIcon1(13.w, Blue1, IconlyLight.plus, Yellow1,
+                    btnDefaultIcon1(18.w, Blue1, IconlyLight.plus, Yellow1,
                         "Tambah Hari Libur", getTextBtnAction(context), () {
                       textC.addNamaLiburC.clear();
                       textC.datepickerC.clear();

@@ -96,8 +96,8 @@ class JamKerjaDTS extends DataTableSource {
               textC.masukJamKerjaC.text = data.jadwalMasuk!;
               textC.keluarJamKerjaC.text = data.jadwalKeluar!;
               textC.batasAwalmasukJamKerjaC.text = data.batasAwalMasuk!;
-              textC.batasAkhirmasukJamKerjaC.text = data.batasAwalKeluar!;
-              textC.batasAwalkeluarJamKerjaC.text = data.batasAkhirMasuk!;
+              textC.batasAkhirmasukJamKerjaC.text = data.batasAkhirMasuk!;
+              textC.batasAwalkeluarJamKerjaC.text = data.batasAwalKeluar!;
               textC.batasAkhirkeluarJamKerjaC.text = data.batasAkhirKeluar!;
               textC.terlambatJamKerjaC.text = data.terlambat!;
               textC.pulLebihAwalJamKerjaC.text = data.pulangLebihAwal!;
