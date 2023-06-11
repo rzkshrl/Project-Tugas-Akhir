@@ -360,38 +360,8 @@ class APIController extends GetxController {
           .toList();
 
       if (kDebugMode) {
-        // print('download data gaes...');
-        // print('jajal print disini dulu ${groupedData.value.length}');
         exportData(groupedData.value);
       }
-
-      // var presenceData = <PresensiKepgModel>[].obs;
-
-      // List<PresensiKepgModel> presenceModels = [];
-
-      // groupedMap.forEach((pin, presenceList) {
-      //   List<PresenceModel> presenceDates = [];
-
-      //   for (var presence in presenceList) {
-      //     List<ScanInDayModel> scans = [];
-
-      //     presence['scanInDay'].forEach((scan) {
-      //       scans.add(ScanInDayModel(scan: DateTime.parse(scan['scan'])));
-      //     });
-
-      //     presenceDates.add(PresenceModel(
-      //       date: presence['date'],
-      //       scanInDay: scans,
-      //     ));
-      //   }
-
-      //   presenceModels.add(PresensiKepgModel(
-      //     pin: pin,
-      //     presence: presenceDates,
-      //   ));
-      // });
-
-      // presenceData.value = presenceModels;
 
       List<PresensiKepgModel> presenceData = groupedData.value
           .map((entry) => PresensiKepgModel(
@@ -412,19 +382,9 @@ class APIController extends GetxController {
 
       final stopwatch = Stopwatch()..start();
 
-      // if (kDebugMode) {
-      //   print("eksekusi ke firestore nih");
-      //   // print("nyoba print dulu : ${presenceData.length}");
-      // }
-
       for (var data in presenceData) {
         final pin = data.pin;
         final presence = data.presence;
-
-        // if (kDebugMode) {
-        //   print("udah deklarasi variabel");
-        //   // print("nyoba print dulu : $pin");
-        // }
 
         final kepegQuerySnapshot =
             await firestore.collection('Kepegawaian').doc(pin).get();
@@ -446,36 +406,16 @@ class APIController extends GetxController {
             .map((doc) => JamKerjaModel.fromJson(doc))
             .toList();
 
-        // if (kDebugMode) {
-        //   print("udah masukin kepg ama jam kerja bang");
-        //   print("nyoba print dulu : ${jamKerjaData.value.hariKerja}");
-        // }
-
         for (var presenceData in presence!) {
-          // final date = presenceData.date!;
           final scanInDay = presenceData.scanInDay;
 
-          // if (kDebugMode) {
-          //   print("udah looping presenceData bang");
-          //   // print("nyoba print dulu : $pin");
-          // }
-
           for (var scanInDayData in scanInDay!) {
-            // if (kDebugMode) {
-            //   print("udah looping terakhir");
-            //   // print("nyoba print dulu : $pin");
-            // }
             final scan = scanInDayData.scan!;
 
-            // if (kDebugMode) {
-            //   print("ini deklarasi scan gaes");
-            //   // print("nyoba print dulu : $pin");
-            // }
             var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
             var datePresensi =
                 formatterDoc.format(DateTime.parse(scan.toIso8601String()));
             final hour = scan.hour;
-            final year = scan.year;
 
             var hari = DateFormat.EEEE('id_ID').format(scan);
 
@@ -486,12 +426,13 @@ class APIController extends GetxController {
             JamKerjaModel jamKerjaRamadhan = jamKerjaList.firstWhere(
                 (jamKerja) =>
                     jamKerja.hariKerja == hari &&
-                        jamKerja.nama!.contains(ramadhan) ||
-                    jamKerja.nama!.contains(ramadhanUpperCase));
+                        jamKerja.nama!
+                            .toLowerCase()
+                            .contains(ramadhanLowerCase) ||
+                    jamKerja.nama!.toUpperCase().contains(ramadhanUpperCase));
 
             final pengecualianTahunPresensiQuerySnapshot = await firestore
                 .collection('Pengecualian')
-                // .where('nama', arrayContains: year.toString())
                 .where('statusPengecualian', isEqualTo: 'Bukan')
                 .get();
 
@@ -502,14 +443,18 @@ class APIController extends GetxController {
                   PengecualianModel.fromJson(documentSnapshot);
             }
 
-            // var isRamadhan = pengecualianData.value.nama!.contains(ramadhan) ||
-            //     pengecualianData.value.nama!.contains(ramadhanUpperCase);
-
             var isRamadhanJamKerja = jamKerjaRamadhan.nama!
+                        .toLowerCase()
+                        .contains(ramadhanLowerCase) ==
+                    pengecualianData.value.nama!
+                        .toLowerCase()
+                        .contains(ramadhanLowerCase) ||
+                jamKerjaRamadhan.nama!
+                        .toUpperCase()
                         .contains(ramadhanUpperCase) ==
-                    pengecualianData.value.nama!.contains(ramadhanUpperCase) ||
-                jamKerjaRamadhan.nama!.contains(ramadhan) ==
-                    pengecualianData.value.nama!.contains(ramadhan);
+                    pengecualianData.value.nama!
+                        .toUpperCase()
+                        .contains(ramadhanUpperCase);
 
             bool isMasuk = isRamadhanJamKerja
                 ? hour >=
@@ -530,6 +475,10 @@ class APIController extends GetxController {
                             jamKerjaRamadhan.batasAkhirKeluar!.split(':')[0])
                 : hour >= int.parse(jamKerja.batasAwalKeluar!.split(':')[0]) &&
                     hour <= int.parse(jamKerja.batasAkhirKeluar!.split(':')[0]);
+
+            if (kDebugMode) {
+              print("kondisi isMasuk isKeluar sudah");
+            }
 
             String doc = '';
             if (isMasuk) {
@@ -553,7 +502,7 @@ class APIController extends GetxController {
             if (isMasuk || isKeluar) {
               dateTime = scan.toIso8601String();
             } else {
-              dateTime = '';
+              dateTime = '2000-01-01T00:00:00.000';
             }
 
             final scanlogPegawai = firestore
