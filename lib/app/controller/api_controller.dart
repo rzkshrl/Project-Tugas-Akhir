@@ -423,13 +423,12 @@ class APIController extends GetxController {
                 jamKerja.hariKerja == hari &&
                 jamKerja.kepg == kepgData.kepegawaian);
 
-            JamKerjaModel jamKerjaRamadhan = jamKerjaList.firstWhere(
-                (jamKerja) =>
+            JamKerjaModel? jamKerjaRamadhan = jamKerjaList.isNotEmpty
+                ? jamKerjaList.firstWhere((jamKerja) =>
                     jamKerja.hariKerja == hari &&
-                        jamKerja.nama!
-                            .toLowerCase()
-                            .contains(ramadhanLowerCase) ||
-                    jamKerja.nama!.toUpperCase().contains(ramadhanUpperCase));
+                    jamKerja.kepg == kepgData.kepegawaian &&
+                    jamKerja.nama!.toUpperCase().contains(ramadhanUpperCase))
+                : null;
 
             final pengecualianTahunPresensiQuerySnapshot = await firestore
                 .collection('Pengecualian')
@@ -443,7 +442,7 @@ class APIController extends GetxController {
                   PengecualianModel.fromJson(documentSnapshot);
             }
 
-            var isRamadhanJamKerja = jamKerjaRamadhan.nama!
+            var isRamadhanJamKerja = jamKerjaRamadhan!.nama!
                         .toLowerCase()
                         .contains(ramadhanLowerCase) ==
                     pengecualianData.value.nama!

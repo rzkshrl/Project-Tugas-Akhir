@@ -35,7 +35,6 @@ class HomeView extends GetView<HomeController> {
           // c.userData.value = storedUserData;
           if (storedUserData.expirationTime.isAfter(DateTime.now())) {
             c.userData.value = storedUserData.user;
-          } else if (authC.isAuth.isFalse) {
           } else {
             return Scaffold(
               backgroundColor: error.withOpacity(0.5),
@@ -52,6 +51,21 @@ class HomeView extends GetView<HomeController> {
                   getTextAlertBtn(context)),
             );
           }
+        } else {
+          return Scaffold(
+            backgroundColor: error.withOpacity(0.5),
+            body: dialogAlertBtn(() {
+              authC.logout();
+            },
+                IconlyLight.danger,
+                111.29,
+                "Keluar",
+                "Session Habis.",
+                "Silahkan masuk ulang.",
+                getTextAlert(context),
+                getTextAlertSub(context),
+                getTextAlertBtn(context)),
+          );
         }
 
         String? roles = c.userData.value.role;

@@ -13,4 +13,5 @@ String sabtu = 'Sabtu';
 String minggu = 'Minggu';
 
 String ramadhan = 'Ramadhan';
+String ramadhanLowerCase = 'ramadhan';
 String ramadhanUpperCase = 'RAMADHAN';
