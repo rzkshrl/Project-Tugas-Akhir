@@ -118,6 +118,13 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                         "Refresh Data", getTextBtnAction(context), () {
                       apiC.getAllPresenceData(context);
                     }),
+                    SizedBox(
+                      width: 2.5.w,
+                    ),
+                    btnDefaultIcon1(15.w, Blue1, IconlyLight.swap, Yellow1,
+                        "Refresh Mesin", getTextBtnAction(context), () {
+                      apiC.getDeviceInfo(context);
+                    }),
                   ],
                 ),
               ),

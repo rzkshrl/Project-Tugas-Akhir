@@ -65,3 +65,59 @@ class JamKerjaModel {
     };
   }
 }
+
+class JamKerjaModel2 {
+  String? nama;
+  String? kepg;
+  String? ket;
+  DateTime? jadwalMasuk;
+  DateTime? jadwalKeluar;
+  DateTime? batasAwalMasuk;
+  DateTime? batasAwalKeluar;
+  DateTime? batasAkhirMasuk;
+  DateTime? batasAkhirKeluar;
+  DateTime? terlambat;
+  DateTime? pulangLebihAwal;
+  String? hariKerja;
+  String? id;
+
+  JamKerjaModel2(
+      {this.nama,
+      this.kepg,
+      this.ket,
+      this.jadwalMasuk,
+      this.jadwalKeluar,
+      this.batasAwalMasuk,
+      this.batasAwalKeluar,
+      this.batasAkhirMasuk,
+      this.batasAkhirKeluar,
+      this.terlambat,
+      this.pulangLebihAwal,
+      this.hariKerja,
+      this.id});
+
+  factory JamKerjaModel2.fromJson(DocumentSnapshot json) {
+    final data = json.data() as Map<String, dynamic>;
+    return (JamKerjaModel2(
+        nama: data['nama'],
+        kepg: data['kepegawaian'],
+        ket: data['ket'],
+        jadwalMasuk: _parseTime(data['jadwal_masuk']),
+        jadwalKeluar: _parseTime(data['jadwal_keluar']),
+        batasAwalMasuk: _parseTime(data['batasAwal_masuk']),
+        batasAwalKeluar: _parseTime(data['batasAwal_keluar']),
+        batasAkhirMasuk: _parseTime(data['batasAkhir_masuk']),
+        batasAkhirKeluar: _parseTime(data['batasAkhir_keluar']),
+        terlambat: _parseTime(data['keterlambatan']),
+        pulangLebihAwal: _parseTime(data['pulang_awal']),
+        hariKerja: data['hariKerja'],
+        id: data['id']));
+  }
+
+  static DateTime _parseTime(String timeString) {
+    final parts = timeString.split(':');
+    final hours = int.parse(parts[0]);
+    final minutes = int.parse(parts[1]);
+    return DateTime(0, 1, 1, hours, minutes);
+  }
+}

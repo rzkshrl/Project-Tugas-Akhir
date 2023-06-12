@@ -67,7 +67,7 @@ class AuthController extends GetxController {
       print("User Data : $checkUserData");
     }
 
-    final expirationTime = DateTime.now().add(const Duration(minutes: 10));
+    final expirationTime = DateTime.now().add(const Duration(hours: 5));
 
     userData.value = (UserModel(
         uid: auth.currentUser!.uid,
