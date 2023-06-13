@@ -19,7 +19,6 @@ import '../data/models/devicemodel.dart';
 import '../data/models/firestorescanlogmodel.dart';
 import '../theme/textstyle.dart';
 import '../utils/dialogDefault.dart';
-import '../utils/stringGlobal.dart';
 import '../utils/urlHTTP.dart';
 
 import 'dart:async';
