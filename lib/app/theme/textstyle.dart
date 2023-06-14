@@ -298,8 +298,8 @@ getTextAlertBtn2(BuildContext context) {
 
 getTextAlertMobile(BuildContext context) {
   return TextStyle(
-      fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [
-        const Condition.equals(name: MOBILE, value: 15.0),
+      fontSize: ResponsiveValue(context, defaultValue: 17.0, valueWhen: [
+        const Condition.equals(name: MOBILE, value: 17.0),
       ]).value,
       color: Yellow1,
       fontWeight: FontWeight.w300);

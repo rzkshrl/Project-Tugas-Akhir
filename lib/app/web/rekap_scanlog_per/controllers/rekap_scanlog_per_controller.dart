@@ -15,8 +15,6 @@ import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../utils/textfield.dart';
 
 class RekapScanlogPerController extends GetxController {
-  late Stream<List<KepegawaianModel>> firestoreKepegawaianList;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<KepegawaianModel> kepegawaianList = [];
   var pinList = <String>[].obs;
   var namaList = <String>[].obs;
@@ -30,21 +28,23 @@ class RekapScanlogPerController extends GetxController {
   final end = DateTime.now().obs;
   final dateFormatter = DateFormat('d MMMM yyyy', 'id-ID');
 
+  late Future<List<KepegawaianModel>> firestoreKepegawaianList;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   @override
   void onInit() {
     super.onInit();
-    firestoreKepegawaianList = firestore
-        .collection('Kepegawaian')
-        .snapshots()
-        .map((querySnapshot) => querySnapshot.docs
-            .map((documentSnapshot) =>
-                KepegawaianModel.fromSnapshot(documentSnapshot))
-            .toList());
-    fetchPinData().then((_) {
-      update();
-    });
+    firestoreKepegawaianList = getFirestoreKepegawaianList();
+  }
 
-    fetchKepegawaianList();
+  Future<List<KepegawaianModel>> getFirestoreKepegawaianList() async {
+    QuerySnapshot querySnapshot =
+        await firestore.collection('Kepegawaian').get();
+    List<KepegawaianModel> kepegawaianList = querySnapshot.docs
+        .map((documentSnapshot) =>
+            KepegawaianModel.fromSnapshot(documentSnapshot))
+        .toList();
+    return kepegawaianList;
   }
 
   Future fetchPinData() async {
@@ -64,15 +64,6 @@ class RekapScanlogPerController extends GetxController {
     var startFormatted = dateFormatter.format(start!);
     var endFormatted = dateFormatter.format(end.value);
     textC.datepickerC.text = '$startFormatted - $endFormatted';
-  }
-
-  void fetchKepegawaianList() {
-    firestoreKepegawaianList.listen((list) {
-      kepegawaianList = list;
-      pinList.value =
-          kepegawaianList.map((kepegawaian) => kepegawaian.pin!).toList();
-      update();
-    });
   }
 
   Future<void> unduhPDF(String pin) async {

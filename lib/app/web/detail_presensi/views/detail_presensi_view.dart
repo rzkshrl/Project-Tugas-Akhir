@@ -44,268 +44,303 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
       print(pin);
     }
 
-    return Scaffold(
-      backgroundColor: light,
-      drawer: const NavigationDrawerView(),
-      drawerScrimColor: light.withOpacity(0.6),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: AppBar(
-          backgroundColor: light,
-          automaticallyImplyLeading: false,
-          bottomOpacity: 0.0,
-          elevation: 0.0,
-          leading: null,
-          title: Padding(
-            padding: EdgeInsets.only(
-              left: 1.5.w,
-              top: 26,
+    return FutureBuilder(
+        future: simulateDelay(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Tampilkan LoadingWidget selama delay
+            return const LoadingView();
+          }
+          return Scaffold(
+            backgroundColor: light,
+            drawer: const NavigationDrawerView(),
+            drawerScrimColor: light.withOpacity(0.6),
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(80),
+              child: AppBar(
+                backgroundColor: light,
+                automaticallyImplyLeading: false,
+                bottomOpacity: 0.0,
+                elevation: 0.0,
+                leading: null,
+                title: Padding(
+                  padding: EdgeInsets.only(
+                    left: 1.5.w,
+                    top: 26,
+                  ),
+                  child: Builder(builder: (context) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            iconSize: 30,
+                            onPressed: () {
+                              Scaffold.of(context).openDrawer();
+                            },
+                            tooltip: MaterialLocalizations.of(context)
+                                .openAppDrawerTooltip,
+                            icon: FaIcon(
+                              FontAwesomeIcons.bars,
+                              color: Blue1,
+                            )),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right: 1.5.w,
+                          ),
+                          child: IconButton(
+                            color: Blue1,
+                            onPressed: () => authC.logout(),
+                            icon: const Icon(IconlyLight.logout),
+                            iconSize: 30,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+              ),
             ),
-            child: Builder(builder: (context) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      iconSize: 30,
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                      tooltip: MaterialLocalizations.of(context)
-                          .openAppDrawerTooltip,
-                      icon: FaIcon(
-                        FontAwesomeIcons.bars,
-                        color: Blue1,
-                      )),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      right: 1.5.w,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 4.w, top: 2.h, right: 4.w, bottom: 8.h),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Detail Presensi',
+                          style: getTextHeader2(context),
+                        ),
+                      ],
                     ),
-                    child: IconButton(
-                      color: Blue1,
-                      onPressed: () => authC.logout(),
-                      icon: const Icon(IconlyLight.logout),
-                      iconSize: 30,
+                    SizedBox(
+                      height: 3.h,
                     ),
-                  ),
-                ],
-              );
-            }),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              EdgeInsets.only(left: 4.w, top: 2.h, right: 4.w, bottom: 8.h),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Detail Presensi',
-                    style: getTextHeader2(context),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 3.h,
-              ),
-              Container(
-                decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
-                width: 70.w,
-                height: 75.h,
-                child: FutureBuilder<QuerySnapshot>(
-                    future: firestore
-                        .collection('Kepegawaian')
-                        .doc(pin)
-                        .collection('Presensi')
-                        .get(),
-                    builder: (context, snap) {
-                      if (!snap.hasData) {
-                        return const LoadingView();
-                      }
-                      final List<PresensiModel> presensiList = snap.data!.docs
-                          .map((e) => PresensiModel.fromJson(
-                              e.data() as Map<String, dynamic>))
-                          .toList();
-                      return FutureBuilder(
-                          future: liburC.firestoreHolidayList,
+                    Container(
+                      decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
+                      width: 70.w,
+                      height: 75.h,
+                      child: FutureBuilder<QuerySnapshot>(
+                          future: firestore
+                              .collection('Kepegawaian')
+                              .doc(pin)
+                              .collection('Presensi')
+                              .get(),
                           builder: (context, snap) {
                             if (!snap.hasData) {
                               return const LoadingView();
                             }
-                            final holidayList =
-                                snap.data! as List<HolidayModel>;
-
+                            final List<PresensiModel> presensiList = snap
+                                .data!.docs
+                                .map((e) => PresensiModel.fromJson(
+                                    e.data() as Map<String, dynamic>))
+                                .toList();
                             return FutureBuilder(
-                                future: pengecualianC.firestorePengecualianList,
+                                future: liburC.firestoreHolidayList,
                                 builder: (context, snap) {
                                   if (!snap.hasData) {
                                     return const LoadingView();
                                   }
-                                  final pengecualianList =
-                                      snap.data! as List<PengecualianModel>;
+                                  final holidayList =
+                                      snap.data! as List<HolidayModel>;
 
-                                  List<PengecualianIterableModel>
-                                      pengecualianRangeList = [];
+                                  return FutureBuilder(
+                                      future: pengecualianC
+                                          .firestorePengecualianList,
+                                      builder: (context, snap) {
+                                        if (!snap.hasData) {
+                                          return const LoadingView();
+                                        }
+                                        final pengecualianList = snap.data!
+                                            as List<PengecualianModel>;
 
-                                  var pengecualian = pengecualianList
-                                      .firstWhere((pengecualian) =>
-                                          pengecualian.statusPengecualian ==
-                                          'Ya');
+                                        List<PengecualianIterableModel>
+                                            pengecualianRangeList = [];
 
-                                  generateDateRangePengecualian(
-                                      pengecualianRangeList, pengecualian);
-                                  return Column(
-                                    children: [
-                                      Expanded(
-                                        child: SfCalendar(
-                                          view: CalendarView.month,
-                                          viewHeaderStyle: ViewHeaderStyle(
-                                              backgroundColor: light),
-                                          controller: c.controller,
-                                          todayHighlightColor: Blue1,
-                                          cellBorderColor: Grey1,
-                                          showNavigationArrow: true,
-                                          showDatePickerButton: true,
-                                          allowedViews: const [
-                                            CalendarView.month,
-                                            CalendarView.day,
-                                            CalendarView.week,
-                                          ],
-                                          appointmentTextStyle:
-                                              c.appointmentTextStyle,
-                                          monthViewSettings:
-                                              const MonthViewSettings(
-                                            dayFormat: 'EEE',
-                                            appointmentDisplayMode:
-                                                MonthAppointmentDisplayMode
-                                                    .indicator,
-                                            showTrailingAndLeadingDates: true,
-                                            showAgenda: true,
-                                            agendaViewHeight: 140,
-                                          ),
-                                          selectionDecoration: BoxDecoration(
-                                              color: Colors.transparent,
-                                              border: Border.all(color: Blue1)),
-                                          dataSource: _PresensiDataSource(
-                                              presensiList,
-                                              holidayList,
-                                              pengecualianList),
-                                          monthCellBuilder:
-                                              (BuildContext context,
-                                                  MonthCellDetails details) {
-                                            final DateTime date = details.date;
-                                            final bool isLeadingDate = details
-                                                        .visibleDates[0]
-                                                        .month ==
-                                                    date.month &&
-                                                details.visibleDates[0].year ==
-                                                    date.year;
-                                            final bool isTrailingDate = details
-                                                        .visibleDates[details
-                                                                .visibleDates
-                                                                .length -
-                                                            1]
-                                                        .month ==
-                                                    date.month &&
-                                                details
-                                                        .visibleDates[details
-                                                                .visibleDates
-                                                                .length -
-                                                            1]
-                                                        .year ==
-                                                    date.year;
-                                            final bool isToday = date.year ==
-                                                    DateTime.now().year &&
-                                                date.month ==
-                                                    DateTime.now().month &&
-                                                date.day == DateTime.now().day;
+                                        var pengecualian = pengecualianList
+                                            .firstWhere((pengecualian) =>
+                                                pengecualian
+                                                    .statusPengecualian ==
+                                                'Ya');
 
-                                            final bool isHoliday =
-                                                holidayList.any((data) =>
-                                                    DateTime.parse(data.date!)
-                                                            .year ==
-                                                        date.year &&
-                                                    DateTime.parse(data.date!)
-                                                            .month ==
-                                                        date.month &&
-                                                    DateTime.parse(data.date!)
-                                                            .day ==
-                                                        date.day);
-
-                                            final bool isHolidayRutin =
-                                                pengecualianRangeList.any(
-                                                    (data) =>
-                                                        data.date!.year ==
-                                                            date.year &&
-                                                        data.date!.month ==
-                                                            date.month &&
-                                                        data.date!.day ==
-                                                            date.day);
-                                            if (details.date.weekday == 7) {
-                                              return Center(
-                                                child: Text(date.day.toString(),
-                                                    style:
-                                                        getTextCalendarHoliday(
-                                                            context)),
-                                              );
-                                            } else if (isHoliday) {
-                                              return Center(
-                                                child: Text(date.day.toString(),
-                                                    style:
-                                                        getTextCalendarHoliday(
-                                                            context)),
-                                              );
-                                            } else if (isHolidayRutin) {
-                                              return Center(
-                                                child: Text(date.day.toString(),
-                                                    style:
-                                                        getTextCalendarHolidayRutin(
-                                                            context)),
-                                              );
-                                            } else if (isLeadingDate ||
-                                                isTrailingDate) {
-                                              return Center(
-                                                child: Text(date.day.toString(),
-                                                    style: getTextCalendarTrail(
-                                                        context)),
-                                              );
-                                            } else {
-                                              return Container(
-                                                decoration: isToday
-                                                    ? BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: Blue1,
-                                                      )
-                                                    : null,
-                                                child: Center(
-                                                  child: Text(
-                                                      date.day.toString(),
-                                                      style: isToday
-                                                          ? getTextCalendarToday(
-                                                              context)
-                                                          : getTextCalendarDef(
-                                                              context)),
+                                        generateDateRangePengecualian(
+                                            pengecualianRangeList,
+                                            pengecualian);
+                                        return Column(
+                                          children: [
+                                            Expanded(
+                                              child: SfCalendar(
+                                                view: CalendarView.month,
+                                                viewHeaderStyle:
+                                                    ViewHeaderStyle(
+                                                        backgroundColor: light),
+                                                controller: c.controller,
+                                                todayHighlightColor: Blue1,
+                                                cellBorderColor: Grey1,
+                                                showNavigationArrow: true,
+                                                showDatePickerButton: true,
+                                                allowedViews: const [
+                                                  CalendarView.month,
+                                                  CalendarView.day,
+                                                  CalendarView.week,
+                                                ],
+                                                appointmentTextStyle:
+                                                    c.appointmentTextStyle,
+                                                monthViewSettings:
+                                                    const MonthViewSettings(
+                                                  dayFormat: 'EEE',
+                                                  appointmentDisplayMode:
+                                                      MonthAppointmentDisplayMode
+                                                          .indicator,
+                                                  showTrailingAndLeadingDates:
+                                                      true,
+                                                  showAgenda: true,
+                                                  agendaViewHeight: 140,
                                                 ),
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  );
+                                                selectionDecoration:
+                                                    BoxDecoration(
+                                                        color:
+                                                            Colors.transparent,
+                                                        border: Border.all(
+                                                            color: Blue1)),
+                                                dataSource: _PresensiDataSource(
+                                                    presensiList,
+                                                    holidayList,
+                                                    pengecualianList),
+                                                monthCellBuilder: (BuildContext
+                                                        context,
+                                                    MonthCellDetails details) {
+                                                  final DateTime date =
+                                                      details.date;
+                                                  final bool isLeadingDate =
+                                                      details.visibleDates[0]
+                                                                  .month ==
+                                                              date.month &&
+                                                          details
+                                                                  .visibleDates[
+                                                                      0]
+                                                                  .year ==
+                                                              date.year;
+                                                  final bool isTrailingDate = details
+                                                              .visibleDates[details
+                                                                      .visibleDates
+                                                                      .length -
+                                                                  1]
+                                                              .month ==
+                                                          date.month &&
+                                                      details
+                                                              .visibleDates[details
+                                                                      .visibleDates
+                                                                      .length -
+                                                                  1]
+                                                              .year ==
+                                                          date.year;
+                                                  final bool isToday = date
+                                                              .year ==
+                                                          DateTime.now().year &&
+                                                      date.month ==
+                                                          DateTime.now()
+                                                              .month &&
+                                                      date.day ==
+                                                          DateTime.now().day;
+
+                                                  final bool isHoliday =
+                                                      holidayList.any((data) =>
+                                                          DateTime.parse(data
+                                                                      .date!)
+                                                                  .year ==
+                                                              date.year &&
+                                                          DateTime.parse(data
+                                                                      .date!)
+                                                                  .month ==
+                                                              date.month &&
+                                                          DateTime.parse(data
+                                                                      .date!)
+                                                                  .day ==
+                                                              date.day);
+
+                                                  final bool isHolidayRutin =
+                                                      pengecualianRangeList.any(
+                                                          (data) =>
+                                                              data.date!.year ==
+                                                                  date.year &&
+                                                              data.date!
+                                                                      .month ==
+                                                                  date.month &&
+                                                              data.date!.day ==
+                                                                  date.day);
+                                                  if (details.date.weekday ==
+                                                      7) {
+                                                    return Center(
+                                                      child: Text(
+                                                          date.day.toString(),
+                                                          style:
+                                                              getTextCalendarHoliday(
+                                                                  context)),
+                                                    );
+                                                  } else if (isHoliday) {
+                                                    return Center(
+                                                      child: Text(
+                                                          date.day.toString(),
+                                                          style:
+                                                              getTextCalendarHoliday(
+                                                                  context)),
+                                                    );
+                                                  } else if (isHolidayRutin) {
+                                                    return Center(
+                                                      child: Text(
+                                                          date.day.toString(),
+                                                          style:
+                                                              getTextCalendarHolidayRutin(
+                                                                  context)),
+                                                    );
+                                                  } else if (isLeadingDate ||
+                                                      isTrailingDate) {
+                                                    return Center(
+                                                      child: Text(
+                                                          date.day.toString(),
+                                                          style:
+                                                              getTextCalendarTrail(
+                                                                  context)),
+                                                    );
+                                                  } else {
+                                                    return Container(
+                                                      decoration: isToday
+                                                          ? BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              color: Blue1,
+                                                            )
+                                                          : null,
+                                                      child: Center(
+                                                        child: Text(
+                                                            date.day.toString(),
+                                                            style: isToday
+                                                                ? getTextCalendarToday(
+                                                                    context)
+                                                                : getTextCalendarDef(
+                                                                    context)),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      });
                                 });
-                          });
-                    }),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+                          }),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
 

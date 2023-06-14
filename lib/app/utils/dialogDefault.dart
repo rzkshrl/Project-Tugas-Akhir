@@ -629,13 +629,13 @@ Widget dialogAlertBtnAnimation(
     backgroundColor: Blue1,
     child: SizedBox(
       width: 350,
-      height: 336,
+      height: 386,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 143.97,
-            height: 139.02,
+            width: 153.97,
+            height: 149.02,
             decoration: BoxDecoration(
                 border: Border.all(color: Yellow1),
                 borderRadius: BorderRadius.circular(12)),

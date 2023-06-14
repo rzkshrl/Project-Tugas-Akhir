@@ -66,7 +66,7 @@ class ProjectTugasAkhir extends StatelessWidget {
             }
 
             return FutureBuilder(
-                future: Future.delayed(const Duration(seconds: 0)),
+                future: simulateDelay(),
                 builder: (context, snapshot) {
                   if (snap.connectionState == ConnectionState.waiting) {
                     return const LoadingView();

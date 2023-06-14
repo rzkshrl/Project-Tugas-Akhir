@@ -16,6 +16,7 @@ import '../../../controller/auth_controller.dart';
 import '../../../utils/dialogDefault.dart';
 
 import '../../../mobile/beranda_mobile/views/beranda_mobile_view.dart';
+import '../../../utils/loading.dart';
 import '../../../utils/session.dart';
 import '../../../web/super-admin/views/super_admin_view.dart';
 import '../controllers/home_controller.dart';
@@ -154,29 +155,38 @@ class HomeView extends GetView<HomeController> {
           );
         } else {
           if (roles == pegawai) {
-            return Scaffold(
-              body: Obx(() => pages[controller.currentIndex.value]),
-              bottomNavigationBar: Container(
-                decoration: BoxDecoration(
-                  color: Blue1,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(right: 9.w, left: 9.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      navBarItem(context, IconlyLight.home, 0),
-                      navBarItem(context, FontAwesomeIcons.fingerprint, 1),
-                      navBarItem(context, IconlyLight.profile, 2),
-                    ],
-                  ),
-                ),
-              ),
-            );
+            return FutureBuilder(
+                future: simulateDelay(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Tampilkan LoadingWidget selama delay
+                    return const LoadingView();
+                  }
+                  return Scaffold(
+                    body: Obx(() => pages[controller.currentIndex.value]),
+                    bottomNavigationBar: Container(
+                      decoration: BoxDecoration(
+                        color: Blue1,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 9.w, left: 9.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            navBarItem(context, IconlyLight.home, 0),
+                            navBarItem(
+                                context, FontAwesomeIcons.fingerprint, 1),
+                            navBarItem(context, IconlyLight.profile, 2),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                });
           } else {
             return Scaffold(
               backgroundColor: error.withOpacity(0.5),
@@ -188,9 +198,9 @@ class HomeView extends GetView<HomeController> {
                   "Keluar",
                   "Salah Akun!",
                   "Aplikasi ini hanya untuk pegawai, \nsilahkan masuk menggunakan akun pegawai.",
-                  getTextAlert(context),
-                  getTextAlertSub(context),
-                  getTextAlertBtn(context)),
+                  getTextAlertMobile(context),
+                  getTextAlertSubMobile(context),
+                  getTextAlertBtnMobile(context)),
             );
           }
         }

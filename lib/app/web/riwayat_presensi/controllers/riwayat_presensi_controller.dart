@@ -12,13 +12,6 @@ class RiwayatPresensiController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // firestoreKepegawaianList = firestore
-    //     .collection('Kepegawaian')
-    //     .snapshots()
-    //     .map((querySnapshot) => querySnapshot.docs
-    //         .map((documentSnapshot) =>
-    //             KepegawaianModel.fromSnapshot(documentSnapshot))
-    //         .toList());
     firestoreKepegawaianList = getFirestoreKepegawaianList();
   }
 

@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
+import 'package:project_tugas_akhir/app/utils/loading.dart';
 
 import '../data/models/usermodel.dart';
 import '../routes/app_pages.dart';
@@ -143,9 +144,7 @@ class AuthController extends GetxController {
           );
         }
 
-        await Future.delayed(
-          const Duration(seconds: 5),
-        );
+        await simulateDelay();
         Get.back();
 
         await Get.offAllNamed(Routes.HOME);
@@ -230,6 +229,41 @@ class AuthController extends GetxController {
               'assets/lootie/warning.json',
               "Kata sandi yang dimasukkan salah!",
               getTextAlertMobile(context)));
+        }
+      } else if (e.code == 'invalid-email') {
+        if (kDebugMode) {
+          print('Email address is not valid.');
+        }
+        if (kIsWeb) {
+          Get.dialog(dialogAlertOnlyAnimation(
+              'assets/lootie/warning.json',
+              "Terjadi Kesalahan.",
+              "Email salah. Periksa kembali email anda.",
+              getTextAlert(context),
+              getTextAlertSub(context)));
+        } else {
+          Get.dialog(dialogAlertOnlyAnimation(
+              'assets/lootie/warning.json',
+              "Terjadi Kesalahan.",
+              "Email valid. Periksa kembali email anda.",
+              getTextAlertMobile(context),
+              getTextAlertSubMobile(context)));
+        }
+      } else {
+        if (kIsWeb) {
+          Get.dialog(dialogAlertOnlyAnimation(
+              'assets/lootie/warning.json',
+              "Terjadi Kesalahan.",
+              "Periksa isian form anda.",
+              getTextAlert(context),
+              getTextAlertSub(context)));
+        } else {
+          Get.dialog(dialogAlertOnlyAnimation(
+              'assets/lootie/warning.json',
+              "Terjadi Kesalahan.",
+              "Periksa isian form anda.",
+              getTextAlertMobile(context),
+              getTextAlertSubMobile(context)));
         }
       }
     } catch (e) {

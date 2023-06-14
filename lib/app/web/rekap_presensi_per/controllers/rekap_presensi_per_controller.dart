@@ -19,8 +19,6 @@ import '../../../utils/fungsiRekap.dart';
 import '../../../utils/textfield.dart';
 
 class RekapPresensiPerController extends GetxController {
-  late Stream<List<KepegawaianModel>> firestoreKepegawaianList;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<KepegawaianModel> kepegawaianList = [];
   List<JamKerjaModel> jamKerjaList = [];
   List<HolidayModel> holidayList = [];
@@ -52,22 +50,23 @@ class RekapPresensiPerController extends GetxController {
   final end = DateTime.now().obs;
   final dateFormatter = DateFormat('d MMMM yyyy', 'id-ID');
 
+  late Future<List<KepegawaianModel>> firestoreKepegawaianList;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   @override
   void onInit() {
     super.onInit();
+    firestoreKepegawaianList = getFirestoreKepegawaianList();
+  }
 
-    firestoreKepegawaianList = firestore
-        .collection('Kepegawaian')
-        .snapshots()
-        .map((querySnapshot) => querySnapshot.docs
-            .map((documentSnapshot) =>
-                KepegawaianModel.fromSnapshot(documentSnapshot))
-            .toList());
-    fetchPinData().then((_) {
-      update();
-    });
-
-    fetchKepegawaianList();
+  Future<List<KepegawaianModel>> getFirestoreKepegawaianList() async {
+    QuerySnapshot querySnapshot =
+        await firestore.collection('Kepegawaian').get();
+    List<KepegawaianModel> kepegawaianList = querySnapshot.docs
+        .map((documentSnapshot) =>
+            KepegawaianModel.fromSnapshot(documentSnapshot))
+        .toList();
+    return kepegawaianList;
   }
 
   Future fetchPinData() async {
@@ -87,15 +86,6 @@ class RekapPresensiPerController extends GetxController {
     var startFormatted = dateFormatter.format(start!);
     var endFormatted = dateFormatter.format(end.value);
     textC.datepickerC.text = '$startFormatted - $endFormatted';
-  }
-
-  void fetchKepegawaianList() {
-    firestoreKepegawaianList.listen((list) {
-      kepegawaianList = list;
-      pinList.value =
-          kepegawaianList.map((kepegawaian) => kepegawaian.pin!).toList();
-      update();
-    });
   }
 
   void hitungKeterlambatanPulangLebihAwal(

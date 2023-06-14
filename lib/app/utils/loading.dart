@@ -10,7 +10,11 @@ class LoadingView extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: Center(
-              child: Lottie.asset('assets/lootie/warning2.json', height: 85))),
+              child: Lottie.asset('assets/lootie/loading2.json', height: 135))),
     );
   }
+}
+
+Future<void> simulateDelay() async {
+  await Future.delayed(const Duration(milliseconds: 1500));
 }
