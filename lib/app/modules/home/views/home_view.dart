@@ -135,6 +135,7 @@ class HomeView extends GetView<HomeController> {
         ];
 
         String? roles = c.userData.value.role;
+        String? status = c.userData.value.status;
         if (kDebugMode) {
           print("ROLES MOBILE : $roles");
         }
@@ -149,6 +150,21 @@ class HomeView extends GetView<HomeController> {
                 "Keluar",
                 "Terjadi Masalah!",
                 "Silahkan masuk ulang.",
+                getTextAlertMobile(context),
+                getTextAlertSubMobile(context),
+                getTextAlertBtnMobile(context)),
+          );
+        } else if (status == 'false') {
+          return Scaffold(
+            backgroundColor: error.withOpacity(0.5),
+            body: dialogAlertBtnAnimation(() {
+              authC.logout();
+            },
+                'assets/lootie/warning.json',
+                111.29,
+                "Keluar",
+                "Terjadi Masalah!",
+                "Akun dinonaktifkan.",
                 getTextAlertMobile(context),
                 getTextAlertSubMobile(context),
                 getTextAlertBtnMobile(context)),
