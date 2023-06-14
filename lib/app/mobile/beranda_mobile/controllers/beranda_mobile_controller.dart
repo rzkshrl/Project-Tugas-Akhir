@@ -117,8 +117,10 @@ class BerandaMobileController extends GetxController {
     QuerySnapshot<Map<String, dynamic>> holidaySnapshot;
     QuerySnapshot<Map<String, dynamic>> jamKerjaSnapshot;
     QuerySnapshot<Map<String, dynamic>> pengecualianSnapshot;
-    final previousMonth = DateTime(now.year, now.month - 1, now.day);
+    final previousMonth = DateTime(now.year, now.month - 1, 1);
+    final nowMonth = DateTime(now.year, now.month, 1);
     start = previousMonth;
+    end.value = nowMonth;
 
     pin.value = authC.userData.value.pin!;
 

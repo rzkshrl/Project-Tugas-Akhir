@@ -79,7 +79,6 @@ class RiwayatPresensiMobileView
                         .collection('Kepegawaian')
                         .doc(pin)
                         .collection('Presensi')
-                        .orderBy("date_time", descending: false)
                         .get(),
                     builder: (context, snap) {
                       if (!snap.hasData) {
@@ -100,7 +99,7 @@ class RiwayatPresensiMobileView
 
                             return FutureBuilder(
                                 future: pengecualianC.firestorePengecualianList,
-                                builder: (context, snapshot) {
+                                builder: (context, snap) {
                                   if (!snap.hasData) {
                                     return const LoadingView();
                                   }

@@ -38,10 +38,10 @@ class HomeView extends GetView<HomeController> {
           } else {
             return Scaffold(
               backgroundColor: error.withOpacity(0.5),
-              body: dialogAlertBtn(() {
+              body: dialogAlertBtnAnimation(() {
                 authC.logout();
               },
-                  IconlyLight.danger,
+                  'assets/lootie/warning.json',
                   111.29,
                   "Keluar",
                   "Session Habis.",
@@ -54,10 +54,10 @@ class HomeView extends GetView<HomeController> {
         } else {
           return Scaffold(
             backgroundColor: error.withOpacity(0.5),
-            body: dialogAlertBtn(() {
+            body: dialogAlertBtnAnimation(() {
               authC.logout();
             },
-                IconlyLight.danger,
+                'assets/lootie/warning.json',
                 111.29,
                 "Keluar",
                 "Session Habis.",
@@ -77,10 +77,10 @@ class HomeView extends GetView<HomeController> {
         if (roles == null || roles == '') {
           return Scaffold(
             backgroundColor: error.withOpacity(0.5),
-            body: dialogAlertBtn(() {
+            body: dialogAlertBtnAnimation(() {
               authC.logout();
             },
-                IconlyLight.danger,
+                'assets/lootie/warning.json',
                 111.29,
                 "Keluar",
                 "Terjadi Masalah!",
@@ -92,10 +92,10 @@ class HomeView extends GetView<HomeController> {
         } else if (status == 'false') {
           return Scaffold(
             backgroundColor: error.withOpacity(0.5),
-            body: dialogAlertBtn(() {
+            body: dialogAlertBtnAnimation(() {
               authC.logout();
             },
-                IconlyLight.danger,
+                'assets/lootie/warning.json',
                 111.29,
                 "Keluar",
                 "Terjadi Masalah!",
@@ -112,10 +112,10 @@ class HomeView extends GetView<HomeController> {
           } else {
             return Scaffold(
               backgroundColor: error.withOpacity(0.5),
-              body: dialogAlertBtn(() {
+              body: dialogAlertBtnAnimation(() {
                 authC.logout();
               },
-                  IconlyLight.danger,
+                  'assets/lootie/warning.json',
                   111.29,
                   "Keluar",
                   "Salah Akun!",
@@ -140,17 +140,17 @@ class HomeView extends GetView<HomeController> {
         if (roles == null) {
           return Scaffold(
             backgroundColor: error.withOpacity(0.5),
-            body: dialogAlertBtn(() {
+            body: dialogAlertBtnAnimation(() {
               authC.logout();
             },
-                IconlyLight.danger,
+                'assets/lootie/warning.json',
                 111.29,
                 "Keluar",
                 "Terjadi Masalah!",
                 "Silahkan masuk ulang.",
-                getTextAlert(context),
-                getTextAlertSub(context),
-                getTextAlertBtn(context)),
+                getTextAlertMobile(context),
+                getTextAlertSubMobile(context),
+                getTextAlertBtnMobile(context)),
           );
         } else {
           if (roles == pegawai) {
@@ -180,10 +180,10 @@ class HomeView extends GetView<HomeController> {
           } else {
             return Scaffold(
               backgroundColor: error.withOpacity(0.5),
-              body: dialogAlertBtn(() {
+              body: dialogAlertBtnAnimation(() {
                 authC.logout();
               },
-                  IconlyLight.danger,
+                  'assets/lootie/warning.json',
                   111.29,
                   "Keluar",
                   "Salah Akun!",

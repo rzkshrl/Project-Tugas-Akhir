@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.project_tugas_akhir">
+    package="com.rzkshrl.monitorpresence">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
    <application
-        android:label="project_tugas_akhir"
+        android:label="monitorpresence"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -42,11 +42,15 @@ class UbahProfilMobileController extends GetxController {
       }
       update();
     } else if (status == PermissionStatus.denied) {
-      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-          "Akses ke penyimpanan ditolak!.", getTextAlert(Get.context!)));
+      Get.dialog(dialogAlertOnlySingleMsgAnimationMobile(
+          'assets/lootie/warning.json',
+          "Akses ke penyimpanan ditolak!.",
+          getTextAlert(Get.context!)));
     } else {
-      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-          "Akses ke penyimpanan ditolak!.", getTextAlert(Get.context!)));
+      Get.dialog(dialogAlertOnlySingleMsgAnimationMobile(
+          'assets/lootie/warning.json',
+          "Akses ke penyimpanan ditolak!.",
+          getTextAlert(Get.context!)));
     }
   }
 
@@ -84,8 +88,10 @@ class UbahProfilMobileController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
-      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-          "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
+      Get.dialog(dialogAlertOnlySingleMsgAnimationMobile(
+          'assets/lootie/warning.json',
+          "Terjadi Kesalahan!.",
+          getTextAlert(Get.context!)));
     }
   }
 

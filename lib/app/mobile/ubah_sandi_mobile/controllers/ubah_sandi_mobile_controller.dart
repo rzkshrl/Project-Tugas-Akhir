@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 
 import '../../../theme/textstyle.dart';
 import '../../../utils/dialogDefault.dart';
@@ -20,8 +19,8 @@ class UbahSandiMobileController extends GetxController {
 
   void ubahSandi(String sandiLama, String sandiBaru) async {
     if (sandiLama == sandiBaru) {
-      Get.dialog(dialogAlertOnly(
-          IconlyLight.danger,
+      Get.dialog(dialogAlertOnlyAnimationMobile(
+          'assets/lootie/warning.json',
           "Terjadi Kesalahan!",
           "Kata sandi tidak boleh sama!",
           getTextAlertMobile(Get.context!),
@@ -47,8 +46,10 @@ class UbahSandiMobileController extends GetxController {
         if (kDebugMode) {
           print(e);
         }
-        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-            "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
+        Get.dialog(dialogAlertOnlySingleMsgAnimationMobile(
+            'assets/lootie/warning.json',
+            "Terjadi Kesalahan!.",
+            getTextAlert(Get.context!)));
       }
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 
 class LoadingView extends StatelessWidget {
@@ -10,10 +11,7 @@ class LoadingView extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: Center(
-        child: CircularProgressIndicator(
-          color: Blue1,
-        ),
-      )),
+              child: Lottie.asset('assets/lootie/warning2.json', height: 85))),
     );
   }
 }

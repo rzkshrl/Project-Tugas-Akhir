@@ -101,8 +101,8 @@ class APIController extends GetxController {
         if (kDebugMode) {
           print(e);
         }
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
             "Terjadi Kesalahan.",
             "Tidak dapat tersambung dengan internet.",
             getTextAlert(Get.context!),
@@ -110,8 +110,12 @@ class APIController extends GetxController {
       }
       if (kDebugMode) {
         print(e);
-        Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.",
-            "$e", getTextAlert(Get.context!), getTextAlertSub(Get.context!)));
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
+            "Terjadi Kesalahan.",
+            "$e",
+            getTextAlert(Get.context!),
+            getTextAlertSub(Get.context!)));
       }
     }
   }
@@ -151,8 +155,8 @@ class APIController extends GetxController {
       }
 
       if (res[0].data['Result'] == 'false') {
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
             "Terjadi Kesalahan.",
             "Tidak dapat mengambil data dari mesin.",
             getTextAlert(context),
@@ -183,8 +187,8 @@ class APIController extends GetxController {
         if (kDebugMode) {
           print(e);
         }
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
             "Terjadi Kesalahan.",
             "Tidak dapat tersambung dengan mesin.",
             getTextAlert(context),
@@ -210,8 +214,8 @@ class APIController extends GetxController {
     }
 
     if (res[0].data['Result'] == 'false') {
-      Get.dialog(dialogAlertOnly(
-          IconlyLight.danger,
+      Get.dialog(dialogAlertOnlyAnimation(
+          'assets/lootie/warning.json',
           "Terjadi Kesalahan.",
           "Tidak dapat mengambil data dari mesin.",
           getTextAlert(Get.context!),
@@ -576,8 +580,8 @@ class APIController extends GetxController {
         if (kDebugMode) {
           print(e);
         }
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
             "Terjadi Kesalahan.",
             "Tidak dapat tersambung dengan mesin.",
             getTextAlert(context),
@@ -585,8 +589,12 @@ class APIController extends GetxController {
       }
       if (kDebugMode) {
         print(e);
-        Get.dialog(dialogAlertOnly(IconlyLight.danger, "Terjadi Kesalahan.",
-            "$e", getTextAlert(context), getTextAlertSub(context)));
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
+            "Terjadi Kesalahan.",
+            "$e",
+            getTextAlert(context),
+            getTextAlertSub(context)));
       }
     }
   }

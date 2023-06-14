@@ -218,8 +218,8 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                         if (kDebugMode) {
                           print(e);
                         }
-                        Get.dialog(dialogAlertOnlySingleMsg(
-                            IconlyLight.danger,
+                        Get.dialog(dialogAlertOnlySingleMsgAnimationMobile(
+                            'assets/lootie/warning.json',
                             "Terjadi Kesalahan!.",
                             getTextAlertMobile(Get.context!)));
                       }

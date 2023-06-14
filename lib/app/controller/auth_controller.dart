@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 
 import '../data/models/usermodel.dart';
@@ -94,10 +93,10 @@ class AuthController extends GetxController {
   void lupaSandi(String email, BuildContext context) async {
     try {
       auth.sendPasswordResetEmail(email: email);
-      Get.dialog(dialogAlertBtn(() {
+      Get.dialog(dialogAlertBtnAnimation(() {
         Get.back();
       },
-          IconlyLight.tick_square,
+          'assets/lootie/finish.json',
           111.29,
           "OK",
           "Email sukses terkirim!",
@@ -106,8 +105,8 @@ class AuthController extends GetxController {
           getTextAlertSub(context),
           getTextAlertBtn(context)));
     } catch (e) {
-      Get.dialog(dialogAlertOnly(
-          IconlyLight.danger,
+      Get.dialog(dialogAlertOnlyAnimation(
+          'assets/lootie/warning.json',
           "Terjadi Kesalahan.",
           "Tidak dapat reset sandi.",
           getTextAlert(context),
@@ -152,13 +151,13 @@ class AuthController extends GetxController {
         await Get.offAllNamed(Routes.HOME);
       } else {
         if (kIsWeb) {
-          Get.dialog(dialogAlertBtn(() async {
+          Get.dialog(dialogAlertBtnAnimation(() async {
             myUser.user!.sendEmailVerification();
             Get.back();
-            await Get.dialog(dialogAlertBtn(() {
+            await Get.dialog(dialogAlertBtnAnimation(() {
               Get.back();
             },
-                IconlyLight.tick_square,
+                'assets/lootie/finish.json',
                 111.29,
                 "OK",
                 "Email sukses terkirim!",
@@ -167,7 +166,7 @@ class AuthController extends GetxController {
                 getTextAlertSub(context),
                 getTextAlertBtn(context)));
           },
-              IconlyLight.danger,
+              'assets/lootie/warning.json',
               111.29,
               "Kirim",
               "Email Belum Diverifikasi!",
@@ -176,13 +175,13 @@ class AuthController extends GetxController {
               getTextAlertSub(context),
               getTextAlertBtn(context)));
         } else {
-          Get.dialog(dialogAlertBtn(() async {
+          Get.dialog(dialogAlertBtnAnimation(() async {
             myUser.user!.sendEmailVerification();
             Get.back();
-            await Get.dialog(dialogAlertBtn(() {
+            await Get.dialog(dialogAlertBtnAnimation(() {
               Get.back();
             },
-                IconlyLight.tick_square,
+                'assets/lootie/finish.json',
                 111.29,
                 "OK",
                 "Email sukses terkirim!",
@@ -191,7 +190,7 @@ class AuthController extends GetxController {
                 getTextAlertSubMobile(context),
                 getTextAlertBtnMobile(context)));
           },
-              IconlyLight.danger,
+              'assets/lootie/warning.json',
               111.29,
               "Kirim",
               "Email Belum Diverifikasi!",
@@ -207,22 +206,28 @@ class AuthController extends GetxController {
           print('No user found for that email.');
         }
         if (kIsWeb) {
-          Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-              "Akun tidak ditemukan!", getTextAlert(context)));
+          Get.dialog(dialogAlertOnlySingleMsgAnimation(
+              'assets/lootie/warning.json',
+              "Akun tidak ditemukan!",
+              getTextAlert(context)));
         } else {
-          Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-              "Akun tidak ditemukan!", getTextAlertMobile(context)));
+          Get.dialog(dialogAlertOnlySingleMsgAnimation(
+              'assets/lootie/warning.json',
+              "Akun tidak ditemukan!",
+              getTextAlertMobile(context)));
         }
       } else if (e.code == 'wrong-password') {
         if (kDebugMode) {
           print('Wrong password provided for that user.');
         }
         if (kIsWeb) {
-          Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-              "Kata sandi yang dimasukkan salah!", getTextAlert(context)));
+          Get.dialog(dialogAlertOnlySingleMsgAnimation(
+              'assets/lootie/warning.json',
+              "Kata sandi yang dimasukkan salah!",
+              getTextAlert(context)));
         } else {
-          Get.dialog(dialogAlertOnlySingleMsg(
-              IconlyLight.danger,
+          Get.dialog(dialogAlertOnlySingleMsgAnimation(
+              'assets/lootie/warning.json',
               "Kata sandi yang dimasukkan salah!",
               getTextAlertMobile(context)));
         }
@@ -232,15 +237,15 @@ class AuthController extends GetxController {
         print(e);
       }
       if (kIsWeb) {
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
             "Terjadi Kesalahan.",
             "Tidak dapat masuk.",
             getTextAlert(context),
             getTextAlertSub(context)));
       } else {
-        Get.dialog(dialogAlertOnly(
-            IconlyLight.danger,
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
             "Terjadi Kesalahan.",
             "Tidak dapat masuk.",
             getTextAlertMobile(context),

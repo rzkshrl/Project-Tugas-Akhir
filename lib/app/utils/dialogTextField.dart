@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/web/hari_libur/controllers/hari_libur_controller.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
 import 'package:project_tugas_akhir/app/utils/datePicker.dart';
@@ -1143,16 +1142,16 @@ Widget dialogAddPengecualian(BuildContext context, Widget btnAction) {
                           value.startDate!, value.endDate!);
                       Get.back();
                     } else {
-                      Get.dialog(dialogAlertOnly(
-                          IconlyLight.danger,
+                      Get.dialog(dialogAlertOnlyAnimation(
+                          'assets/lootie/warning.json',
                           "Terjadi Kesalahan.",
                           "Pilih tanggal jangkauan\n(Senin-Sabtu, dsb)\n(tekan tanggal dua kali \nuntuk memilih tanggal yang sama)",
                           getTextAlert(context),
                           getTextAlertSub(context)));
                     }
                   } else {
-                    Get.dialog(dialogAlertOnly(
-                        IconlyLight.danger,
+                    Get.dialog(dialogAlertOnlyAnimation(
+                        'assets/lootie/warning.json',
                         "Terjadi Kesalahan.",
                         "Tanggal tidak dipilih.",
                         getTextAlert(context),

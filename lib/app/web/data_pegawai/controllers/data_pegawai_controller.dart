@@ -51,17 +51,20 @@ class DataPegawaiController extends GetxController {
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
               'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {
             Get.back();
+            Get.back();
           }),
         );
       } else {
-        Get.dialog(dialogAlertOnlySingleMsg(
-            IconlyLight.danger, "Data sudah ada.", getTextAlert(context)));
+        Get.dialog(dialogAlertOnlySingleMsgAnimation(
+            'assets/lootie/warning.json',
+            "Data sudah ada.",
+            getTextAlert(context)));
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+      Get.dialog(dialogAlertOnlySingleMsgAnimation('assets/lootie/warning.json',
           "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
     }
   }
@@ -80,6 +83,7 @@ class DataPegawaiController extends GetxController {
       dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
           'Berhasil Mengubah Data!', getTextAlert(Get.context!), () {
         Get.back();
+        Get.back();
       }),
     );
   }
@@ -95,14 +99,17 @@ class DataPegawaiController extends GetxController {
           dialogAlertBtnSingleMsgAnimation('assets/lootie/finish.json',
               'Berhasil Menghapus Data!', getTextAlert(Get.context!), () {
             Get.back();
+            Get.back();
           }),
         );
       } catch (e) {
         if (kDebugMode) {
           print(e);
         }
-        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-            "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
+        Get.dialog(dialogAlertOnlySingleMsgAnimation(
+            'assets/lootie/warning.json',
+            "Terjadi Kesalahan!.",
+            getTextAlert(Get.context!)));
       }
     },
         IconlyLight.danger,

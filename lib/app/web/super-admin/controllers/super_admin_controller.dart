@@ -110,14 +110,16 @@ class SuperAdminController extends GetxController {
           }),
         );
       } else {
-        Get.dialog(dialogAlertOnlySingleMsg(
-            IconlyLight.danger, "User sudah ada.", getTextAlert(Get.context!)));
+        Get.dialog(dialogAlertOnlySingleMsgAnimation(
+            'assets/lootie/warning.json',
+            "User sudah ada.",
+            getTextAlert(Get.context!)));
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+      Get.dialog(dialogAlertOnlySingleMsgAnimation('assets/lootie/warning.json',
           "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
     }
   }
@@ -142,8 +144,10 @@ class SuperAdminController extends GetxController {
         if (kDebugMode) {
           print(e);
         }
-        Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-            "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
+        Get.dialog(dialogAlertOnlySingleMsgAnimation(
+            'assets/lootie/warning.json',
+            "Terjadi Kesalahan!.",
+            getTextAlert(Get.context!)));
       }
     },
         IconlyLight.danger,
@@ -174,7 +178,7 @@ class SuperAdminController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
-      Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
+      Get.dialog(dialogAlertOnlySingleMsgAnimation('assets/lootie/warning.json',
           "Terjadi Kesalahan!.", getTextAlert(Get.context!)));
     }
   }

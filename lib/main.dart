@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:iconly/iconly.dart';
 import 'package:project_tugas_akhir/app/modules/home/views/home_view.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
 
@@ -54,8 +53,10 @@ class ProjectTugasAkhir extends StatelessWidget {
         future: _initialization,
         builder: (context, snap) {
           if (snap.hasError) {
-            Get.dialog(dialogAlertOnlySingleMsg(IconlyLight.danger,
-                "Terjadi Kesalahan!", getTextAlert(context)));
+            Get.dialog(dialogAlertOnlySingleMsgAnimation(
+                'assets/lootie/warning.json',
+                "Terjadi Kesalahan!",
+                getTextAlert(context)));
           }
           if (kIsWeb) {
             final sessionController = Get.put(SessionController());

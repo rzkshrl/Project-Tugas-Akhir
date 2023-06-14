@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -141,16 +142,16 @@ class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
                                       value.startDate!, value.endDate!);
                                   Get.back();
                                 } else {
-                                  Get.dialog(dialogAlertOnly(
-                                      IconlyLight.danger,
+                                  Get.dialog(dialogAlertOnlyAnimation(
+                                      'assets/lootie/warning.json',
                                       "Terjadi Kesalahan.",
                                       "Pilih tanggal jangkauan\n(Senin-Sabtu, dsb)\n(tekan tanggal dua kali \nuntuk memilih tanggal yang sama)",
                                       getTextAlert(context),
                                       getTextAlertSub(context)));
                                 }
                               } else {
-                                Get.dialog(dialogAlertOnly(
-                                    IconlyLight.danger,
+                                Get.dialog(dialogAlertOnlyAnimation(
+                                    'assets/lootie/warning.json',
                                     "Terjadi Kesalahan.",
                                     "Tanggal tidak dipilih.",
                                     getTextAlert(context),
@@ -232,10 +233,9 @@ class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
                             width: 90.w,
                             height: 70.h,
                             child: Center(
-                              child: CircularProgressIndicator(
-                                color: Blue1,
-                              ),
-                            )),
+                                child: Lottie.asset(
+                                    'assets/lootie/warning2.json',
+                                    height: 85))),
               ],
             ),
           ),
