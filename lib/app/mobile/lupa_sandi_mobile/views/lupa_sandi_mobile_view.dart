@@ -66,7 +66,7 @@ class LupaSandiMobileView extends GetView<LupaSandiMobileController> {
                     }
                   },
                   child: Text(
-                    'Masuk',
+                    'Kirim',
                     style: getTextLoginBtnActiveMobile(context),
                   ),
                 ),

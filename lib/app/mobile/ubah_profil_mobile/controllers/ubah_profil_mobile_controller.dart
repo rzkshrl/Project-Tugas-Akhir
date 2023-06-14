@@ -52,7 +52,12 @@ class UbahProfilMobileController extends GetxController {
 
   Future<void> ubahProfil(String nama, String bidang) async {
     String email = auth.currentUser!.email.toString();
-    DocumentReference docUsers = firestore.collection("Users").doc(email);
+    DocumentReference<Map<String, dynamic>> docUsers =
+        firestore.collection("Users").doc(email);
+    var getDataFromUser = await docUsers.get();
+    var getDataUser = getDataFromUser.data()!;
+    DocumentReference<Map<String, dynamic>> docKepg =
+        firestore.collection("Kepegawaian").doc(getDataUser['pin']);
     try {
       if (image != null) {
         File file = File(image!.path);
@@ -64,6 +69,10 @@ class UbahProfilMobileController extends GetxController {
 
         await docUsers
             .update({'name': nama, 'bidang': bidang, 'profile': urlImage});
+        await docKepg.update({
+          "nama": nama,
+          'bidang': bidang,
+        });
         Get.dialog(
           dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
               'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {

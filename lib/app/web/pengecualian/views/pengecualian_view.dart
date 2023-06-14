@@ -139,8 +139,8 @@ class PengecualianView extends GetView<PengecualianController> {
                   decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                   width: 90.w,
                   height: 70.h,
-                  child: StreamBuilder(
-                      stream: c.firestorePengecualianList,
+                  child: FutureBuilder(
+                      future: c.firestorePengecualianList,
                       builder: (context, snap) {
                         if (!snap.hasData) {
                           return const LoadingView();

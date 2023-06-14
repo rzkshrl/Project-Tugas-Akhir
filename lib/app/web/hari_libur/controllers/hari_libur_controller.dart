@@ -13,18 +13,24 @@ import '../../../utils/dialogDefault.dart';
 import '../../../utils/textfield.dart';
 
 class HariLiburController extends GetxController {
+  late Future<List<HolidayModel>> firestoreHolidayList;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late Stream<List<HolidayModel>> firestoreHolidayList;
+
   @override
   void onInit() {
     super.onInit();
-    firestoreHolidayList = firestore
+    firestoreHolidayList = getFirestoreHolidayList();
+  }
+
+  Future<List<HolidayModel>> getFirestoreHolidayList() async {
+    QuerySnapshot querySnapshot = await firestore
         .collection('Holiday')
         .orderBy('date', descending: true)
-        .snapshots()
-        .map((querySnapshot) => querySnapshot.docs
-            .map((documentSnapshot) => HolidayModel.fromJson(documentSnapshot))
-            .toList());
+        .get();
+    List<HolidayModel> holidayList = querySnapshot.docs
+        .map((documentSnapshot) => HolidayModel.fromJson(documentSnapshot))
+        .toList();
+    return holidayList;
   }
 
   var sortColumnIndex = 0.obs;

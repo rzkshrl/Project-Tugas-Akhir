@@ -35,7 +35,7 @@ class UbahSandiMobileController extends GetxController {
 
         Get.dialog(
           dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
-              'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {
+              'Berhasil Mengganti Kata Sandi!', getTextAlert(Get.context!), () {
             auth.signOut();
             Get.back();
             Get.back();

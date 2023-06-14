@@ -11,8 +11,25 @@ import '../../../theme/textstyle.dart';
 import '../../../utils/dialogDefault.dart';
 
 class JamKerjaController extends GetxController {
+  late Future<List<JamKerjaModel>> firestoreJamKerjaList;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late Stream<List<JamKerjaModel>> firestoreJamKerjaList;
+
+  @override
+  void onInit() {
+    super.onInit();
+    firestoreJamKerjaList = getFirestoreJamKerjaList();
+  }
+
+  Future<List<JamKerjaModel>> getFirestoreJamKerjaList() async {
+    QuerySnapshot querySnapshot = await firestore
+        .collection('JamKerja')
+        .orderBy('hariKerja', descending: true)
+        .get();
+    List<JamKerjaModel> jamKerjaList = querySnapshot.docs
+        .map((documentSnapshot) => JamKerjaModel.fromJson(documentSnapshot))
+        .toList();
+    return jamKerjaList;
+  }
 
   final isChecked = false.obs;
 
@@ -216,18 +233,6 @@ class JamKerjaController extends GetxController {
         getTextAlertSub(Get.context!),
         getTextAlertBtn(Get.context!),
         getTextAlertBtn2(Get.context!)));
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    firestoreJamKerjaList = firestore
-        .collection('JamKerja')
-        .orderBy('hariKerja', descending: true)
-        .snapshots()
-        .map((querySnapshot) => querySnapshot.docs
-            .map((documentSnapshot) => JamKerjaModel.fromJson(documentSnapshot))
-            .toList());
   }
 
   @override

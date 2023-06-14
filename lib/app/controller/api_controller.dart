@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:project_tugas_akhir/app/data/models/firestorejamkerjamodel.dart';
 import 'package:project_tugas_akhir/app/data/models/firestorepengecualianmodel.dart';
+import 'package:project_tugas_akhir/app/utils/stringGlobal.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -118,8 +119,7 @@ class APIController extends GetxController {
 
   Future<void> getDeviceInfo(BuildContext context) async {
     isLoading.value = true;
-    CollectionReference users = firestore.collection("Device");
-    final devices = await users.doc('mesin-1').get();
+    final devices = await firestore.collection("Device").doc('mesin-1').get();
     final deviceDataDB = devices.data() as Map<String, dynamic>;
 
     deviceData(DeviceModel.fromJson(deviceDataDB));
@@ -238,8 +238,7 @@ class APIController extends GetxController {
   Future<void> getAllPresenceData(BuildContext context) async {
     isLoading.value = true;
 
-    CollectionReference users = firestore.collection("Device");
-    final devices = await users.doc('mesin-1').get();
+    final devices = await firestore.collection("Device").doc('mesin-1').get();
     final deviceDataDB = devices.data() as Map<String, dynamic>;
 
     deviceData(DeviceModel.fromJson(deviceDataDB));
@@ -268,8 +267,11 @@ class APIController extends GetxController {
       showLoadingDialog();
 
       while (true) {
-        var response =
-            await Future.wait([dio.post('$url&page=$pageNumber&limit=100')]);
+        var response = await Future.wait([
+          dio.post(
+            '$url&page=$pageNumber&limit=100',
+          )
+        ]);
         final data = response[0].data['Data'];
 
         if (data != null) {
@@ -379,13 +381,38 @@ class APIController extends GetxController {
 
       for (var data in presenceData) {
         final presence = data.presence;
+        final pin = data.pin;
+
+        final kepegQuerySnapshot =
+            await firestore.collection('Kepegawaian').doc(pin).get();
+
+        final KepegawaianModel kepgData =
+            KepegawaianModel.fromSnapshot(kepegQuerySnapshot);
+
+        final jamKerjaQuerySnapshot = await firestore
+            .collection('JamKerja')
+            .where('kepegawaian', isEqualTo: kepgData.kepegawaian)
+            .get();
+
+        List<JamKerjaModel2> jamKerjaList = jamKerjaQuerySnapshot.docs
+            .map((doc) => JamKerjaModel2.fromJson(doc))
+            .toList();
+
+        final pengecualianTahunPresensiQuerySnapshot = await firestore
+            .collection('Pengecualian')
+            .where('statusPengecualian', isEqualTo: 'Bukan')
+            .get();
+
+        List<PengecualianModel> pengecualianList =
+            pengecualianTahunPresensiQuerySnapshot.docs
+                .map((doc) => PengecualianModel.fromJson(doc))
+                .toList();
 
         for (var presenceData in presence!) {
           final scanInDay = presenceData.scanInDay;
 
           for (var scanInDayData in scanInDay!) {
             final scan = scanInDayData.scan!;
-            final pin = data.pin;
 
             var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
             var datePresensi =
@@ -394,27 +421,9 @@ class APIController extends GetxController {
 
             var hari = DateFormat.EEEE('id_ID').format(scan);
 
-            final kepegQuerySnapshot =
-                await firestore.collection('Kepegawaian').doc(pin).get();
-
-            final KepegawaianModel kepgData =
-                KepegawaianModel.fromSnapshot(kepegQuerySnapshot);
-
-            final jamKerjaQuerySnapshot = await firestore
-                .collection('JamKerja')
-                .where('kepegawaian', isEqualTo: kepgData.kepegawaian)
-                .get();
-
-            List<JamKerjaModel2> jamKerjaList = jamKerjaQuerySnapshot.docs
-                .map((doc) => JamKerjaModel2.fromJson(doc))
-                .toList();
-
-            // Filter jamKerjaList berdasarkan kriteria yang Anda inginkan
             List<JamKerjaModel2> filteredJamKerjaList =
                 jamKerjaList.where((jamKerja) {
-              // Filter berdasarkan hariKerja
               if (jamKerja.hariKerja == hari) {
-                // Filter berdasarkan nama yang tidak mengandung 'RAMADHAN'
                 return !jamKerja.nama!.contains('RAMADHAN');
               } else {
                 return false;
@@ -434,55 +443,113 @@ class APIController extends GetxController {
               var batasAwalKeluar = jamKerja.batasAwalKeluar!;
               var batasAkhirKeluar = jamKerja.batasAkhirKeluar!;
 
-              var isMasuk = scan.isAfter(batasAwalMasuk) &&
-                  scan.isBefore(batasAkhirMasuk);
-              var isKeluar = scan.isAfter(batasAwalKeluar) &&
-                  scan.isBefore(batasAkhirKeluar);
+              if (kepgData.kepegawaian == 'PNS') {
+                if (jamKerja.nama!.toUpperCase().contains(ramadhanUpperCase)) {
+                  for (var pengecualianData in pengecualianList) {
+                    if (pengecualianData.nama!
+                        .toUpperCase()
+                        .contains(ramadhanUpperCase)) {
+                      var pengecualianDateStart = pengecualianData.dateStart!;
+                      var pengecualianDateEnd = pengecualianData.dateEnd!;
 
-              var doc = ''.obs;
-              if (isMasuk) {
-                doc.value = '$datePresensi Masuk';
-              } else if (isKeluar) {
-                doc.value = '$datePresensi Keluar';
+                      var isMasukPengecualian = scan.isAfter(batasAwalMasuk) &&
+                          scan.isBefore(batasAkhirMasuk) &&
+                          scan.isAfter(pengecualianDateStart) &&
+                          scan.isBefore(pengecualianDateEnd);
+                      var isKeluarPengecualian =
+                          scan.isAfter(batasAwalKeluar) &&
+                              scan.isBefore(batasAkhirKeluar) &&
+                              scan.isAfter(pengecualianDateStart) &&
+                              scan.isBefore(pengecualianDateEnd);
+
+                      var doc = ''.obs;
+                      if (isMasukPengecualian) {
+                        doc.value = '$datePresensi Masuk';
+                      } else if (isKeluarPengecualian) {
+                        doc.value = '$datePresensi Keluar';
+                      } else {
+                        doc.value = '$datePresensi Tanpa Keterangan';
+                      }
+
+                      var status = ''.obs;
+                      if (isMasukPengecualian) {
+                        status.value = 'Masuk';
+                      } else if (isKeluarPengecualian) {
+                        status.value = 'Keluar';
+                      } else {
+                        status.value = 'Tanpa Keterangan';
+                      }
+
+                      var dateTime = ''.obs;
+                      if (isMasukPengecualian) {
+                        dateTime.value = scan.toIso8601String();
+                      } else if (isKeluarPengecualian) {
+                        dateTime.value = scan.toIso8601String();
+                      } else {
+                        dateTime.value = '2000-01-01T00:00:00.000';
+                      }
+
+                      final scanlogPegawai = firestore
+                          .collection('Kepegawaian')
+                          .doc(pin)
+                          .collection('Presensi')
+                          .doc(
+                            doc.value,
+                          );
+
+                      if (pin != null) {
+                        await scanlogPegawai.set({
+                          'pin': pin,
+                          'date_time': dateTime.value,
+                          'status': status.value
+                        });
+                      }
+                    }
+                  }
+                }
               } else {
-                doc.value = '$datePresensi Tanpa Keterangan';
-              }
+                var isMasuk = scan.isAfter(batasAwalMasuk) &&
+                    scan.isBefore(batasAkhirMasuk);
+                var isKeluar = scan.isAfter(batasAwalKeluar) &&
+                    scan.isBefore(batasAkhirKeluar);
 
-              var status = ''.obs;
-              if (isMasuk) {
-                status.value = 'Masuk';
-              } else if (isKeluar) {
-                status.value = 'Keluar';
-              } else {
-                status.value = 'Tanpa Keterangan';
-              }
-
-              var dateTime = ''.obs;
-              if (isMasuk) {
-                dateTime.value = scan.toIso8601String();
-              } else if (isKeluar) {
-                dateTime.value = scan.toIso8601String();
-              } else {
-                dateTime.value = '2000-01-01T00:00:00.000';
-              }
-
-              final scanlogPegawai = firestore
-                  .collection('Kepegawaian')
-                  .doc(pin)
-                  .collection('Presensi')
-                  .doc(
-                    doc.value,
-                  );
-              final checkData = await scanlogPegawai.get();
-              if (pin != null) {
-                if (checkData.exists == false) {
-                  await scanlogPegawai.set({
-                    'pin': pin,
-                    'date_time': dateTime.value,
-                    'status': status.value
-                  });
+                var doc = ''.obs;
+                if (isMasuk) {
+                  doc.value = '$datePresensi Masuk';
+                } else if (isKeluar) {
+                  doc.value = '$datePresensi Keluar';
                 } else {
-                  await scanlogPegawai.update({
+                  doc.value = '$datePresensi Tanpa Keterangan';
+                }
+
+                var status = ''.obs;
+                if (isMasuk) {
+                  status.value = 'Masuk';
+                } else if (isKeluar) {
+                  status.value = 'Keluar';
+                } else {
+                  status.value = 'Tanpa Keterangan';
+                }
+
+                var dateTime = ''.obs;
+                if (isMasuk) {
+                  dateTime.value = scan.toIso8601String();
+                } else if (isKeluar) {
+                  dateTime.value = scan.toIso8601String();
+                } else {
+                  dateTime.value = '2000-01-01T00:00:00.000';
+                }
+
+                final scanlogPegawai = firestore
+                    .collection('Kepegawaian')
+                    .doc(pin)
+                    .collection('Presensi')
+                    .doc(
+                      doc.value,
+                    );
+
+                if (pin != null) {
+                  await scanlogPegawai.set({
                     'pin': pin,
                     'date_time': dateTime.value,
                     'status': status.value

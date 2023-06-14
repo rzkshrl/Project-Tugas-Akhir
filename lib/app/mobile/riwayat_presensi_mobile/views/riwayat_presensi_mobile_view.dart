@@ -74,13 +74,13 @@ class RiwayatPresensiMobileView
                     color: Blue1.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(18)),
                 height: 55.h,
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: firestore
+                child: FutureBuilder<QuerySnapshot>(
+                    future: firestore
                         .collection('Kepegawaian')
                         .doc(pin)
                         .collection('Presensi')
                         .orderBy("date_time", descending: false)
-                        .snapshots(),
+                        .get(),
                     builder: (context, snap) {
                       if (!snap.hasData) {
                         return const LoadingView();
@@ -89,8 +89,8 @@ class RiwayatPresensiMobileView
                           .map((e) => PresensiModel.fromJson(
                               e.data() as Map<String, dynamic>))
                           .toList();
-                      return StreamBuilder(
-                          stream: liburC.firestoreHolidayList,
+                      return FutureBuilder(
+                          future: liburC.firestoreHolidayList,
                           builder: (context, snap) {
                             if (!snap.hasData) {
                               return const LoadingView();
@@ -98,8 +98,8 @@ class RiwayatPresensiMobileView
                             final holidayList =
                                 snap.data! as List<HolidayModel>;
 
-                            return StreamBuilder(
-                                stream: pengecualianC.firestorePengecualianList,
+                            return FutureBuilder(
+                                future: pengecualianC.firestorePengecualianList,
                                 builder: (context, snapshot) {
                                   if (!snap.hasData) {
                                     return const LoadingView();

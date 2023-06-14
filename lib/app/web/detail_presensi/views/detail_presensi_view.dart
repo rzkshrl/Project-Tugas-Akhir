@@ -116,12 +116,12 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 70.w,
                 height: 75.h,
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: firestore
+                child: FutureBuilder<QuerySnapshot>(
+                    future: firestore
                         .collection('Kepegawaian')
                         .doc(pin)
                         .collection('Presensi')
-                        .snapshots(),
+                        .get(),
                     builder: (context, snap) {
                       if (!snap.hasData) {
                         return const LoadingView();
@@ -130,8 +130,8 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                           .map((e) => PresensiModel.fromJson(
                               e.data() as Map<String, dynamic>))
                           .toList();
-                      return StreamBuilder(
-                          stream: liburC.firestoreHolidayList,
+                      return FutureBuilder(
+                          future: liburC.firestoreHolidayList,
                           builder: (context, snap) {
                             if (!snap.hasData) {
                               return const LoadingView();
@@ -139,8 +139,8 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                             final holidayList =
                                 snap.data! as List<HolidayModel>;
 
-                            return StreamBuilder(
-                                stream: pengecualianC.firestorePengecualianList,
+                            return FutureBuilder(
+                                future: pengecualianC.firestorePengecualianList,
                                 builder: (context, snap) {
                                   if (!snap.hasData) {
                                     return const LoadingView();

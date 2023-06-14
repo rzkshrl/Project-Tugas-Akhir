@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_overrides
+// ignore_for_file: unnecessary_overrides, invalid_use_of_protected_member, unused_local_variable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -207,6 +207,7 @@ class BerandaMobileController extends GetxController {
             pengecualian.dateEnd!.year == start!.year);
 
     final int totalPresensi = combinedData.length;
+    int hadirCountHoliday = 0;
     int tidakHadirCount = 0;
 
     for (var presensi in combinedData) {
@@ -228,27 +229,23 @@ class BerandaMobileController extends GetxController {
           presensi.dateTimeKeluar!.hour == 0 &&
           presensi.dateTimeKeluar!.minute == 0;
 
-      if (isAbsen) {
+      if (isHoliday) {
+        hadirCountHoliday++;
+      } else if (isAbsen) {
         tidakHadirCount++;
       }
     }
 
     if (kDebugMode) {
       print('hadirCount: ${groupedData.length}');
-      print('tidakHadirCount: ${(tidakHadirCount - 1)}');
-      print('totalPresensi: ${(totalPresensi - 1)}');
+      print('tidakHadirCount: $tidakHadirCount');
+      print('totalPresensi: $totalPresensi');
     }
 
-    double persentaseKetidakhadiran =
-        ((tidakHadirCount - 1) / (totalPresensi - 1)) * 100;
+    double persentaseKetidakhadiran = (tidakHadirCount / totalPresensi) * 100;
     double persentaseKehadiran = 100 - persentaseKetidakhadiran;
 
-    if (persentaseKehadiran > 100) {
-      persentaseKehadiran = 100.0;
-    } else if (persentaseKetidakhadiran > 100) {
-      persentaseKetidakhadiran = 100.0;
-    }
-
+    percentageList.value.clear();
     percentageList.value = [
       PercentageModel('Hadir', persentaseKehadiran),
       PercentageModel('Tidak Hadir', persentaseKetidakhadiran),

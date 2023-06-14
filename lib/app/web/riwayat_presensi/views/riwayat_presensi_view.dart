@@ -135,8 +135,8 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                 decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                 width: 90.w,
                 height: 70.h,
-                child: StreamBuilder<List<KepegawaianModel>>(
-                    stream: controller.firestoreKepegawaianList,
+                child: FutureBuilder<List<KepegawaianModel>>(
+                    future: controller.firestoreKepegawaianList,
                     builder: (context, snap) {
                       if (!snap.hasData) {
                         return const LoadingView();
