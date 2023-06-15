@@ -225,6 +225,26 @@ getTextTableData(BuildContext context) {
       fontWeight: FontWeight.w500);
 }
 
+getTextItemList(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 20.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 17.0),
+        const Condition.equals(name: DESKTOP, value: 20.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w700);
+}
+
+getTextItemList2(BuildContext context) {
+  return TextStyle(
+      fontSize: ResponsiveValue(context, defaultValue: 17.0, valueWhen: [
+        const Condition.smallerThan(name: DESKTOP, value: 14.0),
+        const Condition.equals(name: DESKTOP, value: 17.0),
+      ]).value,
+      color: Yellow1,
+      fontWeight: FontWeight.w500);
+}
+
 getTextTableDataDisabled(BuildContext context) {
   return TextStyle(
       fontSize: ResponsiveValue(context, defaultValue: 15.0, valueWhen: [

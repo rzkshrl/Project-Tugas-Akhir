@@ -57,6 +57,7 @@ class RekapPresensiPerController extends GetxController {
   void onInit() {
     super.onInit();
     firestoreKepegawaianList = getFirestoreKepegawaianList();
+    fetchPinData();
   }
 
   Future<List<KepegawaianModel>> getFirestoreKepegawaianList() async {

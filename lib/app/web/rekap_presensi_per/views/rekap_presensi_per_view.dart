@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member, unnecessary_cast
+// ignore_for_file: invalid_use_of_protected_member, unnecessary_cast, duplicate_ignore
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:responsive_framework/responsive_grid.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -250,10 +251,11 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 3.h,
+                      ),
                       controller.isClicked.value == false
-                          ? Container(
-                              decoration:
-                                  BoxDecoration(color: Blue1.withOpacity(0.2)),
+                          ? SizedBox(
                               width: 90.w,
                               height: 70.h,
                               child: FutureBuilder<List<KepegawaianModel>>(
@@ -262,27 +264,30 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                                     if (!snap.hasData) {
                                       return const LoadingView();
                                     }
-                                    final kepegawaianList = snap.data!.obs
-                                        as List<KepegawaianModel>;
-                                    return ListView.builder(
+                                    final kepegawaianList =
+                                        snap.data! as List<KepegawaianModel>;
+
+                                    return ResponsiveGridView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const AlwaysScrollableScrollPhysics(),
+                                        alignment: Alignment.center,
+                                        gridDelegate: ResponsiveGridDelegate(
+                                            crossAxisExtent: 32.5.h,
+                                            mainAxisSpacing: 2.h,
+                                            crossAxisSpacing: 2.w,
+                                            childAspectRatio: 1.5),
                                         itemCount: kepegawaianList.length,
                                         itemBuilder: (context, index) {
+                                          kepegawaianList.sort((a, b) =>
+                                              a.pin!.compareTo(b.pin!));
                                           var data = kepegawaianList[index];
-                                          return InkWell(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  Routes.DETAIL_PRESENSI,
-                                                  arguments: data.pin!);
-                                            },
-                                            child: ListTile(
-                                              title: Text(data.nama!),
-                                              titleTextStyle:
-                                                  getTextTableData(context),
-                                              subtitle: Text(data.pin!),
-                                              subtitleTextStyle:
-                                                  getTextTableData(context),
-                                            ),
-                                          );
+
+                                          return itemListRiwayatPresensi(() {
+                                            Get.toNamed(Routes.DETAIL_PRESENSI,
+                                                arguments: data.pin!);
+                                          }, data.nama!, data.pin!,
+                                              data.bidang!);
                                         });
                                   }),
                             )

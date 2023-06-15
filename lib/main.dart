@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_if_null_operators
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -101,8 +101,8 @@ class ProjectTugasAkhir extends StatelessWidget {
                         ),
                         initialRoute: sessionController.isLoggedIn.value
                             ? currentRoute != null
-                                ? Routes.HOME
-                                : Routes.LOGIN
+                                ? currentRoute
+                                : Routes.HOME
                             : Routes.LOGIN,
                         getPages: AppPages.routes,
                         debugShowCheckedModeBanner: false,

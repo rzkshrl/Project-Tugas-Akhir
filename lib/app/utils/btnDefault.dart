@@ -7,6 +7,7 @@ import 'package:responsive_framework/responsive_value.dart' as rspnsvlue;
 import 'package:sizer/sizer.dart';
 
 import '../theme/textstyle.dart';
+import '../theme/theme.dart';
 
 Widget btnDefaultIcon1(
     double width,
@@ -173,6 +174,46 @@ Widget btnMobile(
       child: Text(
         textBtn,
         style: getTextLoginBtnActiveMobile(Get.context!),
+      ),
+    ),
+  );
+}
+
+Widget itemListRiwayatPresensi(
+    Function()? onTap, String text1, String text2, String text3) {
+  return Padding(
+    padding: EdgeInsets.only(bottom: 2.h),
+    child: Material(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+              color: Blue1, borderRadius: BorderRadius.circular(19)),
+          child: Padding(
+              padding: EdgeInsets.only(left: 2.w, right: 2.w),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                        child:
+                            Text(text1, style: getTextItemList(Get.context!))),
+                    SizedBox(
+                      height: 3.h,
+                    ),
+                    Text(
+                      'PIN Pegawai: $text2',
+                      style: getTextItemList2(Get.context!),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Text(
+                      'Jabatan: $text3',
+                      style: getTextItemList2(Get.context!),
+                    )
+                  ])),
+        ),
       ),
     ),
   );

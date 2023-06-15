@@ -271,7 +271,7 @@ Widget dialogAlertOnlyAnimation(
     backgroundColor: Blue1,
     child: SizedBox(
       width: 350,
-      height: 274.07,
+      height: 374.07,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -281,7 +281,7 @@ Widget dialogAlertOnlyAnimation(
             decoration: BoxDecoration(
                 border: Border.all(color: Yellow1),
                 borderRadius: BorderRadius.circular(12)),
-            child: Lottie.asset(animationLink, height: 55),
+            child: Lottie.asset(animationLink, height: 45),
           ),
           const SizedBox(
             height: 30,
