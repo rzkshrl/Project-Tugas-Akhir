@@ -148,17 +148,17 @@ class LoginView extends GetView<LoginController> {
                 ),
                 Text(
                   "MonitorPresence",
-                  style: getTextHeaderWelcomeScreen(context, 16),
+                  style: getTextHeaderWelcomeScreen(context, 11.sp),
                 ),
                 SizedBox(
                   height: 1.h,
                 ),
                 Text(
                   "Pantau Presensi Anda secara Langsung",
-                  style: getTextSubHeaderWelcomeScreen(context, 15),
+                  style: getTextSubHeaderWelcomeScreen(context, 10.sp),
                 ),
                 SizedBox(
-                  height: 28.h,
+                  height: 26.h,
                 ),
                 Container(
                   width: 58.w,

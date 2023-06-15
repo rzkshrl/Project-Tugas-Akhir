@@ -8,8 +8,10 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:iconly/iconly.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:project_tugas_akhir/app/theme/theme.dart';
 import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 
 import '../../../theme/textstyle.dart';
@@ -27,13 +29,35 @@ class UbahProfilMobileController extends GetxController {
   void pickImage() async {
     var status = await Permission.storage.request();
     if (status == PermissionStatus.granted) {
-      image =
+      var pickedImage =
           await picker.pickImage(source: ImageSource.gallery, imageQuality: 75);
-      if (image != null) {
-        if (kDebugMode) {
-          print(image!.name);
-          print(image!.name.split(".").last);
-          print(image!.path);
+      if (pickedImage != null) {
+        var croppedImage = await ImageCropper().cropImage(
+          sourcePath: pickedImage.path,
+          aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+          ],
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Potong Gambar',
+                toolbarColor: Blue1,
+                toolbarWidgetColor: light,
+                backgroundColor: light,
+                statusBarColor: dark),
+          ],
+        );
+        if (croppedImage != null) {
+          image = XFile.fromData(await croppedImage.readAsBytes(),
+              path: croppedImage.path);
+          if (kDebugMode) {
+            print(image!.name);
+            print(image!.path);
+          }
+        } else {
+          if (kDebugMode) {
+            print("Image cropping cancelled");
+          }
         }
       } else {
         if (kDebugMode) {
@@ -80,6 +104,7 @@ class UbahProfilMobileController extends GetxController {
         Get.dialog(
           dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
               'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {
+            Get.back();
             Get.back();
           }),
         );

@@ -26,7 +26,7 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
     String? profile = authC.userData.value.photoUrl;
 
     var defaultImage =
-        "https://ui-avatars.com/api/?name=${nama}&background=fff38a&color=5175c0&font-size=0.33";
+        "https://ui-avatars.com/api/?name=${nama}&background=fff38a&color=5175c0&font-size=0.33&size=256";
     return Scaffold(
         backgroundColor: light,
         body: SingleChildScrollView(
@@ -64,18 +64,13 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                   Padding(
                     padding: EdgeInsets.only(right: 3.w, left: 3.w),
                     child: ClipOval(
-                      child: Container(
-                        width: 40.w,
-                        height: 18.5.h,
-                        color: Colors.grey.shade200,
-                        child: Image.network(
-                          profile != null
-                              ? profile != ''
-                                  ? profile
-                                  : defaultImage
-                              : defaultImage,
-                          fit: BoxFit.cover,
-                        ),
+                      child: Image.network(
+                        profile != null
+                            ? profile != ''
+                                ? profile
+                                : defaultImage
+                            : defaultImage,
+                        width: 35.w,
                       ),
                     ),
                   ),
@@ -208,7 +203,7 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                 borderRadius: BorderRadius.circular(20),
                 child: InkWell(
                   onTap: () {
-                    Get.dialog(dialogAlertDualBtn(() async {
+                    Get.dialog(dialogAlertDualBtnAnimation(() async {
                       Get.back();
                     }, () async {
                       Get.back();
@@ -224,7 +219,7 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                             getTextAlertMobile(Get.context!)));
                       }
                     },
-                        IconlyLight.danger,
+                        'assets/lootie/warning.json',
                         111.29,
                         'Batal',
                         111.29,

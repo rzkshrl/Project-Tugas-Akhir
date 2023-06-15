@@ -27,6 +27,7 @@ dependencies:
   iconly: ^1.0.1
   icons_launcher: ^2.1.1
   icons_plus: ^4.0.0
+  image_cropper: ^4.0.1
   image_picker: ^0.8.7+5
   intl: ^0.17.0
   linked_scroll_controller: ^0.2.0

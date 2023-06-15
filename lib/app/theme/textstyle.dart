@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:project_tugas_akhir/app/theme/theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:sizer/sizer.dart';
 
 getTextLogin(BuildContext context) {
   return TextStyle(
@@ -575,18 +576,19 @@ getTextSubHeaderWelcomeScreen(BuildContext context, double value) {
 }
 
 getTextLoginBtnActiveMobile(BuildContext context) {
+  var value = 12.sp;
   return TextStyle(
-      fontSize: ResponsiveValue(context, defaultValue: 18.0, valueWhen: [
-        const Condition.equals(name: MOBILE, value: 18.0),
-        const Condition.equals(name: TABLET, value: 22.0),
+      fontSize: ResponsiveValue(context, defaultValue: value, valueWhen: [
+        Condition.equals(name: MOBILE, value: value),
       ]).value,
       color: Yellow1);
 }
 
 getTextLupaSandiMobile(BuildContext context) {
+  var value = 9.sp;
   return TextStyle(
-      fontSize: ResponsiveValue(context, defaultValue: 13.0, valueWhen: [
-        const Condition.equals(name: MOBILE, value: 13.0),
+      fontSize: ResponsiveValue(context, defaultValue: value, valueWhen: [
+        Condition.equals(name: MOBILE, value: value),
       ]).value,
       color: Blue1,
       fontWeight: FontWeight.w500);

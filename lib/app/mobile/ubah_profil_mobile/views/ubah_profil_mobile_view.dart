@@ -29,7 +29,7 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
     cDropdown.bidangUbahProfilC.text = bidang!;
 
     var defaultImage =
-        "https://ui-avatars.com/api/?name=${nama}&background=fff38a&color=5175c0&font-size=0.33";
+        "https://ui-avatars.com/api/?name=${nama}&background=fff38a&color=5175c0&font-size=0.33&size=256";
     return Scaffold(
         backgroundColor: light,
         body: SingleChildScrollView(
@@ -84,32 +84,22 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                     if (c.image != null) {
                       return Center(
                         child: ClipOval(
-                          child: Container(
-                            width: 40.w,
-                            height: 18.5.h,
-                            color: Colors.grey.shade200,
-                            child: Image.file(
-                              File(c.image!.path),
-                              fit: BoxFit.cover,
-                            ),
+                          child: Image.file(
+                            File(c.image!.path),
+                            width: 38.w,
                           ),
                         ),
                       );
                     } else {
                       return Center(
                         child: ClipOval(
-                          child: Container(
-                            width: 40.w,
-                            height: 18.5.h,
-                            color: Colors.grey.shade200,
-                            child: Image.network(
-                              profile != null
-                                  ? profile != ''
-                                      ? profile
-                                      : defaultImage
-                                  : defaultImage,
-                              fit: BoxFit.cover,
-                            ),
+                          child: Image.network(
+                            profile != null
+                                ? profile != ''
+                                    ? profile
+                                    : defaultImage
+                                : defaultImage,
+                            width: 38.w,
                           ),
                         ),
                       );

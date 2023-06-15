@@ -86,7 +86,7 @@ class LoginMobileView extends GetView<LoginMobileController> {
               ),
             ),
             SizedBox(
-              height: 28.h,
+              height: 24.h,
             ),
             TextButton(
               onPressed: () {
