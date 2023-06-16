@@ -19,9 +19,9 @@ String ramadhanUpperCase = 'RAMADHAN';
 String serverKey =
     'AAAAngsjQcA:APA91bFnvowTDsw_75mekKGE8WRNF1PH1t0USZC02vFHdRHBRFGOs-Tn8kzQkkUKhru5jS4jFMDPUYzvyLjRC3KttZdBXFV8cdQWZLhr_QKKseJAa18LUNqqUhN6AQNopineYq-9QLJa';
 
-String titleNotif = 'Halo, Semangat Menjalani Hari!';
+String titleNotif = 'Halo, Rekapitulasi Presensi Anda sudah selesai!';
 String messageNotif =
-    'Tingkatkan Produktifitasmu dengan Presensi tepat pada waktunya!';
+    'Cek disini untuk melihat rekapitulasi presensi bulan lalu.';
 
 final keyApplicationId = 'k4hwdDnSxJ3UXLeVGc9KALbwO3FUmhsoeoxsMGph';
 final keyClientKey = '3Fq1JMWix2tEYyo5nhws4BftFFsFsWC0OfU1mPzE';

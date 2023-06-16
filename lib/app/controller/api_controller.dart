@@ -185,6 +185,8 @@ class APIController extends GetxController {
         }
         isLoading.value = false;
 
+        // fcmC.sendNotificationToAllUser(titleNotif, messageNotif);
+
         Get.back();
         showFinishDialog();
       }
