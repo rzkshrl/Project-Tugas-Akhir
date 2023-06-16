@@ -216,15 +216,23 @@ class RekapPresensiAllView extends GetView<RekapPresensiAllController> {
                         height: 3.h,
                       ),
                       controller.isClicked.value == false
-                          ? Container(
-                              decoration:
-                                  BoxDecoration(color: Blue1.withOpacity(0.2)),
+                          ? SizedBox(
                               width: 90.w,
                               height: 70.h,
                               child: Center(
-                                child: Text(
-                                  'Rekapitulasi belum di preview',
-                                  style: getTextSubHeader(context),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset('assets/lootie/no_data.json',
+                                        height: 145),
+                                    SizedBox(
+                                      height: 3.h,
+                                    ),
+                                    Text(
+                                      'Preview Rekapitulasi belum ditampilkan',
+                                      style: getTextSubHeader(context),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )

@@ -266,6 +266,12 @@ class RekapPresensiPerView extends GetView<RekapPresensiPerController> {
                                     }
                                     final kepegawaianList =
                                         snap.data! as List<KepegawaianModel>;
+                                    if (kepegawaianList.isEmpty) {
+                                      return Center(
+                                          child: Lottie.asset(
+                                              'assets/lootie/no_data.json',
+                                              height: 135));
+                                    }
 
                                     return ResponsiveGridView.builder(
                                         shrinkWrap: true,

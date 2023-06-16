@@ -31,9 +31,9 @@ class HomeView extends GetView<HomeController> {
     return GetBuilder<AuthController>(builder: (c) {
       if (kIsWeb) {
         final storedUserData = StorageService.getUserDataWithExpiration();
+        final currentRoute = StorageService.getCurrentRoute();
 
         if (storedUserData != null) {
-          // c.userData.value = storedUserData;
           if (storedUserData.expirationTime.isAfter(DateTime.now())) {
             c.userData.value = storedUserData.user;
           } else {
@@ -71,6 +71,7 @@ class HomeView extends GetView<HomeController> {
 
         String? roles = c.userData.value.role;
         String? status = c.userData.value.status;
+
         if (kDebugMode) {
           print("ROLES WEB 1 : $roles");
         }
@@ -106,10 +107,48 @@ class HomeView extends GetView<HomeController> {
                 getTextAlertBtn(context)),
           );
         } else {
+          // if (roles == admin) {
+          //   if (currentRoute != null) {
+          //     WidgetsBinding.instance.addPostFrameCallback((_) {
+          //       Navigator.pushReplacementNamed(context, currentRoute);
+          //     });
+          //   }
+          //   return const RiwayatPresensiView();
+          // } else if (roles == superAdmin) {
+          //   if (currentRoute != null) {
+          //     WidgetsBinding.instance.addPostFrameCallback((_) {
+          //       Navigator.pushReplacementNamed(context, currentRoute);
+          //     });
+          //   }
+          //   return const SuperAdminView();
           if (roles == admin) {
-            return const RiwayatPresensiView();
+            if (currentRoute != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacementNamed(context, currentRoute);
+              });
+            } else {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            const RiwayatPresensiView()));
+              });
+            }
           } else if (roles == superAdmin) {
-            return const SuperAdminView();
+            if (currentRoute != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacementNamed(context, currentRoute);
+              });
+            } else {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            const SuperAdminView()));
+              });
+            }
           } else {
             return Scaffold(
               backgroundColor: error.withOpacity(0.5),
@@ -127,6 +166,7 @@ class HomeView extends GetView<HomeController> {
             );
           }
         }
+        return const LoadingView();
       } else {
         var pages = <Widget>[
           const BerandaMobileView(),
@@ -136,6 +176,9 @@ class HomeView extends GetView<HomeController> {
 
         String? roles = c.userData.value.role;
         String? status = c.userData.value.status;
+
+        // fcmC.sendNotificationToAllUser(titleNotif, messageNotif);
+
         if (kDebugMode) {
           print("ROLES MOBILE : $roles");
         }

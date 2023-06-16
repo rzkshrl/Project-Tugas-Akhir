@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_brace_in_string_interps, use_build_context_synchronously, unnecessary_overrides, invalid_use_of_protected_member
+// ignore_for_file: unnecessary_brace_in_string_interps, use_build_context_synchronously, unnecessary_overrides, invalid_use_of_protected_member, deprecated_member_use
 
 import 'dart:convert';
 import 'package:project_tugas_akhir/app/data/models/firestorejamkerjamodel.dart';

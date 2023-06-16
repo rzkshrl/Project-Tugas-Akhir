@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:lottie/lottie.dart';
 import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:project_tugas_akhir/app/utils/jamKerjaDTS.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
@@ -196,6 +197,24 @@ class JamKerjaView extends GetView<JamKerjaController> {
                             }
                             final jamKerjaList =
                                 snap.data! as List<JamKerjaModel>;
+                            if (jamKerjaList.isEmpty) {
+                              Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset('assets/lootie/no_data.json',
+                                        height: 145),
+                                    SizedBox(
+                                      height: 3.h,
+                                    ),
+                                    Text(
+                                      'Data kosong.',
+                                      style: getTextSubHeader(context),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                             int rowsPerPage =
                                 PaginatedDataTable.defaultRowsPerPage;
                             return GetBuilder<JamKerjaController>(builder: (c) {

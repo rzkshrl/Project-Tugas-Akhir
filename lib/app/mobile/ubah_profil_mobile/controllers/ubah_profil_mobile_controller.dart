@@ -78,6 +78,14 @@ class UbahProfilMobileController extends GetxController {
     }
   }
 
+  showLoadingDialog() {
+    Get.dialog(
+      dialogAlertOnlySingleMsgAnimationMobile('assets/lootie/loading.json',
+          'Memuat...', getTextAlertMobile(Get.context!)),
+      barrierDismissible: false,
+    );
+  }
+
   Future<void> ubahProfil(String nama, String bidang) async {
     String email = auth.currentUser!.email.toString();
     DocumentReference<Map<String, dynamic>> docUsers =
@@ -101,7 +109,10 @@ class UbahProfilMobileController extends GetxController {
           "nama": nama,
           'bidang': bidang,
         });
-        Get.dialog(
+
+        showLoadingDialog();
+
+        await Get.dialog(
           dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
               'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {
             Get.back();

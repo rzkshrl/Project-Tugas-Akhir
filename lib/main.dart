@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_if_null_operators
+// ignore_for_file: prefer_if_null_operators, use_key_in_widget_constructors
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,7 +16,7 @@ import 'package:project_tugas_akhir/app/theme/theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'app/controller/auth_controller.dart';
-import 'app/modules/home/controllers/home_controller.dart';
+import 'app/controller/fcm_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'app/theme/textstyle.dart';
 import 'app/utils/dialogDefault.dart';
@@ -37,18 +37,27 @@ Future<void> main() async {
     Get.put(SessionController());
   }
   await GetStorage.init();
+  final FCMController fcmController = FCMController();
+  fcmController.notificationRequestDaily();
+  // fcmController.sendNotificationToAllUser(titleNotif, messageNotif);
   await initializeDateFormatting('id_ID', null)
-      .then((_) => runApp(ProjectTugasAkhir()));
-  runApp(ProjectTugasAkhir());
+      .then((_) => runApp(ProjectTugasAkhir(
+            fcmController: fcmController,
+          )));
+  runApp(ProjectTugasAkhir(fcmController: fcmController));
 }
 
 class ProjectTugasAkhir extends StatelessWidget {
+  final FCMController fcmController;
+
+  ProjectTugasAkhir({Key? key, required this.fcmController}) : super(key: key);
   // const ProjectTugasAkhir({super.key});
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   final authC = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
+    fcmController.notificationRequestDaily();
     return FutureBuilder(
         future: _initialization,
         builder: (context, snap) {
@@ -100,9 +109,7 @@ class ProjectTugasAkhir extends StatelessWidget {
                           // )),
                         ),
                         initialRoute: sessionController.isLoggedIn.value
-                            ? currentRoute != null
-                                ? currentRoute
-                                : Routes.HOME
+                            ? Routes.HOME
                             : Routes.LOGIN,
                         getPages: AppPages.routes,
                         debugShowCheckedModeBanner: false,
@@ -115,7 +122,6 @@ class ProjectTugasAkhir extends StatelessWidget {
               return FutureBuilder(
                   future: Future.delayed(const Duration(seconds: 0)),
                   builder: (context, snap) {
-                    Get.put<HomeController>(HomeController());
                     if (snap.connectionState == ConnectionState.done) {
                       return AnnotatedRegion(
                         value: SystemUiOverlayStyle(
@@ -148,6 +154,9 @@ class ProjectTugasAkhir extends StatelessWidget {
                           home: SplashScreen(),
                           getPages: AppPages.routes,
                           debugShowCheckedModeBanner: false,
+                          initialBinding: BindingsBuilder(() {
+                            Get.put(fcmController);
+                          }),
                         ),
                       );
                     } else {

@@ -198,7 +198,7 @@ getTextTable(BuildContext context) {
         const Condition.equals(name: DESKTOP, value: 16.0),
       ]).value,
       color: Blue1,
-      fontWeight: FontWeight.w600);
+      fontWeight: FontWeight.w700);
 }
 
 getTextTableDisabled(BuildContext context) {
@@ -210,7 +210,7 @@ getTextTableDisabled(BuildContext context) {
         const Condition.equals(name: DESKTOP, value: 16.0),
       ]).value,
       color: Blue1.withOpacity(0.7),
-      fontWeight: FontWeight.w600);
+      fontWeight: FontWeight.w700);
 }
 
 getTextTableData(BuildContext context) {

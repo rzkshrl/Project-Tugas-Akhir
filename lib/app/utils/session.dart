@@ -93,4 +93,8 @@ class StorageService {
   static String? getCurrentRoute() {
     return _box.read('currentRoute');
   }
+
+  static Future<void> removeCurrentRoute() {
+    return _box.remove('currentRoute');
+  }
 }

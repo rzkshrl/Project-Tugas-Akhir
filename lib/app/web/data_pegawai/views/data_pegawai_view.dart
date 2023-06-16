@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:lottie/lottie.dart';
 import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
 import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:sizer/sizer.dart';
@@ -174,6 +175,24 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                             }
                             final kepegawaianList =
                                 snap.data! as List<KepegawaianModel>;
+                            if (kepegawaianList.isEmpty) {
+                              Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset('assets/lootie/no_data.json',
+                                        height: 145),
+                                    SizedBox(
+                                      height: 3.h,
+                                    ),
+                                    Text(
+                                      'Data kosong.',
+                                      style: getTextSubHeader(context),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                             int rowsPerPage =
                                 PaginatedDataTable.defaultRowsPerPage;
 

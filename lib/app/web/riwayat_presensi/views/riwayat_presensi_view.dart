@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:lottie/lottie.dart';
 import 'package:project_tugas_akhir/app/controller/api_controller.dart';
 import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
 import 'package:project_tugas_akhir/app/theme/textstyle.dart';
@@ -161,6 +162,25 @@ class RiwayatPresensiView extends GetView<RiwayatPresensiController> {
                             final kepegawaianList =
                                 // ignore: unnecessary_cast
                                 snap.data! as List<KepegawaianModel>;
+
+                            if (kepegawaianList.isEmpty) {
+                              Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset('assets/lootie/no_data.json',
+                                        height: 145),
+                                    SizedBox(
+                                      height: 3.h,
+                                    ),
+                                    Text(
+                                      'Data kosong.',
+                                      style: getTextSubHeader(context),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
 
                             return ResponsiveGridView.builder(
                                 shrinkWrap: true,

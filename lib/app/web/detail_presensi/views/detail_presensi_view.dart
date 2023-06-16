@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:lottie/lottie.dart';
 import 'package:project_tugas_akhir/app/controller/calendars_controller.dart';
 import 'package:project_tugas_akhir/app/data/models/firestorepengecualianmodel.dart';
 import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
@@ -138,6 +139,25 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                                 .map((e) => PresensiModel.fromJson(
                                     e.data() as Map<String, dynamic>))
                                 .toList();
+
+                            if (presensiList.isEmpty) {
+                              Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset('assets/lootie/no_data.json',
+                                        height: 145),
+                                    SizedBox(
+                                      height: 3.h,
+                                    ),
+                                    Text(
+                                      'Data kosong.',
+                                      style: getTextSubHeader(context),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                             return FutureBuilder(
                                 future: liburC.firestoreHolidayList,
                                 builder: (context, snap) {

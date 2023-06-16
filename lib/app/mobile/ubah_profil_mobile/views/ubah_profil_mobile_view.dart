@@ -86,7 +86,7 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                         child: ClipOval(
                           child: Image.file(
                             File(c.image!.path),
-                            width: 38.w,
+                            width: 38.5.w,
                           ),
                         ),
                       );
@@ -99,7 +99,7 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                                     ? profile
                                     : defaultImage
                                 : defaultImage,
-                            width: 38.w,
+                            width: 38.5.w,
                           ),
                         ),
                       );

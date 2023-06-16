@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:lottie/lottie.dart';
 import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
 import 'package:project_tugas_akhir/app/utils/pengecualianDTS.dart';
 import 'package:sizer/sizer.dart';
@@ -164,6 +165,24 @@ class PengecualianView extends GetView<PengecualianController> {
                               }
                               final pengecualianList =
                                   snap.data! as List<PengecualianModel>;
+                              if (pengecualianList.isEmpty) {
+                                Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Lottie.asset('assets/lootie/no_data.json',
+                                          height: 145),
+                                      SizedBox(
+                                        height: 3.h,
+                                      ),
+                                      Text(
+                                        'Data kosong.',
+                                        style: getTextSubHeader(context),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                               int rowsPerPage =
                                   PaginatedDataTable.defaultRowsPerPage;
                               return GetBuilder<PengecualianController>(
