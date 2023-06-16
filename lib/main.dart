@@ -57,7 +57,6 @@ class ProjectTugasAkhir extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    fcmController.notificationRequestDaily();
     return FutureBuilder(
         future: _initialization,
         builder: (context, snap) {
@@ -118,9 +117,10 @@ class ProjectTugasAkhir extends StatelessWidget {
                   });
                 });
           } else {
+            fcmController.notificationRequestDaily();
             return Sizer(builder: (context, orientation, screenType) {
               return FutureBuilder(
-                  future: Future.delayed(const Duration(seconds: 0)),
+                  future: Future.delayed(const Duration(milliseconds: 0)),
                   builder: (context, snap) {
                     if (snap.connectionState == ConnectionState.done) {
                       return AnnotatedRegion(
@@ -137,13 +137,13 @@ class ProjectTugasAkhir extends StatelessWidget {
                                   breakpoints: [
                                 const ResponsiveBreakpoint.resize(240,
                                     name: MOBILE),
-                                const ResponsiveBreakpoint.resize(650,
+                                const ResponsiveBreakpoint.autoScale(650,
                                     name: TABLET),
-                                const ResponsiveBreakpoint.resize(900,
+                                const ResponsiveBreakpoint.autoScale(900,
                                     name: TABLET),
-                                const ResponsiveBreakpoint.resize(1000,
+                                const ResponsiveBreakpoint.autoScale(1000,
                                     name: DESKTOP),
-                                const ResponsiveBreakpoint.resize(2468,
+                                const ResponsiveBreakpoint.autoScale(2468,
                                     name: '4K')
                               ]),
                           title: "MonitorPresence MIM Jetis Lor",
@@ -163,7 +163,13 @@ class ProjectTugasAkhir extends StatelessWidget {
                       return FutureBuilder(
                           future: authC.firstInitialized(),
                           builder: (context, snap) {
-                            return const LoadingView();
+                            return GetMaterialApp(
+                              home: Scaffold(
+                                  backgroundColor: light,
+                                  body: const Center(
+                                    child: SizedBox(),
+                                  )),
+                            );
                           });
                     }
                   });

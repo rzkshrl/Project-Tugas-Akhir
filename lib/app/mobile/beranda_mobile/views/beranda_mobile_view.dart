@@ -65,14 +65,30 @@ class BerandaMobileView extends GetView<BerandaMobileController> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: 3.w, left: 3.w),
-                    child: ClipOval(
-                      child: Image.network(
-                        profile != null
-                            ? profile != ''
-                                ? profile
-                                : defaultImage
-                            : defaultImage,
-                        width: 35.w,
+                    child: InkWell(
+                      onTap: () {
+                        Get.dialog(
+                            Dialog(
+                              child: Image.network(
+                                profile != null
+                                    ? profile != ''
+                                        ? profile
+                                        : defaultImage
+                                    : defaultImage,
+                                // width: 45.w,
+                              ),
+                            ),
+                            barrierColor: light.withOpacity(0.65));
+                      },
+                      child: ClipOval(
+                        child: Image.network(
+                          profile != null
+                              ? profile != ''
+                                  ? profile
+                                  : defaultImage
+                              : defaultImage,
+                          width: 35.w,
+                        ),
                       ),
                     ),
                   ),

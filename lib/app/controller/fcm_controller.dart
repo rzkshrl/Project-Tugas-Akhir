@@ -84,10 +84,6 @@ class FCMController extends GetxController {
     if (kDebugMode) {
       print('Received background message: ${message.notification?.body}');
     }
-
-    if (message != null) {
-      notificationData = message.data;
-    } else {}
   }
 
   Future<List<String>> getAllUserToken() async {
