@@ -1,21 +1,10 @@
 {
   "hosting": {
-    "site": "monitorpresence",
-    "public": "build/web",
+    "public": "/build/web",
     "ignore": [
       "firebase.json",
-      "**/.*"
-    ],
-    "rewrites": [
-      {
-        "source": "/api/**",
-        "destination": "/proxy-server/proxy.js"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+      "**/.*",
+      "**/node_modules/**"
     ]
   }
-  
 }

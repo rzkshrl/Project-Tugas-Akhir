@@ -23,6 +23,8 @@ import '../utils/urlHTTP.dart';
 
 import 'dart:async';
 
+import 'fcm_controller.dart';
+
 class APIController extends GetxController {
   late BuildContext context1;
   APIController({required this.context1});
@@ -42,6 +44,7 @@ class APIController extends GetxController {
   var presensiList = [].obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final fcmC = Get.put(FCMController());
 
   showLoadingDialog() {
     Get.dialog(
@@ -147,7 +150,11 @@ class APIController extends GetxController {
 
       String urlGet = "http://$ip:$port$urlGetDeviceInfo?sn=${sn}";
 
-      var res = await Future.wait([dio.post(urlGet)]);
+      var res = await Future.wait([
+        dio.post(
+          urlGet,
+        )
+      ]);
 
       if (kDebugMode) {
         print('HASIL DEVINFO : ${res[0].data['Result']}');
@@ -565,6 +572,8 @@ class APIController extends GetxController {
       }
 
       isLoading.value = false;
+
+      fcmC.sendNotificationToAllUser(titleNotif, messageNotif);
 
       Get.back();
       showFinishDialog();

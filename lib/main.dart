@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:project_tugas_akhir/app/modules/home/views/home_view.dart';
 import 'package:project_tugas_akhir/app/utils/loading.dart';
 
@@ -22,6 +23,7 @@ import 'app/theme/textstyle.dart';
 import 'app/utils/dialogDefault.dart';
 
 import 'app/utils/session.dart';
+import 'app/utils/stringGlobal.dart';
 import 'firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
 // ignore: depend_on_referenced_packages
@@ -38,8 +40,9 @@ Future<void> main() async {
   }
   await GetStorage.init();
   final FCMController fcmController = FCMController();
-  fcmController.notificationRequestDaily();
-  // fcmController.sendNotificationToAllUser(titleNotif, messageNotif);
+
+  await Parse().initialize(keyApplicationId, keyParseServerUrl,
+      clientKey: keyClientKey, autoSendSessionId: true);
   await initializeDateFormatting('id_ID', null)
       .then((_) => runApp(ProjectTugasAkhir(
             fcmController: fcmController,
@@ -117,7 +120,6 @@ class ProjectTugasAkhir extends StatelessWidget {
                   });
                 });
           } else {
-            fcmController.notificationRequestDaily();
             return Sizer(builder: (context, orientation, screenType) {
               return FutureBuilder(
                   future: Future.delayed(const Duration(milliseconds: 0)),

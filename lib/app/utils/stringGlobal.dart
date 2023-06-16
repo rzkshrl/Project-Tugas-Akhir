@@ -22,3 +22,7 @@ String serverKey =
 String titleNotif = 'Halo, Semangat Menjalani Hari!';
 String messageNotif =
     'Tingkatkan Produktifitasmu dengan Presensi tepat pada waktunya!';
+
+final keyApplicationId = 'k4hwdDnSxJ3UXLeVGc9KALbwO3FUmhsoeoxsMGph';
+final keyClientKey = '3Fq1JMWix2tEYyo5nhws4BftFFsFsWC0OfU1mPzE';
+final keyParseServerUrl = 'https://parseapi.back4app.com';

@@ -162,22 +162,22 @@ class FCMController extends GetxController {
     }
   }
 
-  void notificationRequestDaily() {
-    DateTime now = DateTime.now();
+  // void notificationRequestDaily() {
+  //   DateTime now = DateTime.now();
 
-    DateTime scheduledTime = DateTime(now.year, now.month, now.day, 6);
+  //   DateTime scheduledTime = DateTime(now.year, now.month, now.day, 6);
 
-    Duration difference = scheduledTime.difference(now);
+  //   Duration difference = scheduledTime.difference(now);
 
-    int dayOfWeek = now.weekday;
+  //   int dayOfWeek = now.weekday;
 
-    if (dayOfWeek == DateTime.sunday || now.hour >= 6) {
-      scheduledTime = scheduledTime.add(const Duration(days: 1));
-      difference = scheduledTime.difference(now);
-    }
+  //   if (dayOfWeek == DateTime.sunday || now.hour >= 6) {
+  //     scheduledTime = scheduledTime.add(const Duration(days: 1));
+  //     difference = scheduledTime.difference(now);
+  //   }
 
-    Timer(difference, () {
-      sendNotificationToAllUser(titleNotif, messageNotif);
-    });
-  }
+  //   Timer(difference, () {
+  //     sendNotificationToAllUser(titleNotif, messageNotif);
+  //   });
+  // }
 }

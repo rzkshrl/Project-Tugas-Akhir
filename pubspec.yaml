@@ -34,6 +34,7 @@ dependencies:
   intl: ^0.17.0
   lottie: ^2.3.2
   node_interop: ^2.1.0
+  parse_server_sdk_flutter: ^5.1.0
   pdf: ^3.10.3
   permission_handler: ^10.2.0
   printing: ^5.10.4

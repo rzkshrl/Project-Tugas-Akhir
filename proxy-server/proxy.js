@@ -1,30 +1,46 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
+Parse.Cloud.define("getScanlogWithPaging", async (request) => {
+  const ip = request.params.ip;
+  const port = request.params.port;
+  const sn = request.params.sn;
+  const urlReq = request.params.urlReq;
+  const pageNumber = request.params.pageNumber || 0;
 
-const app = express();
-app.use(cors());
+  const url = `http://${ip}:${port}${urlReq}?sn=${sn}&page=${pageNumber}&limit=100`;
 
-const apiUrl = 'http://192.168.0.1:8080/scanlog/all/paging?sn=61629016310377';
+  const options = {
+    url: url,
+    headers: {
+      'Access-Control-Allow-Origin': '*', // Mengizinkan akses dari semua origin
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE', // Mengizinkan metode HTTP yang diizinkan
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Mengizinkan header yang diizinkan
+    },
+    method: 'POST'
+  };
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
+  const response = await Parse.Cloud.httpRequest(options);
+
+  return response.data;
 });
 
-app.get('/api', (req, res) => {
-  axios.get(apiUrl)
-    .then(response => {
-      res.json(response.data);
-    })
-    .catch(error => {
-      console.error(error);
-      res.status(500).send('Error');
-    });
-});
+Parse.Cloud.define("getDeviceInfo", async (request) => {
+  const ip = request.params.ip;
+  const port = request.params.port;
+  const sn = request.params.sn;
+  const urlReq = request.params.urlReq;
 
-app.listen(8080, () => {
-  console.log('Proxy server is running on port 8080');
+  const url = `http://${ip}:${port}${urlReq}?sn=${sn}`;
+
+  const options = {
+    url: url,
+    headers: {
+      'Access-Control-Allow-Origin': '*', // Mengizinkan akses dari semua origin
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE', // Mengizinkan metode HTTP yang diizinkan
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Mengizinkan header yang diizinkan
+    },
+    method: 'POST'
+  };
+
+  const response = await Parse.Cloud.httpRequest(options);
+
+  return response.data;
 });
