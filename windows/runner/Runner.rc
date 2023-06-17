@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "project_tugas_akhir" "\0"
+            VALUE "FileDescription", "monitorpresensi" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "project_tugas_akhir" "\0"
+            VALUE "InternalName", "monitorpresensi" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "project_tugas_akhir.exe" "\0"
-            VALUE "ProductName", "project_tugas_akhir" "\0"
+            VALUE "OriginalFilename", "monitorpresensi.exe" "\0"
+            VALUE "ProductName", "monitorpresensi" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

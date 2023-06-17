@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_tugas_akhir/app/controller/calendars_controller.dart';
-import 'package:project_tugas_akhir/app/utils/loading.dart';
+import 'package:monitorpresensi/app/controller/calendars_controller.dart';
+import 'package:monitorpresensi/app/utils/loading.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarWidget extends StatelessWidget {

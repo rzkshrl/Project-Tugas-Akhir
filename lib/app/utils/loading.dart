@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:project_tugas_akhir/app/theme/theme.dart';
+import 'package:monitorpresensi/app/theme/theme.dart';
 
 class LoadingView extends StatelessWidget {
   const LoadingView({Key? key}) : super(key: key);

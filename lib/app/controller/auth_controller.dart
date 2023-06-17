@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_tugas_akhir/app/theme/textstyle.dart';
-import 'package:project_tugas_akhir/app/utils/loading.dart';
+import 'package:monitorpresensi/app/theme/textstyle.dart';
+import 'package:monitorpresensi/app/utils/loading.dart';
 
 import '../data/models/usermodel.dart';
 import '../routes/app_pages.dart';

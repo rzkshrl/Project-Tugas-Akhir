@@ -5,8 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
-import 'package:project_tugas_akhir/app/utils/dropdownTextField.dart';
-import 'package:project_tugas_akhir/app/utils/pengecualianDTS.dart';
+import 'package:monitorpresensi/app/utils/dropdownTextField.dart';
+import 'package:monitorpresensi/app/utils/pengecualianDTS.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';

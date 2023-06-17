@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'package:project_tugas_akhir/app/modules/home/views/home_view.dart';
-import 'package:project_tugas_akhir/app/utils/loading.dart';
+import 'package:monitorpresensi/app/modules/home/views/home_view.dart';
+import 'package:monitorpresensi/app/utils/loading.dart';
 
 import 'package:sizer/sizer.dart';
 
 import 'package:get/get.dart';
-import 'package:project_tugas_akhir/app/theme/theme.dart';
+import 'package:monitorpresensi/app/theme/theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'app/controller/auth_controller.dart';

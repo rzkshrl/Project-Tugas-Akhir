@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import 'package:project_tugas_akhir/app/utils/dialogDefault.dart';
+import 'package:monitorpresensi/app/utils/dialogDefault.dart';
 
 import '../../../data/models/firestorescanlogmodel.dart';
 import '../../../theme/textstyle.dart';

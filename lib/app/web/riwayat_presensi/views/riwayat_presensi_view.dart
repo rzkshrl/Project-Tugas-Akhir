@@ -4,11 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
-import 'package:project_tugas_akhir/app/controller/api_controller.dart';
-import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
-import 'package:project_tugas_akhir/app/theme/textstyle.dart';
-import 'package:project_tugas_akhir/app/theme/theme.dart';
-import 'package:project_tugas_akhir/app/utils/btnDefault.dart';
+import 'package:monitorpresensi/app/controller/api_controller.dart';
+import 'package:monitorpresensi/app/data/models/firestorescanlogmodel.dart';
+import 'package:monitorpresensi/app/theme/textstyle.dart';
+import 'package:monitorpresensi/app/theme/theme.dart';
+import 'package:monitorpresensi/app/utils/btnDefault.dart';
 import 'package:responsive_framework/responsive_grid.dart';
 import 'package:sizer/sizer.dart';
 

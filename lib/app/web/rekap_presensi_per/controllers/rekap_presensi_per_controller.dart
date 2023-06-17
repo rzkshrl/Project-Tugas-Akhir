@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
-import 'package:project_tugas_akhir/app/data/models/firestorehariliburmodel.dart';
+import 'package:monitorpresensi/app/data/models/firestorehariliburmodel.dart';
 import 'package:universal_html/html.dart' as html;
 
 import '../../../data/models/firestorejamkerjamodel.dart';

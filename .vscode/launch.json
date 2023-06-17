@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "project_tugas_akhir",
+            "name": "monitorpresensi",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "project_tugas_akhir (profile mode)",
+            "name": "monitorpresensi (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "project_tugas_akhir (release mode)",
+            "name": "monitorpresensi (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

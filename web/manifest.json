@@ -1,6 +1,6 @@
 {
-    "name": "project_tugas_akhir",
-    "short_name": "project_tugas_akhir",
+    "name": "monitorpresensi",
+    "short_name": "monitorpresensi",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

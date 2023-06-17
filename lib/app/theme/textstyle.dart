@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:project_tugas_akhir/app/theme/theme.dart';
+import 'package:monitorpresensi/app/theme/theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 

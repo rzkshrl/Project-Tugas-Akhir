@@ -6,11 +6,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
-import 'package:project_tugas_akhir/app/controller/calendars_controller.dart';
-import 'package:project_tugas_akhir/app/data/models/firestorepengecualianmodel.dart';
-import 'package:project_tugas_akhir/app/data/models/firestorescanlogmodel.dart';
-import 'package:project_tugas_akhir/app/utils/fungsiRekap.dart';
-import 'package:project_tugas_akhir/app/utils/loading.dart';
+import 'package:monitorpresensi/app/controller/calendars_controller.dart';
+import 'package:monitorpresensi/app/data/models/firestorepengecualianmodel.dart';
+import 'package:monitorpresensi/app/data/models/firestorescanlogmodel.dart';
+import 'package:monitorpresensi/app/utils/fungsiRekap.dart';
+import 'package:monitorpresensi/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 

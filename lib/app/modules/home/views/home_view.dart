@@ -3,13 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import 'package:project_tugas_akhir/app/mobile/profile_mobile/views/profile_mobile_view.dart';
-import 'package:project_tugas_akhir/app/web/riwayat_presensi/views/riwayat_presensi_view.dart';
-import 'package:project_tugas_akhir/app/mobile/riwayat_presensi_mobile/views/riwayat_presensi_mobile_view.dart';
-import 'package:project_tugas_akhir/app/routes/app_pages.dart';
-import 'package:project_tugas_akhir/app/theme/textstyle.dart';
-import 'package:project_tugas_akhir/app/theme/theme.dart';
-import 'package:project_tugas_akhir/app/utils/stringGlobal.dart';
+import 'package:monitorpresensi/app/mobile/profile_mobile/views/profile_mobile_view.dart';
+import 'package:monitorpresensi/app/web/riwayat_presensi/views/riwayat_presensi_view.dart';
+import 'package:monitorpresensi/app/mobile/riwayat_presensi_mobile/views/riwayat_presensi_mobile_view.dart';
+import 'package:monitorpresensi/app/routes/app_pages.dart';
+import 'package:monitorpresensi/app/theme/textstyle.dart';
+import 'package:monitorpresensi/app/theme/theme.dart';
+import 'package:monitorpresensi/app/utils/stringGlobal.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';

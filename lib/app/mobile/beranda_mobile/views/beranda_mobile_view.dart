@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:project_tugas_akhir/app/theme/textstyle.dart';
-import 'package:project_tugas_akhir/app/theme/theme.dart';
+import 'package:monitorpresensi/app/theme/textstyle.dart';
+import 'package:monitorpresensi/app/theme/theme.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

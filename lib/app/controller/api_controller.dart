@@ -1,9 +1,9 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, use_build_context_synchronously, unnecessary_overrides, invalid_use_of_protected_member, deprecated_member_use
 
 import 'dart:convert';
-import 'package:project_tugas_akhir/app/data/models/firestorejamkerjamodel.dart';
-import 'package:project_tugas_akhir/app/data/models/firestorepengecualianmodel.dart';
-import 'package:project_tugas_akhir/app/utils/stringGlobal.dart';
+import 'package:monitorpresensi/app/data/models/firestorejamkerjamodel.dart';
+import 'package:monitorpresensi/app/data/models/firestorepengecualianmodel.dart';
+import 'package:monitorpresensi/app/utils/stringGlobal.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -12,8 +12,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:iconly/iconly.dart';
-import 'package:project_tugas_akhir/app/data/models/allscanlogmodel.dart';
-import 'package:project_tugas_akhir/app/data/models/deviceinfomodel.dart';
+import 'package:monitorpresensi/app/data/models/allscanlogmodel.dart';
+import 'package:monitorpresensi/app/data/models/deviceinfomodel.dart';
 
 import '../data/models/devicemodel.dart';
 import '../data/models/firestorescanlogmodel.dart';

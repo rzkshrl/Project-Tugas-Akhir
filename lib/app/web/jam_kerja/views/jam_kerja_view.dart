@@ -5,9 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
-import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
-import 'package:project_tugas_akhir/app/utils/jamKerjaDTS.dart';
-import 'package:project_tugas_akhir/app/utils/loading.dart';
+import 'package:monitorpresensi/app/utils/dialogTextField.dart';
+import 'package:monitorpresensi/app/utils/jamKerjaDTS.dart';
+import 'package:monitorpresensi/app/utils/loading.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';

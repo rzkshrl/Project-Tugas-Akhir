@@ -5,9 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
-import 'package:project_tugas_akhir/app/data/models/firestorehariliburmodel.dart';
+import 'package:monitorpresensi/app/data/models/firestorehariliburmodel.dart';
 
-import 'package:project_tugas_akhir/app/utils/dialogTextField.dart';
+import 'package:monitorpresensi/app/utils/dialogTextField.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/api_controller.dart';

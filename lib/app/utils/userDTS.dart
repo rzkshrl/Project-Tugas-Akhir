@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
-import 'package:project_tugas_akhir/app/data/models/usermodel.dart';
-import 'package:project_tugas_akhir/app/web/super-admin/controllers/super_admin_controller.dart';
-import 'package:project_tugas_akhir/app/theme/theme.dart';
-import 'package:project_tugas_akhir/app/utils/stringGlobal.dart';
+import 'package:monitorpresensi/app/data/models/usermodel.dart';
+import 'package:monitorpresensi/app/web/super-admin/controllers/super_admin_controller.dart';
+import 'package:monitorpresensi/app/theme/theme.dart';
+import 'package:monitorpresensi/app/utils/stringGlobal.dart';
 
 import '../theme/textstyle.dart';
 

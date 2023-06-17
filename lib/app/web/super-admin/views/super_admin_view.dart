@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import 'package:project_tugas_akhir/app/data/models/usermodel.dart';
-import 'package:project_tugas_akhir/app/utils/userDTS.dart';
+import 'package:monitorpresensi/app/data/models/usermodel.dart';
+import 'package:monitorpresensi/app/utils/userDTS.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../controller/auth_controller.dart';
