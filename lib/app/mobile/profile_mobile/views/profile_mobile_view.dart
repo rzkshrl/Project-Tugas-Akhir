@@ -149,7 +149,9 @@ class ProfileMobileView extends GetView<ProfileMobileController> {
                 borderRadius: BorderRadius.circular(20),
                 child: InkWell(
                   onTap: () {
-                    Get.toNamed(Routes.UBAH_PROFIL_MOBILE);
+                    Get.toNamed(
+                      Routes.UBAH_PROFIL_MOBILE,
+                    );
                   },
                   borderRadius: BorderRadius.circular(20),
                   child: Container(

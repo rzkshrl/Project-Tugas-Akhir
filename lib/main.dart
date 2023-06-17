@@ -166,6 +166,7 @@ class ProjectTugasAkhir extends StatelessWidget {
                           future: authC.firstInitialized(),
                           builder: (context, snap) {
                             return GetMaterialApp(
+                              debugShowCheckedModeBanner: false,
                               home: Scaffold(
                                   backgroundColor: light,
                                   body: const Center(

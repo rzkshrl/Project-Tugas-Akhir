@@ -177,6 +177,9 @@ class AuthController extends GetxController {
           Get.dialog(dialogAlertBtnAnimation(() async {
             myUser.user!.sendEmailVerification();
             Get.back();
+            Future.delayed(const Duration(microseconds: 0), () async {
+              await auth.signOut();
+            });
             await Get.dialog(dialogAlertBtnAnimation(() {
               Get.back();
             },

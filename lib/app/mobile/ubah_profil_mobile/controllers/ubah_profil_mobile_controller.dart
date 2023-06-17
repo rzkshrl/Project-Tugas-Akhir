@@ -14,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:monitorpresensi/app/theme/theme.dart';
 import 'package:monitorpresensi/app/utils/dropdownTextField.dart';
 
+import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../utils/dialogDefault.dart';
 import '../../../utils/textfield.dart';
@@ -23,6 +24,7 @@ class UbahProfilMobileController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseStorage storage = FirebaseStorage.instance;
   ImagePicker picker = ImagePicker();
+  final authC = Get.put(AuthController());
 
   XFile? image;
 
@@ -87,6 +89,7 @@ class UbahProfilMobileController extends GetxController {
   }
 
   Future<void> ubahProfil(String nama, String bidang) async {
+    print('$nama, $bidang');
     String email = auth.currentUser!.email.toString();
     DocumentReference<Map<String, dynamic>> docUsers =
         firestore.collection("Users").doc(email);
@@ -113,10 +116,28 @@ class UbahProfilMobileController extends GetxController {
         showLoadingDialog();
 
         await Get.dialog(
-          dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
-              'Berhasil Menambahkan Data!', getTextAlert(Get.context!), () {
-            Get.back();
-            Get.back();
+          dialogAlertBtnSingleMsgAnimationMobile(
+              'assets/lootie/finish.json',
+              'Berhasil Mengubah Data!\nUser akan logout.',
+              getTextAlertMobile(Get.context!), () {
+            authC.logout();
+          }),
+        );
+      } else {
+        await docUsers.update({'name': nama, 'bidang': bidang});
+        await docKepg.update({
+          "nama": nama,
+          'bidang': bidang,
+        });
+
+        showLoadingDialog();
+
+        await Get.dialog(
+          dialogAlertBtnSingleMsgAnimationMobile(
+              'assets/lootie/finish.json',
+              'Berhasil Mengubah Data!\nUser akan logout.',
+              getTextAlertMobile(Get.context!), () {
+            authC.logout();
           }),
         );
       }

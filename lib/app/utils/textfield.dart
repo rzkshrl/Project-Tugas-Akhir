@@ -471,13 +471,13 @@ Widget textformNormalMobile(
         keyboardType: TextInputType.emailAddress,
         validator: validator,
         controller: controller,
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
+        // onTap: () {
+        //   FocusScopeNode currentFocus = FocusScope.of(context);
 
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
+        //   if (!currentFocus.hasPrimaryFocus) {
+        //     currentFocus.unfocus();
+        //   }
+        // },
         style: getTextFormValueMobile(context),
         decoration: InputDecoration(
             helperText: ' ',
@@ -620,6 +620,7 @@ Widget textformPassMobile2(
   IconData? prefixIcon,
   Color? prefixIconColor,
   String hintText,
+  RxBool hidePass,
 ) {
   return Form(
     key: key,
@@ -632,7 +633,7 @@ Widget textformPassMobile2(
           autofillHints: autofillHints,
           style: getTextFormValueMobile(context),
           validator: textC.passValidator,
-          obscureText: textC.isPasswordHidden.value,
+          obscureText: hidePass.value,
           controller: controller,
           onTap: () {
             FocusScopeNode currentFocus = FocusScope.of(context);
@@ -683,11 +684,11 @@ Widget textformPassMobile2(
                 color: Blue1,
                 splashRadius: 1,
                 iconSize: 18,
-                icon: Icon(textC.isPasswordHidden.value
+                icon: Icon(hidePass.value
                     ? FontAwesomeIcons.eye
                     : FontAwesomeIcons.eyeSlash),
                 onPressed: () {
-                  textC.isPasswordHidden.value = !textC.isPasswordHidden.value;
+                  hidePass.value = !hidePass.value;
                 },
               ),
             ),

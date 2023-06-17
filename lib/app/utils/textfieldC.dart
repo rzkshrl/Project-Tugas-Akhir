@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 class TextFieldController extends GetxController {
   final isPasswordHidden = true.obs;
+  final isPasswordHidden2 = true.obs;
 
   final emailWebC = TextEditingController();
   final emailWebResetPassC = TextEditingController();

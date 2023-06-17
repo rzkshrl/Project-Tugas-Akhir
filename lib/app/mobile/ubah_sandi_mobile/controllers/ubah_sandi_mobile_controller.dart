@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/auth_controller.dart';
 import '../../../theme/textstyle.dart';
 import '../../../utils/dialogDefault.dart';
 
@@ -16,6 +17,7 @@ class UbahSandiMobileController extends GetxController {
 
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final authC = Get.put(AuthController());
 
   void ubahSandi(String sandiLama, String sandiBaru) async {
     if (sandiLama == sandiBaru) {
@@ -33,11 +35,11 @@ class UbahSandiMobileController extends GetxController {
         await auth.currentUser!.updatePassword(sandiBaru);
 
         Get.dialog(
-          dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
-              'Berhasil Mengganti Kata Sandi!', getTextAlert(Get.context!), () {
-            auth.signOut();
-            Get.back();
-            Get.back();
+          dialogAlertBtnSingleMsgAnimationMobile(
+              'assets/lootie/finish.json',
+              'Berhasil Mengganti Kata Sandi!\nUser akan logout.',
+              getTextAlert(Get.context!), () {
+            authC.logout();
           }),
         );
         await auth.signInWithEmailAndPassword(
