@@ -471,6 +471,76 @@ Widget textformNormalMobile(
         keyboardType: TextInputType.emailAddress,
         validator: validator,
         controller: controller,
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        style: getTextFormValueMobile(context),
+        decoration: InputDecoration(
+            helperText: ' ',
+            helperStyle: getTextErrorFormLoginMobile(context),
+            isDense: true,
+            contentPadding: const EdgeInsets.all(20),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(
+                left: 1.w,
+                right: 0.8.w,
+              ),
+              child: Align(
+                  widthFactor: 0.5,
+                  heightFactor: 0.5,
+                  child: Icon(
+                    prefixIcon,
+                    size: 24,
+                  )),
+            ),
+            prefixIconColor: prefixIconColor,
+            hintText: hintText,
+            focusColor: Blue1,
+            fillColor: fillColor,
+            filled: true,
+            errorStyle: getTextErrorFormLoginMobile(context),
+            errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: errorBg, width: 1.8),
+                borderRadius: BorderRadius.circular(12),
+                gapPadding: 2),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: error, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: focusedBorderColor, width: 1.8),
+                borderRadius: BorderRadius.circular(12)),
+            hintStyle: getTextHintFormLoginMobile(context),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: borderColor),
+                borderRadius: BorderRadius.circular(12))),
+      ),
+    ),
+  );
+}
+
+Widget textformNormalMobile2(
+    BuildContext context,
+    Key? key,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    IconData? prefixIcon,
+    Color? prefixIconColor,
+    String hintText,
+    Color fillColor,
+    Color borderColor,
+    Color focusedBorderColor) {
+  return Form(
+    key: key,
+    child: SizedBox(
+      width: 68.5.w,
+      height: 70,
+      child: TextFormField(
+        validator: validator,
+        controller: controller,
         // onTap: () {
         //   FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -480,10 +550,9 @@ Widget textformNormalMobile(
         // },
         style: getTextFormValueMobile(context),
         decoration: InputDecoration(
-            helperText: ' ',
-            helperStyle: getTextErrorFormLoginMobile(context),
-            isDense: true,
-            contentPadding: const EdgeInsets.all(20),
+            // helperText: ' ',
+            // helperStyle: getTextErrorFormLoginMobile(context),
+            // contentPadding: const EdgeInsets.all(20),
             prefixIcon: Padding(
               padding: EdgeInsets.only(
                 left: 1.w,

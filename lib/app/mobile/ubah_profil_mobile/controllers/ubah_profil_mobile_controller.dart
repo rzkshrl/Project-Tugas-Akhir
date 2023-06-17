@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:iconly/iconly.dart';
@@ -89,7 +91,6 @@ class UbahProfilMobileController extends GetxController {
   }
 
   Future<void> ubahProfil(String nama, String bidang) async {
-    print('$nama, $bidang');
     String email = auth.currentUser!.email.toString();
     DocumentReference<Map<String, dynamic>> docUsers =
         firestore.collection("Users").doc(email);
@@ -113,14 +114,12 @@ class UbahProfilMobileController extends GetxController {
           'bidang': bidang,
         });
 
-        showLoadingDialog();
-
         await Get.dialog(
-          dialogAlertBtnSingleMsgAnimationMobile(
-              'assets/lootie/finish.json',
-              'Berhasil Mengubah Data!\nUser akan logout.',
-              getTextAlertMobile(Get.context!), () {
-            authC.logout();
+          dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
+              'Berhasil Mengubah Data!', getTextAlertMobile(Get.context!), () {
+            Get.back();
+            Get.back();
+            Get.back();
           }),
         );
       } else {
@@ -130,14 +129,12 @@ class UbahProfilMobileController extends GetxController {
           'bidang': bidang,
         });
 
-        showLoadingDialog();
-
         await Get.dialog(
-          dialogAlertBtnSingleMsgAnimationMobile(
-              'assets/lootie/finish.json',
-              'Berhasil Mengubah Data!\nUser akan logout.',
-              getTextAlertMobile(Get.context!), () {
-            authC.logout();
+          dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
+              'Berhasil Mengubah Data!.', getTextAlertMobile(Get.context!), () {
+            Get.back();
+            Get.back();
+            Get.back();
           }),
         );
       }
