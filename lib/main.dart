@@ -196,7 +196,7 @@ class SplashScreen extends StatelessWidget {
         child: AnimatedSplashScreen(
           animationDuration: const Duration(milliseconds: 900),
           duration: 1200,
-          splash: 'assets/icons/logo_splash.png',
+          splash: 'assets/assets/logo_splash.png',
           backgroundColor: light,
           nextScreen: const HomeView(),
           nextRoute: authC.isAuth.isTrue ? Routes.HOME : Routes.LOGIN,

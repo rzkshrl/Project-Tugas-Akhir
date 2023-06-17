@@ -23,6 +23,6 @@ String titleNotif = 'Halo, Rekapitulasi Presensi Anda sudah selesai!';
 String messageNotif =
     'Cek disini untuk melihat rekapitulasi presensi bulan lalu.';
 
-final keyApplicationId = 'k4hwdDnSxJ3UXLeVGc9KALbwO3FUmhsoeoxsMGph';
-final keyClientKey = '3Fq1JMWix2tEYyo5nhws4BftFFsFsWC0OfU1mPzE';
-final keyParseServerUrl = 'https://parseapi.back4app.com';
+const keyApplicationId = 'k4hwdDnSxJ3UXLeVGc9KALbwO3FUmhsoeoxsMGph';
+const keyClientKey = '3Fq1JMWix2tEYyo5nhws4BftFFsFsWC0OfU1mPzE';
+const keyParseServerUrl = 'https://parseapi.back4app.com';

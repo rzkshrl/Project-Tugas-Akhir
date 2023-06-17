@@ -27,7 +27,7 @@ class LoginMobileView extends GetView<LoginMobileController> {
             ),
             Center(
               child: Image.asset(
-                'assets/icons/logo_splash.png',
+                'assets/assets/logo_splash.png',
                 width: 225,
                 fit: BoxFit.contain,
               ),

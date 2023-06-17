@@ -55,7 +55,7 @@ dev_dependencies:
   json_serializable: ^6.6.1
 
 icons_launcher:
-  image_path: "assets/icons/logo_app.png"
+  image_path: "assets/assets/logo_app.png"
   platforms:
     android:
       enable: true
@@ -66,7 +66,7 @@ icons_launcher:
 
 flutter:
   assets:
-    - assets/icons/
+    - assets/assets/
     - assets/lootie/
   fonts:
     - family: Inter

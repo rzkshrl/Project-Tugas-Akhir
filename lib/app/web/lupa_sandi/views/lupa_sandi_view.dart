@@ -29,8 +29,8 @@ class LupaSandiView extends GetView<LupaSandiController> {
                 height: 3.h,
               ),
               Center(
-                child: Image.network(
-                  'assets/icons/logo.png',
+                child: Image.asset(
+                  'assets/assets/logo.png',
                   width: 312,
                   height: 274,
                   fit: BoxFit.contain,

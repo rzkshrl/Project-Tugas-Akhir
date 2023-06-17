@@ -26,7 +26,7 @@ class LupaSandiMobileView extends GetView<LupaSandiMobileController> {
               ),
               Center(
                 child: Image.asset(
-                  'assets/icons/logo_splash.png',
+                  'assets/assets/logo_splash.png',
                   width: 225,
                   fit: BoxFit.contain,
                 ),

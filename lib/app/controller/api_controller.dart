@@ -156,6 +156,9 @@ class APIController extends GetxController {
         )
       ]);
 
+      // ignore: avoid_print
+      print('request berhasil');
+
       if (kDebugMode) {
         print('HASIL DEVINFO : ${res[0].data['Result']}');
         // print('BODY : ${res[0].data['DEVINFO']}');
@@ -299,6 +302,9 @@ class APIController extends GetxController {
       if (kDebugMode) {
         print('Jumlah Data Response API : ${res.length}');
       }
+
+      // ignore: avoid_print
+      print('request berhasil');
 
       allScanlogList =
           List.from(res).map((e) => AllScanlogModel.fromJson(e)).toList();
