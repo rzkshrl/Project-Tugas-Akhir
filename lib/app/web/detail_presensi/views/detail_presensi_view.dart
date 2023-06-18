@@ -158,8 +158,8 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                                 ),
                               );
                             }
-                            return FutureBuilder(
-                                future: liburC.firestoreHolidayList,
+                            return StreamBuilder(
+                                stream: liburC.firestoreHolidayList,
                                 builder: (context, snap) {
                                   if (!snap.hasData) {
                                     return const LoadingView();
@@ -167,8 +167,8 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                                   final holidayList =
                                       snap.data! as List<HolidayModel>;
 
-                                  return FutureBuilder(
-                                      future: pengecualianC
+                                  return StreamBuilder(
+                                      stream: pengecualianC
                                           .firestorePengecualianList,
                                       builder: (context, snap) {
                                         if (!snap.hasData) {

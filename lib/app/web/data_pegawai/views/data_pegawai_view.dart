@@ -167,8 +167,8 @@ class DataPegawaiView extends GetView<DataPegawaiController> {
                       decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                       width: 90.w,
                       height: 70.h,
-                      child: FutureBuilder(
-                          future: c.firestoreKepegawaianList,
+                      child: StreamBuilder(
+                          stream: c.firestoreKepegawaianList,
                           builder: (context, snap) {
                             if (!snap.hasData) {
                               return const LoadingView();

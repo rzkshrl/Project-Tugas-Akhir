@@ -12,13 +12,21 @@ import '../../../utils/dialogDefault.dart';
 import '../../../utils/textfield.dart';
 
 class PengecualianController extends GetxController {
-  late Future<List<PengecualianModel>> firestorePengecualianList;
+  late Stream<List<PengecualianModel>> firestorePengecualianList;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void onInit() {
     super.onInit();
-    firestorePengecualianList = getFirestorePengecualianList();
+    // firestorePengecualianList = getFirestorePengecualianList();
+    firestorePengecualianList = firestore
+        .collection('Pengecualian')
+        .orderBy('dateStart', descending: true)
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map((documentSnapshot) =>
+                PengecualianModel.fromJson(documentSnapshot))
+            .toList());
   }
 
   Future<List<PengecualianModel>> getFirestorePengecualianList() async {

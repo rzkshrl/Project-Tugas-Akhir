@@ -189,8 +189,8 @@ class JamKerjaView extends GetView<JamKerjaController> {
                       decoration: BoxDecoration(color: Blue1.withOpacity(0.2)),
                       width: 90.w,
                       height: 70.h,
-                      child: FutureBuilder(
-                          future: c.firestoreJamKerjaList,
+                      child: StreamBuilder(
+                          stream: c.firestoreJamKerjaList,
                           builder: (context, snap) {
                             if (!snap.hasData) {
                               return const LoadingView();

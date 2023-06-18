@@ -11,13 +11,20 @@ import '../../../theme/textstyle.dart';
 import '../../../utils/dialogDefault.dart';
 
 class JamKerjaController extends GetxController {
-  late Future<List<JamKerjaModel>> firestoreJamKerjaList;
+  late Stream<List<JamKerjaModel>> firestoreJamKerjaList;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void onInit() {
     super.onInit();
-    firestoreJamKerjaList = getFirestoreJamKerjaList();
+    // firestoreJamKerjaList = getFirestoreJamKerjaList();
+    firestoreJamKerjaList = firestore
+        .collection('JamKerja')
+        .orderBy('hariKerja', descending: true)
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map((documentSnapshot) => JamKerjaModel.fromJson(documentSnapshot))
+            .toList());
   }
 
   Future<List<JamKerjaModel>> getFirestoreJamKerjaList() async {

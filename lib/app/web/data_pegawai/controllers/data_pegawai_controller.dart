@@ -17,7 +17,7 @@ class DataPegawaiController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool isSuccess = false;
   Completer<bool> completer = Completer<bool>();
-  late Future<List<KepegawaianModel>> firestoreKepegawaianList;
+  late Stream<List<KepegawaianModel>> firestoreKepegawaianList;
   var isLoading = true.obs;
 
   late KepegawaianDTS dts;
@@ -128,7 +128,14 @@ class DataPegawaiController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    firestoreKepegawaianList = getFirestoreKepegawaianList();
+    // firestoreKepegawaianList = getFirestoreKepegawaianList();
+    firestoreKepegawaianList = firestore
+        .collection('Kepegawaian')
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map((documentSnapshot) =>
+                KepegawaianModel.fromSnapshot(documentSnapshot))
+            .toList());
   }
 
   Future<List<KepegawaianModel>> getFirestoreKepegawaianList() async {
