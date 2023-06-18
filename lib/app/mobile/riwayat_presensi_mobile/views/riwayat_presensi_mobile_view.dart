@@ -88,8 +88,8 @@ class RiwayatPresensiMobileView
                           .map((e) => PresensiModel.fromJson(
                               e.data() as Map<String, dynamic>))
                           .toList();
-                      return FutureBuilder(
-                          future: liburC.firestoreHolidayList,
+                      return StreamBuilder(
+                          stream: liburC.firestoreHolidayList,
                           builder: (context, snap) {
                             if (!snap.hasData) {
                               return const LoadingView();
@@ -97,8 +97,8 @@ class RiwayatPresensiMobileView
                             final holidayList =
                                 snap.data! as List<HolidayModel>;
 
-                            return FutureBuilder(
-                                future: pengecualianC.firestorePengecualianList,
+                            return StreamBuilder(
+                                stream: pengecualianC.firestorePengecualianList,
                                 builder: (context, snap) {
                                   if (!snap.hasData) {
                                     return const LoadingView();
