@@ -74,12 +74,12 @@ class RiwayatPresensiMobileView
                     color: Blue1.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(18)),
                 height: 55.h,
-                child: FutureBuilder<QuerySnapshot>(
-                    future: firestore
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: firestore
                         .collection('Kepegawaian')
                         .doc(pin)
                         .collection('Presensi')
-                        .get(),
+                        .snapshots(),
                     builder: (context, snap) {
                       if (!snap.hasData) {
                         return const LoadingView();
