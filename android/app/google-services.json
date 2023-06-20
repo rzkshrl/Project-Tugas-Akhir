@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:678791692736:android:0c9c03ecb1f759723f8825",
+        "mobilesdk_app_id": "1:678791692736:android:93303c1c64a14bee3f8825",
         "android_client_info": {
-          "package_name": "com.example.monitorpresensi"
+          "package_name": "com.rzkshrl.monitorpresensi"
         }
       },
       "oauth_client": [
