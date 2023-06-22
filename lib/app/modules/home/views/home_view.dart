@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -237,8 +236,7 @@ class HomeView extends GetView<HomeController> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             navBarItem(context, IconlyLight.home, 0),
-                            navBarItem(
-                                context, FontAwesomeIcons.fingerprint, 1),
+                            navBarItem(context, IconlyLight.document, 1),
                             navBarItem(context, IconlyLight.profile, 2),
                           ],
                         ),

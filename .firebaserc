@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "tugas-akhir-e1997"
-  }
+  },
+  "targets": {
+    "tugas-akhir-e1997": {
+      "hosting": {
+        "app": [
+          "monitorpresence"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

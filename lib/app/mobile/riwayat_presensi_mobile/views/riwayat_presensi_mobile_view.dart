@@ -130,8 +130,6 @@ class RiwayatPresensiMobileView
                                           showDatePickerButton: true,
                                           allowedViews: const [
                                             CalendarView.month,
-                                            CalendarView.day,
-                                            CalendarView.week,
                                           ],
                                           appointmentTextStyle:
                                               c.appointmentTextStyle,
@@ -174,11 +172,10 @@ class RiwayatPresensiMobileView
                                               print(currentMonthEnd);
                                             }
 
-                                            controller.setCurrentMonth(
-                                                currentMonthStart);
-
                                             if (currentMonthStart != null &&
                                                 currentMonthEnd != null) {
+                                              controller.setCurrentMonth(
+                                                  currentMonthEnd);
                                               controller.getPercentagePresence(
                                                   currentMonthStart,
                                                   currentMonthEnd);
@@ -319,39 +316,39 @@ class RiwayatPresensiMobileView
                 height: 2.5.h,
               ),
               Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Persentase Kehadiran Bulan ${controller.dateFormatter.format(controller.currentMonth.value)}',
-                      style: getTextSemiBoldHeaderWelcomeScreen(context, 16),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Obx(() {
-                      final List<PercentageModel> percentageList =
-                          controller.percentageList;
+                child: Obx(() {
+                  final List<PercentageModel> percentageList =
+                      controller.percentageList;
 
-                      if (percentageList.isEmpty) {
-                        return Text(
-                          'Memuat...',
-                          style: getTextSubHeaderWelcomeScreen(context, 16),
-                        );
-                      }
+                  if (percentageList.isEmpty) {
+                    return Text(
+                      'Memuat...',
+                      style: getTextSubHeaderWelcomeScreen(context, 16),
+                    );
+                  }
 
-                      final String kehadiran = percentageList
-                          .firstWhere((p) => p.category == 'Hadir')
-                          .percentage!
-                          .toStringAsFixed(1);
+                  final String kehadiran = percentageList
+                      .firstWhere((p) => p.category == 'Hadir')
+                      .percentage!
+                      .toStringAsFixed(1);
 
-                      return Text(
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Persentase Kehadiran Bulan ${controller.currentMonth.value != null ? controller.dateFormatter.format(controller.currentMonth.value) : '-'}',
+                        style: getTextSemiBoldHeaderWelcomeScreen(context, 16),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Text(
                         '$kehadiran%',
                         style: getTextSubHeaderWelcomeScreen(context, 16),
-                      );
-                    }),
-                  ],
-                ),
+                      )
+                    ],
+                  );
+                }),
               ),
               SizedBox(
                 height: 2.5.h,
@@ -367,42 +364,71 @@ class RiwayatPresensiMobileView
                 height: 2.5.h,
               ),
               Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Persentase Ketidakhadiran Bulan ${controller.dateFormatter.format(controller.currentMonth.value)}',
-                      style: getTextSemiBoldHeaderWelcomeScreen(context, 16),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Obx(() {
-                      final List<PercentageModel> percentageList =
-                          controller.percentageList;
+                child: Obx(() {
+                  final List<PercentageModel> percentageList =
+                      controller.percentageList;
 
-                      if (percentageList.isEmpty) {
-                        return Text(
-                          'Memuat...',
-                          style: getTextSubHeaderWelcomeScreen(context, 16),
-                        );
-                      }
+                  if (percentageList.isEmpty) {
+                    return Text(
+                      'Memuat...',
+                      style: getTextSubHeaderWelcomeScreen(context, 16),
+                    );
+                  }
 
-                      final String kehadiran = percentageList
-                          .firstWhere((p) => p.category == 'Tidak Hadir')
-                          .percentage!
-                          .toStringAsFixed(1);
+                  final double kehadiran = percentageList
+                      .firstWhere((p) => p.category == 'Hadir')
+                      .percentage!;
 
-                      return Text(
-                        '$kehadiran%',
+                  final String ketidakhadiran = percentageList
+                      .firstWhere((p) => p.category == 'Tidak Hadir')
+                      .percentage!
+                      .toStringAsFixed(1);
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Persentase Ketidakhadiran Bulan ${controller.currentMonth.value != null ? controller.dateFormatter.format(controller.currentMonth.value) : '-'}',
+                        style: getTextSemiBoldHeaderWelcomeScreen(context, 16),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Text(
+                        '$ketidakhadiran%',
                         style: getTextSubHeaderWelcomeScreen(context, 16),
-                      );
-                    }),
-                    SizedBox(
-                      height: 9.5.h,
-                    ),
-                  ],
-                ),
+                      ),
+                      SizedBox(
+                        height: 2.5.h,
+                      ),
+                      Center(
+                        child: Container(
+                          height: 0.1.h,
+                          width: 70.w,
+                          decoration:
+                              BoxDecoration(color: Blue1.withOpacity(0.5)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      kehadiran <= 70
+                          ? Text(
+                              'Ayo tingkatkan lagi kedisiplinan presensi Anda :)',
+                              style: getTextSubHeaderWelcomeScreen(context, 18),
+                              textAlign: TextAlign.center,
+                            )
+                          : Text(
+                              'Persentase kehadiran Anda sudah baik, pertahankan kedisiplinan Anda!',
+                              style: getTextSubHeaderWelcomeScreen(context, 18),
+                              textAlign: TextAlign.center,
+                            ),
+                      SizedBox(
+                        height: 9.h,
+                      )
+                    ],
+                  );
+                }),
               ),
             ],
           ),
