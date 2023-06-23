@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -142,7 +141,7 @@ class HariLiburController extends GetxController {
   }
 
   Future<void> deleteHariLibur(String doc) async {
-    Get.dialog(dialogAlertDualBtn(() async {
+    Get.dialog(dialogAlertDualBtnAnimation(() async {
       Get.back();
     }, () async {
       Get.back();
@@ -164,7 +163,7 @@ class HariLiburController extends GetxController {
             getTextAlert(Get.context!)));
       }
     },
-        IconlyLight.danger,
+        'assets/lootie/warning.json',
         111.29,
         'Batal',
         111.29,

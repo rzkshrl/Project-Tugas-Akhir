@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import 'package:monitorpresensi/app/data/models/firestorejamkerjamodel.dart';
 import 'package:monitorpresensi/app/utils/stringGlobal.dart';
 
@@ -211,7 +210,7 @@ class JamKerjaController extends GetxController {
   }
 
   Future<void> deleteJamKerja(String doc) async {
-    Get.dialog(dialogAlertDualBtn(() async {
+    Get.dialog(dialogAlertDualBtnAnimation(() async {
       Get.back();
     }, () async {
       Get.back();
@@ -233,7 +232,7 @@ class JamKerjaController extends GetxController {
             getTextAlert(Get.context!)));
       }
     },
-        IconlyLight.danger,
+        'assets/lootie/warning.json',
         111.29,
         'Batal',
         111.29,
