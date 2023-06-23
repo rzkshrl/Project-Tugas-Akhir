@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import 'package:monitorpresensi/app/utils/dialogDefault.dart';
 
 import '../../../data/models/firestorescanlogmodel.dart';
@@ -89,7 +88,7 @@ class DataPegawaiController extends GetxController {
   }
 
   Future<void> deleteDoc(String doc) async {
-    Get.dialog(dialogAlertDualBtn(() async {
+    Get.dialog(dialogAlertDualBtnAnimation(() async {
       Get.back();
     }, () async {
       Get.back();
@@ -112,7 +111,7 @@ class DataPegawaiController extends GetxController {
             getTextAlert(Get.context!)));
       }
     },
-        IconlyLight.danger,
+        'assets/lootie/warning.json',
         111.29,
         'Batal',
         111.29,

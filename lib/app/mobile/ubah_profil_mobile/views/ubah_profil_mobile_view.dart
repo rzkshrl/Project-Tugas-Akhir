@@ -35,11 +35,12 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                         height: 135));
               }
               var data = snap.data!.data()!;
-              var nama = data['name'];
+              String nama = data['name'];
               var bidang = data['bidang'];
               var profile = data['profile'];
 
               cDropdown.bidangUbahProfilC.text = bidang;
+              // textC.namaUbahProfilC.text = nama;
 
               var defaultImage =
                   "https://ui-avatars.com/api/?name=${nama}&background=fff38a&color=5175c0&font-size=0.33&size=256";
@@ -144,7 +145,7 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                           context,
                           textC.namaUbahProfilKey.value,
                           textC.namaUbahProfilC,
-                          textC.normalValidator,
+                          null,
                           [AutofillHints.name],
                           TextInputType.name,
                           IconlyLight.user,
@@ -179,22 +180,18 @@ class UbahProfilMobileView extends GetView<UbahProfilMobileController> {
                           Blue1,
                           cDropdown.bidangUbahProfilC.text == ''
                               ? ''
-                              : cDropdown.bidangUbahProfilC.text),
+                              : cDropdown.bidangUbahProfilC.text,
+                          false),
                     ),
                     SizedBox(
                       height: 2.5.h,
                     ),
                     Center(
                       child: btnMobile(Blue1, () {
-                        if (textC.namaUbahProfilKey.value.currentState!
-                                .validate() &&
-                            cDropdown.bidangUbahProfilKey.value.currentState!
-                                .validate()) {
-                          controller.ubahProfil(
-                            textC.namaUbahProfilC.text,
-                            cDropdown.bidangUbahProfilC.text,
-                          );
-                        }
+                        controller.ubahProfil(
+                          textC.namaUbahProfilC.text,
+                          cDropdown.bidangUbahProfilC.text,
+                        );
                       }, "Kirim"),
                     )
                   ],

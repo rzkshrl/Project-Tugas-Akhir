@@ -472,11 +472,11 @@ Widget textformNormalMobile(
         validator: validator,
         controller: controller,
         onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
+          // FocusScopeNode currentFocus = FocusScope.of(context);
 
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
+          // if (!currentFocus.hasPrimaryFocus) {
+          //   currentFocus.unfocus();
+          // }
         },
         style: getTextFormValueMobile(context),
         decoration: InputDecoration(

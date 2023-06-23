@@ -107,12 +107,14 @@ class UbahProfilMobileController extends GetxController {
         String urlImage =
             await storage.ref('$email/profile.$ext').getDownloadURL();
 
-        await docUsers
-            .update({'name': nama, 'bidang': bidang, 'profile': urlImage});
-        await docKepg.update({
-          "nama": nama,
-          'bidang': bidang,
-        });
+        if (nama == '') {
+          await docUsers.update({'profile': urlImage});
+        } else {
+          await docUsers.update({'name': nama, 'profile': urlImage});
+          await docKepg.update({
+            "nama": nama,
+          });
+        }
 
         await Get.dialog(
           dialogAlertBtnSingleMsgAnimationMobile('assets/lootie/finish.json',
@@ -123,10 +125,11 @@ class UbahProfilMobileController extends GetxController {
           }),
         );
       } else {
-        await docUsers.update({'name': nama, 'bidang': bidang});
+        await docUsers.update({
+          'name': nama,
+        });
         await docKepg.update({
           "nama": nama,
-          'bidang': bidang,
         });
 
         await Get.dialog(

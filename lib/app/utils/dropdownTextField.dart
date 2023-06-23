@@ -316,7 +316,8 @@ Widget dropdownNormalFieldMobile(
     Color borderColor,
     Color focusedBorderColor,
     Color clearBtnColor,
-    String? selectedItem) {
+    String? selectedItem,
+    bool enabled) {
   return Form(
     key: key,
     child: Column(
@@ -337,6 +338,7 @@ Widget dropdownNormalFieldMobile(
             items: items,
             onChanged: onChanged,
             selectedItem: selectedItem,
+            enabled: enabled,
             dropdownDecoratorProps: DropDownDecoratorProps(
                 baseStyle: getTextFormValueMobile(context),
                 dropdownSearchDecoration: InputDecoration(
