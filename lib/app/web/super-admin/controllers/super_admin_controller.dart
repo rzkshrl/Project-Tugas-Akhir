@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import 'package:monitorpresensi/app/data/models/usermodel.dart';
 import 'package:monitorpresensi/app/utils/stringGlobal.dart';
 
@@ -125,7 +124,7 @@ class SuperAdminController extends GetxController {
   }
 
   Future<void> deleteDoc(String doc, String uid) async {
-    Get.dialog(dialogAlertDualBtn(() async {
+    Get.dialog(dialogAlertDualBtnAnimation(() async {
       Get.back();
     }, () async {
       Get.back();
@@ -150,7 +149,7 @@ class SuperAdminController extends GetxController {
             getTextAlert(Get.context!)));
       }
     },
-        IconlyLight.danger,
+        'assets/lootie/warning.json',
         111.29,
         'Batal',
         111.29,

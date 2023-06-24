@@ -73,12 +73,12 @@ class UbahProfilMobileController extends GetxController {
       Get.dialog(dialogAlertOnlySingleMsgAnimationMobile(
           'assets/lootie/warning.json',
           "Akses ke penyimpanan ditolak!.",
-          getTextAlert(Get.context!)));
+          getTextAlertMobile(Get.context!)));
     } else {
       Get.dialog(dialogAlertOnlySingleMsgAnimationMobile(
           'assets/lootie/warning.json',
           "Akses ke penyimpanan ditolak!.",
-          getTextAlert(Get.context!)));
+          getTextAlertMobile(Get.context!)));
     }
   }
 
@@ -148,7 +148,7 @@ class UbahProfilMobileController extends GetxController {
       Get.dialog(dialogAlertOnlySingleMsgAnimationMobile(
           'assets/lootie/warning.json',
           "Terjadi Kesalahan!.",
-          getTextAlert(Get.context!)));
+          getTextAlertMobile(Get.context!)));
     }
   }
 

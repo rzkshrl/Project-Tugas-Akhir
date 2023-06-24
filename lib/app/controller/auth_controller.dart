@@ -94,24 +94,47 @@ class AuthController extends GetxController {
   void lupaSandi(String email, BuildContext context) async {
     try {
       auth.sendPasswordResetEmail(email: email);
-      Get.dialog(dialogAlertBtnAnimation(() {
-        Get.back();
-      },
-          'assets/lootie/finish.json',
-          111.29,
-          "OK",
-          "Email sukses terkirim!",
-          "Cek inbox email Anda untuk reset sandi",
-          getTextAlert(context),
-          getTextAlertSub(context),
-          getTextAlertBtn(context)));
+      if (kIsWeb) {
+        Get.dialog(dialogAlertBtnAnimation(() {
+          Get.back();
+        },
+            'assets/lootie/finish.json',
+            111.29,
+            "OK",
+            "Email sukses terkirim!",
+            "Cek inbox email Anda untuk reset sandi",
+            getTextAlert(context),
+            getTextAlertSub(context),
+            getTextAlertBtn(context)));
+      } else {
+        Get.dialog(dialogAlertBtnAnimation(() {
+          Get.back();
+        },
+            'assets/lootie/finish.json',
+            111.29,
+            "OK",
+            "Email sukses terkirim!",
+            "Cek inbox email Anda untuk reset sandi",
+            getTextAlertMobile(context),
+            getTextAlertSubMobile(context),
+            getTextAlertBtnMobile(context)));
+      }
     } catch (e) {
-      Get.dialog(dialogAlertOnlyAnimation(
-          'assets/lootie/warning.json',
-          "Terjadi Kesalahan.",
-          "Tidak dapat reset sandi.",
-          getTextAlert(context),
-          getTextAlertSub(context)));
+      if (kIsWeb) {
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
+            "Terjadi Kesalahan.",
+            "Tidak dapat reset sandi.",
+            getTextAlert(context),
+            getTextAlertSub(context)));
+      } else {
+        Get.dialog(dialogAlertOnlyAnimation(
+            'assets/lootie/warning.json',
+            "Terjadi Kesalahan.",
+            "Tidak dapat reset sandi.",
+            getTextAlertMobile(context),
+            getTextAlertSubMobile(context)));
+      }
     }
   }
 
