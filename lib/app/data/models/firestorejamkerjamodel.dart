@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class JamKerjaModel {
   String? nama;
@@ -70,14 +71,14 @@ class JamKerjaModel2 {
   String? nama;
   String? kepg;
   String? ket;
-  DateTime? jadwalMasuk;
-  DateTime? jadwalKeluar;
-  DateTime? batasAwalMasuk;
-  DateTime? batasAwalKeluar;
-  DateTime? batasAkhirMasuk;
-  DateTime? batasAkhirKeluar;
-  DateTime? terlambat;
-  DateTime? pulangLebihAwal;
+  TimeOfDay? jadwalMasuk;
+  TimeOfDay? jadwalKeluar;
+  TimeOfDay? batasAwalMasuk;
+  TimeOfDay? batasAwalKeluar;
+  TimeOfDay? batasAkhirMasuk;
+  TimeOfDay? batasAkhirKeluar;
+  TimeOfDay? terlambat;
+  TimeOfDay? pulangLebihAwal;
   String? hariKerja;
   String? id;
 
@@ -114,10 +115,17 @@ class JamKerjaModel2 {
         id: data['id']));
   }
 
-  static DateTime _parseTime(String timeString) {
+  // static DateTime _parseTime(String timeString) {
+  //   final parts = timeString.split(':');
+  //   final hours = int.parse(parts[0]);
+  //   final minutes = int.parse(parts[1]);
+  //   return DateTime(0, 1, 1, hours, minutes);
+  // }
+
+  static TimeOfDay _parseTime(String timeString) {
     final parts = timeString.split(':');
     final hours = int.parse(parts[0]);
     final minutes = int.parse(parts[1]);
-    return DateTime(0, 1, 1, hours, minutes);
+    return TimeOfDay(hour: hours, minute: minutes);
   }
 }

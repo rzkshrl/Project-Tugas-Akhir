@@ -433,147 +433,297 @@ class APIController extends GetxController {
             final scan = scanInDayData.scan!;
 
             var formatterDoc = DateFormat('d MMMM yyyy', 'id-ID');
-            var datePresensi =
-                formatterDoc.format(DateTime.parse(scan.toIso8601String()));
-            // final hour = scan.hour;
-
             var hari = DateFormat.EEEE('id_ID').format(scan);
 
-            List<JamKerjaModel2> filteredJamKerjaList =
-                jamKerjaList.where((jamKerja) {
-              if (jamKerja.hariKerja == hari) {
-                return !jamKerja.nama!.contains('RAMADHAN');
-              } else {
-                return false;
-              }
-            }).toList();
+            var datePresensi =
+                formatterDoc.format(DateTime.parse(scan.toIso8601String()));
 
-            if (kDebugMode) {
-              print("perulangan sontol suda ${kepgData.pin}, ${kepgData.nama}");
-            }
+            bool isPengecualian = false;
+            for (var pengecualian in pengecualianList) {
+              if (scan.isAfter(pengecualian.dateStart!) &&
+                  scan.isBefore(pengecualian.dateEnd!) &&
+                  kepgData.kepegawaian == 'PNS') {
+                // Jika tanggal presensi berada dalam rentang pengecualian
+                // Lakukan pengecekan sesuai data jam kerja
+                isPengecualian = true;
 
-            // var isMasuk = hour >= 6 && hour <= 9;
-            // var isKeluar = hour >= 9 && hour <= 16;
+                for (var jamKerja in jamKerjaList) {
+                  if (jamKerja.hariKerja == hari &&
+                      jamKerja.nama!
+                          .toUpperCase()
+                          .contains(ramadhanUpperCase) &&
+                      jamKerja.kepg == 'PNS') {
+                    final scanMinutes = scan.hour * 60 + scan.minute;
 
-            for (var jamKerja in filteredJamKerjaList) {
-              var batasAwalMasuk = jamKerja.batasAwalMasuk!;
-              var batasAkhirMasuk = jamKerja.batasAkhirMasuk!;
-              var batasAwalKeluar = jamKerja.batasAwalKeluar!;
-              var batasAkhirKeluar = jamKerja.batasAkhirKeluar!;
+                    final batasAwalMasukMinutes =
+                        jamKerja.batasAwalMasuk!.hour * 60 +
+                            jamKerja.batasAwalMasuk!.minute;
+                    final batasAkhirMasukMinutes =
+                        jamKerja.batasAkhirMasuk!.hour * 60 +
+                            jamKerja.batasAkhirMasuk!.minute;
+                    final batasAwalKeluarMinutes =
+                        jamKerja.batasAwalKeluar!.hour * 60 +
+                            jamKerja.batasAwalKeluar!.minute;
+                    final batasAkhirKeluarMinutes =
+                        jamKerja.batasAkhirKeluar!.hour * 60 +
+                            jamKerja.batasAkhirKeluar!.minute;
 
-              if (kepgData.kepegawaian == 'PNS') {
-                if (jamKerja.nama!.toUpperCase().contains(ramadhanUpperCase)) {
-                  for (var pengecualianData in pengecualianList) {
-                    if (pengecualianData.nama!
-                        .toUpperCase()
-                        .contains(ramadhanUpperCase)) {
-                      var pengecualianDateStart = pengecualianData.dateStart!;
-                      var pengecualianDateEnd = pengecualianData.dateEnd!;
+                    var isMasuk = (scanMinutes >= batasAwalMasukMinutes &&
+                        scanMinutes <= batasAkhirMasukMinutes);
 
-                      var isMasukPengecualian = scan.isAfter(batasAwalMasuk) &&
-                          scan.isBefore(batasAkhirMasuk) &&
-                          scan.isAfter(pengecualianDateStart) &&
-                          scan.isBefore(pengecualianDateEnd);
-                      var isKeluarPengecualian =
-                          scan.isAfter(batasAwalKeluar) &&
-                              scan.isBefore(batasAkhirKeluar) &&
-                              scan.isAfter(pengecualianDateStart) &&
-                              scan.isBefore(pengecualianDateEnd);
+                    var isKeluar = scanMinutes >= batasAwalKeluarMinutes &&
+                        scanMinutes <= batasAkhirKeluarMinutes;
 
-                      var doc = ''.obs;
-                      if (isMasukPengecualian) {
-                        doc.value = '$datePresensi Masuk';
-                      } else if (isKeluarPengecualian) {
-                        doc.value = '$datePresensi Keluar';
-                      } else {
-                        doc.value = '$datePresensi Tanpa Keterangan';
-                      }
-
-                      var status = ''.obs;
-                      if (isMasukPengecualian) {
-                        status.value = 'Masuk';
-                      } else if (isKeluarPengecualian) {
-                        status.value = 'Keluar';
-                      } else {
-                        status.value = 'Tanpa Keterangan';
-                      }
-
-                      var dateTime = ''.obs;
-                      if (isMasukPengecualian) {
-                        dateTime.value = scan.toIso8601String();
-                      } else if (isKeluarPengecualian) {
-                        dateTime.value = scan.toIso8601String();
-                      } else {
-                        dateTime.value = '2000-01-01T00:00:00.000';
-                      }
-
-                      final scanlogPegawai = firestore
-                          .collection('Kepegawaian')
-                          .doc(pin)
-                          .collection('Presensi')
-                          .doc(
-                            doc.value,
-                          );
-
-                      if (pin != null) {
-                        await scanlogPegawai.set({
-                          'pin': pin,
-                          'date_time': dateTime.value,
-                          'status': status.value
-                        });
-                      }
+                    var doc = ''.obs;
+                    if (isMasuk) {
+                      doc.value = '$datePresensi Masuk';
+                    } else if (isKeluar) {
+                      doc.value = '$datePresensi Keluar';
+                    } else {
+                      doc.value = '$datePresensi Tanpa Keterangan';
                     }
+
+                    var status = ''.obs;
+                    if (isMasuk) {
+                      status.value = 'Masuk';
+                    } else if (isKeluar) {
+                      status.value = 'Keluar';
+                    } else {
+                      status.value = 'Tanpa Keterangan';
+                    }
+
+                    var dateTime = ''.obs;
+                    if (isMasuk) {
+                      dateTime.value = scan.toIso8601String();
+                    } else if (isKeluar) {
+                      dateTime.value = scan.toIso8601String();
+                    } else {
+                      dateTime.value = scan.toIso8601String();
+                    }
+
+                    final scanlogPegawai = firestore
+                        .collection('Kepegawaian')
+                        .doc(pin)
+                        .collection('Presensi')
+                        .doc(
+                          doc.value,
+                        );
+
+                    if (pin != null) {
+                      await scanlogPegawai.set({
+                        'pin': pin,
+                        'date_time': dateTime.value,
+                        'status': status.value
+                      });
+                    }
+                    break;
                   }
                 }
-              } else {
-                var isMasuk = scan.isAfter(batasAwalMasuk) &&
-                    scan.isBefore(batasAkhirMasuk);
-                var isKeluar = scan.isAfter(batasAwalKeluar) &&
-                    scan.isBefore(batasAkhirKeluar);
+                break;
+              }
+              if (scan.isAfter(pengecualian.dateStart!) &&
+                  scan.isBefore(pengecualian.dateEnd!) &&
+                  kepgData.kepegawaian == 'NON-PNS') {
+                // Jika tanggal presensi berada dalam rentang pengecualian
+                // Lakukan pengecekan sesuai data jam kerja
+                isPengecualian = true;
 
-                var doc = ''.obs;
-                if (isMasuk) {
-                  doc.value = '$datePresensi Masuk';
-                } else if (isKeluar) {
-                  doc.value = '$datePresensi Keluar';
-                } else {
-                  doc.value = '$datePresensi Tanpa Keterangan';
+                for (var jamKerja in jamKerjaList) {
+                  if (jamKerja.hariKerja == hari &&
+                      jamKerja.nama!
+                          .toUpperCase()
+                          .contains(ramadhanUpperCase) &&
+                      jamKerja.kepg == 'NON-PNS') {
+                    final scanMinutes = scan.hour * 60 + scan.minute;
+
+                    final batasAwalMasukMinutes =
+                        jamKerja.batasAwalMasuk!.hour * 60 +
+                            jamKerja.batasAwalMasuk!.minute;
+                    final batasAkhirMasukMinutes =
+                        jamKerja.batasAkhirMasuk!.hour * 60 +
+                            jamKerja.batasAkhirMasuk!.minute;
+                    final batasAwalKeluarMinutes =
+                        jamKerja.batasAwalKeluar!.hour * 60 +
+                            jamKerja.batasAwalKeluar!.minute;
+                    final batasAkhirKeluarMinutes =
+                        jamKerja.batasAkhirKeluar!.hour * 60 +
+                            jamKerja.batasAkhirKeluar!.minute;
+
+                    var isMasuk = (scanMinutes >= batasAwalMasukMinutes &&
+                        scanMinutes <= batasAkhirMasukMinutes);
+
+                    var isKeluar = scanMinutes >= batasAwalKeluarMinutes &&
+                        scanMinutes <= batasAkhirKeluarMinutes;
+
+                    var doc = ''.obs;
+                    if (isMasuk) {
+                      doc.value = '$datePresensi Masuk';
+                    } else if (isKeluar) {
+                      doc.value = '$datePresensi Keluar';
+                    } else {
+                      doc.value = '$datePresensi Tanpa Keterangan';
+                    }
+
+                    var status = ''.obs;
+                    if (isMasuk) {
+                      status.value = 'Masuk';
+                    } else if (isKeluar) {
+                      status.value = 'Keluar';
+                    } else {
+                      status.value = 'Tanpa Keterangan';
+                    }
+
+                    var dateTime = ''.obs;
+                    if (isMasuk) {
+                      dateTime.value = scan.toIso8601String();
+                    } else if (isKeluar) {
+                      dateTime.value = scan.toIso8601String();
+                    } else {
+                      dateTime.value = scan.toIso8601String();
+                    }
+
+                    final scanlogPegawai = firestore
+                        .collection('Kepegawaian')
+                        .doc(pin)
+                        .collection('Presensi')
+                        .doc(
+                          doc.value,
+                        );
+
+                    if (pin != null) {
+                      await scanlogPegawai.set({
+                        'pin': pin,
+                        'date_time': dateTime.value,
+                        'status': status.value
+                      });
+                    }
+                    break;
+                  }
                 }
+                break;
+              }
+            }
+            if (!isPengecualian) {
+              // Tidak ada pengecualian, lakukan pengecekan sesuai data jam kerja
+              for (var jamKerja in jamKerjaList) {
+                if (jamKerja.hariKerja == hari) {
+                  final scanMinutes = scan.hour * 60 + scan.minute;
 
-                var status = ''.obs;
-                if (isMasuk) {
-                  status.value = 'Masuk';
-                } else if (isKeluar) {
-                  status.value = 'Keluar';
-                } else {
-                  status.value = 'Tanpa Keterangan';
-                }
+                  final batasAwalMasukMinutes =
+                      jamKerja.batasAwalMasuk!.hour * 60 +
+                          jamKerja.batasAwalMasuk!.minute;
+                  final batasAkhirMasukMinutes =
+                      jamKerja.batasAkhirMasuk!.hour * 60 +
+                          jamKerja.batasAkhirMasuk!.minute;
+                  final batasAwalKeluarMinutes =
+                      jamKerja.batasAwalKeluar!.hour * 60 +
+                          jamKerja.batasAwalKeluar!.minute;
+                  final batasAkhirKeluarMinutes =
+                      jamKerja.batasAkhirKeluar!.hour * 60 +
+                          jamKerja.batasAkhirKeluar!.minute;
 
-                var dateTime = ''.obs;
-                if (isMasuk) {
-                  dateTime.value = scan.toIso8601String();
-                } else if (isKeluar) {
-                  dateTime.value = scan.toIso8601String();
-                } else {
-                  dateTime.value = '2000-01-01T00:00:00.000';
-                }
+                  var isMasuk = (scanMinutes >= batasAwalMasukMinutes &&
+                      scanMinutes <= batasAkhirMasukMinutes);
 
-                final scanlogPegawai = firestore
-                    .collection('Kepegawaian')
-                    .doc(pin)
-                    .collection('Presensi')
-                    .doc(
-                      doc.value,
-                    );
+                  var isKeluar = scanMinutes >= batasAwalKeluarMinutes &&
+                      scanMinutes <= batasAkhirKeluarMinutes;
 
-                if (pin != null) {
-                  await scanlogPegawai.set({
-                    'pin': pin,
-                    'date_time': dateTime.value,
-                    'status': status.value
-                  });
+                  var doc = ''.obs;
+                  if (isMasuk) {
+                    doc.value = '$datePresensi Masuk';
+                  } else if (isKeluar) {
+                    doc.value = '$datePresensi Keluar';
+                  } else {
+                    doc.value = '$datePresensi Tanpa Keterangan';
+                  }
+
+                  var status = ''.obs;
+                  if (isMasuk) {
+                    status.value = 'Masuk';
+                  } else if (isKeluar) {
+                    status.value = 'Keluar';
+                  } else {
+                    status.value = 'Tanpa Keterangan';
+                  }
+
+                  var dateTime = ''.obs;
+                  if (isMasuk) {
+                    dateTime.value = scan.toIso8601String();
+                  } else if (isKeluar) {
+                    dateTime.value = scan.toIso8601String();
+                  } else {
+                    dateTime.value = scan.toIso8601String();
+                  }
+
+                  final scanlogPegawai = firestore
+                      .collection('Kepegawaian')
+                      .doc(pin)
+                      .collection('Presensi')
+                      .doc(
+                        doc.value,
+                      );
+
+                  if (pin != null) {
+                    await scanlogPegawai.set({
+                      'pin': pin,
+                      'date_time': dateTime.value,
+                      'status': status.value
+                    });
+                  }
+                  break;
                 }
               }
+            }
+
+            // PENGECEKAN HARDCODE
+            // var isMasuk = scan.hour >= 6 && scan.hour <= 9;
+            // var isKeluar = scan.hour >= 9 && scan.hour <= 17;
+
+            // var doc = ''.obs;
+            // if (isMasuk) {
+            //   doc.value = '$datePresensi Masuk';
+            // } else if (isKeluar) {
+            //   doc.value = '$datePresensi Keluar';
+            // } else {
+            //   doc.value = '$datePresensi Tanpa Keterangan';
+            // }
+
+            // var status = ''.obs;
+            // if (isMasuk) {
+            //   status.value = 'Masuk';
+            // } else if (isKeluar) {
+            //   status.value = 'Keluar';
+            // } else {
+            //   status.value = 'Tanpa Keterangan';
+            // }
+
+            // var dateTime = ''.obs;
+            // if (isMasuk) {
+            //   dateTime.value = scan.toIso8601String();
+            // } else if (isKeluar) {
+            //   dateTime.value = scan.toIso8601String();
+            // } else {
+            //   dateTime.value = scan.toIso8601String();
+            // }
+
+            // final scanlogPegawai = firestore
+            //     .collection('Kepegawaian')
+            //     .doc(pin)
+            //     .collection('Presensi')
+            //     .doc(
+            //       doc.value,
+            //     );
+
+            // if (pin != null) {
+            //   await scanlogPegawai.set({
+            //     'pin': pin,
+            //     'date_time': dateTime.value,
+            //     'status': status.value
+            //   });
+            // }
+
+            if (kDebugMode) {
+              print("perulangan ke berapa huhu}");
             }
           }
         }
