@@ -16,6 +16,7 @@ import 'package:monitorpresensi/app/data/models/allscanlogmodel.dart';
 import 'package:monitorpresensi/app/data/models/deviceinfomodel.dart';
 
 import '../data/models/devicemodel.dart';
+import '../data/models/firestorehariliburmodel.dart';
 import '../data/models/firestorescanlogmodel.dart';
 import '../theme/textstyle.dart';
 import '../utils/dialogDefault.dart';
@@ -426,6 +427,15 @@ class APIController extends GetxController {
                 .map((doc) => PengecualianModel.fromJson(doc))
                 .toList();
 
+        // final hariLiburQuerySnapshot = await firestore
+        //     .collection('Holiday')
+        //     .orderBy('date', descending: true)
+        //     .get();
+
+        // List<HolidayModel> hariLiburList = hariLiburQuerySnapshot.docs
+        //     .map((doc) => HolidayModel.fromJson(doc))
+        //     .toList();
+
         for (var presenceData in presence!) {
           final scanInDay = presenceData.scanInDay;
 
@@ -439,6 +449,12 @@ class APIController extends GetxController {
                 formatterDoc.format(DateTime.parse(scan.toIso8601String()));
 
             bool isPengecualian = false;
+            // for (var libur in hariLiburList) {
+            //   var liburan = DateTime.parse(libur.date!);
+            //   if (scan != liburan) {
+
+            //   }
+            // }
             for (var pengecualian in pengecualianList) {
               if (scan.isAfter(pengecualian.dateStart!) &&
                   scan.isBefore(pengecualian.dateEnd!) &&
