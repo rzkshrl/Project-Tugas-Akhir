@@ -1,5 +1,7 @@
 Sebuah project Tugas Akhir untuk memenuhi persyaratan kelulusan program D3 Teknologi Informasi Politeknik Negeri Madiun
 
+Aplikasi ini digunakan untuk melakukan rekapitulasi presensi serta pengolahan data pada sisi web, serta pemantauan presensi pada sisi Android. Data presensi diambil langsung dari mesin presensi melalui API mesin serta mengolah data JSON ke database. Aplikasi ini dikembangkan untuk dua platform, yaitu Web dan Android menggunakan Flutter secara penuh. 
+
 Dokumentasi :
 
 https://chat.openai.com/
